@@ -1,8 +1,13 @@
 package com.ssafy.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.ssafy.domain.Testuser;
 
-public interface TestuserRepository extends CrudRepository<Testuser, Integer> {
+public interface TestuserRepository extends JpaRepository<Testuser, Integer> {
+	Testuser findById(long id);
 	Testuser findByName(String name);
+	List<Testuser> findAll();
+	long count();
 }

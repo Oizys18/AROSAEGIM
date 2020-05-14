@@ -9,11 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.repositories.TestuserRepository;
+import com.ssafy.service.TestuserService;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RequestMapping("/")
@@ -21,6 +23,8 @@ import com.ssafy.repositories.TestuserRepository;
 public class TestRestController {
 	@Autowired
     private TestuserRepository userRepository;
+	@Autowired
+	private TestuserService userService;
 	
 	@ExceptionHandler
 	public ResponseEntity<Map<String, Object>> handle(Exception e){
@@ -53,8 +57,20 @@ public class TestRestController {
 		return handleSuccess("GET Hello World");
 	}
 	
-	@GetMapping("/testuser")
-	public ResponseEntity<Map<String, Object>> getTestuser() throws Exception{
-		return handleSuccess(userRepository.findByName("AAA"));
+//	@GetMapping("/user/{userId}")
+//	public ResponseEntity<Map<String, Object>> getTestuser(@PathVariable("userId") long userId) throws Exception{
+//		return handleSuccess(userRepository.findById(userId));
+//	}
+	@GetMapping("/user/{userName}")
+	public ResponseEntity<Map<String, Object>> getTestuser(@PathVariable("userName") String userName) throws Exception{
+		return handleSuccess(userService.getUser(userName));
+	}
+	@GetMapping("/users")
+	public ResponseEntity<Map<String, Object>> getTestusers() throws Exception{
+		return handleSuccess(userService.getUsers());
+	}
+	@GetMapping("/usercount")
+	public ResponseEntity<Map<String, Object>> getTestuserCount() throws Exception{
+		return handleSuccess(userService.getUserCount());
 	}
 }
