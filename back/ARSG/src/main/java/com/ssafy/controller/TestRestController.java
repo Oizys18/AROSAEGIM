@@ -3,6 +3,7 @@ package com.ssafy.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,10 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.repositories.TestuserRepository;
+
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RequestMapping("/")
 @RestController
 public class TestRestController {
+	@Autowired
+    private TestuserRepository userRepository;
 	
 	@ExceptionHandler
 	public ResponseEntity<Map<String, Object>> handle(Exception e){
@@ -36,15 +41,20 @@ public class TestRestController {
 		return new ResponseEntity<Map<String,Object>>(resultMap, state); 
 	}
 	
-//	@ApiOperation("새로운 고양이 정보를 입력한다.")
+//	@ApiOperation("post 요청에 관한 인삿말을 출력한다")
 	@PostMapping("/hello")
 	public ResponseEntity<Map<String, Object>> getHello() throws Exception{
 		return handleSuccess("POST Hello World");
 	}
 	
-//	@ApiOperation("고양이 관리번호로 고양이 정보를 찾는다.")
+//	@ApiOperation("get 요청에 관한 인삿말을 출력한다")
 	@GetMapping("/")
 	public ResponseEntity<Map<String, Object>> postHello() throws Exception{
 		return handleSuccess("GET Hello World");
+	}
+	
+	@GetMapping("/testuser")
+	public ResponseEntity<Map<String, Object>> getTestuser() throws Exception{
+		return handleSuccess(userRepository.findByName("AAA"));
 	}
 }
