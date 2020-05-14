@@ -1,50 +1,22 @@
 package com.ssafy.domain;
 
 import javax.persistence.*;
+import lombok.*;
+
 @Entity
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Table(name = "test_user")
+@Getter @Setter
 public class Testuser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NonNull
     private String email;
+    @NonNull
     private String name;
+    @NonNull
     private String password;
-    public Testuser() {
-    }
-	public Testuser(String email, String name, String password) {
-		super();
-		this.email = email;
-		this.name = name;
-		this.password = password;
-	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	@Override
-	public String toString() {
-		return "Testuser [email=" + email + ", name=" + name + ", password=" + password + "]";
-	}
-    
 }
