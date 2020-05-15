@@ -18,7 +18,7 @@
 
 - 노션 링크 : https://www.notion.so/a7afc1c35e534bf9b67be69c7bdf0fd1?v=04e758783a644a8ead7f215c7485b8e3
 
-  ![image-20200515142041810](readme_img\image-20200515142041810.png)
+  ![image-20200515142041810](readme_img/image-20200515142041810.png)
 
-  ![image-20200515142208557](readme_img\image-20200515142208557.png)
+  ![image-20200515142208557](readme_img/image-20200515142208557.png)
 
