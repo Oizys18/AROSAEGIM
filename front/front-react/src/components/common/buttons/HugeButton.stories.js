@@ -1,10 +1,11 @@
-import React from 'react';
-// import { action } from '@storybook/addon-actions';
-import HugeButton from './HugeButton';
-
+import React from "react";
+import HugeButton from "./HugeButton";
+import { action } from "@storybook/addon-actions";
 export default {
   component: HugeButton,
-  title: 'Button',
+  title: "Button",
 };
 
-export const hugebtn = () => <HugeButton text="default-msg" />
+export const hugebtn = () => (
+  <HugeButton onClick={action("clicked")} text="짱 큰 버튼 😉" />
+);
