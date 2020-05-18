@@ -1,18 +1,26 @@
 import React, { Component } from 'react';
+import {Storage} from '../../../storage/Storage';
 import styled from 'styled-components';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Zoom } from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
 
 class Hamburger extends Component {
   render(){
     return(
-      <StHamburger>
-        <IconButton>
-          <Menu/>
-        </IconButton>
-      </StHamburger>
+      <Zoom in={!this.context.sideMenu} timeout={400}>
+        <StHamburger>
+          <IconButton onClick={this.context.toggleSideMenu}>
+            <Menu/>
+          </IconButton>
+        </StHamburger>
+      </Zoom>
     )
   }
-} export default Hamburger;
+} Hamburger.contextType = Storage;
+export default Hamburger;
 
-const StHamburger = styled.div``
+const StHamburger = styled.div`
+  position: fixed;
+  top:0;
+  z-index: 1;
+`
