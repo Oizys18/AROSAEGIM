@@ -1,14 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+// import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { StylesProvider } from '@material-ui/core/styles';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  // material-ui 와 styled-components 같이 사용해야할때 <StylesProvider injectFirst>를 선언해줘야 함.
+  <StylesProvider injectFirst>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </StylesProvider>
+  , document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
