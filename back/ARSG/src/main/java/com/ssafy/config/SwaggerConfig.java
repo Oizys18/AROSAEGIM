@@ -26,7 +26,7 @@ public class SwaggerConfig {
 				.apis(RequestHandlerSelectors.any())
 				.paths(PathSelectors.any()).build();
 	}
-	
+}
 	
 //	private String version;
 //    private String title;
@@ -76,4 +76,4 @@ public class SwaggerConfig {
 //
 //                new ArrayList<>());
 //    }
-}
+
