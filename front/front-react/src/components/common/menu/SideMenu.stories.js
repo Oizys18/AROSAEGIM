@@ -1,24 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Slide } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 
 export const SideMenu = () => {
-  return(
-    <StMenuCont>
-      
-      <StTopCont>
-        <StLogo>대애충 로고</StLogo>
-        <StCloseBtn><Close/></StCloseBtn>
-      </StTopCont>
-
-      <StListCont>
-        메뉴 리스트 들어갈 자리
-      </StListCont>
-
-    </StMenuCont>
+  return (
+    <Slide in={true} direction="right">
+      <StMenuCont>
+        <StTopCont>
+          <StLogo>대애충 로고</StLogo>
+          <StCloseBtn><Close/></StCloseBtn>
+        </StTopCont>
+        <StListCont>
+          메뉴 리스트 들어갈 자리
+        </StListCont>
+      </StMenuCont>
+    </Slide>
   )
-} 
+}
 
 export default {
   component: SideMenu,

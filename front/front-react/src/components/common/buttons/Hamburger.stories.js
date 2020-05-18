@@ -1,24 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Zoom } from '@material-ui/core';
 import { Menu, } from '@material-ui/icons';
 
-const StHamburger = styled.div`
-  position: fixed;
-  top:0;
-  z-index: 1;
-`
-
 export const Hamburger = () => (
-  <StHamburger>
-    <IconButton>
+  <Zoom in={true} timeout={400}>
+    <StHamburger>
       <Menu/>
-    </IconButton>
-  </StHamburger>
+    </StHamburger>
+  </Zoom>
 )
-
 
 export default {
   component: Hamburger,
   title: 'Button',
 };
+
+
+const StHamburger = styled(IconButton)`
+  position: fixed;
+  top:0;
+  z-index: 1;
+`

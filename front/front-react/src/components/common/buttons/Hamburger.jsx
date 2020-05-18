@@ -8,10 +8,8 @@ class Hamburger extends Component {
   render(){
     return(
       <Zoom in={!this.context.sideMenu} timeout={400}>
-        <StHamburger>
-          <IconButton onClick={this.context.toggleSideMenu}>
-            <Menu/>
-          </IconButton>
+        <StHamburger onClick={this.context.toggleSideMenu}>
+          <Menu/>
         </StHamburger>
       </Zoom>
     )
@@ -19,8 +17,8 @@ class Hamburger extends Component {
 } Hamburger.contextType = Storage;
 export default Hamburger;
 
-const StHamburger = styled.div`
-  position: fixed;
-  top:0;
+const StHamburger = styled(IconButton)`
+  position: absolute;
+  left: 0;
   z-index: 1;
 `
