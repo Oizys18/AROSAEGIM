@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Slide} from '@material-ui/core';
+import { Slide } from '@material-ui/core';
 
 export const TopBar = () => {
   return(

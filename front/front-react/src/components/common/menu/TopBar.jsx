@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Hamburger from '../buttons/Hamburger'
 import styled from 'styled-components';
-import {Slide} from '@material-ui/core';
+import { Slide } from '@material-ui/core';
 
 class TopBar extends Component {
   render(){
