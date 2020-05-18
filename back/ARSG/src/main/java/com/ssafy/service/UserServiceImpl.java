@@ -19,7 +19,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUser(long uId) {
 		User user = userRepository.findById(uId);
-		user.setLikes(likeRepository.findByuId(uId));
 		return user;
 //				.orElseThrow(() -> 
 //        		new RestException(HttpStatus.NOT_FOUND, "Not found board"));

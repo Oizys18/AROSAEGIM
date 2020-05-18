@@ -1,17 +1,18 @@
 package com.ssafy.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 @Entity
-@NoArgsConstructor
-@RequiredArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor @RequiredArgsConstructor @AllArgsConstructor
 @Getter @Setter
 @Table(name = "users")
 public class User {
@@ -26,10 +27,9 @@ public class User {
 	@NonNull
 	private String password;
 
-	@Transient
-	@ApiModelProperty(hidden=true)
-	private List<Likes> likes = new ArrayList<Likes>();
-//	@OneToMany(mappedBy="user", fetch = FetchType.LAZY)
-//	@JsonBackReference
-//	private List<Users_Saegim> likes = new ArrayList<Users_Saegim>();
+//	@ApiModelProperty(hidden=true)
+//	private List<Likes> likes = new ArrayList<Likes>();
+//	@Transient
+	@OneToMany(mappedBy="user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Favorite> Favorites = new ArrayList<Favorite>();
 }

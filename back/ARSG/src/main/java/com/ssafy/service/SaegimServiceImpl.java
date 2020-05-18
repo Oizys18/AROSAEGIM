@@ -19,7 +19,6 @@ public class SaegimServiceImpl implements SaegimService {
 	@Override
 	public Saegim getSaegim(long sId) {
 		Saegim saegim = saegimRepository.findByid(sId);
-		saegim.setLikes(likeRepository.findBysId(sId));
 		return saegim;
 //				.orElseThrow(() -> 
 //        		new RestException(HttpStatus.NOT_FOUND, "Not found board"));
@@ -31,17 +30,17 @@ public class SaegimServiceImpl implements SaegimService {
 	@Override
 	public List<Saegim> getSaegimsByUid(long uid) {
 		List<Saegim> list = saegimRepository.findByuId(uid);
-		for (Saegim saegim : list) {
-			saegim.setLikes(likeRepository.findByuId(saegim.getId()));
-		}
+//		for (Saegim saegim : list) {
+//			saegim.setLikes(likeRepository.findByuId(saegim.getId()));
+//		}
 		return list;
 	}
 	@Override
 	public List<Saegim> getSaegims() {
 		List<Saegim> list = saegimRepository.findAll();
-		for (Saegim saegim : list) {
-			saegim.setLikes(likeRepository.findByuId(saegim.getId()));
-		}
+//		for (Saegim saegim : list) {
+//			saegim.setLikes(likeRepository.findByuId(saegim.getId()));
+//		}
 		return list;
 	}
 	@Override
