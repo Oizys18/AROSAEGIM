@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, withRouter, } from "react-router-dom";
 import { Storage } from './storage/Storage'
 import Main from "./components/main/Main";
 import TopBar from './components/common/menus/TopBar';
@@ -47,19 +47,22 @@ class App extends Component {
   render() {
     return (
       <Storage.Provider value={this.state}>
-        <Router>
-          <Switch>
-            <Route path="/login" component={Login}/>
-          </Switch>
-          
-          <Route path="/" component={TopBar}/>
-          <Route path="/" component={Main} />
-          <Route path="/" component={SideMenu}/>
+        {
+          this.props.location.pathname !== '/login' && 
+          <>
+            <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
+            <SideMenu on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
+          </>
+        }
 
+        {/* <Router> */}
+          <Route exact path="/" component={Main} />
           <Route path="/auth" component={Auth} />
-        </Router>
+          <Route path="/login" component={Login}/>
+        {/* </Router> */}
+
       </Storage.Provider>
     );
   }
 }
-export default App;
+export default withRouter(App);

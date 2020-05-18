@@ -8,7 +8,7 @@ class TopBar extends Component {
     return(
       <Slide in={true} direction="down">
         <StTopCont>
-          <Hamburger/>
+          <Hamburger on={this.props.on} toggle={this.props.toggle}/>
           <StLogo>로고</StLogo>
         </StTopCont>
       </Slide>

@@ -1,21 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IconButton, Slide } from '@material-ui/core';
+import { StylesProvider } from '@material-ui/core/styles';
 import { Close } from '@material-ui/icons';
 
 export const SideMenu = () => {
   return (
+    <StylesProvider injectFirst>
     <Slide in={true} direction="right">
       <StMenuCont>
         <StTopCont>
           <StLogo>대애충 로고</StLogo>
-          <StCloseBtn><Close/></StCloseBtn>
+          <StCloseBtn size="small"><Close/></StCloseBtn>
         </StTopCont>
         <StListCont>
           메뉴 리스트 들어갈 자리
         </StListCont>
       </StMenuCont>
     </Slide>
+    </StylesProvider>
   )
 }
 
@@ -60,7 +63,7 @@ const StLogo = styled.div`
 `;
 
 const StCloseBtn = styled(IconButton)`
-  padding: 1vh;
+  /* padding: 1vh; */
   /* margin: 1vh; */
 `;
 

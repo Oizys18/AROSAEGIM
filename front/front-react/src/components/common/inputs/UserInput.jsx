@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import { TextField, InputAdornment, Zoom } from '@material-ui/core';
+import styled, { css } from 'styled-components';
+import { TextField, InputAdornment, } from '@material-ui/core';
+import { Email } from '@material-ui/icons';
 
 class UserInput extends Component {
   render(){
@@ -18,7 +19,9 @@ class UserInput extends Component {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              {this.props.icon}
+              <div style={{position: 'relative'}}>
+                {this.props.icon}
+              </div>
             </InputAdornment>
           ),
         }}
@@ -29,15 +32,21 @@ class UserInput extends Component {
 } export default UserInput;
 
 const StInput = styled(TextField)`
-  label {
-    color: ${props => {
-      if (props.valid === 'valid'){
-        return 'blue'
-      }
-      else if (props.valid === 'invalid') {
-        return 'red'
-      }
-      return 'gray'
-    }}
-  }
+
+  ${props => {
+    if(props.valid === 'invalid'){
+    }
+    else{
+      return(css`
+        label{
+          color: gray;
+        }
+        label.Mui-focused{
+          color: skyblue;
+        }
+
+
+      `)
+    }
+  }}
 `;

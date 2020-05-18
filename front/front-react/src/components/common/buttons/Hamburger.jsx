@@ -7,15 +7,15 @@ import { Menu } from '@material-ui/icons';
 class Hamburger extends Component {
   render(){
     return(
-      <Zoom in={!this.context.sideMenu} timeout={400}>
-        <StHamburger onClick={this.context.toggleSideMenu}>
+      <Zoom in={!this.props.on} timeout={400}>
+        <StHamburger onClick={this.props.toggle}>
           <Menu/>
         </StHamburger>
       </Zoom>
     )
   }
-} Hamburger.contextType = Storage;
-export default Hamburger;
+} export default Hamburger;
+// Hamburger.contextType = Storage;
 
 const StHamburger = styled(IconButton)`
   position: absolute;

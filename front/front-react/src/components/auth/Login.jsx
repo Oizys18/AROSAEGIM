@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import UserInput from '../common/inputs/UserInput'
+import DefaultButton from '../common/buttons/DefaultButton'
 import {Storage} from '../../storage/Storage'
 import styled from 'styled-components';
-import { Zoom } from '@material-ui/core';
-import { Email, Lock, CheckCircle, Error } from '@material-ui/icons';
+import { Slide, Zoom } from '@material-ui/core';
+import { Email, Lock, CheckCircle, Warning } from '@material-ui/icons';
 
 const regExp = {
   email: /^(([^<>()\\[\].,;:\s@"]+(\.[^<>()\\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i,
   pw: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{6,15}$/,
-  // name: /^[A-Za-z가-힣]{2,}$/,
   // nickname: /^[A-Za-z0-9가-힣_]{2,10}$/,
-  // channelname: /^[A-Za-z0-9가-힣_]{2,}$/
 };
 
 
@@ -46,14 +45,13 @@ class Login extends Component {
           _emailValid = 'valid'
         }
         else {
-          _emailLabel = '이메일 양식을 맞춰 주세요'
+          _emailLabel = '이메일 양식을 지켜주세요'
           _emailValid = 'invalid'
         }
       }
       this.setState({
         emailLabel: _emailLabel,
         emailValid: _emailValid,
-        
       })
     }
     else {
@@ -77,31 +75,72 @@ class Login extends Component {
     }
   }
 
-  render(){
-    return(
-      <StFormCont height={this.context.appHeight}>
-        <UserInput 
-          id='email' 
-          value={this.state.email}
-          label={this.state.emailLabel} 
-          valid={this.state.emailValid}
-          onChange={this.handleInput}
-          icon={<Email/>} 
-        />
+  changeIcon = (flag) => {
+    if(flag === 'email') {
+      return (
+        <>
+          <Email style={{visibility: 'hidden'}}/>
+          <Zoom in={this.state.emailValid === 'init'} style={{position: 'absolute', zIndex: 1, left: 0}}><Email/></Zoom>
+          <Zoom in={this.state.emailValid === 'invalid'} style={{position: 'absolute', zIndex: 2, left: 0}}><Warning/></Zoom>
+          <Zoom in={this.state.emailValid === 'valid'}  style={{position: 'absolute', zIndex: 3, left: 0}}><CheckCircle/></Zoom>
+        </>
+      )
+    }
+    else{
+      return (
+        <>
+          <Lock style={{visibility: 'hidden'}}/>
+          <Zoom in={this.state.pwValid === 'init'} style={{position: 'absolute', zIndex: 1, left: 0}}><Lock/></Zoom>
+          <Zoom in={this.state.pwValid === 'invalid'} style={{position: 'absolute', zIndex: 2, left: 0}}><Warning/></Zoom>
+          <Zoom in={this.state.pwValid === 'valid'}  style={{position: 'absolute', zIndex: 3, left: 0}}><CheckCircle/></Zoom>
+        </>
+      )
+    }
+  }
 
-        <UserInput 
-          id='pw' 
-          value={this.state.pw} 
-          label={this.state.pwLabel} 
-          valid={this.state.pwValid}
-          onChange={this.handleInput}
-          icon={<Lock/>} 
-        />
-      </StFormCont>
+  handleSubmit = () => {
+
+  }
+  handleCancel = () => {
+    this.props.history.goBack()
+  }
+
+  render(){
+    
+    return(
+      <Slide in={true} direction="left">
+        <StFormCont height={this.context.appHeight}>
+
+
+          <UserInput 
+            id='email' 
+            value={this.state.email}
+            label={this.state.emailLabel} 
+            valid={this.state.emailValid}
+            onChange={this.handleInput}
+            icon={this.changeIcon('email')} 
+          />
+
+          <UserInput 
+            id='pw' 
+            value={this.state.pw} 
+            label={this.state.pwLabel} 
+            valid={this.state.pwValid}
+            onChange={this.handleInput}
+            icon={this.changeIcon('pw')} 
+          />
+
+          <StBtn text="로그인" onClick={this.handleSubmit}/>
+          <StBtn text="취소" onClick={this.handleCancel}/>
+
+        </StFormCont>
+      </Slide>
     )
   }
-} Login.contextType = Storage;
-export default Login;
+} export default Login;
+Login.contextType = Storage;
+
+
 
 const StFormCont = styled.div`
   display: flex;
@@ -111,3 +150,7 @@ const StFormCont = styled.div`
   background: linear-gradient(to bottom, #ffffcc 0%, #ff9999 100%);
   height: ${props => props.height}px;
 `;
+
+const StBtn = styled(DefaultButton)`
+
+`

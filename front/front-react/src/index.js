@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 // import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -8,9 +9,11 @@ import { StylesProvider } from '@material-ui/core/styles';
 ReactDOM.render(
   // material-ui 와 styled-components 같이 사용해야할때 <StylesProvider injectFirst>를 선언해줘야 함.
   <StylesProvider injectFirst>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
+    <BrowserRouter>
+      <React.StrictMode>
+        <App/>
+      </React.StrictMode>
+    </BrowserRouter>
   </StylesProvider>
   , document.getElementById('root')
 );
