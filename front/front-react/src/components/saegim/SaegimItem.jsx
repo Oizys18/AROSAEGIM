@@ -18,9 +18,9 @@ class SaegimItem extends Component {
   constructor(props) {
     super(props);
 
-    this.onMouseMove = this.onMouseMove.bind(this);
+    // this.onMouseMove = this.onMouseMove.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
-    this.onDragStartMouse = this.onDragStartMouse.bind(this);
+    // this.onDragStartMouse = this.onDragStartMouse.bind(this);
     this.onDragStartTouch = this.onDragStartTouch.bind(this);
     this.onDragEndMouse = this.onDragEndMouse.bind(this);
     this.onDragEndTouch = this.onDragEndTouch.bind(this);
@@ -32,19 +32,19 @@ class SaegimItem extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener("mouseup", this.onDragEndMouse);
+    // window.addEventListener("mouseup", this.onDragEndMouse);
     window.addEventListener("touchend", this.onDragEndTouch);
   }
 
   componentWillMount() {
-    window.addEventListener("mouseup", this.onDragEndMouse);
+    // window.addEventListener("mouseup", this.onDragEndMouse);
     window.addEventListener("touchend", this.onDragEndTouch);
   }
 
-  onDragStartMouse(e) {
-    this.onDragStart(e.clientX);
-    window.addEventListener("mousemove", this.onMouseMove)
-  }
+  // onDragStartMouse(e) {
+  //   this.onDragStart(e.clientX);
+  //   window.addEventListener("mousemove", this.onMouseMove)
+  // }
 
   onDragStartTouch(e) {
     const _touch = e.targetTouches[0];
@@ -73,28 +73,25 @@ class SaegimItem extends Component {
   onDragEnd() {
     if (this.dragged) {
       this.dragged = false;
-
-      const _threshold = this.props.threshold || 0.3;
-
-      if (this.left < this.listElement.offsetWidth + _threshold + -1) {
+      if (Math.abs(this.left) > this.listElement.offsetWidth / 2) {
         this.left = -this.listElement.offsetWidth * 2;
         this.wrapper.style.maxHeight = 0;
+        // 없어지게 만들 것
         this.onSwiped();
       } else {
         this.left = 0;
+        this.listElement.style.transform = `translateX(${this.left}px)`;
       }
-
       this.listElement.className = "BouncingListItem";
-      this.listElement.style.transform = `translateX(${this.left}px)`;
     }
   }
 
-  onMouseMove(e) {
-    const _left = e.clientX - this.dragStartX;
-    if (_left < 0 ) {
-      this.left = _left;
-    }
-  }
+  // onMouseMove(e) {
+  //   const _left = e.clientX - this.dragStartX;
+  //   if (_left < 0 ) {
+  //     this.left = _left;
+  //   }
+  // }
 
   onTouchMove(e) {
     const _touch = e.targetTouches[0];
@@ -142,13 +139,13 @@ class SaegimItem extends Component {
     return (
       <div className="Wrapper" ref={div => (this.wrapper = div)}>
         <div className="Background" ref={div => (this.background = div)}>
-          {this.props.background ? (this.props.background) : (<span>Delete</span>)}
+          {this.props.background ? (this.props.background) : <span style={{display:"none"}}>Swiped</span>}
         </div>
         <div
           onClick={this.onClicked}
           ref={div => (this.listElement = div)}
-          onMouseDown={this.onDragStartMouse}
-          onTouchStart={this.onDragEndTouch}
+          // onMouseDown={this.onDragStartMouse}
+          onTouchStart={this.onDragStartTouch}
           className="ListItem"
         >
           <Card>

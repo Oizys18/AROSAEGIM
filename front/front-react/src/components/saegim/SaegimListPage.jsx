@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SaegimItem from "./SaegimItem";
 import SaegimList from "./SaegimList";
 
-const background = <span>Archive</span>;
+const background = <span style={{display:"none"}}>Archive</span>;
 
 class SaegimListPage extends Component {
   constructor(props) {
