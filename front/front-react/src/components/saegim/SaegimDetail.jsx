@@ -37,8 +37,12 @@ class SaegimDetail extends Component {
   render() {
     return (
       <div>
-        <Card children={this.state.contents} />
+        <Card>
+          <div>{this.state.user_name}</div>
+
+          <div>{this.state.contents}</div>
         <DefaultButton onClick={this.goBack} text={'뒤로가기'} />
+        </Card>
       </div>
     );
   }

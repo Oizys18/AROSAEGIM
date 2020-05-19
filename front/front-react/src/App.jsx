@@ -5,7 +5,7 @@ import Main from "./components/main/Main";
 import TopBar from './components/common/menu/TopBar';
 import SideMenu from './components/common/menu/SideMenu';
 import Auth from "./components/auth/Auth";
-import SaegimList from "./components/saegim/SaegimList";
+import SaegimListPage from "./components/saegim/SaegimListPage";
 import SaegimDetail from "./components/saegim/SaegimDetail";
 
 class App extends Component {
@@ -32,7 +32,7 @@ class App extends Component {
           <Route path="/" component={Main} />
           <Route path="/" component={SideMenu}/>
           <Route path="/auth" component={Auth} />
-          <Route exact path="/saegim" component={SaegimList} />
+          <Route exact path="/saegim" component={SaegimListPage} />
           <Route exact path="/saegim/:id" component={SaegimDetail} />
         </Router>
       </Storage.Provider>
