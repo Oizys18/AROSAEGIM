@@ -2,22 +2,22 @@ import React, { Component } from "react";
 import styled from 'styled-components';
 import Button from "@material-ui/core/Button";
 
-class DefaultButton extends Component {
+class SmallButton extends Component {
   render() {
     return (
       <Button
         onClick={this.props.onClick}
         variant="contained"
         color="default"
-        size="middle"
+        size="small"
       >
         <BtnTxt>{this.props.text}</BtnTxt>
       </Button>
     );
   }
 }
-export default DefaultButton;
+export default SmallButton;
 
 const BtnTxt = styled.div`
-  /* font-size:px; */
+  /* font-size:8px; */
 `
