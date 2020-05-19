@@ -12,6 +12,8 @@ class Signup extends Component {
   constructor(props){
     super(props);
     this.state = {
+      slideIn: true,
+
       email: '',
       emailLabel: '이메일',
       emailValid: 'init',
@@ -101,14 +103,15 @@ class Signup extends Component {
   handleSubmit = () => {
 
   }
-  handleCancel = () => {
+  handleCancel = async () => {
+    await this.setStateAsync({ slideIn: false })
     this.props.history.goBack()
   }
 
   render(){
     
     return(
-      <Slide in={true} direction="left">
+      <Slide in={this.state.slideIn} direction="left">
         <AS.StFormCont height={this.context.appHeight}>
           
           <AS.StBackBtn onClick={this.handleCancel}>
@@ -160,7 +163,6 @@ class Signup extends Component {
               로그인
             </Link>
           </AS.StLinkCont>
-
         </AS.StFormCont>
       </Slide>
     )

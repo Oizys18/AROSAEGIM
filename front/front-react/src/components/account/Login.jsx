@@ -13,6 +13,8 @@ class Login extends Component {
   constructor(props){
     super(props);
     this.state = {
+      slideIn: true,
+
       email: '',
       emailLabel: '이메일',
       emailValid: 'init',
@@ -21,6 +23,10 @@ class Login extends Component {
       pwLabel: '비밀번호',
       pwValid: 'init',
     }
+  }
+
+  componentDidMount(){
+    
   }
 
   setStateAsync(state) {
@@ -67,19 +73,20 @@ class Login extends Component {
 
   }
   
-  handleCancel = () => {
+  handleCancel = async () => {
+    await this.setStateAsync({ slideIn: false })
     this.props.history.goBack()
   }
 
   render(){
     return(
-      <Slide in={true} direction="left">
+      <Slide in={this.state.slideIn} direction="left">
         <AS.StFormCont height={this.context.appHeight}>
           
           <AS.StBackBtn onClick={this.handleCancel}>
             <ArrowBack/>
           </AS.StBackBtn>
-
+          
           <LogoAnimation/>
 
           <UserInput 
@@ -109,7 +116,6 @@ class Login extends Component {
               가입하기
             </Link>
           </AS.StLinkCont>
-
         </AS.StFormCont>
       </Slide>
     )

@@ -6,14 +6,14 @@ import styled from "styled-components";
 class Main extends Component {
 
   go = () => {
-    // this.props.history.replace('/login')
+    this.props.history.push('/login')
   }
 
   render() {
     return (
       <Wrapper>
         <div>Main! 제발 나와라!</div>
-        <DefaultButton text="더 귀여운 버튼😘" />
+        <DefaultButton text="더 귀여운 버튼😘" onClick={this.go}/>
         <HugeButton text="귀여운 버튼🥰"/>
       </Wrapper>
     );
@@ -26,7 +26,8 @@ const Wrapper = styled.div`
   justify-content:center;
   align-items:center;
   width:100vw;
-  height:100vh;
+  /* height:100vh; */
+  height:100%;
 `
 
 const Container = styled.div`

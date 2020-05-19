@@ -19,27 +19,26 @@ class App extends Component {
     }
   }
 
-  componentDidMount(){
-    window.addEventListener('resize', this.handleHeight) // 화면 높이를 항상 맞추기 위한 이벤트리스너
-  }
-  shouldComponentUpdate(){ // 자판 튀어나와도 앱의 높이를 유지하기 위한 생명주기 메서드
-    return (window.innerHeight !== this.state.appHeight) && false
-  }
-  // componentDidUpdate(preProps, preState){
-    // if(preState.height !== this.state.height){
-    //   this.setState({
-    //     appHeight: window.innerHeight,
-    //   })
-    // }
+  // 생각해보니 생성할때 높이 초기화하면 필요없을듯
+  // componentDidMount(){
+  //   window.addEventListener('resize', this.handleHeight) // 화면 높이를 항상 맞추기 위한 이벤트리스너
+  //   console.log('app did mount', window.innerHeight) 
   // }
-  componentWillUnmount(){
-    window.removeEventListener('resize', this.handleHeight) // 화면 높이 이벤트리스너 해제
-  }
-  handleHeight = () => {
-    this.setState({
-      appHeight: window.innerHeight,
-    })
-  }
+  // shouldComponentUpdate(){ // 자판 튀어나와도 앱의 높이를 유지하기 위한 생명주기 메서드
+  //   return (window.innerHeight !== this.state.appHeight) ? false : true;
+  // }
+  // componentDidUpdate(preProps, preState){
+  //   console.log('app did update', window.innerHeight)
+  //   if(preState.appHeight !== window.innerHeight){
+  //     this.setState({ appHeight: preState.appHeight })
+  //   }
+  // }
+  // componentWillUnmount(){
+  //   window.removeEventListener('resize', this.handleHeight) // 화면 높이 이벤트리스너 해제
+  // }
+  // handleHeight = () => {
+  //   this.setState({ appHeight: window.innerHeight })
+  // }
 
   toggleSideMenu = () => {
     this.setState({ sideMenu: !this.state.sideMenu })
@@ -48,6 +47,7 @@ class App extends Component {
   render() {
     return (
       <Storage.Provider value={this.state}>
+
         { // 사이드메뉴랑, 상단바(햄버거)는 라우터가 아니라 그냥 조건부 렌더링으로 작성
           (this.props.location.pathname !== '/login' && 
           this.props.location.pathname !== '/signup') && 
