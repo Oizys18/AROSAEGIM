@@ -26,6 +26,14 @@ class SaegimDetail extends Component {
     this.props.history.goBack();
   }
 
+  getSaegimDetail() {
+    // 상세정보 가져오는 api 추가
+  }
+
+  componentDidMount() {
+    this.getSaegimDetail();
+  }
+
   render() {
     return (
       <div>

@@ -7,18 +7,43 @@ class SaegimList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: 3,
-      contents: '여기는 목록 페이지에서 보이는 카드',
+      data: [
+        {
+          id: 3,
+          contents: '여기는 목록 페이지에서 보이는 카드'
+        },
+        {
+          id: 4,
+          contents: '여기는 목록 페이지에서 보이는 카드'
+        }
+      ]
     }
   }
 
+  getSaegimList() {
+    // 목록 가져오는 api 추가
+  }
+
+  componentDidMount() {
+    this.getSaegimList()
+  }
+
   render() {
+    const data = this.state.data
+    const PrintList = data.map((saegim, i) => {
+      return (
+          <div>
+            <Card children={saegim.contents}/>
+            <Link to={{pathname: `${saegim.id}/`}}>
+              <DefaultButton text={saegim.id + '페이지로 갑니다'}/>
+            </Link>
+          </div>
+      )
+    });
+
     return (
       <div>
-        <Card children={this.state.contents}/>
-        <Link to={{pathname: `${this.state.id}/`}}>
-          <DefaultButton text={this.state.id + '페이지로 갑니다'}/>
-        </Link>
+        {PrintList}
       </div>
     );
   }
