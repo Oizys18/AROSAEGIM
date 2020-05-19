@@ -1,20 +1,14 @@
 import React, { Component } from 'react';
+import { Slide, Zoom, } from '@material-ui/core';
+import { Email, Lock, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
+
+import { StylesProvider } from '@material-ui/core/styles';
+import LogoAnimation from '../common/logo/LogoAnimation'
 import UserInput from '../common/inputs/UserInput'
-import DefaultButton from '../common/buttons/DefaultButton'
-import {Storage} from '../../storage/Storage'
-import styled from 'styled-components';
-import { Slide, Zoom } from '@material-ui/core';
-import { Email, Lock, CheckCircle, Warning } from '@material-ui/icons';
-
-const regExp = {
-  email: /^(([^<>()\\[\].,;:\s@"]+(\.[^<>()\\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i,
-  pw: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{6,15}$/,
-  // nickname: /^[A-Za-z0-9가-힣_]{2,10}$/,
-};
-
+import * as AM from './AccountMethod'
+import * as AS from '../../styles/account/AccountStyles'
 
 class Login extends Component {
-
   constructor(props){
     super(props);
     this.state = {
@@ -37,41 +31,11 @@ class Login extends Component {
   handleInput = async (e) => {
     if(e.currentTarget.id === 'email'){
       await this.setStateAsync({ email: e.currentTarget.value })
-      let _emailLabel = '이메일'
-      let _emailValid = 'init'
-
-      if(this.state.email !== '') {
-        if (regExp.email.test(this.state.email)) {
-          _emailValid = 'valid'
-        }
-        else {
-          _emailLabel = '이메일 양식을 지켜주세요'
-          _emailValid = 'invalid'
-        }
-      }
-      this.setState({
-        emailLabel: _emailLabel,
-        emailValid: _emailValid,
-      })
+      this.setState( AM.checkEmail(this.state.email) )
     }
     else {
       await this.setStateAsync({ pw: e.currentTarget.value })
-      let _pwLabel = '비밀번호'
-      let _pwValid = 'init'
-      
-      if(this.state.pw !== '') {
-        if (regExp.pw.test(this.state.pw)) {
-          _pwValid = 'valid'
-        }
-        else {
-          _pwLabel = '영문, 숫자 조합 6~15자'
-          _pwValid = 'invalid'
-        }
-      }
-      this.setState({
-        pwLabel: _pwLabel,
-        pwValid: _pwValid
-      })
+      this.setState( AM.checkPW(this.state.pw) )
     }
   }
 
@@ -101,16 +65,22 @@ class Login extends Component {
   handleSubmit = () => {
 
   }
+  
   handleCancel = () => {
     this.props.history.goBack()
   }
 
   render(){
-    
     return(
+      <StylesProvider injectFirst>
       <Slide in={true} direction="left">
-        <StFormCont height={this.context.appHeight}>
+        <AS.StFormCont height="100%">
+          
+          <AS.StBackBtn>
+            <ArrowBack/>
+          </AS.StBackBtn>
 
+          <LogoAnimation/>
 
           <UserInput 
             id='email' 
@@ -129,28 +99,26 @@ class Login extends Component {
             onChange={this.handleInput}
             icon={this.changeIcon('pw')} 
           />
+          
+          <AS.StBtnCont>
+            <AS.StBtn text="로그인" onClick={this.handleSubmit}/>
+          </AS.StBtnCont>
 
-          <StBtn text="로그인" onClick={this.handleSubmit}/>
-          <StBtn text="취소" onClick={this.handleCancel}/>
+          <AS.StLinkCont>
+            <a href='/signup'>
+              가입하기
+            </a>
+          </AS.StLinkCont>
 
-        </StFormCont>
+        </AS.StFormCont>
       </Slide>
+      </StylesProvider>
     )
   }
-} export default Login;
-Login.contextType = Storage;
+} 
 
-
-
-const StFormCont = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(to bottom, #ffffcc 0%, #ff9999 100%);
-  height: ${props => props.height}px;
-`;
-
-const StBtn = styled(DefaultButton)`
-
-`
+export default {
+  component: Login,
+  title: "Account",
+};
+export const login = () => <Login/>;
