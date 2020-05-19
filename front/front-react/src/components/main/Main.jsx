@@ -4,7 +4,7 @@ import DefaultButton from "../common/buttons/DefaultButton";
 class Main extends Component {
 
   go = () => {
-    this.props.history.replace('/login')
+    // this.props.history.replace('/login')
   }
 
   render() {
