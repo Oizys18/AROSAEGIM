@@ -11,16 +11,16 @@ class SideMenu extends Component {
     return(
       <>
       { 
-        this.context.sideMenu && 
-        <StOpacityBack onClick={this.context.toggleSideMenu}/> 
+        this.props.on && 
+        <StOpacityBack onClick={this.props.toggle}/> 
       }
 
-      <Slide in={this.context.sideMenu} direction='right'>
+      <Slide in={this.props.on} direction='right' >
         <StMenuCont>
           
           <StTopCont>
             <StLogo>대애충 로고</StLogo>
-            <StCloseBtn onClick={this.context.toggleSideMenu}><Close/></StCloseBtn>
+            <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
           </StTopCont>
 
           <StListCont>
@@ -32,8 +32,8 @@ class SideMenu extends Component {
       </>
     )
   }
-} SideMenu.contextType = Storage; 
-export default SideMenu;
+} export default SideMenu;
+// SideMenu.contextType = Storage; 
 
 const StOpacityBack = styled.div`
   position: fixed;
@@ -83,7 +83,7 @@ const StLogo = styled.div`
 `;
 
 const StCloseBtn = styled(IconButton)`
-  padding: 1vh;
+  /* padding: 1vh; */
   /* margin: 1vh; */
 `;
 

@@ -4,6 +4,11 @@ import HugeButton from "../common/buttons/HugeButton";
 import styled from "styled-components";
 
 class Main extends Component {
+
+  go = () => {
+    // this.props.history.replace('/login')
+  }
+
   render() {
     return (
       <Wrapper>
