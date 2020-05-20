@@ -31,7 +31,6 @@ class SideMenu extends Component {
     )
   }
 } export default SideMenu;
-// SideMenu.contextType = Storage; 
 
 const StOpacityBack = styled.div`
   position: fixed;
@@ -43,7 +42,7 @@ const StOpacityBack = styled.div`
 
   background: black;
   opacity: 0.3;
-`
+`;
 
 const StMenuCont = styled.div`
   position: fixed;
