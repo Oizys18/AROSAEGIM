@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Route, withRouter, } from "react-router-dom";
 import { Storage } from './storage/Storage'
 import Main from "./components/main/Main";
+import Write from "./components/write/Write";
 import TopBar from './components/common/menus/TopBar';
 import SideMenu from './components/common/menus/SideMenu';
 import Auth from "./components/account/Auth";
@@ -59,6 +60,7 @@ class App extends Component {
 
         <Route exact path="/" component={Main} />
         <Route path="/auth" component={Auth} />
+        <Route path="/write" component={Write} />
         <Route path="/login" component={Login}/>
         <Route path="/signup" component={Signup}/>
 
