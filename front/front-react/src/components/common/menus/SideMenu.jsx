@@ -43,7 +43,7 @@ const StOpacityBack = styled.div`
 
   background: black;
   opacity: 0.3;
-`
+`;
 
 const StMenuCont = styled.div`
   position: fixed;

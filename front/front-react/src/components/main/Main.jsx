@@ -14,7 +14,7 @@ class Main extends Component {
       <Wrapper>
         <Container>
           <div>Main! 제발 나와라!</div>
-          <DefaultButton text="더 귀여운 버튼😘" />
+          <DefaultButton text="더 귀여운 버튼😘" onClick={this.go}/>
           <HugeButton text="귀여운 버튼🥰" />
         </Container>
       </Wrapper>

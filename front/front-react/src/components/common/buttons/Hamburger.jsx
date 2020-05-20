@@ -14,10 +14,9 @@ class Hamburger extends Component {
     )
   }
 } export default Hamburger;
-// Hamburger.contextType = Storage;
 
 const StHamburger = styled(IconButton)`
-  position: absolute;
+  position: fixed;
   left: 0;
   z-index: 1;
 `
