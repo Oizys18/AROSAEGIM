@@ -1,6 +1,5 @@
 /*global kakao*/
 import React, { Component } from 'react';
-import ReactDOMServer from 'react-dom/server';
 import styled from 'styled-components';
 import DefaultButton from '../buttons/DefaultButton';
 import MapItem from './MapItem';
@@ -14,8 +13,10 @@ class Map extends Component {
       items: [],
       jsxItems: [],
       customOverlays: [],
+      selected: null,
     };
-    this.map = Object();
+    this.refs = [];
+    this.map = null;
   }
 
   componentDidMount() {
@@ -36,20 +37,24 @@ class Map extends Component {
 
         this.map = new window.kakao.maps.Map(container, options);
 
-        // load item from dummy array : change to API later
-        const items = dummyItems.map((el,index) => {
-          return {
-            title: el.title,
-            latlng: new kakao.maps.LatLng(el.latlng[0], el.latlng[1]),
-            jsxElement: <MapItem text={el.title} key={index} />,
-          }
-        })
-
-        this.setState({
-          items: items,
-        });
+        this.initializeOverlay();
       })
     }
+  }
+
+  initializeOverlay = () => {
+    let refArr = []
+    this.setState({
+      items: dummyItems,
+      jsxItems: dummyItems.map((el, index) => {
+        const itemRef = React.createRef();
+        const item = <MapItem item={el} key={index} map={this.map} selectItem={this.selectItem} ref={itemRef} />
+        refArr.push(itemRef)
+        return item
+      })
+    });
+
+    this.refs = refArr;
   }
 
   toggleRoadView = (event) => {
@@ -69,7 +74,6 @@ class Map extends Component {
   }
 
   // TODO : basic map methods
-  // 2. show item on map coordinate with <MapItem />
   // 3. go to DetailView (route)
   // 4. go to RoadView (route)
 
@@ -89,52 +93,17 @@ class Map extends Component {
 
   handleRoadView = (event) => {}
 
-  // check:
-  // 이벤트핸들러를 저 객체에 집어넣을 수 있는가?
-  // -> 있다. 하지만 컴포넌트로 해야 state를 건드릴 수 있지 않을까
-  //    react dom 을 이용해서 서버사이드 렌더링 함수를 사용하는 것도 마음에 걸립니다
-
-  clickEvent = (event) => {
-    event.preventDefault();
-    console.log('event called : ');
-    console.log(event);
-    console.log(event.target);
-  }
-
-  showItem = (event, inputItems) => {
-    const items = this.state.items;
-    let customOverlays = [];
-
-    if (this.state.customOverlays.length !== 0) {
-      this.hideItem();
-    }
-
-    // make an array of customOverlay from data
-    items.forEach(el => {
-      // wrap with div element, add click event to container
-      const itemContainer = document.createElement('div'); 
-      const item = ReactDOMServer.renderToString(el.jsxElement);
-      itemContainer.innerHTML = item;
-      itemContainer.addEventListener('click', this.clickEvent);
-
-      var customOverlay = new kakao.maps.CustomOverlay({
-        position: el.latlng,
-        content: itemContainer,
-        yAnchor: 1,
-      })
-      customOverlays.push(customOverlay);
-    })
-    
-    customOverlays.forEach(el => {
-      el.setMap(this.map)
-    });
-
-    this.setState({customOverlays: customOverlays});
+  showItem = (event) => {
+    this.refs.forEach((el)=>el.current.showItem())
   }
 
   hideItem = (event) => {
-    this.state.customOverlays.forEach(el => {
-      el.setMap(null);
+    this.refs.forEach((el)=>el.current.hideItem())
+  }
+
+  selectItem = (item) => {
+    this.setState({
+      selected: JSON.stringify(item)
     })
   }
 
@@ -142,7 +111,6 @@ class Map extends Component {
     return (
       <MapContainer>
         <h1>지도컴포넌트</h1>
-        <MapItem text="1234" item={dummyItems[0]} map={this.state.map} />
         <DefaultButton text={this.state.roadView? "로드뷰 켜짐" : "로드뷰 꺼짐"} onClick={this.toggleRoadView}></DefaultButton>
         <DefaultButton text="map level +" onClick={this.handleZoomIn}></DefaultButton>
         <DefaultButton text="map level -" onClick={this.handleZoomOut}></DefaultButton>
@@ -150,7 +118,9 @@ class Map extends Component {
         <DefaultButton text="hide item" onClick={this.hideItem}></DefaultButton>
         <div>roadview status : {this.state.roadView? "ON" : "OFF"}</div>
         <div>current map level: {this.state.level}</div>
+        <div>clicked Item : {this.state.selected ? this.state.selected : "none"}</div>
         <MapContents id="Mymap"></MapContents>
+        {this.state.jsxItems}
       </MapContainer>
     );
   }

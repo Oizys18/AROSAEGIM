@@ -10,33 +10,59 @@ class MapItem extends Component {
     super(props);
     this.myRef = React.createRef();
     this.state = {
-      item: props.item,
+      item: {title: null, latlng: [null, null]},
+    }
+  }
+  componentDidMount() {
+    this.setState({
+      item: this.props.item
+    })
+  }
+  
+  componentDidUpdate() {
+    console.log(this.props.map)
+
+    if (!!this.props.map) {
+      // do something
+      console.log(this.myRef)
+      this.showOnMap();
     }
   }
 
-  // method for map overlay : this doesn't work now
+  // initial map overlay
   showOnMap = () => {
     const customOverlay = new kakao.maps.CustomOverlay({
       position: new kakao.maps.LatLng(this.state.item.latlng[0],this.state.item.latlng[1]),
-      content: this.myRef,
+      content: this.myRef.current,
       yAnchor: 1,
       clickable: true,
     });
     customOverlay.setMap(this.props.map);
+    this.customOverlay = customOverlay
   }
 
-  clickEvent = () => {
-    console.log(this.myRef);
-    console.log(this.state.item.latlng)
-    console.log(this.props.map)
+  // deliver state item to parent
+  clickEvent = (e) => {
+    e.preventDefault();
+    this.props.selectItem(this.state.item)
+  }
+
+  // show on map
+  showItem = () => {
+    this.customOverlay.setMap(this.props.map)
+  }
+
+  // hide from map
+  hideItem = () => {
+    this.customOverlay.setMap(null)
   }
 
   render() {
     return (
-      <ItemContainer ref={this.myRef} onClick={this.clickEvent} >
+      <ItemContainer ref={this.myRef} onClick={this.clickEvent}>
         <ItemLeft />
         <ItemMiddle>
-          <TextMiddle>{this.props.text}</TextMiddle>
+          <TextMiddle>{this.state.item.title}</TextMiddle>
         </ItemMiddle>
         <ItemRight />
       </ItemContainer>
