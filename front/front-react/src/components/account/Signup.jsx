@@ -4,6 +4,7 @@ import { Slide, Zoom, } from '@material-ui/core';
 import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
+import LogoAnimation from '../common/logo/LogoAnimation'
 import UserInput from '../common/inputs/UserInput';
 import * as AM from './AccountMethod';
 import * as AS from '../../styles/account/AccountStyles';
@@ -117,6 +118,8 @@ class Signup extends Component {
           <AS.StBackBtn onClick={this.handleCancel}>
             <ArrowBack/>
           </AS.StBackBtn>
+
+          <LogoAnimation/>
 
           <UserInput 
             id='email' 
