@@ -8,6 +8,8 @@ import SideMenu from './components/common/menus/SideMenu';
 import Auth from "./components/account/Auth";
 import Login from "./components/account/Login";
 import Signup from "./components/account/Signup";
+import SaegimListPage from "./components/saegim/SaegimListPage";
+import SaegimDetail from "./components/saegim/SaegimDetail";
 
 class App extends Component {
   constructor(props){
@@ -63,7 +65,8 @@ class App extends Component {
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login}/>
         <Route path="/signup" component={Signup}/>
-
+        <Route exact path="/saegim" component={SaegimListPage}/>
+        <Route exact path="/saegim/:id" component={SaegimDetail}/>
       </Storage.Provider>
     );
   }
