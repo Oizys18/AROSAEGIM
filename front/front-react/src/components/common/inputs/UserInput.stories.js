@@ -7,6 +7,4 @@ export default {
   title: "Input",
 };
 
-export const userInput = () => (
-  <UserInput label='Label' icon={<Face/>}/>
-);
+export const userInput = () => <UserInput label='Label' icon={<Face/>}/>

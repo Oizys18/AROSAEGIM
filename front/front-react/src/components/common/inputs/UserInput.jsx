@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
-import { TextField, InputAdornment, } from '@material-ui/core';
-import { Email } from '@material-ui/icons';
+import { TextField, InputAdornment } from '@material-ui/core';
 
 class UserInput extends Component {
   render(){
+    
     return(
       <StInput
         variant="outlined"
         margin="dense"
         error={this.props.valid === 'invalid'}
         id={this.props.id}
-        type={this.props.id === 'pw' ? 'password' : 'text'}
+        type={this.props.id.includes('pw') ? 'password' : 'text'}
         label={this.props.label}
         valid={this.props.valid}
         value={this.props.value}
@@ -32,8 +32,7 @@ class UserInput extends Component {
 } export default UserInput;
 
 const StInput = styled(TextField)`
-
-  ${props => {
+  /* ${props => {
     if(props.valid === 'invalid'){
     }
     else{
@@ -48,5 +47,5 @@ const StInput = styled(TextField)`
 
       `)
     }
-  }}
+  }} */
 `;
