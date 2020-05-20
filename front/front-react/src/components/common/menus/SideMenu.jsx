@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Slide, IconButton } from '@material-ui/core';
 import { Close } from '@material-ui/icons'
-import { Storage } from '../../../storage/Storage'
-
 
 class SideMenu extends Component {
 
