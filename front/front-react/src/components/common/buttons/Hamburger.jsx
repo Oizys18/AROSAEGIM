@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {Storage} from '../../../storage/Storage';
 import styled from 'styled-components';
 import { IconButton, Zoom } from '@material-ui/core';
 import { Menu } from '@material-ui/icons';

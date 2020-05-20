@@ -6,7 +6,7 @@ import HugeButton from "../common/buttons/HugeButton";
 class Main extends Component {
 
   go = () => {
-    // this.props.history.replace('/login')
+    this.props.history.push('/login')
   }
 
   render() {
