@@ -159,9 +159,7 @@ class Signup extends Component {
           </AS.StBtnCont>
 
           <AS.StLinkCont>
-            <Link to='/login'>
-              로그인
-            </Link>
+            <Link to='/login' replace>로그인</Link>
           </AS.StLinkCont>
         </AS.StFormCont>
       </Slide>

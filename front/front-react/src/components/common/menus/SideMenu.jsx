@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 import styled from 'styled-components';
 import { Slide, IconButton } from '@material-ui/core';
-import { Close } from '@material-ui/icons'
+import { Close } from '@material-ui/icons';
+
+
 
 class SideMenu extends Component {
 
@@ -21,6 +25,9 @@ class SideMenu extends Component {
             <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
           </StTopCont>
 
+          <Link to='login'>로그인</Link>
+          <Link to='signup'>회원가입</Link>
+
           <StListCont>
             메뉴 리스트 들어갈 자리
           </StListCont>
@@ -34,7 +41,7 @@ class SideMenu extends Component {
 
 const StOpacityBack = styled.div`
   position: fixed;
-  top:0;
+  top: 0;
   z-index: 2;
 
   width: 100%;
@@ -46,7 +53,7 @@ const StOpacityBack = styled.div`
 
 const StMenuCont = styled.div`
   position: fixed;
-  top:0;
+  top: 0;
   z-index: 3;
 
   width: 70%;

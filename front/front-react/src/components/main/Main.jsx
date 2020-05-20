@@ -2,20 +2,14 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import DefaultButton from "../common/buttons/DefaultButton";
 import HugeButton from "../common/buttons/HugeButton";
-import Modal from '../common/modal/Modal';
 
 class Main extends Component {
-
-  go = () => {
-    this.props.history.push('/login')
-  }
 
   render() {
     return (
       <Wrapper>
         <Container>
-          <div>Main! 제발 나와라!</div>
-          <DefaultButton text="더 귀여운 버튼😘" onClick={this.go}/>
+          <DefaultButton text="더 귀여운 버튼😘"/>
           <HugeButton text="귀여운 버튼🥰"/>
         </Container>
       </Wrapper>
