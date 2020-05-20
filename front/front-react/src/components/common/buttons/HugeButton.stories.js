@@ -6,6 +6,6 @@ export default {
   title: "Button",
 };
 
-export const hugebtn = () => (
+export const huge_btn = () => (
   <HugeButton onClick={action("clicked")} text="짱 큰 버튼 😉" />
 );

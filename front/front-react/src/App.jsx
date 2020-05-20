@@ -1,42 +1,70 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Route, withRouter, } from "react-router-dom";
 import { Storage } from './storage/Storage'
 import Main from "./components/main/Main";
-import TopBar from './components/common/menu/TopBar';
-import SideMenu from './components/common/menu/SideMenu';
-import Auth from "./components/auth/Auth";
-import SaegimListPage from "./components/saegim/SaegimListPage";
-import SaegimDetail from "./components/saegim/SaegimDetail";
+import Write from "./components/write/Write";
+import TopBar from './components/common/menus/TopBar';
+import SideMenu from './components/common/menus/SideMenu';
+import Auth from "./components/account/Auth";
+import Login from "./components/account/Login";
+import Signup from "./components/account/Signup";
 
 class App extends Component {
   constructor(props){
     super(props);
     this.state = {
+      appHeight: window.innerHeight,
+
       sideMenu: false,
       toggleSideMenu: this.toggleSideMenu,
     }
   }
 
-  toggleSideMenu = () => {
-    this.setState({
-      sideMenu: !this.state.sideMenu,
-    })
-  }
+  // 생각해보니 생성할때 높이 초기화하면 필요없을듯
+  // componentDidMount(){
+  //   window.addEventListener('resize', this.handleHeight) // 화면 높이를 항상 맞추기 위한 이벤트리스너
+  //   console.log('app did mount', window.innerHeight) 
+  // }
+  // shouldComponentUpdate(){ // 자판 튀어나와도 앱의 높이를 유지하기 위한 생명주기 메서드
+  //   return (window.innerHeight !== this.state.appHeight) ? false : true;
+  // }
+  // componentDidUpdate(preProps, preState){
+  //   console.log('app did update', window.innerHeight)
+  //   if(preState.appHeight !== window.innerHeight){
+  //     this.setState({ appHeight: preState.appHeight })
+  //   }
+  // }
+  // componentWillUnmount(){
+  //   window.removeEventListener('resize', this.handleHeight) // 화면 높이 이벤트리스너 해제
+  // }
+  // handleHeight = () => {
+  //   this.setState({ appHeight: window.innerHeight })
+  // }
 
+  toggleSideMenu = () => {
+    this.setState({ sideMenu: !this.state.sideMenu })
+  }
 
   render() {
     return (
       <Storage.Provider value={this.state}>
-        <Router>
-          <Route path="/" component={TopBar}/>
-          <Route path="/" component={Main} />
-          <Route path="/" component={SideMenu}/>
-          <Route path="/auth" component={Auth} />
-          <Route exact path="/saegim" component={SaegimListPage} />
-          <Route exact path="/saegim/:id" component={SaegimDetail} />
-        </Router>
+
+        { // 사이드메뉴랑, 상단바(햄버거)는 라우터가 아니라 그냥 조건부 렌더링으로 작성
+          (this.props.location.pathname !== '/login' && 
+          this.props.location.pathname !== '/signup') && 
+          <>
+            <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
+            <SideMenu on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
+          </>
+        }
+
+        <Route exact path="/" component={Main} />
+        <Route path="/auth" component={Auth} />
+        <Route path="/write" component={Write} />
+        <Route path="/login" component={Login}/>
+        <Route path="/signup" component={Signup}/>
+
       </Storage.Provider>
     );
   }
-}
-export default App;
+} export default withRouter(App);
