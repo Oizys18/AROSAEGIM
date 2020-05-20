@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import Card from "../common/cards/Card";
 import DefaultButton from "../common/buttons/DefaultButton";
+import styled from "styled-components";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -37,15 +38,24 @@ class SaegimDetail extends Component {
   render() {
     return (
       <div>
+       <div>
+          <DefaultButton onClick={this.goBack} text={'뒤로가기'} />
+        </div>
+        <StCard>
         <Card>
           <div>{this.state.user_name}</div>
 
           <div>{this.state.contents}</div>
-        <DefaultButton onClick={this.goBack} text={'뒤로가기'} />
         </Card>
+          </StCard>
       </div>
     );
   }
 }
 
 export default SaegimDetail;
+
+const StCard = styled.div`
+  height: 80%
+`
+
