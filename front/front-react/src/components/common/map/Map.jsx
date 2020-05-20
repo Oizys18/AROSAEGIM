@@ -8,8 +8,10 @@ class Map extends Component {
   constructor() {
     super();
     this.state = {
+      myPos: null,
       roadView: false,
       level: 3,
+      center: null,
       items: [],
       jsxItems: [],
       customOverlays: [],
@@ -30,13 +32,24 @@ class Map extends Component {
     // initialize state after script is loaded
     script.onload = () => {
       kakao.maps.load(() => {
+        const initialCenter = new kakao.maps.LatLng(33.450701, 126.570667);
+        this.setState({center: initialCenter})
+
         let container = document.getElementById("Mymap");
         let options = {
-          center: new kakao.maps.LatLng(33.450701, 126.570667), // 37.506502, 127.053617),
+          center: initialCenter, // 37.506502, 127.053617 역삼),
           level: this.state.level,
         };
 
         this.map = new window.kakao.maps.Map(container, options);
+
+        kakao.maps.event.addListener(this.map, "zoom_changed", () => {
+          this.setState({ level: this.map.getLevel() });
+        });
+
+        kakao.maps.event.addListener(this.map, "center_changed", () => {
+          this.setState({ center: this.map.getCenter() });
+        });
 
         this.initializeOverlay();
       });
@@ -86,6 +99,19 @@ class Map extends Component {
   // 3. go to DetailView (route)
   // 4. go to RoadView (route)
 
+  handleMyPosition = () => {
+    console.log(this.state.myPos)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.setState({
+          myPos: position,
+        })
+      });
+    } else {
+      
+    }
+  }
+
   handleZoomIn = (event) => {
     const currentLevel = this.map.getLevel();
     this.map.setLevel(currentLevel - 1);
@@ -118,30 +144,29 @@ class Map extends Component {
 
   render() {
     return (
-      <MapContainer>
-        <h1>지도컴포넌트</h1>
-        <DefaultButton
-          text={this.state.roadView ? "로드뷰 켜짐" : "로드뷰 꺼짐"}
-          onClick={this.toggleRoadView}
-        ></DefaultButton>
-        <DefaultButton
-          text="map level +"
-          onClick={this.handleZoomIn}
-        ></DefaultButton>
-        <DefaultButton
-          text="map level -"
-          onClick={this.handleZoomOut}
-        ></DefaultButton>
-        <DefaultButton text="show item" onClick={this.showItem}></DefaultButton>
-        <DefaultButton text="hide item" onClick={this.hideItem}></DefaultButton>
-        <div>roadview status : {this.state.roadView ? "ON" : "OFF"}</div>
-        <div>current map level: {this.state.level}</div>
-        <div>
-          clicked Item : {this.state.selected ? this.state.selected : "none"}
-        </div>
-        <MapContents id="Mymap"></MapContents>
-        {this.state.jsxItems}
-      </MapContainer>
+      <>
+        <MapContainer>
+          <MapContents id="Mymap"></MapContents>
+          {this.state.jsxItems}
+          <div>roadview status : {this.state.roadView ? "ON" : "OFF"}</div>
+          <div>current map level: {this.state.level}</div>
+          <div>current map center: {this.state.center? this.state.center.getLat() + ' ' + this.state.center.getLng(): ''}</div>
+          <div>
+            clicked Item : {this.state.selected ? this.state.selected : "none"}
+          </div>
+        </MapContainer>
+        <MapTools>
+          <DefaultButton text="where am i?" onClick={this.handleMyPosition} />
+          <DefaultButton
+            text={this.state.roadView ? "로드뷰 켜짐" : "로드뷰 꺼짐"}
+            onClick={this.toggleRoadView}
+          />
+          <DefaultButton text="map level +" onClick={this.handleZoomIn} />
+          <DefaultButton text="map level -" onClick={this.handleZoomOut} />
+          <DefaultButton text="show item" onClick={this.showItem} />
+          <DefaultButton text="hide item" onClick={this.hideItem} />
+        </MapTools>
+      </>
     );
   }
 }
@@ -154,6 +179,13 @@ const MapContainer = styled.div`
 const MapContents = styled.div`
   width: 100%;
   height: 100%;
+`;
+
+const MapTools = styled.div`
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  right: 0;
 `;
 
 export default Map;
