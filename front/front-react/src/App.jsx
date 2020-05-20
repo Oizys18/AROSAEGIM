@@ -5,7 +5,7 @@ import Main from "./components/main/Main";
 import Write from "./components/write/Write";
 import TopBar from './components/common/menus/TopBar';
 import SideMenu from './components/common/menus/SideMenu';
-import Auth from "./components/account/Auth";
+// import Auth from "./components/account/Auth";
 import Login from "./components/account/Login";
 import Signup from "./components/account/Signup";
 
@@ -14,6 +14,8 @@ class App extends Component {
     super(props);
     this.state = {
       appHeight: window.innerHeight,
+
+      userInitPage: '/main',
 
       sideMenu: false,
       toggleSideMenu: this.toggleSideMenu,
@@ -41,6 +43,10 @@ class App extends Component {
   //   this.setState({ appHeight: window.innerHeight })
   // }
 
+  componentDidMount(){
+    this.props.history.replace(this.state.userInitPage)
+  }
+
   toggleSideMenu = () => {
     this.setState({ sideMenu: !this.state.sideMenu })
   }
@@ -59,7 +65,8 @@ class App extends Component {
         }
 
         <Route exact path="/" component={Main} />
-        <Route path="/auth" component={Auth} />
+        {/* <Route path="/auth" component={Auth} /> */}
+        <Route path="/main" component={Main} />
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login}/>
         <Route path="/signup" component={Signup}/>
