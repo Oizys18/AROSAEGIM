@@ -7,6 +7,6 @@ export default {
   title: "Button",
 };
 
-export const defaultbtn = () => (
+export const default_btn = () => (
   <DefaultButton onClick={action("clicked")} text="보통 버튼 😭" />
 );
