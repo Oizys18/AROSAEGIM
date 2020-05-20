@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import DefaultButton from "../common/buttons/DefaultButton";
 import HugeButton from "../common/buttons/HugeButton";
-import Modal from '../common/modal/Modal';
 
 class Main extends Component {
 
