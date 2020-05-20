@@ -31,7 +31,6 @@ class SideMenu extends Component {
     )
   }
 } export default SideMenu;
-// SideMenu.contextType = Storage; 
 
 const StOpacityBack = styled.div`
   position: fixed;

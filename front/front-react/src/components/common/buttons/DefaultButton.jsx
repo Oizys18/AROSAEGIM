@@ -9,7 +9,7 @@ class DefaultButton extends Component {
         onClick={this.props.onClick}
         variant="contained"
         color="default"
-        size="middle"
+        size="medium"
       >
         <BtnTxt>{this.props.text}</BtnTxt>
       </Button>
