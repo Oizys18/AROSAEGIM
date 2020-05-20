@@ -168,8 +168,8 @@ export default SaegimItem;
 const StLink = styled(Link)`
     color: inherit;
     text-decoration: none;
-     &:focus, &:hover, &:active {
-        opacity: 60%;
+    &:focus, &:hover, &:active {
+      opacity: 60%;
     }
     align-self: right;
   `
