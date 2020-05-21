@@ -15,9 +15,8 @@ export default class MapBase extends Component {
     this.state = {
       status: props.status,
       items: props.items,
-      jsxItems: [],
-      itemRefs: [],
       mapCenter: center,
+      mapBounds: [],
       userCenter: null,
       level: level,
     };
@@ -26,27 +25,31 @@ export default class MapBase extends Component {
   }
 
   componentDidMount() {
+    // this._isMounted = true;
     this.initMap();
   }
 
   componentDidUpdate() {}
 
   componentWillUnmount() {
-    kakao.maps.event.removeListener(
-      this.map,
-      "zoom_changed",
-      this.handleZoomChange
-    );
-    kakao.maps.event.removeListener(
-      this.map,
-      "center_changed",
-      this.handleCenterChange
-    );
-    kakao.maps.event.removeListener(
-      this.map,
-      "dragstart",
-      this.handleDragStart
-    );
+    // this._isMounted = false;
+    if (kakao) {
+      kakao.maps.event.removeListener(
+        this.map,
+        "zoom_changed",
+        this.handleZoomChange
+      );
+      kakao.maps.event.removeListener(
+        this.map,
+        "center_changed",
+        this.handleCenterChange
+      );
+      kakao.maps.event.removeListener(
+        this.map,
+        "dragstart",
+        this.handleDragStart
+      );
+    }
   }
 
   // TODO : navigator.geolocation.watchLocation() 확인하기
@@ -118,6 +121,11 @@ export default class MapBase extends Component {
           this.handleDragStart
         );
 
+        kakao.maps.event.addListener(
+          this.map,
+          "bounds_changed",
+          this.handleBoundsChange
+        );
         const getGeolocation = this.getGeolocation();
         getGeolocation
           .then((data) => {
@@ -177,6 +185,10 @@ export default class MapBase extends Component {
     this.map.panTo(targetCenter);
   };
 
+  getBounds = () => {
+    return this.map.getBounds();
+  }
+
   handleZoomChange = () => {
     this.props.onZoomChange();
     this.setState({ level: this.map.getLevel() });
@@ -191,6 +203,12 @@ export default class MapBase extends Component {
     this.props.onDragStart();
     this.setState({ mapCenter: this.map.getCenter() });
   };
+  
+  handleBoundsChange = () => {
+    const bounds = this.map.getBounds();
+    this.props.onBoundsChange(bounds);
+    this.setState({ mapBounds: {ne: bounds.getNorthEast(), sw: bounds.getSouthWest() }})
+  }
 
   showOverlay = () => {};
 
@@ -204,7 +222,7 @@ export default class MapBase extends Component {
 
   selectItem = (item) => {
     this.panTo({ lat: item.latlng[0], lng: item.latlng[1] });
-    this.props.selectItem(item);
+    this.props.selectItem(item, this.panTo);
   };
 
   render() {
@@ -212,15 +230,15 @@ export default class MapBase extends Component {
       <>
         <MapBaseContainer id="MapBase" />
         {this.props.status === "list" && this.overlayItems()}
-        <div>
+        {/* <div>
           geolocation {!!this.state.userCenter ? "enabled" : "disabled"}
-        </div>
+        </div> */}
       </>
     );
   }
 }
 
 const MapBaseContainer = styled.div`
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
 `;

@@ -8,7 +8,7 @@ export default class MapListItem extends Component {
     return (
       <CardContainer>
         <Card>
-          {JSON.stringify(this.props.item)}
+          <div style={{overflowWrap: 'anywhere'}}>{JSON.stringify(this.props.item)}</div>
           <DefaultButton text="자세히보기" onClick={ ()=>{alert(JSON.stringify(this.props.item))}}/>
         </Card>
       </CardContainer>
@@ -17,6 +17,6 @@ export default class MapListItem extends Component {
 }
 
 const CardContainer = styled.div`
-  width: 300px;
-  margin: 0 30px 0 30px;
+  width: auto;
+  max-width: 100%;
 `
