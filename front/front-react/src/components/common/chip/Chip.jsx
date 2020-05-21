@@ -18,5 +18,5 @@ class Chip extends Component {
 export default Chip;
 
 const StChip = styled(ChipComponent)`
-  font-size: 100px;
+  font-size: 8px;
 `;

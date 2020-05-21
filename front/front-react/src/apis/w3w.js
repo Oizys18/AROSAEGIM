@@ -5,12 +5,13 @@ import axios from "axios";
 export function CtoW(lat, lng) {
   const url = "https://api.what3words.com/v3/convert-to-3wa?coordinates=";
   const APIKEY = process.env.REACT_APP_APIKEY;
-  axios
-    .get(url + lat + "," + lng + "&language=ko&key=" + APIKEY)
-    .then((res) => {
-      return res.data.words;
-    });
-  // return axios.get(url + lat + "," + lng + "&language=ko&key=" + APIKEY);
+  // axios
+  //   .get(url + lat + "," + lng + "&language=ko&key=" + APIKEY)
+  //   .then((res) => {
+  //     console.log(res.data.words)
+  //     return res.data.words;
+  //   });
+  return axios.get(url + lat + "," + lng + "&language=ko&key=" + APIKEY);
 }
 export default CtoW;
 
