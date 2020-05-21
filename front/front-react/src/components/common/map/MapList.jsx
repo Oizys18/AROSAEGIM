@@ -13,6 +13,7 @@ export default class MapList extends Component {
       items: dummyItems,
       mapListItems: [],
       testList: [1, 2, 3],
+      selected: false,
     };
   }
 
@@ -33,6 +34,15 @@ export default class MapList extends Component {
   selectItem = (e) => {
     console.log(e);
   };
+
+  onCenterChange = () => {
+    console.log('center changed');
+  };
+
+  onZoomChange = () => {
+    console.log('zoom changed');
+  };
+
 
   prevItem = () => {
     console.log("previous item");
@@ -61,10 +71,12 @@ export default class MapList extends Component {
           status={"list"}
           items={this.state.items}
           selectItem={this.selectItem}
+          onCenterChange={this.onCenterChange}
+          onZoomChange={this.onZoomChange}
         />
         <DefaultButton text="decrease" onClick={this.prevItem} />
         <DefaultButton text="increase" onClick={this.nextItem} />
-        {this.state.testList.map(e=><div>{e}</div>)}
+        {this.state.testList.map((e, index)=><div key={index}>{e}</div>)}
         {/* <CardWrapper>{this.state.mapListItems}</CardWrapper> */}
       </>
     );

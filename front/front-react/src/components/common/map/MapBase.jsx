@@ -17,35 +17,53 @@ export default class MapBase extends Component {
       items: props.items,
       jsxItems: [],
       itemRefs: [],
-      center: center,
+      mapCenter: center,
+      userCenter: null,
       level: level,
     };
-    this.map = props.map;
+    this.map = null;
   }
 
   componentDidMount() {
-    this.getLocation();
+    this.initMap();
+  }
+
+  componentWillUnmount() {
+    kakao.maps.event.removeListener(
+      this.map,
+      "zoom_changed",
+      this.handleZoomChange
+    );
+    kakao.maps.event.removeListener(
+      this.map,
+      "center_changed",
+      this.handleCenterChange
+    );
   }
 
   // TODO : navigator.geolocation.watchLocation() 확인하기
   // https://developer.mozilla.org/ko/docs/WebAPI/Using_geolocation
-  // 아래와 같이 카카오 api를 불러오는 것은 카카오 api를
-  getLocation = () => {
+  initMap = () => {
+    let center = { lat: 37.506502, lng: 127.053617 };
+    let userCenter = null;
+
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.setState({
-          center: {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          userCenter = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
-          },
-        });
-      });
+          };
+        },
+        (error) => {
+          console.warn("error", error);
+        }
+      );
     } else {
       alert("위치 정보를 사용할 수 없습니다. 브라우저 설정을 확인해주세요.");
-      this.setState({
-        center: { lat: 37.506502, lng: 127.053617 },
-      });
+      center = { lat: 37.506502, lng: 127.053617 };
     }
+    this.setState({ mapCenter: center, userCenter: userCenter });
     this.fetchKakaoAPI();
   };
 
@@ -53,16 +71,15 @@ export default class MapBase extends Component {
   fetchKakaoAPI = () => {
     const script = document.createElement("script");
     script.async = true;
-    script.src =
-      "https://dapi.kakao.com/v2/maps/sdk.js?appkey=78ea54eeb30cab7c0130ac4ab15d3939&autoload=false";
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_API}&autoload=false`;
     document.head.appendChild(script);
 
     // initialize state after script is loaded
     script.onload = () => {
       kakao.maps.load(() => {
         const initialCenter = new kakao.maps.LatLng(
-          this.state.center.lat,
-          this.state.center.lng
+          this.state.mapCenter.lat,
+          this.state.mapCenter.lng
         );
         const initialLevel = this.state.level;
 
@@ -74,26 +91,66 @@ export default class MapBase extends Component {
           level: initialLevel,
         };
 
-        this.map = new window.kakao.maps.Map(container, options);
+        this.map = new kakao.maps.Map(container, options);
 
-        kakao.maps.event.addListener(this.map, "zoom_changed", () => {
-          this.setState({ level: this.map.getLevel() });
-        });
+        kakao.maps.event.addListener(
+          this.map,
+          "zoom_changed",
+          this.handleZoomChange
+        );
+        kakao.maps.event.addListener(
+          this.map,
+          "center_changed",
+          this.handleCenterChange
+        );
 
-        kakao.maps.event.addListener(this.map, "center_changed", () => {
-          this.setState({ center: this.map.getCenter() });
-        });
+        const getGeolocation = this.getGeolocation();
+        getGeolocation.then((data) => {
+            const userCenter = {
+              lat: data.coords.latitude,
+              lng: data.coords.longitude,
+            };
+            this.setCenter(userCenter);
+            this.setState({ userCenter: userCenter });
+          })
+          .catch((err) =>
+            console.warn(
+              "위치 정보를 가져오는데 실패했습니다. 브라우저 설정을 확인해주세요.",
+              err
+            )
+          );
+        
+        if (this.status === 'list') {
+          this.createOverlay();
+        } else if (this.status === 'point') {
+          // show point overlay
+        } else {
+          // do nothing
+        }
 
-        this.createOverlay();
       });
     };
+  };
+
+  getGeolocation = () => {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
   };
 
   createOverlay = () => {
     let itemRefs = [];
     const jsxItems = this.state.items.map((el, index) => {
       const itemRef = React.createRef();
-      const item = <MapItem ref={itemRef} map={this.map} item={el} key={index} selectItem={this.props.selectItem} />;
+      const item = (
+        <MapItem
+          ref={itemRef}
+          map={this.map}
+          item={el}
+          key={index}
+          selectItem={this.props.selectItem}
+        />
+      );
       itemRefs.push(itemRef);
       return item;
     });
@@ -103,8 +160,30 @@ export default class MapBase extends Component {
     });
   };
 
-  showOverlay = () => {
+  // move directly to given center
+  setCenter = (center) => {
+    console.log("set new center to ", center);
+    const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
+    this.map.setCenter(targetCenter);
   };
+
+  // move smoothly to given center
+  panTo = (center) => {
+    const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
+    this.map.panTo(targetCenter);
+  };
+
+  handleZoomChange = () => {
+    this.props.onZoomChange();
+    this.setState({ level: this.map.getLevel() });
+  };
+
+  handleCenterChange = () => {
+    this.props.onCenterChange();
+    this.setState({ mapCenter: this.map.getCenter() });
+  };
+
+  showOverlay = () => {};
 
   hideOverlay = (target) => {
     if (target) {
@@ -119,6 +198,9 @@ export default class MapBase extends Component {
       <>
         <MapBaseContainer id="MapBase" />
         {this.state.jsxItems}
+        <div>
+          geolocation {!!this.state.userCenter ? "enabled" : "disabled"}
+        </div>
       </>
     );
   }

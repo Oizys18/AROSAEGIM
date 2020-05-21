@@ -10,7 +10,7 @@ class MapItem extends Component {
     super(props);
     this.myRef = React.createRef();
     this.state = {
-      item: { title: null, latlng: [null, null] },
+      item: { title: null, latlng: [null, null], on: false },
     };
   }
   componentDidMount() {
@@ -47,6 +47,7 @@ class MapItem extends Component {
   // deliver state item to parent
   clickEvent = (e) => {
     e.preventDefault();
+    this.setState({on: !this.state.on})
     this.props.selectItem(this.state.item);
   };
 
