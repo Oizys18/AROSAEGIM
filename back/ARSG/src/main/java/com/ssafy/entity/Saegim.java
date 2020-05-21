@@ -1,57 +1,67 @@
 package com.ssafy.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
-import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ssafy.dto.SaegimFormDto;
+
+import lombok.*;
 
 @Entity
-@NoArgsConstructor
-@RequiredArgsConstructor
-@AllArgsConstructor
-@Table(name = "saegim")
+@NoArgsConstructor @RequiredArgsConstructor @AllArgsConstructor
 @Getter @Setter
+@Table(name = "saegim")
+@Transactional
 public class Saegim {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @ApiModelProperty(hidden=true)
     private Long id;
     
     @NonNull
     @Column(name="user_id", nullable=false)
     private Long uId;
     
+    @NonNull
+    @Column(name="user_name", nullable=false)
+    private String uName;
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="registered_datetime", nullable=false)
     private Date regDate;
     
     private String contents;
-    private String address_w3w;
+    private Double latitude;
+    private Double longitude;
+    private String w3w;
     private String image;
     private String record;
-    private Double longitude;
-    private Double latitude;
+    private Integer secret;
     
-    @Transient
-	private List<Likes> likes = new ArrayList<Likes>();
+    @OneToMany(mappedBy="saegim", fetch = FetchType.EAGER)
+	private Set<Likes> likes;
+    
 //    @OneToMany(mappedBy="saegim", fetch = FetchType.LAZY)
-//    @JsonBackReference
-//	private List<Users_Saegim> likes = new ArrayList<Users_Saegim>();
+//	private List<Tagging> taggings = new ArrayList<Tagging>();
+
+	public Saegim(SaegimFormDto sfd) {
+		super();
+		this.uId = sfd.getUId();
+		this.uName = sfd.getUName();
+		this.regDate = sfd.getRegDate();
+		this.contents = sfd.getContents();
+		this.latitude = sfd.getLatitude();
+		this.longitude = sfd.getLongitude();
+		this.w3w = sfd.getW3w();
+		this.secret = sfd.getSecret();
+	}
+    
+    
 }

@@ -1,5 +1,7 @@
 package com.ssafy.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -7,17 +9,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter @Setter
-@Table(name = "tagging")
-public class Tagging {
-	@Id @GeneratedValue
-	@JsonIgnore
-	private Long id;
+@IdClass(TaggingId.class)
+public class Tagging  implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
-	@NonNull
-	@Column(name="tag_id", nullable=false)
-	private Long tId;
-	@NonNull
-	@Column(name="saegim_id", nullable=false)
-	private Long sId;
+	@Id
+	private Long tag_id;
+	@Id
+	private Long saegim_id;
+	
+//	@JsonIgnore
+//	@ManyToOne @JoinColumn(name = "saegim_id", insertable=false, updatable=false)
+//	private Saegim saegim;
+//	
+//	@JsonIgnore
+//	@ManyToOne @JoinColumn(name = "tag_id", insertable=false, updatable=false)
+//	private Hashtag hashtag;
 }
