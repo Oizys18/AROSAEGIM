@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { Link } from "react-router-dom";
 // import DefaultButton from "../common/buttons/DefaultButton";
 import Card from "../common/cards/Card";
+import { Zoom } from "@material-ui/core";
+import "./CardItem.css"
 
 class CardItem extends Component {
   listElement;
   wrapper;
-  // background;
 
   dragStartX = 0;
   left = 0;
@@ -18,6 +19,9 @@ class CardItem extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      currentId: 0
+    }
 
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
@@ -32,11 +36,16 @@ class CardItem extends Component {
     this.onSwiped = this.onSwiped.bind(this);
   }
 
+  changeOrder() {
+    this.setState({
+      currentId: this.props.saegim.id
+    })
+  }
+
   componentDidMount() {
-    console.log(this.props)
-    console.log(this.props.zIndex)
     window.addEventListener("mouseup", this.onDragEndMouse);
     window.addEventListener("touchend", this.onDragEndTouch);
+    this.changeOrder()
   }
 
   componentWillMount() {
@@ -60,6 +69,9 @@ class CardItem extends Component {
     this.dragStartX = clientX;
     this.listElement.className = "ListItem";
     this.startTime = Date.now();
+    this.changeOrder()
+    this.listElement.style.transition = "none";
+    this.listElement.style.animation = "none"
     requestAnimationFrame(this.updatePosition);
   }
 
@@ -76,16 +88,23 @@ class CardItem extends Component {
   onDragEnd() {
     if (this.dragged) {
       this.dragged = false;
-      if (Math.abs(this.left) > this.listElement.offsetWidth / 2) {
+      if (Math.abs(this.left) > (this.listElement.offsetWidth / 4)*3) {
         this.left = -this.listElement.offsetWidth * 2;
         this.wrapper.style.maxHeight = 0;
         this.listElement.style.transform = `translateX(${this.left}px)`;
         this.onChangeData(this.props.idx)
         this.onSwiped();
       }
-      this.listElement.className = "BouncingListItem";
+
+      // this.listElement.className = "BouncingListItem";
       this.left = 0;
-      this.listElement.style.transform = `translateX(${this.left}px)`;
+      if (this.state.currentId !== this.props.saegim.id) {
+        this.listElement.style.animation = 'zoom 1s ease-out';
+        this.listElement.style.transform = `translateX(${this.left}px)`;
+      } else {
+        this.listElement.style.transition = `all ease 0.5s`;
+        this.listElement.style.transform = `translateX(${this.left}px)`;
+      }
     }
   }
 
@@ -112,7 +131,6 @@ class CardItem extends Component {
 
     if (this.dragged && _elapsed > this.fpsInterval) {
       this.listElement.style.transform = `translateX(${this.left}px)`;
-
       this.startTime = Date.now();
     }
   }
@@ -186,12 +204,17 @@ const StLinkDiv = styled.div`
 `
 
 const StCard = styled.div`
+`
 
+const zoom = keyframes`
+  from { transform: none; }
+  to { transform: scale(${props => 1.0 - props.idx * 0.05}); }
 `
 
 const StackedCard = styled.div `
   position: absolute;
   z-index: ${props => props.length - props.idx};
   bottom: ${props => 20 + props.idx * 3}%;
-  transform: scale(${props => 1.0 - props.idx * 0.05});
+  transform: scale(${props => 1.0 - ((props.idx+1) * 0.05)});
+  animation: ${zoom} 2s ease;
 `
