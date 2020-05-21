@@ -22,7 +22,7 @@ class Map extends Component {
     // load kakao api
     const script = document.createElement("script");
     script.async = true;
-    script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=78ea54eeb30cab7c0130ac4ab15d3939&autoload=false";
+    script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=2820969c0132ab6234a3db24b7a37921&autoload=false";
     document.head.appendChild(script);
 
     // initialize state after script is loaded
