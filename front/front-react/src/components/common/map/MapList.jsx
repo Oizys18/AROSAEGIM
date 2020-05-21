@@ -20,10 +20,12 @@ export default class MapList extends Component {
         latlng: [],
       },
     };
+    this.map = null;
+    this.child = React.createRef();
   }
 
   componentDidMount() {
-    console.log(this.state);
+    console.log(this.child);
     const mapListItems = this.state.items.map((el, index) => (
       <MapListItem
         key={index}
@@ -69,6 +71,10 @@ export default class MapList extends Component {
 
   onDragStart = () => {
     this.setState({ selected: false });
+  };
+
+  onBoundsChange = (bounds) => {
+    console.log(bounds)
   }
 
   decr = () => {
@@ -98,6 +104,7 @@ export default class MapList extends Component {
     this.setState({
       selectedItem: this.state.items[prevIndex],
     });
+    this.child.panTo({lat: this.state.items[prevIndex].latlng[0],lng: this.state.items[prevIndex].latlng[1]})
   };
 
   nextItem = () => {
@@ -107,6 +114,7 @@ export default class MapList extends Component {
     this.setState({
       selectedItem: this.state.items[nextIndex],
     });
+    this.child.panTo({lat: this.state.items[nextIndex].latlng[0],lng: this.state.items[nextIndex].latlng[1]})
   };
 
   addItem = () => {
@@ -121,6 +129,27 @@ export default class MapList extends Component {
     });
   };
 
+  addRndItemInView = () => {
+    const bounds = this.child.getBounds();
+    console.log(bounds)
+    const rndLatLng = [this.generateRandom(bounds.ka, bounds.ja), this.generateRandom(bounds.da, bounds.ia)]
+    console.log(rndLatLng)
+
+    const lastItem = this.state.items[this.state.items.length - 1];
+    const newItem = {
+      id: lastItem.id + 1,
+      title: `new item ${lastItem.id+1}`,
+      latlng: rndLatLng,
+    };
+    this.setState({
+      items: this.state.items.concat(newItem),
+    });
+  };
+
+  generateRandom = (min, max) => {
+    return Math.random() * (max - min) + min;
+  }
+
   getIndexById = (itemId) => {
     return this.state.items.indexOf(
       this.state.items.find((el) => el.id === itemId)
@@ -129,50 +158,70 @@ export default class MapList extends Component {
 
   render() {
     return (
-      <>
+      <MapListContainer>
         <MapBase
+          ref={Ref => this.child=Ref}
           status={"list"}
           items={this.state.items}
           selectItem={this.selectItem}
           onCenterChange={this.onCenterChange}
           onZoomChange={this.onZoomChange}
           onDragStart={this.onDragStart}
+          onBoundsChange={this.onBoundsChange}
         />
-        <DefaultButton text="decrease" onClick={this.decr} />
-        <DefaultButton text="increase" onClick={this.incr} />
-        <DefaultButton text="add item" onClick={this.addItem} />
-        {this.state.testList.map((e, index) => (
-          <div key={index}>{e}</div>
-        ))}
-        {this.state.selected ? (
-          <div>
-            현재 선택한 아이템의 카드 뷰: {this.state.selectedItem.id},{" "}
-            {this.state.selectedItem.title}
-            <MapListItem item={this.state.selectedItem} />
-            <DefaultButton text="prev Item" onClick={this.prevItem} />
-            <DefaultButton text="next Item" onClick={this.nextItem} />
-          </div>
-        ) : (
-          <></>
-        )}
-        {/* <CardWrapper>{this.state.mapListItems}</CardWrapper> */}
-      </>
+        <MapTools>
+          <ButtonWrapper>
+            <DefaultButton text="add item" onClick={this.addItem} />
+            <DefaultButton text="add random item" onClick={this.addRndItemInView} />
+          </ButtonWrapper>
+          {this.state.selected ? (
+            <div>
+              현재 선택한 아이템의 카드 뷰: {this.state.selectedItem.id},{" "}
+              {this.state.selectedItem.title}
+              <MapListItem item={this.state.selectedItem} />
+              <ButtonWrapper>
+                <DefaultButton text="prev Item" onClick={this.prevItem} />
+                <DefaultButton text="next Item" onClick={this.nextItem} />
+              </ButtonWrapper>
+            </div>
+          ) : (
+            <></>
+          )}
+        </MapTools>
+      </MapListContainer>
     );
   }
 }
 
-const CardWrapper = styled.div`
-  position: absolute;
-  height: 250px;
-  width: 300px;
-  z-index: 15;
-  bottom: -30px;
-  padding-bottom: 30px;
-  display: flex;
-  flex-direction: row;
-  overflow-x: scroll;
-  overflow-y: hidden;
+const MapListContainer = styled.div`
+  padding-top: 48px;
+  width: ${window.screen.width}px;
+  height: ${window.screen.height - 48 - 56}px;
 `;
+
+const MapTools = styled.div`
+  position: absolute;
+  bottom: 56px;
+  z-index: 15;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  padding: 0 16px 0 16px;
+`;
+
+// const CardWrapper = styled.div`
+//   position: absolute;
+//   height: 250px;
+//   width: 300px;
+//   z-index: 15;
+//   bottom: -30px;
+//   padding-bottom: 30px;
+//   display: flex;
+//   flex-direction: row;
+//   overflow-x: scroll;
+//   overflow-y: hidden;
+// `;
 
 const dummyItems = [
   {
