@@ -5,8 +5,8 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import MapIcon from "@material-ui/icons/Map";
 import { IconButton } from "@material-ui/core";
+import TextInput from "../common/inputs/TextInput";
 // import CtoW from "../../apis/w3w";
-// import Input from "@material-ui/core/Input";
 
 class Write extends Component {
   constructor() {
@@ -70,7 +70,7 @@ class Write extends Component {
       <Wrapper>
         <Container>
           <Lock onClick={this.lockOrUnlock}>{icon}</Lock>
-          <Text placeholder="당신의 추억을 새겨보세요"></Text>
+          <Text><TextInput/></Text>
           <Addition>
             <Map onClick={this.getLocation}>
               <MapIcon />
@@ -124,17 +124,8 @@ const Lock = styled(IconButton)`
   grid-row: 1 / 1;
   outline: none;
 `;
-const Text = styled.textarea`
+const Text = styled.div`
   justify-content: center;
-  height: 20vh;
-  text-align:center;
-  vertical-align:center;
-  font-size:16px;
-  margin-left: 8px;
-  margin-right: 8px;
-  background-color: transparent;
-  border: none;
-  outline: none;
   align-items: center;
   display: flex;
   grid-column: 1 / 4;
