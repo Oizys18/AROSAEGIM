@@ -6,7 +6,8 @@ import TopBar from './components/common/menus/TopBar';
 import SideMenu from './components/common/menus/SideMenu';
 import BotNav from './components/common/navbar/BotNav'
 import Main from "./components/main/Main";
-import Map from './components/common/map/Map'
+import MapTest from './components/common/map/sj/MapTest'
+// import Map from './components/common/map/Map'
 import Write from "./components/write/Write";
 // import Auth from "./components/account/Auth";
 import Login from "./components/account/Login";
@@ -22,7 +23,8 @@ class App extends Component {
 
       isLogin: false,
 
-      userInitPage: '/main',
+      userInitPage: '/map',
+      // userInitPage: '/main',
       curPage: this.props.location.pathname,
 
       sideMenu: false,
@@ -38,6 +40,7 @@ class App extends Component {
 
   componentDidMount(){
     this.props.history.replace(this.state.userInitPage)
+    // this.props.history.replace(this.props.location.pathname)
   }
 
   toggleSideMenu = () => {
@@ -71,7 +74,8 @@ class App extends Component {
         <Route exact path="/" component={Main} />
         {/* <Route path="/auth" component={Auth} /> */}
         <Route path="/main" component={Main} />
-        <Route path="/map" component={Map} />
+        <Route path="/map" component={MapTest} />
+        {/* <Route path="/map" component={Map} /> */}
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login}/>
         <Route path="/signup" component={Signup}/>
