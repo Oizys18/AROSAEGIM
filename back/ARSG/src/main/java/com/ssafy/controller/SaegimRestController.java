@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.ssafy.dto.SaegimFormDto;
 import com.ssafy.entity.Saegim;
-import com.ssafy.service.SaegimServiceImpl;
+import com.ssafy.service.SaegimService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -16,11 +17,11 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/saegim")
 public class SaegimRestController extends EntityRestController{
 	@Autowired
-	private SaegimServiceImpl saegimService;
+	private SaegimService saegimService;
 	
 	@ApiOperation("saegimId으로 새김 정보 검색")
 	@GetMapping("/id/{id}")
-	public ResponseEntity<Map<String, Object>> getSaegim(@PathVariable("id") long saegimid) throws Exception{
+	public ResponseEntity<Map<String, Object>> getSaegimBySid(@PathVariable("id") long saegimid) throws Exception{
 		return handleSuccess(saegimService.getSaegim(saegimid));
 	}
 	@ApiOperation("userId으로 새김 List 검색")
@@ -40,7 +41,18 @@ public class SaegimRestController extends EntityRestController{
 	}
 	@ApiOperation("새로운 새김 등록")
 	@PostMapping("/")
-	public ResponseEntity<Map<String, Object>> postSaegim(Saegim saegim) throws Exception{
-		return handleSuccess(saegimService.postSaegim(saegim));
+	public ResponseEntity<Map<String, Object>> postSaegim(SaegimFormDto saegimFormDto) throws Exception{
+		return handleSuccess(saegimService.postSaegim(saegimFormDto));
+	}
+	// 추가
+	@ApiOperation("lat, lng으로 주변 새김 List 검색")
+	@GetMapping("/latlng")
+	public ResponseEntity<Map<String, Object>> getSaegimsByGeo(@RequestParam double lat, @RequestParam double lng, @RequestParam int meter) throws Exception{
+		return handleSuccess(saegimService.getSaegimsByGeo(lat, lng, meter));
+	}
+	@ApiOperation("saegimId으로 새김 정보 삭제")
+	@DeleteMapping("/id/{id}")
+	public ResponseEntity<Map<String, Object>> deleteSaegimBySid(@PathVariable("id") long saegimid) throws Exception{
+		return handleSuccess((saegimService.deleteSaegimBySid(saegimid)>0)?"Remove Success":"Remove Fail");
 	}
 }

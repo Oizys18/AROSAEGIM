@@ -22,7 +22,7 @@ public class EntityRestController {
 	}
 	public ResponseEntity<Map<String, Object>> handleSuccess(Object data){
 		Map<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap.put("state", "ok");
+		resultMap.put("state", "success");
 		resultMap.put("data", data);
 		return new ResponseEntity<Map<String, Object>>(resultMap, HttpStatus.OK);
 	}
@@ -32,9 +32,9 @@ public class EntityRestController {
 		resultMap.put("data", data);
 		return new ResponseEntity<Map<String,Object>>(resultMap, state); 
 	}
-	@ApiOperation("get 요청에 관한 인삿말을 출력한다")
-	@GetMapping("/")
-	public ResponseEntity<Map<String, Object>> postHello() throws Exception{
-		return handleSuccess("GET Hello World");
-	}
+//	@ApiOperation("get 요청에 관한 인삿말을 출력한다")
+//	@GetMapping("/")
+//	public ResponseEntity<Map<String, Object>> postHello() throws Exception{
+//		return handleSuccess("GET Hello World");
+//	}
 }
