@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-// import DefaultButton from "../common/buttons/DefaultButton";
 import Card from "../common/cards/Card";
 
-class SaegimItem extends Component {
+class ListItem extends Component {
   listElement;
   wrapper;
   background;
@@ -151,7 +150,7 @@ class SaegimItem extends Component {
                 {saegim.contents}
               </div>
               <StLinkDiv>
-              <StLink to={{pathname: `/saegim/${saegim.id}/`}}>
+              <StLink to={{pathname: `/list/${saegim.id}/`}}>
                 더보기
               </StLink>
                 </StLinkDiv>
@@ -163,7 +162,7 @@ class SaegimItem extends Component {
   }
 }
 
-export default SaegimItem;
+export default ListItem;
 
 const StLink = styled(Link)`
     color: inherit;
