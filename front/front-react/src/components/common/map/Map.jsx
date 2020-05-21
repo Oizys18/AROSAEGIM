@@ -29,6 +29,7 @@ class Map extends Component {
     script.onload = () => {
       kakao.maps.load(() => {
         let container = document.getElementById("Mymap");
+
         let options = {
           center: new kakao.maps.LatLng(33.450701, 126.570667),// 37.506502, 127.053617),
           level: this.state.level,
@@ -141,7 +142,7 @@ class Map extends Component {
   render() {
     return (
       <MapContainer>
-        <h1>지도컴포넌트</h1>
+        {/* <h1>지도컴포넌트</h1> */}
         <MapItem text="1234" item={dummyItems[0]} map={this.state.map} />
         <DefaultButton text={this.state.roadView? "로드뷰 켜짐" : "로드뷰 꺼짐"} onClick={this.toggleRoadView}></DefaultButton>
         <DefaultButton text="map level +" onClick={this.handleZoomIn}></DefaultButton>
@@ -157,6 +158,8 @@ class Map extends Component {
 }
 
 const MapContainer = styled.div`
+  padding-top: 48px;
+
   width: 300px;
   height: 300px;
 `
