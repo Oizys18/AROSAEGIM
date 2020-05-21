@@ -1,57 +1,84 @@
 /*global kakao*/
-import React, { Component } from 'react';
-import ReactDOMServer from 'react-dom/server';
-import styled from 'styled-components';
-import DefaultButton from '../buttons/DefaultButton';
-import MapItem from './MapItem';
+import React, { Component } from "react";
+import styled from "styled-components";
+import DefaultButton from "../buttons/DefaultButton";
+import MapItem from "./MapItem";
 
 class Map extends Component {
   constructor() {
     super();
     this.state = {
+      myPos: null,
       roadView: false,
       level: 3,
+      center: null,
       items: [],
       jsxItems: [],
       customOverlays: [],
+      selected: null,
     };
-    this.map = Object();
+    this.refs = [];
+    this.map = null;
   }
 
   componentDidMount() {
     // load kakao api
     const script = document.createElement("script");
     script.async = true;
-    script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=78ea54eeb30cab7c0130ac4ab15d3939&autoload=false";
+    script.src =
+      "https://dapi.kakao.com/v2/maps/sdk.js?appkey=78ea54eeb30cab7c0130ac4ab15d3939&autoload=false";
     document.head.appendChild(script);
 
     // initialize state after script is loaded
     script.onload = () => {
       kakao.maps.load(() => {
+        const initialCenter = new kakao.maps.LatLng(33.450701, 126.570667);
+        this.setState({center: initialCenter})
+
         let container = document.getElementById("Mymap");
 
         let options = {
-          center: new kakao.maps.LatLng(33.450701, 126.570667),// 37.506502, 127.053617),
+          center: initialCenter, // 37.506502, 127.053617 역삼),
           level: this.state.level,
         };
 
         this.map = new window.kakao.maps.Map(container, options);
 
-        // load item from dummy array : change to API later
-        const items = dummyItems.map((el,index) => {
-          return {
-            title: el.title,
-            latlng: new kakao.maps.LatLng(el.latlng[0], el.latlng[1]),
-            jsxElement: <MapItem text={el.title} key={index} />,
-          }
-        })
-
-        this.setState({
-          items: items,
+        kakao.maps.event.addListener(this.map, "zoom_changed", () => {
+          this.setState({ level: this.map.getLevel() });
         });
-      })
-    }
+
+        kakao.maps.event.addListener(this.map, "center_changed", () => {
+          this.setState({ center: this.map.getCenter() });
+        });
+
+        this.initializeOverlay();
+      });
+    };
   }
+
+  initializeOverlay = () => {
+    let refArr = [];
+    this.setState({
+      items: dummyItems,
+      jsxItems: dummyItems.map((el, index) => {
+        const itemRef = React.createRef();
+        const item = (
+          <MapItem
+            item={el}
+            key={index}
+            map={this.map}
+            selectItem={this.selectItem}
+            ref={itemRef}
+          />
+        );
+        refArr.push(itemRef);
+        return item;
+      }),
+    });
+
+    this.refs = refArr;
+  };
 
   toggleRoadView = (event) => {
     if (this.state.roadView) {
@@ -67,92 +94,80 @@ class Map extends Component {
         roadView: true,
       });
     }
-  }
+  };
 
   // TODO : basic map methods
-  // 2. show item on map coordinate with <MapItem />
   // 3. go to DetailView (route)
   // 4. go to RoadView (route)
+
+  handleMyPosition = () => {
+    console.log(this.state.myPos)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.setState({
+          myPos: position,
+        })
+      });
+    } else {
+      
+    }
+  }
 
   handleZoomIn = (event) => {
     const currentLevel = this.map.getLevel();
     this.map.setLevel(currentLevel - 1);
-    this.setState({...this.state, level: currentLevel - 1});
-  }
+    this.setState({ ...this.state, level: currentLevel - 1 });
+  };
 
   handleZoomOut = (event) => {
     const currentLevel = this.map.getLevel();
     this.map.setLevel(currentLevel + 1);
-    this.setState({...this.state, level: currentLevel + 1});
-  }
+    this.setState({ ...this.state, level: currentLevel + 1 });
+  };
 
-  handleDetailView = (event) => {}
+  handleDetailView = (event) => {};
 
-  handleRoadView = (event) => {}
+  handleRoadView = (event) => {};
 
-  // check:
-  // 이벤트핸들러를 저 객체에 집어넣을 수 있는가?
-  // -> 있다. 하지만 컴포넌트로 해야 state를 건드릴 수 있지 않을까
-  //    react dom 을 이용해서 서버사이드 렌더링 함수를 사용하는 것도 마음에 걸립니다
-
-  clickEvent = (event) => {
-    event.preventDefault();
-    console.log('event called : ');
-    console.log(event);
-    console.log(event.target);
-  }
-
-  showItem = (event, inputItems) => {
-    const items = this.state.items;
-    let customOverlays = [];
-
-    if (this.state.customOverlays.length !== 0) {
-      this.hideItem();
-    }
-
-    // make an array of customOverlay from data
-    items.forEach(el => {
-      // wrap with div element, add click event to container
-      const itemContainer = document.createElement('div'); 
-      const item = ReactDOMServer.renderToString(el.jsxElement);
-      itemContainer.innerHTML = item;
-      itemContainer.addEventListener('click', this.clickEvent);
-
-      var customOverlay = new kakao.maps.CustomOverlay({
-        position: el.latlng,
-        content: itemContainer,
-        yAnchor: 1,
-      })
-      customOverlays.push(customOverlay);
-    })
-    
-    customOverlays.forEach(el => {
-      el.setMap(this.map)
-    });
-
-    this.setState({customOverlays: customOverlays});
-  }
+  showItem = (event) => {
+    this.refs.forEach((el) => el.current.showItem());
+  };
 
   hideItem = (event) => {
-    this.state.customOverlays.forEach(el => {
-      el.setMap(null);
-    })
-  }
+    this.refs.forEach((el) => el.current.hideItem());
+  };
+
+  selectItem = (item) => {
+    this.setState({
+      selected: JSON.stringify(item),
+    });
+  };
 
   render() {
     return (
-      <MapContainer>
-        {/* <h1>지도컴포넌트</h1> */}
-        <MapItem text="1234" item={dummyItems[0]} map={this.state.map} />
-        <DefaultButton text={this.state.roadView? "로드뷰 켜짐" : "로드뷰 꺼짐"} onClick={this.toggleRoadView}></DefaultButton>
-        <DefaultButton text="map level +" onClick={this.handleZoomIn}></DefaultButton>
-        <DefaultButton text="map level -" onClick={this.handleZoomOut}></DefaultButton>
-        <DefaultButton text="show item" onClick={this.showItem}></DefaultButton>
-        <DefaultButton text="hide item" onClick={this.hideItem}></DefaultButton>
-        <div>roadview status : {this.state.roadView? "ON" : "OFF"}</div>
-        <div>current map level: {this.state.level}</div>
-        <MapContents id="Mymap"></MapContents>
-      </MapContainer>
+      <>
+        <MapContainer>
+          <MapContents id="Mymap"></MapContents>
+          {this.state.jsxItems}
+          <div>roadview status : {this.state.roadView ? "ON" : "OFF"}</div>
+          <div>current map level: {this.state.level}</div>
+          <div>current map center: {this.state.center? this.state.center.getLat() + ' ' + this.state.center.getLng(): ''}</div>
+          <div>
+            clicked Item : {this.state.selected ? this.state.selected : "none"}
+          </div>
+        </MapContainer>
+        <MapTools>
+          <DefaultButton text="where am i?" onClick={this.handleMyPosition} />
+          <DefaultButton
+            text={this.state.roadView ? "로드뷰 켜짐" : "로드뷰 꺼짐"}
+            onClick={this.toggleRoadView}
+          />
+          <DefaultButton text="map level +" onClick={this.handleZoomIn} />
+          <DefaultButton text="map level -" onClick={this.handleZoomOut} />
+          <DefaultButton text="show item" onClick={this.showItem} />
+          <DefaultButton text="hide item" onClick={this.hideItem} />
+        </MapTools>
+      </>
     );
   }
 }
@@ -162,30 +177,37 @@ const MapContainer = styled.div`
 
   width: 300px;
   height: 300px;
-`
+`;
 
 const MapContents = styled.div`
   width: 100%;
   height: 100%;
-`
+`;
+
+const MapTools = styled.div`
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  right: 0;
+`;
 
 export default Map;
 
 const dummyItems = [
   {
-      title: '카카오', 
-      latlng: [33.450705, 126.570677]
+    title: "카카오",
+    latlng: [33.450705, 126.570677],
   },
   {
-      title: '생태연못', 
-      latlng: [33.450936, 126.569477]
+    title: "생태연못",
+    latlng: [33.450936, 126.569477],
   },
   {
-      title: '텃밭', 
-      latlng: [33.450879, 126.569940]
+    title: "텃밭",
+    latlng: [33.450879, 126.56994],
   },
   {
-      title: '근린공원',
-      latlng: [33.451393, 126.570738]
+    title: "근린공원",
+    latlng: [33.451393, 126.570738],
   },
 ];
