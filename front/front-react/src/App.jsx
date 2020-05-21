@@ -38,7 +38,7 @@ class App extends Component {
     });
   }
 
-  componentDidMount(){
+  async componentDidMount(){
     this.props.history.replace(this.state.userInitPage)
     // this.props.history.replace(this.props.location.pathname)
   }
