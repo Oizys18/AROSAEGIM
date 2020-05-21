@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {Storage} from '../../../storage/Storage';
 import styled from 'styled-components';
 import { IconButton, Zoom } from '@material-ui/core';
 import { Menu } from '@material-ui/icons';
@@ -7,18 +6,17 @@ import { Menu } from '@material-ui/icons';
 class Hamburger extends Component {
   render(){
     return(
-      <Zoom in={!this.context.sideMenu} timeout={400}>
-        <StHamburger onClick={this.context.toggleSideMenu}>
+      <Zoom in={!this.props.on} timeout={400}>
+        <StHamburger onClick={this.props.toggle}>
           <Menu/>
         </StHamburger>
       </Zoom>
     )
   }
-} Hamburger.contextType = Storage;
-export default Hamburger;
+} export default Hamburger;
 
 const StHamburger = styled(IconButton)`
-  position: absolute;
+  position: fixed;
   left: 0;
   z-index: 1;
 `

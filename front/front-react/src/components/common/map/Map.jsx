@@ -36,6 +36,7 @@ class Map extends Component {
         this.setState({center: initialCenter})
 
         let container = document.getElementById("Mymap");
+
         let options = {
           center: initialCenter, // 37.506502, 127.053617 역삼),
           level: this.state.level,
@@ -172,6 +173,8 @@ class Map extends Component {
 }
 
 const MapContainer = styled.div`
+  padding-top: 48px;
+
   width: 300px;
   height: 300px;
 `;

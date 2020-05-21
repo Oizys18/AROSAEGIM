@@ -1,34 +1,23 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-
-const DefaultBtn = styled.button`
-  color: black;
-  padding: 4px 8px 4px 8px;
-  border-radius: 0.4em;
-  font-size: 16px;
-  border-radius: 0.5em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: none;
-  box-shadow: 2px 2px 4px grey;
-  background-color: ${(props) => props.color || "ghostwhite"};
-  &:hover {
-    background-color: lightgrey;
-  }
-  &:active {
-    background-color: grey;
-  }
-  &:focus {
-    outline: none;
-  }
-`;
+import styled from 'styled-components';
+import Button from "@material-ui/core/Button";
 
 class DefaultButton extends Component {
   render() {
     return (
-      <DefaultBtn onClick={this.props.onClick}>{this.props.text}</DefaultBtn>
+      <Button
+        onClick={this.props.onClick}
+        variant="contained"
+        color="default"
+        size="medium"
+      >
+        <BtnTxt>{this.props.text}</BtnTxt>
+      </Button>
     );
   }
 }
 export default DefaultButton;
+
+const BtnTxt = styled.div`
+  /* font-size:px; */
+`
