@@ -21,12 +21,15 @@ export default class MapBase extends Component {
       userCenter: null,
       level: level,
     };
+    this.itemRefs = [];
     this.map = null;
   }
 
   componentDidMount() {
     this.initMap();
   }
+
+  componentDidUpdate() {}
 
   componentWillUnmount() {
     kakao.maps.event.removeListener(
@@ -38,6 +41,11 @@ export default class MapBase extends Component {
       this.map,
       "center_changed",
       this.handleCenterChange
+    );
+    kakao.maps.event.removeListener(
+      this.map,
+      "dragstart",
+      this.handleDragStart
     );
   }
 
@@ -104,8 +112,15 @@ export default class MapBase extends Component {
           this.handleCenterChange
         );
 
+        kakao.maps.event.addListener(
+          this.map,
+          "dragstart",
+          this.handleDragStart
+        );
+
         const getGeolocation = this.getGeolocation();
-        getGeolocation.then((data) => {
+        getGeolocation
+          .then((data) => {
             const userCenter = {
               lat: data.coords.latitude,
               lng: data.coords.longitude,
@@ -119,15 +134,6 @@ export default class MapBase extends Component {
               err
             )
           );
-        
-        if (this.status === 'list') {
-          this.createOverlay();
-        } else if (this.status === 'point') {
-          // show point overlay
-        } else {
-          // do nothing
-        }
-
       });
     };
   };
@@ -138,9 +144,9 @@ export default class MapBase extends Component {
     });
   };
 
-  createOverlay = () => {
-    let itemRefs = [];
-    const jsxItems = this.state.items.map((el, index) => {
+  overlayItems = () => {
+    const itemRefs = [];
+    const items = this.props.items.map((el, index) => {
       const itemRef = React.createRef();
       const item = (
         <MapItem
@@ -148,16 +154,14 @@ export default class MapBase extends Component {
           map={this.map}
           item={el}
           key={index}
-          selectItem={this.props.selectItem}
+          selectItem={this.selectItem}
         />
       );
       itemRefs.push(itemRef);
       return item;
     });
-    this.setState({
-      itemRefs: itemRefs,
-      jsxItems: jsxItems,
-    });
+    this.itemRefs = itemRefs;
+    return items;
   };
 
   // move directly to given center
@@ -183,6 +187,11 @@ export default class MapBase extends Component {
     this.setState({ mapCenter: this.map.getCenter() });
   };
 
+  handleDragStart = () => {
+    this.props.onDragStart();
+    this.setState({ mapCenter: this.map.getCenter() });
+  };
+
   showOverlay = () => {};
 
   hideOverlay = (target) => {
@@ -193,11 +202,16 @@ export default class MapBase extends Component {
     }
   };
 
+  selectItem = (item) => {
+    this.panTo({ lat: item.latlng[0], lng: item.latlng[1] });
+    this.props.selectItem(item);
+  };
+
   render() {
     return (
       <>
         <MapBaseContainer id="MapBase" />
-        {this.state.jsxItems}
+        {this.props.status === "list" && this.overlayItems()}
         <div>
           geolocation {!!this.state.userCenter ? "enabled" : "disabled"}
         </div>

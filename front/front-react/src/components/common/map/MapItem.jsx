@@ -9,22 +9,17 @@ class MapItem extends Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef();
-    this.state = {
-      item: { title: null, latlng: [null, null], on: false },
-    };
   }
   componentDidMount() {
-    this.setState({
-      item: this.props.item,
-    });
+    if (!!this.props.map) {
+      // do something
+      this.showOnMap();
+    }
   }
 
   componentDidUpdate() {
-    console.log(this.props.map);
-
     if (!!this.props.map) {
       // do something
-      console.log(this.myRef);
       this.showOnMap();
     }
   }
@@ -33,8 +28,8 @@ class MapItem extends Component {
   showOnMap = () => {
     const customOverlay = new kakao.maps.CustomOverlay({
       position: new kakao.maps.LatLng(
-        this.state.item.latlng[0],
-        this.state.item.latlng[1]
+        this.props.item.latlng[0],
+        this.props.item.latlng[1]
       ),
       content: this.myRef.current,
       yAnchor: 1,
@@ -47,8 +42,7 @@ class MapItem extends Component {
   // deliver state item to parent
   clickEvent = (e) => {
     e.preventDefault();
-    this.setState({on: !this.state.on})
-    this.props.selectItem(this.state.item);
+    this.props.selectItem(this.props.item);
   };
 
   // show on map
@@ -66,7 +60,7 @@ class MapItem extends Component {
       <ItemContainer ref={this.myRef} onClick={this.clickEvent}>
         <ItemLeft />
         <ItemMiddle>
-          <TextMiddle>{this.state.item.title}</TextMiddle>
+          <TextMiddle>{this.props.item.title}</TextMiddle>
         </ItemMiddle>
         <ItemRight />
       </ItemContainer>

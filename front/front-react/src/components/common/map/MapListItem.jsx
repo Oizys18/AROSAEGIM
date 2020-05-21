@@ -8,9 +8,8 @@ export default class MapListItem extends Component {
     return (
       <CardContainer>
         <Card>
-          {this.props.item.title}
-          <DefaultButton text="이전 항목" onClick={this.props.prevItem} />
-          <DefaultButton text="다음 항목" onClick={this.props.nextItem} />
+          {JSON.stringify(this.props.item)}
+          <DefaultButton text="자세히보기" onClick={ ()=>{alert(JSON.stringify(this.props.item))}}/>
         </Card>
       </CardContainer>
     );

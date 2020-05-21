@@ -14,10 +14,16 @@ export default class MapList extends Component {
       mapListItems: [],
       testList: [1, 2, 3],
       selected: false,
+      selectedItem: {
+        id: -1,
+        title: "",
+        latlng: [],
+      },
     };
   }
 
   componentDidMount() {
+    console.log(this.state);
     const mapListItems = this.state.items.map((el, index) => (
       <MapListItem
         key={index}
@@ -31,37 +37,94 @@ export default class MapList extends Component {
     });
   }
 
-  selectItem = (e) => {
-    console.log(e);
+  componentDidUpdate() {}
+
+  selectItem = (item) => {
+    console.log("selected: ", item);
+    if (!this.state.selected) {
+      this.setState({
+        selected: true,
+        selectedItem: item,
+      });
+    } else if (item === this.state.selectedItem) {
+      this.setState({
+        selected: false,
+      });
+    } else {
+      this.setState({
+        selectedItem: item,
+      });
+    }
   };
 
   onCenterChange = () => {
-    console.log('center changed');
+    console.log("center changed");
+    // this.setState({ selected: false });
   };
 
   onZoomChange = () => {
-    console.log('zoom changed');
+    console.log("zoom changed");
+    this.setState({ selected: false });
   };
 
+  onDragStart = () => {
+    this.setState({ selected: false });
+  }
 
-  prevItem = () => {
+  decr = () => {
     console.log("previous item");
     const testList = this.state.testList;
     testList.pop();
-    testList.unshift(testList[0]-1);
-    this.setState({
-      testList: testList
-    })
-  };
-
-  nextItem = () => {
-    console.log("next item");
-    const testList = this.state.testList;
-    testList.shift();
-    testList.push(testList[testList.length-1]+1);
+    testList.unshift(testList[0] - 1);
     this.setState({
       testList: testList,
     });
+  };
+
+  incr = () => {
+    console.log("next item");
+    const testList = this.state.testList;
+    testList.shift();
+    testList.push(testList[testList.length - 1] + 1);
+    this.setState({
+      testList: testList,
+    });
+  };
+
+  prevItem = () => {
+    const currentIndex = this.getIndexById(this.state.selectedItem.id);
+    const prevIndex =
+      currentIndex === 0 ? this.state.items.length - 1 : currentIndex - 1;
+    this.setState({
+      selectedItem: this.state.items[prevIndex],
+    });
+  };
+
+  nextItem = () => {
+    const currentIndex = this.getIndexById(this.state.selectedItem.id);
+    const nextIndex =
+      currentIndex === this.state.items.length - 1 ? 0 : currentIndex + 1;
+    this.setState({
+      selectedItem: this.state.items[nextIndex],
+    });
+  };
+
+  addItem = () => {
+    const lastItem = this.state.items[this.state.items.length - 1];
+    const newItem = {
+      id: lastItem.id + 1,
+      title: lastItem.title,
+      latlng: [lastItem.latlng[0] + 0.0005, lastItem.latlng[1]],
+    };
+    this.setState({
+      items: this.state.items.concat(newItem),
+    });
+  };
+
+  getIndexById = (itemId) => {
+    return this.state.items.indexOf(
+      this.state.items.find((el) => el.id === itemId)
+    );
   };
 
   render() {
@@ -73,10 +136,25 @@ export default class MapList extends Component {
           selectItem={this.selectItem}
           onCenterChange={this.onCenterChange}
           onZoomChange={this.onZoomChange}
+          onDragStart={this.onDragStart}
         />
-        <DefaultButton text="decrease" onClick={this.prevItem} />
-        <DefaultButton text="increase" onClick={this.nextItem} />
-        {this.state.testList.map((e, index)=><div key={index}>{e}</div>)}
+        <DefaultButton text="decrease" onClick={this.decr} />
+        <DefaultButton text="increase" onClick={this.incr} />
+        <DefaultButton text="add item" onClick={this.addItem} />
+        {this.state.testList.map((e, index) => (
+          <div key={index}>{e}</div>
+        ))}
+        {this.state.selected ? (
+          <div>
+            현재 선택한 아이템의 카드 뷰: {this.state.selectedItem.id},{" "}
+            {this.state.selectedItem.title}
+            <MapListItem item={this.state.selectedItem} />
+            <DefaultButton text="prev Item" onClick={this.prevItem} />
+            <DefaultButton text="next Item" onClick={this.nextItem} />
+          </div>
+        ) : (
+          <></>
+        )}
         {/* <CardWrapper>{this.state.mapListItems}</CardWrapper> */}
       </>
     );
