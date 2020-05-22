@@ -151,7 +151,6 @@ class CardItem extends Component {
     return (
       <div className="Wrapper" ref={div => (this.wrapper = div)}>
         <StackedCard idx={idx} length={length}>
-          <StCard>
             <div
               onClick={this.onClicked}
               ref={div => (this.listElement = div)}
@@ -160,20 +159,23 @@ class CardItem extends Component {
               className="ListItem"
             >
               <Card>
-                <div>
-                  {saegim.id}
-                </div>
-                <div>
-                  {saegim.contents}
-                </div>
-                <StLinkDiv>
-                <StLink to={{pathname: `/list/${saegim.id}`}}>
-                  더보기
-                </StLink>
-                  </StLinkDiv>
+                <StCard>
+                  <Location>위 치 자 리</Location>
+                  <Registered>작 성 시 간</Registered>
+                  <Contents>
+                    {saegim.contents}, id: {saegim.id}
+                  </Contents>
+                  <StLinkDiv>
+                  <StLink to={{pathname: `/list/${saegim.id}/`}}>
+                    더보기
+                  </StLink>
+                </StLinkDiv>
+                <Comments>
+                  <div>댓 글 자 리 </div>
+                </Comments>
+                </StCard>
               </Card>
             </div>
-          </StCard>
           </StackedCard>
       </div>
     )
@@ -192,11 +194,37 @@ const StLink = styled(Link)`
   `
 
 const StLinkDiv = styled.div`
+  grid-area: link;
   display: flex;
   justify-content: flex-end;
 `
 
 const StCard = styled.div`
+  display: grid;
+  grid-template-rows: repeat(5, minmax(8vh, auto));
+  grid-template-columns: repeat(5, minmax(16vw, auto)) ;
+  grid-template-areas:
+    "location location . date date"
+    ". contents contents contents ."
+    ". contents contents contents ."
+    ". contents contents contents ."
+    "link . . comments comments";
+`
+
+const Contents = styled.div`
+  grid-area: contents;
+`
+
+const Comments = styled.div`
+  grid-area: comments;
+`
+
+const Location = styled.div`
+  grid-area: location;
+`
+
+const Registered = styled.div`
+  grid-area: date
 `
 
 const zoom = keyframes`

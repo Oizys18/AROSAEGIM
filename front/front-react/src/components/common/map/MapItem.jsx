@@ -8,17 +8,20 @@ import imgRight from "../../../assets/balloon/balloon-right@2x.png";
 class MapItem extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      on: false,
+    }
     this.myRef = React.createRef();
   }
   componentDidMount() {
-    if (!!this.props.map) {
+    if (!this.state.on && !!this.props.map) {
       // do something
       this.showOnMap();
     }
   }
 
   componentDidUpdate() {
-    if (!!this.props.map) {
+    if (!this.state.on && !!this.props.map ) {
       // do something
       this.showOnMap();
     }
@@ -33,10 +36,13 @@ class MapItem extends Component {
       ),
       content: this.myRef.current,
       yAnchor: 1,
-      clickable: true,
+      clickable: false,
     });
     customOverlay.setMap(this.props.map);
     this.customOverlay = customOverlay;
+    this.setState({
+      on: true,
+    })
   };
 
   // deliver state item to parent

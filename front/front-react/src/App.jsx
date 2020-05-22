@@ -4,7 +4,7 @@ import { Storage } from "./storage/Storage";
 import TopBar from "./components/common/menus/TopBar";
 import SideMenu from "./components/common/menus/SideMenu";
 import BotNav from "./components/common/navbar/BotNav";
-// import MapTest from './components/common/map/sj/MapTest'
+import MapViewWrapperTest from './components/common/map/MapViewWrapperTest'
 import MapPage from "./components/common/map/MapPage";
 import Write from "./components/write/Write";
 // import Auth from "./components/account/Auth";
@@ -78,7 +78,7 @@ class App extends Component {
           <Route path="/list" component={SaegimListPage} />
         </Switch>
         <Route path="/map" component={MapPage} />
-        {/* <Route path="/map" component={MapTest} /> */}
+        {/* <Route path="/map" component={MapViewWrapperTest} /> */}
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />

@@ -4,37 +4,18 @@ import styled from 'styled-components';
 import {IconButton, Zoom} from '@material-ui/core';
 import {Map, Streetview} from '@material-ui/icons';
 import {FlexColumn} from '../../../styles/DispFlex';
+import DefaultButton from "../buttons/DefaultButton";
 
 import MapView from './MapView';
+import MapListItem from "./MapListItem";
 import RoadView from './RoadView';
-
-const dummyItems = [
-  {
-    title: "카카오",
-    latlng: [33.450705, 126.570677],
-  },
-  {
-    title: "생태연못",
-    latlng: [33.450936, 126.569477],
-  },
-  {
-    title: "텃밭",
-    latlng: [33.450879, 126.56994],
-  },
-  {
-    title: "근린공원",
-    latlng: [33.451393, 126.570738],
-  },
-  {
-    title: "할리스",
-    latlng: [37.50083104531534, 127.03694678811341],
-  },
-];
 
 class MapPage extends Component {
   constructor(props){
     super(props)
     this.state = {
+      items: dummyItems,
+
       mv: null,
 
       rv: null,
@@ -42,12 +23,15 @@ class MapPage extends Component {
 
       center: new kakao.maps.LatLng(37.50083104531534, 127.03694678811341),
       level: 3,
-
-      mkrLi: [],
+      userCenter: null,
+      selected: {
+        status: false,
+        item: null,
+      },
+      bounds: null,
 
       roadView: false,
     }
-    this.map = null
   }
 
   setStateAsync(state) {
@@ -66,6 +50,8 @@ class MapPage extends Component {
     const _mapView = new kakao.maps.Map(_container, _options);
     kakao.maps.event.addListener(_mapView, "zoom_changed", this.changeLvCt)
     kakao.maps.event.addListener(_mapView, "center_changed", this.changeLvCt)
+    // kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
+    // kakao.maps.event.addListener(_mapView, "bounds_changed", this.handleBoundsChange)
 
     await this.setStateAsync({ mv: _mapView })
     this.getMkrLi()
@@ -86,6 +72,8 @@ class MapPage extends Component {
   componentWillUnmount(){
     kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLvCt)
     kakao.maps.event.removeListener(this.state.mv, "center_changed", this.changeLvCt)
+    // kakao.maps.event.removeListener(this.state.mv, "dragstart", this.handleDragStart)
+    // kakao.maps.event.removeListener(this.state.mv, "bounds_changed", this.handleBoundsChange)
   }
 
   getMkrLi = () => {
@@ -93,10 +81,79 @@ class MapPage extends Component {
       const mkr = new kakao.maps.Marker({
         position:  new kakao.maps.LatLng(el.latlng[0], el.latlng[1])
       });
-      // console.log(this.state.mapView)
+      // console.log(this.state.mvView)
       mkr.setMap(this.state.mv)
     })
   }
+
+  // handleDragStart = () => {
+  //   this.setState({ mapCenter: this.state.mv.getCenter() });
+  //   this.closeItem();
+  // };
+
+  // handleBoundsChange = () => {
+  //   this.setState({ bounds: this.state.mv.getBounds() });
+  //   // this.closeItem();
+  // };
+
+  // move directly to given center
+  setCenter = (center) => {
+    const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
+    this.state.mv.setCenter(targetCenter);
+  };
+
+  // move smoothly to given center
+  panTo = (center) => {
+    const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
+    this.state.mv.panTo(targetCenter);
+  };
+
+  selectItem = (item) => {
+    // console.log(item);
+    this.panTo({ lat: item.latlng[0], lng: item.latlng[1] });
+    this.setState({ selected: { status: true, item: item } });
+  };
+
+  closeItem = () => {
+    this.setState({ selected: { status: false, item: null } });
+  };
+
+  prevItem = () => {
+    const currentIndex = this.state.items.indexOf(this.state.selected.item);
+    const prevIndex =
+      currentIndex === 0 ? this.state.items.length - 1 : currentIndex - 1;
+    this.selectItem(this.state.items[prevIndex]);
+  };
+
+  nextItem = () => {
+    const currentIndex = this.state.items.indexOf(this.state.selected.item);
+    const nextIndex =
+      currentIndex === this.state.items.length - 1 ? 0 : currentIndex + 1;
+    this.selectItem(this.state.items[nextIndex]);
+  };
+
+  // function for development
+  addRndItemInView = () => {
+    const bounds = this.state.mv.getBounds();
+    console.log(bounds)
+    const rndLatLng = [
+      this.generateRandom(bounds.ka, bounds.ja),
+      this.generateRandom(bounds.da, bounds.ia),
+    ];
+    const lastItem = this.state.items[this.state.items.length - 1];
+    const newItem = {
+      id: lastItem.id + 1,
+      title: `new item ${lastItem.id + 1}`,
+      latlng: rndLatLng,
+    };
+    this.setState({
+      items: this.state.items.concat(newItem),
+    });
+  };
+
+  generateRandom = (min, max) => {
+    return Math.random() * (max - min) + min;
+  };
 
   changeLvCt = () => {
     this.setState({
@@ -150,28 +207,50 @@ class MapPage extends Component {
     )
   }
 
-  changeIcon = () => {
-    return (
-      <>
-        <Map style={{visibility: 'hidden'}}/>
-        <Zoom in={this.state.roadView} style={{position: 'absolute', zIndex: 12,}}><Map/></Zoom>
-        <Zoom in={!this.state.roadView} style={{position: 'absolute', zIndex: 13,}}><Streetview/></Zoom>
-      </>
-    )
-  }
-
   render(){
     return(
       <StMapCont>
         <StViewCont>
           <Zoom in={true}>
+            <>
             <StBtnCont>
               <IconButton disableRipple onClick={this.tglView}>{this.changeIcon()}</IconButton>
             </StBtnCont>
+            <ButtonWrapper>
+              <DefaultButton
+                text="add random item"
+                onClick={this.addRndItemInView}
+              />
+            </ButtonWrapper>
+            {this.state.selected.status && (
+              <>
+                <ButtonWrapper>
+                  <DefaultButton text="prev Item" onClick={this.prevItem} />
+                  <DefaultButton text="next Item" onClick={this.nextItem} />
+                </ButtonWrapper>
+                <MapListItem
+                  item={this.state.selected.item}
+                  closeItem={this.closeItem}
+                />
+              </>
+            )}
+            </>
           </Zoom>
 
-          <MapView hide={this.state.roadView}/>
-          <RoadView rv={this.state.rv} rvc={this.state.rvc} data={dummyItems} hide={!this.state.roadView}/>
+          <MapView
+            map={this.state.mv}
+            status="list"
+            items={this.state.items}
+            selectItem={this.selectItem}
+            hide={this.state.roadView}
+          />
+
+          <RoadView 
+            rv={this.state.rv} 
+            rvc={this.state.rvc} 
+            data={dummyItems} 
+            hide={!this.state.roadView}
+          />
 
         </StViewCont>
       </StMapCont>
@@ -202,3 +281,37 @@ const StBtnCont = styled.div`
   border-radius: 50%;
 
 `;
+
+const ButtonWrapper = styled.div`
+  position: absolute;
+  z-index: 10;
+
+  bottom: 72px;
+
+  display: flex;
+  padding: 0 16px 0 16px;
+`;
+
+
+const dummyItems = [
+  {
+    title: "카카오",
+    latlng: [33.450705, 126.570677],
+  },
+  {
+    title: "생태연못",
+    latlng: [33.450936, 126.569477],
+  },
+  {
+    title: "텃밭",
+    latlng: [33.450879, 126.56994],
+  },
+  {
+    title: "근린공원",
+    latlng: [33.451393, 126.570738],
+  },
+  {
+    title: "할리스",
+    latlng: [37.50083104531534, 127.03694678811341],
+  },
+];
