@@ -18,6 +18,8 @@ class TopBar extends Component {
 
 const StTopCont = styled.div`
   position: fixed;
+  z-index: 100;
+
   display: flex;
   justify-content: center;
   align-items: center;

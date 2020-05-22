@@ -42,7 +42,7 @@ class SideMenu extends Component {
 const StOpacityBack = styled.div`
   position: fixed;
   top: 0;
-  z-index: 2;
+  z-index: 110;
 
   width: 100%;
   height: 100%;
@@ -54,7 +54,7 @@ const StOpacityBack = styled.div`
 const StMenuCont = styled.div`
   position: fixed;
   top: 0;
-  z-index: 3;
+  z-index: 120;
 
   width: 70%;
   height: 100%;
