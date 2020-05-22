@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-// import DefaultButton from "../common/buttons/DefaultButton";
 import Card from "../common/cards/Card";
 
 class SaegimItem extends Component {
@@ -151,7 +150,7 @@ class SaegimItem extends Component {
                 {saegim.contents}
               </div>
               <StLinkDiv>
-              <StLink to={{pathname: `/saegim/${saegim.id}/`}}>
+              <StLink to={`list/${saegim.id}`} replace>
                 더보기
               </StLink>
                 </StLinkDiv>
