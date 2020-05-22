@@ -4,12 +4,7 @@ import { Storage } from "./storage/Storage";
 import TopBar from "./components/common/menus/TopBar";
 import SideMenu from "./components/common/menus/SideMenu";
 import BotNav from "./components/common/navbar/BotNav";
-<<<<<<< HEAD
-import Main from "./components/main/Main";
 import MapList from "./components/common/map/MapList";
-=======
-import Map from "./components/common/map/Map";
->>>>>>> 42bc8c1a8027e5c8351601ff7e33b9a596b0397e
 import Write from "./components/write/Write";
 // import Auth from "./components/account/Auth";
 import Login from "./components/account/Login";
