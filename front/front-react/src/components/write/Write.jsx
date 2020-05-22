@@ -8,10 +8,10 @@ import { IconButton } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
 import DefaultButton from "../common/buttons/DefaultButton";
-// import CtoW from "../../apis/w3w";
+import CtoW from "../../apis/w3w";
 class Write extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       locked: false,
       location: null,
@@ -49,18 +49,16 @@ class Write extends Component {
   }
 
   componentDidUpdate(prevState) {
-    // console.log(this.state.w3w)
-    // console.log(prevState.w3w)
-    // if (this.state.w3w !== prevState.w3w) {
-    //   const getWWW = async () => {
-    //     var www = await CtoW(this.state.location[0], this.state.location[1]);
-    //     this.setState({
-    //       w3w: www.data.words,
-    //     });
-    //   };
-    //   getWWW();
-    //   console.log(this.state.w3w)
-    // }
+    if (this.state.w3w !== prevState.w3w) {
+      const getWWW = async () => {
+        var www = await CtoW(this.state.location[0], this.state.location[1]);
+        this.setState({
+          w3w: www.data.words,
+        });
+      };
+      getWWW();
+      console.log(this.state.w3w)
+    }
   }
   lockOrUnlock = () => {
     if (this.state.locked) {
