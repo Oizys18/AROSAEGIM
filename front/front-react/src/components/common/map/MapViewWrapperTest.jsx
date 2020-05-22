@@ -70,7 +70,7 @@ class MapViewWrapperTest extends Component {
 
   handleCenterChange = () => {
     this.setState({ mapCenter: this.state.map.getCenter() });
-    this.closeItem();
+    // this.closeItem();
   };
 
   handleDragStart = () => {
@@ -80,7 +80,7 @@ class MapViewWrapperTest extends Component {
 
   handleBoundsChange = () => {
     this.setState({ bounds: this.state.map.getBounds() });
-    this.closeItem();
+    // this.closeItem();
   };
 
   // move directly to given center
