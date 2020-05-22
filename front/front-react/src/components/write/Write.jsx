@@ -17,22 +17,29 @@ class Write extends Component {
       location: null,
       w3w: null,
     };
+
   }
+
+  getWWW = async (lat, lng) => {
+    var www = await CtoW(lat, lng);
+    this.setState({
+      w3w: www.data.words,
+    });
+  };
+
   componentDidMount() {
     if (navigator.geolocation) {
       // GPS를 지원
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          this.setState(
-            {
-              location: [position.coords.latitude, position.coords.longitude],
-            },
-            () =>
-              // alert([
-              //   position.coords.latitude + " " + position.coords.longitude,
-              // ])
-              console.log(this.state.location)
-          );
+          const _lat = position.coords.latitude
+          const _lng = position.coords.longitude
+           
+          this.setState({
+            location: [_lat, _lng],
+          });
+
+          this.getWWW(_lat, _lng)
         },
         function(error) {
           console.error(error);
@@ -48,18 +55,6 @@ class Write extends Component {
     }
   }
 
-  componentDidUpdate(prevState) {
-    if (this.state.w3w !== prevState.w3w) {
-      const getWWW = async () => {
-        var www = await CtoW(this.state.location[0], this.state.location[1]);
-        this.setState({
-          w3w: www.data.words,
-        });
-      };
-      getWWW();
-      console.log(this.state.w3w)
-    }
-  }
   lockOrUnlock = () => {
     if (this.state.locked) {
       this.setState({ locked: false });
