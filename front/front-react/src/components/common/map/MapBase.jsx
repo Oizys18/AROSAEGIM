@@ -83,7 +83,7 @@ export default class MapBase extends Component {
     const script = document.createElement("script");
     script.async = true;
     script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_API}&autoload=false`;
-    document.head.appendChild(script);
+    // document.head.appendChild(script);
 
     // initialize state after script is loaded
     script.onload = () => {
