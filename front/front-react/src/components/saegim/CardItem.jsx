@@ -1,12 +1,14 @@
 import React, { Component } from "react";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { Link } from "react-router-dom";
+// import DefaultButton from "../common/buttons/DefaultButton";
 import Card from "../common/cards/Card";
+import { Zoom } from "@material-ui/core";
+import "./CardItem.css"
 
-class SaegimItem extends Component {
+class CardItem extends Component {
   listElement;
   wrapper;
-  background;
 
   dragStartX = 0;
   left = 0;
@@ -17,6 +19,9 @@ class SaegimItem extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      currentId: 0
+    }
 
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
@@ -31,9 +36,16 @@ class SaegimItem extends Component {
     this.onSwiped = this.onSwiped.bind(this);
   }
 
+  changeOrder() {
+    this.setState({
+      currentId: this.props.saegim.id
+    })
+  }
+
   componentDidMount() {
     window.addEventListener("mouseup", this.onDragEndMouse);
     window.addEventListener("touchend", this.onDragEndTouch);
+    this.changeOrder()
   }
 
   componentWillMount() {
@@ -57,6 +69,9 @@ class SaegimItem extends Component {
     this.dragStartX = clientX;
     this.listElement.className = "ListItem";
     this.startTime = Date.now();
+    this.changeOrder()
+    this.listElement.style.transition = "none";
+    this.listElement.style.animation = "none"
     requestAnimationFrame(this.updatePosition);
   }
 
@@ -73,17 +88,23 @@ class SaegimItem extends Component {
   onDragEnd() {
     if (this.dragged) {
       this.dragged = false;
-      if (Math.abs(this.left) > this.listElement.offsetWidth / 2) {
+      if (Math.abs(this.left) > (this.listElement.offsetWidth / 4)*3) {
         this.left = -this.listElement.offsetWidth * 2;
         this.wrapper.style.maxHeight = 0;
         this.listElement.style.transform = `translateX(${this.left}px)`;
-        // 없어지게 만들 것
+        this.onChangeData(this.props.idx)
         this.onSwiped();
+      }
+
+      // this.listElement.className = "BouncingListItem";
+      this.left = 0;
+      if (this.state.currentId !== this.props.saegim.id) {
+        this.listElement.style.animation = 'zoom 1s ease-out';
+        this.listElement.style.transform = `translateX(${this.left}px)`;
       } else {
-        this.left = 0;
+        this.listElement.style.transition = `all ease 0.5s`;
         this.listElement.style.transform = `translateX(${this.left}px)`;
       }
-      this.listElement.className = "BouncingListItem";
     }
   }
 
@@ -110,7 +131,6 @@ class SaegimItem extends Component {
 
     if (this.dragged && _elapsed > this.fpsInterval) {
       this.listElement.style.transform = `translateX(${this.left}px)`;
-
       this.startTime = Date.now();
     }
   }
@@ -127,42 +147,47 @@ class SaegimItem extends Component {
     }
   }
 
+  onChangeData() {
+    this.props.onChangeData()
+  }
+
   render() {
-    const saegim = this.props.children;
+    const saegim = this.props.saegim;
+    const idx = this.props.idx;
+    const length = this.props.length
     return (
       <div className="Wrapper" ref={div => (this.wrapper = div)}>
-        <div className="Background" ref={div => (this.background = div)}>
-          {this.props.background ? (this.props.background) : <span></span>}
-        </div>
-        <StCard>
-          <div
-            onClick={this.onClicked}
-            ref={div => (this.listElement = div)}
-            onMouseDown={this.onDragStartMouse}
-            onTouchStart={this.onDragStartTouch}
-            className="ListItem"
-          >
-            <Card>
-              <div>
-                {saegim.id}
-              </div>
-              <div>
-                {saegim.contents}
-              </div>
-              <StLinkDiv>
-              <StLink to={`list/${saegim.id}`} replace>
-                더보기
-              </StLink>
-                </StLinkDiv>
-            </Card>
-          </div>
-        </StCard>
+        <StackedCard idx={idx} length={length}>
+          <StCard>
+            <div
+              onClick={this.onClicked}
+              ref={div => (this.listElement = div)}
+              onMouseDown={this.onDragStartMouse}
+              onTouchStart={this.onDragStartTouch}
+              className="ListItem"
+            >
+              <Card>
+                <div>
+                  {saegim.id}
+                </div>
+                <div>
+                  {saegim.contents}
+                </div>
+                <StLinkDiv>
+                <StLink to={{pathname: `/list/${saegim.id}/`}}>
+                  더보기
+                </StLink>
+                  </StLinkDiv>
+              </Card>
+            </div>
+          </StCard>
+          </StackedCard>
       </div>
     )
   }
 }
 
-export default SaegimItem;
+export default CardItem;
 
 const StLink = styled(Link)`
     color: inherit;
@@ -179,5 +204,17 @@ const StLinkDiv = styled.div`
 `
 
 const StCard = styled.div`
-  margin-top: 16px;
+`
+
+const zoom = keyframes`
+  from { transform: none; }
+  to { transform: scale(${props => 1.0 - props.idx * 0.05}); }
+`
+
+const StackedCard = styled.div `
+  position: absolute;
+  z-index: ${props => props.length - props.idx};
+  bottom: ${props => 20 + props.idx * 3}%;
+  transform: scale(${props => 1.0 - ((props.idx+1) * 0.05)});
+  animation: ${zoom} 2s ease;
 `
