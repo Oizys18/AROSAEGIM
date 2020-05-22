@@ -4,10 +4,8 @@ import { Storage } from "./storage/Storage";
 import TopBar from "./components/common/menus/TopBar";
 import SideMenu from "./components/common/menus/SideMenu";
 import BotNav from "./components/common/navbar/BotNav";
-import MapViewWrapperTest from './components/common/map/MapViewWrapperTest'
 import MapPage from "./components/common/map/MapPage";
 import Write from "./components/write/Write";
-// import Auth from "./components/account/Auth";
 import Login from "./components/account/Login";
 import Signup from "./components/account/Signup";
 import SaegimListPage from "./components/saegim/SaegimListPage";
@@ -21,7 +19,7 @@ class App extends Component {
 
       isLogin: false,
 
-      userInitPage: "/map",
+      userInitPage: "/list",
       curPage: this.props.location.pathname,
 
       sideMenu: false,
@@ -78,7 +76,6 @@ class App extends Component {
           <Route path="/list" component={SaegimListPage} />
         </Switch>
         <Route path="/map" component={MapPage} />
-        {/* <Route path="/map" component={MapViewWrapperTest} /> */}
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />

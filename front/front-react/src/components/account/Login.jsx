@@ -70,7 +70,7 @@ class Login extends Component {
   }
 
   handleSubmit = () => {
-
+    console.log(process.env.REACT_APP_URL)
   }
   
   handleCancel = async () => {
