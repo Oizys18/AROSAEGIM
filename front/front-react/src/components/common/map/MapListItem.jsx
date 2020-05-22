@@ -8,9 +8,8 @@ export default class MapListItem extends Component {
     return (
       <CardContainer>
         <Card>
-          {this.props.item.title}
-          <DefaultButton text="이전 항목" onClick={this.props.prevItem} />
-          <DefaultButton text="다음 항목" onClick={this.props.nextItem} />
+          <div style={{overflowWrap: 'anywhere'}}>{JSON.stringify(this.props.item)}</div>
+          <DefaultButton text="자세히보기" onClick={ ()=>{alert(JSON.stringify(this.props.item))}}/>
         </Card>
       </CardContainer>
     );
@@ -18,6 +17,6 @@ export default class MapListItem extends Component {
 }
 
 const CardContainer = styled.div`
-  width: 300px;
-  margin: 0 30px 0 30px;
+  width: auto;
+  max-width: 100%;
 `

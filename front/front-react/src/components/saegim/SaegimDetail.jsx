@@ -4,7 +4,7 @@ import Card from "../common/cards/Card";
 import styled from "styled-components";
 import { ArrowBack } from "@material-ui/icons";
 import bgImage from "../../assets/images/sample_img.jpg"
-import { LockOutlined } from "@material-ui/icons";
+import { Lock, LockOpen } from "@material-ui/icons";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class SaegimDetail extends Component {
       longitude: '',
       latitude: '',
       registered_datetime: '',
-      isLocked: '',
+      isLocked: 0,
       like: '',
       tags: ''
     };
@@ -42,6 +42,7 @@ class SaegimDetail extends Component {
     return (
       <Wrapper>
       <Contents>
+        <BackGround />
         <Location>위 치 자 리</Location>
         <Registered>작 성 시 간</Registered>
         <CardWrapper>
@@ -54,7 +55,7 @@ class SaegimDetail extends Component {
           태 그 자 리
         </Tags>
         <LockIcon>
-         <LockOutlined />
+          {this.state.isLocked ? <Lock /> : <LockOpen />}
          </LockIcon>
       </Contents>
       <Communication>
@@ -87,16 +88,12 @@ const CardWrapper = styled.div `
 `
 
 const Contents = styled.div `
+  position: relative;
+  z-index: 1;
+  
+  margin-top: 48px;
   height: 50%;
-  background-image: url(${bgImage});
-  background-size: 100% 100%;
-  // z-index: 1;
-  // &::before {
-  //   background-image: url(${bgImage});
-  //   background-size: 100% 100%;
-  //   opacity: 0.5;
-  //   z-index: -1;
-  // }
+  
   display: grid;
   grid-template-rows: repeat(5, 20%);
   grid-template-columns: repeat(5, 20%);
@@ -106,6 +103,18 @@ const Contents = styled.div `
     ". contents contents contents ."
     ". contents contents contents ."
     "tags tags tags . isLocked";
+`
+
+const BackGround = styled.div `
+  position: absolute;
+  z-index: -1;
+  
+  height: 100%;
+  width: 100%;
+  
+  background-image: url(${bgImage});
+  background-size: 100% 100%;
+  opacity: 0.7;
 `
 
 const LockIcon = styled.div `
