@@ -35,8 +35,8 @@ class BotNav extends Component {
         <StNavCont>
 
           <Zoom in={true} timeout={500}>
-            <StBtn id="main" onClick={this.props.changePage} disableRipple>
-              <Dashboard fontSize={this.props.location.pathname === '/main' ? 'large' : 'default'}/>
+            <StBtn id="list" onClick={this.props.changePage} disableRipple>
+              <Dashboard fontSize={this.props.location.pathname === '/list' ? 'large' : 'default'}/>
             </StBtn>
           </Zoom>
 
