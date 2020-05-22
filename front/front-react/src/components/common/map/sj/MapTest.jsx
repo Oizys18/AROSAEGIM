@@ -46,7 +46,6 @@ class MapTest extends Component {
   }
 
   async componentDidMount(){
-    console.log('mount')
     const _container = document.getElementById("mapView");
     const _options = {
       center: this.state.center,
@@ -119,7 +118,6 @@ class MapTest extends Component {
               <IconButton disableRipple onClick={this.tglView}>{this.changeIcon()}</IconButton>
             </StBtnCont>
           </Zoom>
-
           <StView id='mapView' hidden={this.state.roadView}/>
           <StView id='roadView' hidden={!this.state.roadView}/>
         </StViewCont>

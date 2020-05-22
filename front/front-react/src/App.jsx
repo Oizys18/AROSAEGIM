@@ -7,7 +7,7 @@ import SideMenu from "./components/common/menus/SideMenu";
 import BotNav from "./components/common/navbar/BotNav";
 import Main from "./components/main/Main";
 import MapTest from './components/common/map/sj/MapTest'
-// import Map from './components/common/map/Map'
+import Map from './components/common/map/Map'
 import Write from "./components/write/Write";
 // import Auth from "./components/account/Auth";
 import Login from "./components/account/Login";

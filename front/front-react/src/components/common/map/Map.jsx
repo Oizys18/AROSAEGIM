@@ -23,6 +23,7 @@ class Map extends Component {
 
   componentDidMount() {
     // load kakao api
+    console.log('map mount')
     const script = document.createElement("script");
     script.async = true;
     script.src =
