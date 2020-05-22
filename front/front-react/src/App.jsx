@@ -6,7 +6,7 @@ import TopBar from "./components/common/menus/TopBar";
 import SideMenu from "./components/common/menus/SideMenu";
 import BotNav from "./components/common/navbar/BotNav";
 import Main from "./components/main/Main";
-import Map from "./components/common/map/Map";
+import MapList from "./components/common/map/MapList";
 import Write from "./components/write/Write";
 // import Auth from "./components/account/Auth";
 import Login from "./components/account/Login";
@@ -73,7 +73,7 @@ class App extends Component {
         <Route exact path="/" component={Main} />
         {/* <Route path="/auth" component={Auth} /> */}
         <Route path="/main" component={Main} />
-        <Route path="/map" component={Map} />
+        <Route path="/map" component={MapList} />
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
