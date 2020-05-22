@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import ListItem from "./ListItem";
 import SaegimList from "./SaegimList";
-import CardView from "./CardView";
 import CardItem from "./CardItem";
 import styled from "styled-components";
 import { Zoom } from "@material-ui/core";
-
-const background = <span style={{display:"none"}}>Archive</span>;
-const ListState = new React.createContext();
 
 class SaegimListPage extends Component {
   constructor(props) {
