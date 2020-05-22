@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import styled, { keyframes, css } from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
-// import DefaultButton from "../common/buttons/DefaultButton";
 import Card from "../common/cards/Card";
-import { Zoom } from "@material-ui/core";
 import "./CardItem.css"
 
 class CardItem extends Component {
@@ -46,11 +44,6 @@ class CardItem extends Component {
     window.addEventListener("mouseup", this.onDragEndMouse);
     window.addEventListener("touchend", this.onDragEndTouch);
     this.changeOrder()
-  }
-
-  componentWillMount() {
-    window.addEventListener("mouseup", this.onDragEndMouse);
-    window.addEventListener("touchend", this.onDragEndTouch);
   }
 
   onDragStartMouse(e) {

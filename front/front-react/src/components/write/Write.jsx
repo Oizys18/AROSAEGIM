@@ -9,10 +9,9 @@ import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
 import DefaultButton from "../common/buttons/DefaultButton";
 import CtoW from "../../apis/w3w";
-
 class Write extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       locked: false,
       location: null,
@@ -21,9 +20,12 @@ class Write extends Component {
 
   }
 
-  getWWW = (latitude, longitude) => {
-    return CtoW(latitude, longitude)
-  }
+  getWWW = async (lat, lng) => {
+    var www = await CtoW(lat, lng);
+    this.setState({
+      w3w: www.data.words,
+    });
+  };
 
   componentDidMount() {
     if (navigator.geolocation) {
@@ -31,15 +33,13 @@ class Write extends Component {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const _lat = position.coords.latitude
-          const _long = position.coords.longtitude
-
-          const _www = CtoW(_lat, _long)
-          console.log(_www)
-
+          const _lng = position.coords.longitude
+           
           this.setState({
-            location: [_lat, _long],
-            w3w: CtoW(_lat, _long).data.words
+            location: [_lat, _lng],
           });
+
+          this.getWWW(_lat, _lng)
         },
         function(error) {
           console.error(error);
@@ -55,20 +55,6 @@ class Write extends Component {
     }
   }
 
-  componentDidUpdate(prevState) {
-    // console.log(this.state.w3w)
-    // console.log(prevState.w3w)
-    // if (this.state.w3w !== prevState.w3w) {
-    //   const getWWW = async () => {
-    //     var www = await CtoW(this.state.location[0], this.state.location[1]);
-    //     this.setState({
-    //       w3w: www.data.words,
-    //     });
-    //   };
-    //   getWWW();
-    //   console.log(this.state.w3w)
-    // }
-  }
   lockOrUnlock = () => {
     if (this.state.locked) {
       this.setState({ locked: false });

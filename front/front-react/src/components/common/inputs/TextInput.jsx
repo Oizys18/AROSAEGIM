@@ -12,7 +12,7 @@ class TextInput extends Component {
           rowsMax={6}
           margin="dense"
           variant="outlined"
-          color="warning"
+          // color="warning"
         />
       </div>
     );
