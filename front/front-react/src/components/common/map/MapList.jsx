@@ -74,7 +74,6 @@ export default class MapList extends Component {
   };
 
   onBoundsChange = (bounds) => {
-    console.log(bounds)
   }
 
   decr = () => {
@@ -129,11 +128,15 @@ export default class MapList extends Component {
     });
   };
 
+  closeItem = () => {
+    this.setState({
+      selected: false
+    })
+  }
+
   addRndItemInView = () => {
     const bounds = this.child.getBounds();
-    console.log(bounds)
     const rndLatLng = [this.generateRandom(bounds.ka, bounds.ja), this.generateRandom(bounds.da, bounds.ia)]
-    console.log(rndLatLng)
 
     const lastItem = this.state.items[this.state.items.length - 1];
     const newItem = {
@@ -178,7 +181,7 @@ export default class MapList extends Component {
             <div>
               현재 선택한 아이템의 카드 뷰: {this.state.selectedItem.id},{" "}
               {this.state.selectedItem.title}
-              <MapListItem item={this.state.selectedItem} />
+              <MapListItem item={this.state.selectedItem} closeItem={this.closeItem}/>
               <ButtonWrapper>
                 <DefaultButton text="prev Item" onClick={this.prevItem} />
                 <DefaultButton text="next Item" onClick={this.nextItem} />
@@ -195,8 +198,8 @@ export default class MapList extends Component {
 
 const MapListContainer = styled.div`
   padding-top: 48px;
-  width: ${window.screen.width}px;
-  height: ${window.screen.height - 48 - 56}px;
+  width: ${window.innerWidth}px;
+  height: ${window.innerHeight - 48 - 56}px;
 `;
 
 const MapTools = styled.div`

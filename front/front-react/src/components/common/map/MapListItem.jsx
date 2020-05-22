@@ -10,6 +10,7 @@ export default class MapListItem extends Component {
         <Card>
           <div style={{overflowWrap: 'anywhere'}}>{JSON.stringify(this.props.item)}</div>
           <DefaultButton text="자세히보기" onClick={ ()=>{alert(JSON.stringify(this.props.item))}}/>
+          <DefaultButton text="닫기" onClick={this.props.closeItem}/>
         </Card>
       </CardContainer>
     );
