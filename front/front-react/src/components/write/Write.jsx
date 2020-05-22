@@ -8,7 +8,8 @@ import { IconButton } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
 import DefaultButton from "../common/buttons/DefaultButton";
-// import CtoW from "../../apis/w3w";
+import CtoW from "../../apis/w3w";
+
 class Write extends Component {
   constructor(props) {
     super(props);
@@ -17,22 +18,28 @@ class Write extends Component {
       location: null,
       w3w: null,
     };
+
   }
+
+  getWWW = (latitude, longitude) => {
+    return CtoW(latitude, longitude)
+  }
+
   componentDidMount() {
     if (navigator.geolocation) {
       // GPS를 지원
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          this.setState(
-            {
-              location: [position.coords.latitude, position.coords.longitude],
-            },
-            () =>
-              // alert([
-              //   position.coords.latitude + " " + position.coords.longitude,
-              // ])
-              console.log(this.state.location)
-          );
+          const _lat = position.coords.latitude
+          const _long = position.coords.longtitude
+
+          const _www = CtoW(_lat, _long)
+          console.log(_www)
+
+          this.setState({
+            location: [_lat, _long],
+            w3w: CtoW(_lat, _long).data.words
+          });
         },
         function(error) {
           console.error(error);

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, withRouter } from "react-router-dom";
+import { Route, withRouter, Switch } from "react-router-dom";
 import { Storage } from "./storage/Storage";
 import TopBar from "./components/common/menus/TopBar";
 import SideMenu from "./components/common/menus/SideMenu";
@@ -47,9 +47,9 @@ class App extends Component {
   changePage = (e) => {
     if (e.currentTarget.id === "write"
     ) {
-      this.props.history.push(e.currentTarget.id);
+      this.props.history.push(`/${e.currentTarget.id}`);
     } else {
-      this.props.history.replace(e.currentTarget.id);
+      this.props.history.replace(`/${e.currentTarget.id}`);
     }
   };
 
@@ -73,13 +73,16 @@ class App extends Component {
         )}
 
         <Route exact path="/" component={SaegimListPage} />
-        <Route exact path="/list" component={SaegimListPage} />
+        <Switch>
+          <Route path="/list/:id" component={SaegimDetail} />
+          <Route path="/list" component={SaegimListPage} />
+        </Switch>
         {/* <Route path="/map" component={Map} /> */}
         <Route path="/map" component={MapTest} />
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route exact path="/list/:id" component={SaegimDetail} />
+        
       </Storage.Provider>
     );
   }
