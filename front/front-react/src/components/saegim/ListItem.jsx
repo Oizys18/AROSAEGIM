@@ -150,7 +150,7 @@ class ListItem extends Component {
                 {saegim.contents}
               </div>
               <StLinkDiv>
-              <StLink to={{pathname: `/list/${saegim.id}/`}}>
+              <StLink to={`list/${saegim.id}`} replace>
                 더보기
               </StLink>
                 </StLinkDiv>
