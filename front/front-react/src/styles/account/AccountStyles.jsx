@@ -5,7 +5,7 @@ import { IconButton } from '@material-ui/core';
 
 export const StFormCont = styled(FlexColumn)`
   position: relative;
-  background: linear-gradient(to bottom, #ffffcc 0%, #ff9999 100%);
+  /* background: linear-gradient(to bottom, #ffffcc 0%, #ff9999 100%); */
   height: ${props => props.height}px;
 `;
 

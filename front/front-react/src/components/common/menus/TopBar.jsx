@@ -17,7 +17,9 @@ class TopBar extends Component {
 } export default TopBar;
 
 const StTopCont = styled.div`
-  position: relative;
+  position: fixed;
+  z-index: 100;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -25,7 +27,7 @@ const StTopCont = styled.div`
   background: gray;
   width: 100%;
   height: 48px;
-`
+`;
 
 const StLogo = styled.div`
   display: flex;
@@ -38,4 +40,4 @@ const StLogo = styled.div`
   background: #f2f2f2;
   border: 3px solid gray;
   box-sizing: border-box;
-`
+`;

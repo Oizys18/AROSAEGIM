@@ -4,6 +4,7 @@ import { Slide, Zoom, } from '@material-ui/core';
 import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
+import LogoAnimation from '../common/logo/LogoAnimation'
 import UserInput from '../common/inputs/UserInput';
 import * as AM from './AccountMethod';
 import * as AS from '../../styles/account/AccountStyles';
@@ -12,6 +13,8 @@ class Signup extends Component {
   constructor(props){
     super(props);
     this.state = {
+      slideIn: true,
+
       email: '',
       emailLabel: '이메일',
       emailValid: 'init',
@@ -101,19 +104,22 @@ class Signup extends Component {
   handleSubmit = () => {
 
   }
-  handleCancel = () => {
+  handleCancel = async () => {
+    await this.setStateAsync({ slideIn: false })
     this.props.history.goBack()
   }
 
   render(){
     
     return(
-      <Slide in={true} direction="left">
+      <Slide in={this.state.slideIn} direction="left">
         <AS.StFormCont height={this.context.appHeight}>
           
           <AS.StBackBtn onClick={this.handleCancel}>
             <ArrowBack/>
           </AS.StBackBtn>
+
+          <LogoAnimation/>
 
           <UserInput 
             id='email' 
@@ -156,11 +162,8 @@ class Signup extends Component {
           </AS.StBtnCont>
 
           <AS.StLinkCont>
-            <Link to='/login'>
-              로그인
-            </Link>
+            <Link to='/login' replace>로그인</Link>
           </AS.StLinkCont>
-
         </AS.StFormCont>
       </Slide>
     )
