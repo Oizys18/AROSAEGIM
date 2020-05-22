@@ -6,11 +6,12 @@ import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import MapIcon from "@material-ui/icons/Map";
 import { IconButton } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
+import Chip from "../common/chip/Chip";
+import DefaultButton from "../common/buttons/DefaultButton";
 // import CtoW from "../../apis/w3w";
-
 class Write extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       locked: false,
       location: null,
@@ -18,17 +19,20 @@ class Write extends Component {
     };
   }
   componentDidMount() {
-    // this.getLocation();
-  }
-  getLocation = () => {
     if (navigator.geolocation) {
       // GPS를 지원
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          alert([position.coords.latitude + " " + position.coords.longitude]);
-          this.setState({
-            location: [position.coords.latitude, position.coords.longitude],
-          });
+          this.setState(
+            {
+              location: [position.coords.latitude, position.coords.longitude],
+            },
+            () =>
+              // alert([
+              //   position.coords.latitude + " " + position.coords.longitude,
+              // ])
+              console.log(this.state.location)
+          );
         },
         function(error) {
           console.error(error);
@@ -42,8 +46,22 @@ class Write extends Component {
     } else {
       alert("GPS를 지원하지 않습니다");
     }
-  };
+  }
 
+  componentDidUpdate(prevState) {
+    // console.log(this.state.w3w)
+    // console.log(prevState.w3w)
+    // if (this.state.w3w !== prevState.w3w) {
+    //   const getWWW = async () => {
+    //     var www = await CtoW(this.state.location[0], this.state.location[1]);
+    //     this.setState({
+    //       w3w: www.data.words,
+    //     });
+    //   };
+    //   getWWW();
+    //   console.log(this.state.w3w)
+    // }
+  }
   lockOrUnlock = () => {
     if (this.state.locked) {
       this.setState({ locked: false });
@@ -51,11 +69,6 @@ class Write extends Component {
       this.setState({ locked: true });
     }
   };
-  // getLoc = async (location) => {
-  //   const getW3W = await CtoW(location[0], location[1]);
-  //   this.setState({ w3w: getW3W });
-  //   console.log(getW3W);
-  // };
 
   render() {
     const locked = this.state.locked;
@@ -70,17 +83,23 @@ class Write extends Component {
       <Wrapper>
         <Container>
           <Lock onClick={this.lockOrUnlock}>{icon}</Lock>
-          <Text><TextInput/></Text>
+          <Text>
+            <TextInput />
+          </Text>
           <Addition>
             <Map onClick={this.getLocation}>
               <MapIcon />
-              <span>위치</span>
+              <span>{this.state.w3w}</span>
             </Map>
             <Tag onClick={() => alert("태그 곧 넣을게요ㅠ")}>
               <LocalOfferIcon />
-              <span>태그</span>
+              <Chip size="small" text="태그1" />
+              <Chip size="small" text="태그2" />
             </Tag>
           </Addition>
+          <ButtonContainer>
+            <DefaultButton text="작성" onClick={() => alert('작성완료!')}/>
+          </ButtonContainer>
         </Container>
       </Wrapper>
     );
@@ -120,7 +139,7 @@ const Lock = styled(IconButton)`
   display: flex;
   background-color: transparent;
   border: none;
-  grid-column: 3 / 3;
+  grid-column: 4 / 4;
   grid-row: 1 / 1;
   outline: none;
 `;
@@ -128,7 +147,7 @@ const Text = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
-  grid-column: 1 / 4;
+  grid-column: 1 / 5;
   grid-row: 2 / 2;
 `;
 const Addition = styled.div`
@@ -155,4 +174,9 @@ const Tag = styled(IconButton)`
   border: none;
   outline: none;
   font-size: 16px;
+`;
+
+const ButtonContainer = styled.div`
+  grid-column: 4 / 4;
+  grid-row: 3 / 3;
 `;
