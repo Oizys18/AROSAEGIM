@@ -9,15 +9,17 @@ import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
 import DefaultButton from "../common/buttons/DefaultButton";
 import CtoW from "../../apis/w3w";
+import axios from "axios";
 class Write extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.handleTextChange = this.handleTextChange.bind(this);
     this.state = {
       locked: false,
       location: null,
       w3w: null,
+      text: null,
     };
-
   }
 
   getWWW = async (lat, lng) => {
@@ -32,14 +34,14 @@ class Write extends Component {
       // GPS를 지원
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const _lat = position.coords.latitude
-          const _lng = position.coords.longitude
-           
+          const _lat = position.coords.latitude;
+          const _lng = position.coords.longitude;
+
           this.setState({
             location: [_lat, _lng],
           });
 
-          this.getWWW(_lat, _lng)
+          this.getWWW(_lat, _lng);
         },
         function(error) {
           console.error(error);
@@ -63,6 +65,22 @@ class Write extends Component {
     }
   };
 
+  writePost = () => {
+    const data = {};
+    axios
+      .post(process.env.REACT_APP_BACK_URL + "/saegim/", data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  handleTextChange = (value) => {
+    // console.log(value)
+    this.setState({ text: value });
+    // console.log(this.state.value);
+  };
   render() {
     const locked = this.state.locked;
     let icon;
@@ -77,7 +95,7 @@ class Write extends Component {
         <Container>
           <Lock onClick={this.lockOrUnlock}>{icon}</Lock>
           <Text>
-            <TextInput />
+            <TextInput onTextChange={this.handleTextChange} />
           </Text>
           <Addition>
             <Map onClick={this.getLocation}>
@@ -91,7 +109,21 @@ class Write extends Component {
             </Tag>
           </Addition>
           <ButtonContainer>
-            <DefaultButton text="작성" onClick={() => alert('작성완료!')}/>
+            <DefaultButton
+              text="작성"
+              onClick={() =>
+                alert(
+                  " w3w: " +
+                    this.state.w3w +
+                    "\n location: " +
+                    this.state.location +
+                    "\n text: " +
+                    this.state.text +
+                    "\n \n 작성완료"
+                )
+              }
+            />
+            {/* <DefaultButton text="작성" onClick={() => this.writePost()} /> */}
           </ButtonContainer>
         </Container>
       </Wrapper>
