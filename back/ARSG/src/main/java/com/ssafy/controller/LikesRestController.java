@@ -12,8 +12,8 @@ import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
-@RequestMapping("/favorite")
-public class FavoriteRestController extends EntityRestController{
+@RequestMapping("/likes")
+public class LikesRestController extends EntityRestController{
 	@Autowired
 	private LikesRepository likesRepository;
 	

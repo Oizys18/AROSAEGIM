@@ -51,17 +51,4 @@ public class Saegim {
 //    @OneToMany(mappedBy="saegim", fetch = FetchType.LAZY)
 //	private List<Tagging> taggings = new ArrayList<Tagging>();
 
-	public Saegim(SaegimFormDto sfd) {
-		super();
-		this.uId = sfd.getUId();
-		this.uName = sfd.getUName();
-		this.regDate = sfd.getRegDate();
-		this.contents = sfd.getContents();
-		this.latitude = sfd.getLatitude();
-		this.longitude = sfd.getLongitude();
-		this.w3w = sfd.getW3w();
-		this.secret = sfd.getSecret();
-	}
-    
-    
 }

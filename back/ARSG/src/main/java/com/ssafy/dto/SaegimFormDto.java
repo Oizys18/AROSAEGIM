@@ -16,7 +16,7 @@ public class SaegimFormDto {
 	@NonNull
     private String uName;
 	@NonNull
-    private Date regDate;
+    private String regDate;
 	@NonNull
     private String contents;
 	@NonNull
