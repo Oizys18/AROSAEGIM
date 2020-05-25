@@ -11,7 +11,7 @@
 	<groupId>com.ssafy</groupId>
 	<artifactId>ARSG</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>ARSG</name>
 	<description>ARSG project for Spring Boot</description>
 

@@ -63,7 +63,16 @@ public class SaegimServiceImpl implements SaegimService {
 	}
 	@Override
 	public SaegimDto postSaegim(SaegimFormDto saegimFormDto) {
-		Saegim tmp = new Saegim(saegimFormDto);
+		Saegim tmp = new Saegim();
+		tmp.setId(Long.parseLong("0"));
+		tmp.setUId(saegimFormDto.getUId());
+		tmp.setUName(saegimFormDto.getUName());
+		tmp.setRegDate(java.sql.Date.valueOf(saegimFormDto.getRegDate()));
+		tmp.setContents(saegimFormDto.getContents());
+		tmp.setLatitude(saegimFormDto.getLatitude());
+		tmp.setLongitude(saegimFormDto.getLongitude());
+		tmp.setW3w(saegimFormDto.getW3w());
+		tmp.setSecret(saegimFormDto.getSecret());
 		tmp = saegimRepository.save(tmp);
 		if(tmp != null) {
 			SaegimDto saegimDto = new SaegimDto(tmp.getId(), tmp.getUId(), tmp.getUName(), tmp.getRegDate(), tmp.getContents(), tmp.getLatitude(), tmp.getLongitude(), tmp.getW3w());

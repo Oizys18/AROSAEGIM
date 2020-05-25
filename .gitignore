@@ -1,12 +1,16 @@
-
+﻿
 # Created by https://www.gitignore.io/api/java,react,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=java,react,visualstudiocode
 
 # Git Ignore 파일 
 # 현재 추가된 Ignore
+## AWS
 ## Java
 ## React
 ## Visualstudio code
+
+### AWS ###
+aws
 
 ### Java ###
 # Compiled class file
