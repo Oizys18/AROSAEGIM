@@ -25,8 +25,15 @@ class SideMenu extends Component {
             <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
           </StTopCont>
 
-          <Link to='login'>로그인</Link>
-          <Link to='signup'>회원가입</Link>
+          {
+            this.props.isLogin ? 
+            <div>로그인 시 유저 정보</div>
+            :
+            <>
+              <Link to='login'>로그인</Link>
+              <Link to='signup'>회원가입</Link>
+            </>
+          }
 
           <StListCont>
             메뉴 리스트 들어갈 자리

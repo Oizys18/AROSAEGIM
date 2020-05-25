@@ -18,9 +18,9 @@ class App extends Component {
       appHeight: window.innerHeight,
 
       isLogin: false,
+      handleLogin: this.handleLogin,
 
       userInitPage: "/list",
-      curPage: this.props.location.pathname,
 
       sideMenu: false,
       toggleSideMenu: this.toggleSideMenu,
@@ -34,8 +34,20 @@ class App extends Component {
   }
 
   async componentDidMount(){
-    this.props.history.replace(this.state.userInitPage)
-    // this.props.history.replace(this.props.location.pathname)
+    const _autoLogin = localStorage.getItem('ARSG autoLogin')
+    if(_autoLogin === 'true'){
+      const _email = localStorage.getItem('ARSG email')
+      this.props.history.replace('/map')
+    }
+    else {
+      const _email = sessionStorage.getItem('ARSG email')
+      if(_email !== null){
+        this.props.history.replace('/map')
+      }
+      else{
+        this.props.history.replace('/list')
+      }
+    }
   }
 
   toggleSideMenu = () => {
