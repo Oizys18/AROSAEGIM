@@ -2,19 +2,23 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
-
+import SelectInput from "../common/inputs/SelectInput";
 
 class MyPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       mySaegim: 'time',
-      bookMark: 'time'
+      bookMark: 'time',
+      options: [
+        { value: 'time', text: '시간 순으로 보기'},
+        { value: 'location', text: '장소 별로 보기'},
+        { value: 'tag', text: '태그 별로 보기'}
+        ]
     }
   };
 
   componentDidMount() {
-    console.log(this.state)
   }
 
   handleChange = async (e) => {
@@ -22,7 +26,6 @@ class MyPage extends Component {
     await this.setState({
       [_name]: e.target.value
     })
-    console.log(this.state)
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -32,6 +35,13 @@ class MyPage extends Component {
   }
 
   render() {
+    const PrintOptions = this.state.options.map((option) => {
+        return (
+          <option value={option.value} key={option.text}>{option.text}</option>
+        )
+      }
+    )
+
     return (
       <div>
         <Wrapper>
@@ -57,9 +67,7 @@ class MyPage extends Component {
             </UserSaegim>
           </UserInfo>
           <SaegimInfo>
-            <FormControl className>
-              <Select
-                native
+              <StSelect
                 value={this.state.mySaegim}
                 onChange={this.handleChange}
                 inputProps={{
@@ -67,17 +75,11 @@ class MyPage extends Component {
                   id: 'mySaegim',
                 }}
               >
-                {/*<option aria-label="None" value="" />*/}
-                <option value="time">시간 순으로 보기</option>
-                <option value="location">장소로 보기</option>
-                <option value="tag">태그로 보기</option>
-              </Select>
-          </FormControl>
+                {PrintOptions}
+              </StSelect>
           </SaegimInfo>
           <SaegimInfo>
-            <FormControl className>
-              <Select
-                native
+              <StSelect
                 value={this.state.bookMark}
                 onChange={this.handleChange}
                 inputProps={{
@@ -85,12 +87,8 @@ class MyPage extends Component {
                   id: 'bookMark',
                 }}
               >
-                {/*<option aria-label="None" value="" />*/}
-                <option value="time">시간 순으로 보기</option>
-                <option value="location">장소로 보기</option>
-                <option value="tag">태그로 보기</option>
-              </Select>
-            </FormControl>
+                {PrintOptions}
+              </StSelect>
           </SaegimInfo>
         </Wrapper>
       </div>
@@ -144,3 +142,7 @@ const SaegimInfo = styled(UserInfo)`
   height: 32vh;
   margin-top: 16px
 `;
+
+const StSelect = styled(Select)`
+  font-size: 0.9rem;
+`
