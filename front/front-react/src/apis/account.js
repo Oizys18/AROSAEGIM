@@ -14,3 +14,16 @@ export const login = async (email, pw) => {
 
   return resData;
 }
+
+export const signup = async (_email, _pw, _name) => {
+  const _res = await axios({
+    method: 'post',
+    url: `${process.env.REACT_APP_URL}/user/`,
+    data: {
+      email: _email,
+      password: _pw,
+      name: _name
+    }
+  })
+  console.log(JSON.stringify(_res, null, 2))
+}

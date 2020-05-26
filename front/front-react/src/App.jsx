@@ -46,7 +46,7 @@ class App extends Component {
         this.props.history.replace('/map')
       }
       else{
-        this.props.history.replace('/list')
+        this.props.history.replace('/signup')
       }
     }
   }

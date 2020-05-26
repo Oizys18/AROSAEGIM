@@ -1,7 +1,7 @@
 const regExp = {
   email: /^(([^<>()\\[\].,;:\s@"]+(\.[^<>()\\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i,
   pw: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{6,15}$/,
-  nickName: /^[A-Za-z0-9가-힣_]{2,10}$/,
+  nickName: /^[A-Za-z0-9_]{4,16}$/,
 };
 
 export const checkEmail = ( curStr ) => {
@@ -61,7 +61,7 @@ export const checkNickName = ( curStr ) => {
       nickNameValid = 'valid'
     }
     else {
-      nickNameLabel = "한글, 영문, 숫자, '_' 포함 2~10자"
+      nickNameLabel = "영문, 숫자, '_' 포함 4~16자"
       nickNameValid = 'invalid'
     }
   }
