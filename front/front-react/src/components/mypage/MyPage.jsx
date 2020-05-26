@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Select from "@material-ui/core/Select";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
+import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
+import BookmarkBorderOutlinedIcon from "@material-ui/icons/BookmarkBorderOutlined";
+import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
+
 import { Link } from "react-router-dom";
-import FormControl from "@material-ui/core/FormControl";
-import SelectInput from "../common/inputs/SelectInput";
 
 class MyPage extends Component {
   listItem;
@@ -11,6 +16,9 @@ class MyPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentTab: 0,
+      tabValues: ['mySaegim', 'like', 'commented', 'bookMark'],
+      tabTitles: ['내가 작성한 새김', '공감한 새김', '되새긴 새김', '덧새긴 새김'],
       mySaegim: 'time',
       bookMark: 'time',
       options: [
@@ -71,20 +79,27 @@ class MyPage extends Component {
     this.setState({
       printData: _result
     })
-  }
+  };
 
   componentDidMount() {
     this.setState({
       printData: this.getData()
     })
-  }
+  };
 
-  handleChange = async (e) => {
+  selectChange = async (e) => {
     const _name = e.target.name;
     await this.setState({
       [_name]: e.target.value
     })
-  }
+  };
+
+  tabChange = async (e, val) => {
+    console.log(val)
+    await this.setState({
+      currentTab: val
+    })
+  };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state !== prevState) {
@@ -103,10 +118,10 @@ class MyPage extends Component {
       this.setState({
         preItems: this.state.items,
         items: this.state.items + 3
-      })
+      });
       this.getData()
     }
-  }
+  };
 
   render() {
     const PrintOptions = this.state.options.map((option) => {
@@ -114,16 +129,18 @@ class MyPage extends Component {
           <option value={option.value} key={option.text}>{option.text}</option>
         )
       }
-    )
+    );
 
     const PrintList = this.state.data.map((saegim, i) => {
       return (
-        <Link to={`list/${saegim.id}`}>
-          <div>{saegim.w3w}</div>
-          <div>{saegim.content}</div>
-        </Link>
+        <SaegimItem>
+          <StLink to={`list/${saegim.id}`}>
+            <div>{saegim.w3w}</div>
+            <div>{saegim.content}</div>
+          </StLink>
+        </SaegimItem>
       )
-    })
+    });
 
     return (
       <div>
@@ -138,22 +155,35 @@ class MyPage extends Component {
               </UserEmail>
             </User>
             <UserSaegim>
-              <SaegimCount>
-                작성 00 개
-              </SaegimCount>
-              <SaegimCount>
-                되새김 00 개
-              </SaegimCount>
-              <SaegimCount>
-                덧새김 00 개
-              </SaegimCount>
+              {/*<SaegimCount>*/}
+              {/*  작성 00 개*/}
+              {/*</SaegimCount>*/}
+              {/*<SaegimCount>*/}
+              {/*  되새김 00 개*/}
+              {/*</SaegimCount>*/}
+              {/*<SaegimCount>*/}
+              {/*  덧새김 00 개*/}
+              {/*</SaegimCount>*/}
+              <Tabs
+                value={this.state.currentTab}
+                textColor="primary"
+                indicatorColor="none"
+                onChange={this.tabChange}
+              >
+                <Tab icon={<CreateOutlinedIcon/>} value={0}></Tab>
+                <Tab icon={<FavoriteBorderOutlinedIcon/>} value={1}></Tab>
+                <Tab icon={<BookmarkBorderOutlinedIcon/>} value={2}></Tab>
+                <Tab icon={<MessageOutlinedIcon/>} value={3}></Tab>
+              </Tabs>
             </UserSaegim>
           </UserInfo>
-          <SaegimInfo>
+          <SaegimInfo value={this.state.currentTab}>
+            <ListInfo>
+            <ListTitle>{this.state.tabTitles[this.state.currentTab]}</ListTitle>
             <StSelect
               autowidth
               value={this.state.mySaegim}
-              onChange={this.handleChange}
+              onChange={this.selectChange}
               inputProps={{
                 name: 'mySaegim',
                 id: 'mySaegim',
@@ -161,24 +191,12 @@ class MyPage extends Component {
             >
               {PrintOptions}
             </StSelect>
+            </ListInfo>
             <SaegimShortList
               ref={div => (this.listItem = div)}
             >
               {PrintList}
             </SaegimShortList>
-          </SaegimInfo>
-          <SaegimInfo>
-            <StSelect
-              autowidth
-              value={this.state.bookMark}
-              onChange={this.handleChange}
-              inputProps={{
-                name: 'bookMark',
-                id: 'bookMark',
-              }}
-            >
-              {PrintOptions}
-            </StSelect>
           </SaegimInfo>
         </Wrapper>
       </div>
@@ -200,9 +218,11 @@ const UserInfo = styled.div`
   position: relative;
   top: 8vh;
   padding: 16px 16px 0px 16px;
-  background-color: #919191;
+  background-color: #f1f1f1;
   width: 84vw;
-  height: 8vh;
+  height: 10vh;
+  margin-bottom: 24px;
+  border-radius: 0.4em;
 `;
 
 const UserEmail = styled.span`
@@ -228,20 +248,65 @@ const User = styled.div`
   justify-content: space-around;
 `;
 
-const SaegimInfo = styled(UserInfo)`
-  height: 32vh;
-  margin-top: 16px;
-  overflow: auto;
+const SaegimInfo = styled.div`
+  height: 60vh;
+  width: 84vw;
+  top: 8vh;
   
+  margin-top: 8px;
+  padding: 16px;
+
+  background-color: #f1f1f1;
+  border-radius: .4em;
+
   display: flex;
   flex-direction: column;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: ${props => ([11, 32, 53, 74][props.value])}%;
+    border: 24px solid transparent;
+    border-bottom-color: #f1f1f1;
+    border-top: 0;
+    margin-top: -32px;
+    transition: all ease .7s;
+  }
 `;
+
+
 
 const StSelect = styled(Select)`
   font-size: 0.9rem;
-  
 `;
 
 const SaegimShortList = styled.div`
- 
+  overflow: auto;
 `;
+
+const SaegimItem = styled.div`
+  margin: 16px;
+  text-decoration: none;
+`;
+
+const ListInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+  padding: 8px;
+`;
+
+const ListTitle = styled.div``;
+
+const StLink = styled(Link)`
+    color: inherit;
+    text-decoration: none;
+    &:focus, &:hover, &:active {
+      opacity: 60%;
+    }
+    align-self: right;
+  `
