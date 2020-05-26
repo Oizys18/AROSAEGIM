@@ -9,6 +9,7 @@ import DefaultButton from "../common/buttons/DefaultButton";
 import CtoW from "../../apis/w3w";
 import Switch from "../common/switch/Switch";
 import axios from "axios";
+import Zoom from "@material-ui/core/Zoom";
 
 class Write extends Component {
   constructor(props) {
@@ -91,54 +92,56 @@ class Write extends Component {
   render() {
     return (
       <Wrapper>
-        <Container>
-          <Top>
-            <Chip text={this.state.time} />
-            <Switch
-              locked={this.state.locked}
-              changeSwitch={this.changeSwitch}
-              color="primary"
-              labelText={this.state.locked ? "비공개" : "공개"}
-              labelPlacement="start"
-            />
-          </Top>
-          <Middle>
-            <Text
-              placeholder="당신의 추억을 새겨주세요"
-              onTextChange={this.handleTextChange}
-            />
-          </Middle>
-          <Bottom>
-            <Addition>
-              <Map onClick={this.getLocation}>
-                <MapIcon />
-                <span>{this.state.w3w}</span>
-              </Map>
-              <Tag onClick={() => alert("태그 곧 넣을게요ㅠ")}>
-                <LocalOfferIcon />
-                <Chip size="small" text="태그1" />
-                <Chip size="small" text="태그2" />
-              </Tag>
-            </Addition>
-            <DefaultButton
-              text="작성"
-              onClick={() =>
-                alert(
-                  " w3w: " +
-                    this.state.w3w +
-                    "\n 잠금여부: " +
-                    this.state.locked +
-                    "\n location: " +
-                    this.state.location +
-                    "\n text: " +
-                    this.state.text +
-                    "\n \n 작성완료"
-                )
-              }
-            />
-            {/* <DefaultButton text="작성" onClick={() => this.writePost()} /> */}
-          </Bottom>
-        </Container>
+        <Zoom in={true}>
+          <Container>
+            <Top>
+              <Chip text={this.state.time} />
+              <Switch
+                locked={this.state.locked}
+                changeSwitch={this.changeSwitch}
+                color="primary"
+                labelText={this.state.locked ? "비공개" : "공개"}
+                labelPlacement="start"
+              />
+            </Top>
+            <Middle>
+              <Text
+                placeholder="당신의 추억을 새겨주세요"
+                onTextChange={this.handleTextChange}
+              />
+            </Middle>
+            <Bottom>
+              <Addition>
+                <Map onClick={this.getLocation}>
+                  <MapIcon />
+                  <span>{this.state.w3w}</span>
+                </Map>
+                <Tag onClick={() => alert("태그 곧 넣을게요ㅠ")}>
+                  <LocalOfferIcon />
+                  <Chip size="small" text="태그1" />
+                  <Chip size="small" text="태그2" />
+                </Tag>
+              </Addition>
+              <DefaultButton
+                text="작성"
+                onClick={() =>
+                  alert(
+                    " w3w: " +
+                      this.state.w3w +
+                      "\n 잠금여부: " +
+                      this.state.locked +
+                      "\n location: " +
+                      this.state.location +
+                      "\n text: " +
+                      this.state.text +
+                      "\n \n 작성완료"
+                  )
+                }
+              />
+              {/* <DefaultButton text="작성" onClick={() => this.writePost()} /> */}
+            </Bottom>
+          </Container>
+        </Zoom>
       </Wrapper>
     );
   }
