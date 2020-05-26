@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Select from "@material-ui/core/Select";
+import { Link } from "react-router-dom";
 import FormControl from "@material-ui/core/FormControl";
 import SelectInput from "../common/inputs/SelectInput";
 
 class MyPage extends Component {
+  listItem;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -14,11 +17,66 @@ class MyPage extends Component {
         { value: 'time', text: '시간 순으로 보기'},
         { value: 'location', text: '장소 별로 보기'},
         { value: 'tag', text: '태그 별로 보기'}
-        ]
+      ],
+      data: [
+        {
+          id: 1,
+          w3w: '///모니터.숨은.자꾸',
+          content: '내 용 자 리'
+        },
+        {
+          id: 2,
+          w3w: '///모니터.숨은.자꾸',
+          content: '내 용 자 리'
+        },
+        {
+          id: 3,
+          w3w: '///모니터.숨은.자꾸',
+          content: '내 용 자 리'
+        },
+        {
+          id: 4,
+          w3w: '///모니터.숨은.자꾸',
+          content: '내 용 자 리'
+        },
+        {
+          id: 5,
+          w3w: '///모니터.숨은.자꾸',
+          content: '내 용 자 리'
+        },
+        {
+          id: 6,
+          w3w: '///모니터.숨은.자꾸',
+          content: '내 용 자 리'
+        },
+        {
+          id: 7,
+          w3w: '///모니터.숨은.자꾸',
+          content: '내 용 자 리'
+        },
+        {
+          id: 8,
+          w3w: '///모니터.숨은.자꾸',
+          content: '내 용 자 리'
+        }
+      ],
+      preItems: 0,
+      items: 3,
+      printData: []
     }
   };
 
+  getData() {
+    let _result = this.state.data.slice(this.state.preItems, this.state.items)
+    this.setState({
+      printData: _result
+    })
+  }
+
   componentDidMount() {
+    this.setState({
+      printData: this.getData()
+    })
   }
 
   handleChange = async (e) => {
@@ -31,6 +89,22 @@ class MyPage extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state !== prevState) {
       console.log('update')
+      this._infiniteScroll()
+    }
+  }
+
+  _infiniteScroll = () => {
+    let _scrollHeight = this.listItem.scrollHeight;
+    let _scrollTop = this.listItem.scrollTop;
+    let _clientHeight = this.listItem.height;
+    console.log(_scrollHeight, _scrollTop, _clientHeight)
+
+    if (_scrollTop + _clientHeight === _scrollHeight) {
+      this.setState({
+        preItems: this.state.items,
+        items: this.state.items + 3
+      })
+      this.getData()
     }
   }
 
@@ -41,6 +115,15 @@ class MyPage extends Component {
         )
       }
     )
+
+    const PrintList = this.state.data.map((saegim, i) => {
+      return (
+        <Link to={`list/${saegim.id}`}>
+          <div>{saegim.w3w}</div>
+          <div>{saegim.content}</div>
+        </Link>
+      )
+    })
 
     return (
       <div>
@@ -67,28 +150,35 @@ class MyPage extends Component {
             </UserSaegim>
           </UserInfo>
           <SaegimInfo>
-              <StSelect
-                value={this.state.mySaegim}
-                onChange={this.handleChange}
-                inputProps={{
-                  name: 'mySaegim',
-                  id: 'mySaegim',
-                }}
-              >
-                {PrintOptions}
-              </StSelect>
+            <StSelect
+              autowidth
+              value={this.state.mySaegim}
+              onChange={this.handleChange}
+              inputProps={{
+                name: 'mySaegim',
+                id: 'mySaegim',
+              }}
+            >
+              {PrintOptions}
+            </StSelect>
+            <SaegimShortList
+              ref={div => (this.listItem = div)}
+            >
+              {PrintList}
+            </SaegimShortList>
           </SaegimInfo>
           <SaegimInfo>
-              <StSelect
-                value={this.state.bookMark}
-                onChange={this.handleChange}
-                inputProps={{
-                  name: 'bookMark',
-                  id: 'bookMark',
-                }}
-              >
-                {PrintOptions}
-              </StSelect>
+            <StSelect
+              autowidth
+              value={this.state.bookMark}
+              onChange={this.handleChange}
+              inputProps={{
+                name: 'bookMark',
+                id: 'bookMark',
+              }}
+            >
+              {PrintOptions}
+            </StSelect>
           </SaegimInfo>
         </Wrapper>
       </div>
@@ -140,9 +230,18 @@ const User = styled.div`
 
 const SaegimInfo = styled(UserInfo)`
   height: 32vh;
-  margin-top: 16px
+  margin-top: 16px;
+  overflow: auto;
+  
+  display: flex;
+  flex-direction: column;
 `;
 
 const StSelect = styled(Select)`
   font-size: 0.9rem;
-`
+  
+`;
+
+const SaegimShortList = styled.div`
+ 
+`;
