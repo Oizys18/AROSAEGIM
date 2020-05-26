@@ -25,8 +25,15 @@ class SideMenu extends Component {
             <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
           </StTopCont>
 
-          <Link to='login'>로그인</Link>
-          <Link to='signup'>회원가입</Link>
+          {
+            this.props.isLogin ? 
+            <div>로그인 시 유저 정보</div>
+            :
+            <>
+              <Link to='login'>로그인</Link>
+              <Link to='signup'>회원가입</Link>
+            </>
+          }
 
           {/* 로그인 여부로 조건부 렌더링 */}
           {/* 일단 임의값 1 로 테스트 할 것 */}

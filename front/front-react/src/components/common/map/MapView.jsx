@@ -4,13 +4,13 @@ import MapItem from './MapItem';
 
 class MapView extends Component {
 
-  componentDidMount() {
-    console.log('mapview mounted')
-  }
+  // componentDidMount() {
+  //   console.log('mapview mounted')
+  // }
 
-  componentDidUpdate() {
-    console.log('mapview updated')
-  }
+  // componentDidUpdate() {
+  //   console.log('mapview updated')
+  // }
   
   overlayItems = () => {
     const itemRefs = [];
@@ -39,16 +39,15 @@ class MapView extends Component {
   render() {
     return (
       <>
-        <MapViewContainer id="MapView" />
+        <StView id="mapView" hidden={this.props.hide}/>
         {this.props.status === 'list' && this.overlayItems()}
       </>
     );
   }
 }
-
 export default MapView;
 
-const MapViewContainer = styled.div`
-  width: ${window.innerWidth}px;
-  height: 300px;
+const StView = styled.div`
+  width: 100%;
+  height: 100%;
 `;

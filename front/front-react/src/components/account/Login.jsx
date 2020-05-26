@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Slide, Zoom, } from '@material-ui/core';
+import { Slide, Zoom, Checkbox, FormControlLabel } from '@material-ui/core';
 import { Email, Lock, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
@@ -22,28 +22,15 @@ class Login extends Component {
       pw: '',
       pwLabel: '비밀번호',
       pwValid: 'init',
-    }
-  }
 
-  componentDidMount(){
-    
+      autoLogin: true,
+    }
   }
 
   setStateAsync(state) {
     return new Promise(resolve => {
       this.setState(state, resolve);
     });
-  }
-
-  handleInput = async (e) => {
-    if(e.currentTarget.id === 'email'){
-      await this.setStateAsync({ email: e.currentTarget.value })
-      this.setState( AM.checkEmail(this.state.email) )
-    }
-    else {
-      await this.setStateAsync({ pw: e.currentTarget.value })
-      this.setState( AM.checkPW(this.state.pw) )
-    }
   }
 
   changeIcon = (flag) => {
@@ -69,8 +56,31 @@ class Login extends Component {
     }
   }
 
-  handleSubmit = () => {
+  handleInput = async (e) => {
+    if(e.currentTarget.id === 'email'){
+      await this.setStateAsync({ email: e.currentTarget.value })
+      this.setState( AM.checkEmail(this.state.email) )
+    }
+    else {
+      await this.setStateAsync({ pw: e.currentTarget.value })
+      this.setState( AM.checkPW(this.state.pw) )
+    }
+  }
 
+  handleAutoLogin = (e) => {
+    this.setState({ autoLogin: !this.state.autoLogin })
+  }
+
+  handleSubmit = async () => {
+    console.log(process.env.REACT_APP_URL)
+    localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
+    if(this.state.autoLogin){
+      localStorage.setItem('ARSG email', this.state.email)
+    }
+    else {
+      sessionStorage.setItem('ARSG email', this.state.email)
+    }
+    window.location.href = '/'
   }
   
   handleCancel = async () => {
@@ -105,6 +115,13 @@ class Login extends Component {
             valid={this.state.pwValid}
             onChange={this.handleInput}
             icon={this.changeIcon('pw')} 
+          />
+
+          <FormControlLabel
+            control={<Checkbox 
+                      checked={this.state.autoLogin} 
+                      onChange={this.handleAutoLogin}/>}
+            label="자동 로그인"
           />
           
           <AS.StBtnCont>

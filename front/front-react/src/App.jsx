@@ -4,10 +4,8 @@ import { Storage } from "./storage/Storage";
 import TopBar from "./components/common/menus/TopBar";
 import SideMenu from "./components/common/menus/SideMenu";
 import BotNav from "./components/common/navbar/BotNav";
-import MapTest from './components/common/map/sj/MapTest'
-import Map from "./components/common/map/Map";
+import MapPage from "./components/common/map/MapPage";
 import Write from "./components/write/Write";
-// import Auth from "./components/account/Auth";
 import Login from "./components/account/Login";
 import Signup from "./components/account/Signup";
 import SaegimListPage from "./components/saegim/SaegimListPage";
@@ -21,9 +19,9 @@ class App extends Component {
       appHeight: window.innerHeight,
 
       isLogin: false,
+      handleLogin: this.handleLogin,
 
       userInitPage: "/list",
-      curPage: this.props.location.pathname,
 
       sideMenu: false,
       toggleSideMenu: this.toggleSideMenu,
@@ -37,8 +35,20 @@ class App extends Component {
   }
 
   async componentDidMount(){
-    this.props.history.replace(this.state.userInitPage)
-    // this.props.history.replace(this.props.location.pathname)
+    const _autoLogin = localStorage.getItem('ARSG autoLogin')
+    if(_autoLogin === 'true'){
+      const _email = localStorage.getItem('ARSG email')
+      this.props.history.replace('/map')
+    }
+    else {
+      const _email = sessionStorage.getItem('ARSG email')
+      if(_email !== null){
+        this.props.history.replace('/map')
+      }
+      else{
+        this.props.history.replace('/signup')
+      }
+    }
   }
 
   toggleSideMenu = () => {
@@ -78,8 +88,7 @@ class App extends Component {
           <Route path="/list/:id" component={SaegimDetail} />
           <Route path="/list" component={SaegimListPage} />
         </Switch>
-        {/* <Route path="/map" component={Map} /> */}
-        <Route path="/map" component={MapTest} />
+        <Route path="/map" component={MapPage} />
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />

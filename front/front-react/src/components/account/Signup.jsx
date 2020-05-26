@@ -1,19 +1,30 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Slide, Zoom, } from '@material-ui/core';
-import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
+
+import styled from 'styled-components';
+import { Slide, Zoom, IconButton } from '@material-ui/core';
+import { AddAPhoto, Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
-import LogoAnimation from '../common/logo/LogoAnimation'
+import ImgUp from '../common/image/ImgUp';
 import UserInput from '../common/inputs/UserInput';
+import Modal from '../common/modal/Modal'
 import * as AM from './AccountMethod';
 import * as AS from '../../styles/account/AccountStyles';
+import * as axios from '../../apis/account'
 
 class Signup extends Component {
   constructor(props){
     super(props);
     this.state = {
       slideIn: true,
+
+      alertModal: false,
+
+      imgFile: '',
+      imgBase64: '',
+      imgCrop: '',
+      imgCropBase64: '',
 
       email: '',
       emailLabel: '이메일',
@@ -37,6 +48,24 @@ class Signup extends Component {
     return new Promise(resolve => {
       this.setState(state, resolve);
     });
+  }
+
+  imgUpload = (e) => {
+    e.preventDefault();
+    const _reader = new FileReader();
+    const _imgFile = e.target.files[0];
+
+    _reader.readAsDataURL(_imgFile);
+    _reader.onloadend = () => {
+      this.setState({
+        imgBase64: _reader.result,
+      })
+    }
+  }
+  imgCrop = (croped) => {
+    this.setState({
+      imgCropedBase64: croped
+    })
   }
 
   handleInput = async (e) => {
@@ -101,9 +130,26 @@ class Signup extends Component {
     }
   }
 
-  handleSubmit = () => {
-
+  checkAllValid = () => {
+    if (
+      this.state.emailValid === "valid" &&
+      this.state.pwValid === "valid" &&
+      this.state.pwCheckValid === "valid" &&
+      this.state.nickNameValid === "valid"
+    ) return true
+    else return false
   }
+
+  handleSubmit = () => { 
+    if(this.checkAllValid()){
+      axios.signup(this.state.email, this.state.pw, this.state.nickName)
+      
+    }
+    else{
+      this.setState({ alertModal: true })
+    }
+  }
+
   handleCancel = async () => {
     await this.setStateAsync({ slideIn: false })
     this.props.history.goBack()
@@ -119,7 +165,11 @@ class Signup extends Component {
             <ArrowBack/>
           </AS.StBackBtn>
 
-          <LogoAnimation/>
+          <ImgUp signup 
+            imgBase64={this.state.imgBase64} 
+            imgUpload={this.imgUpload}
+            imgCrop={this.imgCrop}
+          />
 
           <UserInput 
             id='email' 
@@ -164,9 +214,17 @@ class Signup extends Component {
           <AS.StLinkCont>
             <Link to='/login' replace>로그인</Link>
           </AS.StLinkCont>
+
+          <Modal
+            on={this.state.alertModal} 
+            msg={`입력이\n올바르지 않습니다.`}
+            click={() => { this.setState({ alertModal:false }) }} 
+          />
+
         </AS.StFormCont>
       </Slide>
     )
   }
 } export default Signup;
 Signup.contextType = Storage;
+
