@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import styled from 'styled-components';
-import { Slide, Zoom, IconButton } from '@material-ui/core';
-import { AddAPhoto, Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
+import { Slide, Zoom, } from '@material-ui/core';
+import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
 import ImgUp from '../common/image/ImgUp';
+import ImgCrop from '../common/image/ImgCrop';
 import UserInput from '../common/inputs/UserInput';
 import Modal from '../common/modal/Modal'
 import * as AM from './AccountMethod';
@@ -23,8 +23,13 @@ class Signup extends Component {
 
       imgFile: '',
       imgBase64: '',
-      imgCrop: '',
-      imgCropBase64: '',
+      imgW: 0,
+      imgH: 0,
+      
+      cropMode: false,
+      cropedImg: '',
+      cropedImgBase64: '',
+
 
       email: '',
       emailLabel: '이메일',
@@ -50,21 +55,33 @@ class Signup extends Component {
     });
   }
 
-  imgUpload = (e) => {
+  imgUpload = async (e) => {
     e.preventDefault();
     const _reader = new FileReader();
     const _imgFile = e.target.files[0];
-
+    
     _reader.readAsDataURL(_imgFile);
     _reader.onloadend = () => {
       this.setState({
+        imgFile: _imgFile,
         imgBase64: _reader.result,
       })
+      const _img = new window.Image()
+      _img.src = _reader.result
+      _img.onload = () => {
+        this.setState({
+          imgW: _img.width,
+          imgH: _img.height,
+          cropMode: true,
+        })
+      }
     }
   }
+
   imgCrop = (croped) => {
     this.setState({
-      imgCropedBase64: croped
+      cropMode: false,
+      cropedImgBase64: croped,
     })
   }
 
@@ -166,10 +183,22 @@ class Signup extends Component {
           </AS.StBackBtn>
 
           <ImgUp signup 
-            imgBase64={this.state.imgBase64} 
+            imgBase64={this.state.imgBase64}
             imgUpload={this.imgUpload}
-            imgCrop={this.imgCrop}
+            cropedImgBase64={this.state.cropedImgBase64}
           />
+
+          {
+            this.state.cropMode &&
+            <ImgCrop 
+              imgFile={this.state.imgFile} 
+              imgBase64={this.state.imgBase64}
+              imgW={this.state.imgW}
+              imgH={this.state.imgH}
+              apply={this.imgCrop}
+              cancel={() => {this.setState({ imgFile: '', imgBase64: '', cropMode: false, })}}
+            />
+          }
 
           <UserInput 
             id='email' 

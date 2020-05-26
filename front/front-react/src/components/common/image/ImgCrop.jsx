@@ -4,21 +4,24 @@ import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css'
 
 import styled from 'styled-components';
-import { IconButton, Zoom } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
+import { IconButton, } from '@material-ui/core';
+import { Close, Check } from '@material-ui/icons';
 import { FlexRow, } from '../../../styles/DispFlex'
 
-class imgCrop extends Component {
+import * as IM from './ImgMethod'
+
+class ImgCrop extends Component {
   constructor(props){
     super(props);
     this.state = {
-      crop: {
-        unit: '%',
-        width: 30,
-        aspect: 1 / 1,
-      },
+      crop: IM.calcSize(this.props.imgW, this.props.imgH),
     }
   }
+
+  applyCrop = () => {
+    this.props.apply(this.state.croppedImageUrl)
+  }
+
   onImageLoaded = image => {
     this.imageRef = image;
   };
@@ -34,11 +37,13 @@ class imgCrop extends Component {
   };
 
   async makeClientCrop(crop) {
+    console.log('a;sldkfj;sl')
     if (this.imageRef && crop.width && crop.height) {
+      console.log('a;sldkfj;slasdfasdf')
       const croppedImageUrl = await this.getCroppedImg(
         this.imageRef,
         crop,
-        'newFile.jpeg'
+        `preview ${this.props.imgFile.name}.png`
       );
       this.setState({ croppedImageUrl });
     }
@@ -65,28 +70,38 @@ class imgCrop extends Component {
     );
 
     return new Promise((resolve, reject) => {
-      canvas.toBlob(blob => {
-        if (!blob) {
-          //reject(new Error('Canvas is empty'));
-          console.error('Canvas is empty');
-          return;
-        }
-        blob.name = fileName;
-        window.URL.revokeObjectURL(this.fileUrl);
-        this.fileUrl = window.URL.createObjectURL(blob);
-        resolve(this.fileUrl);
-      }, 'image/jpeg');
+      console.log(canvas.toDataURL())
+      resolve(canvas.toDataURL())
+
+      // canvas.toBlob(blob => {
+      //   if (!blob) {
+      //     //reject(new Error('Canvas is empty'));
+      //     console.error('Canvas is empty');
+      //     return;
+      //   }
+      //   blob.name = fileName;
+      //   window.URL.revokeObjectURL(this.fileUrl);
+      //   this.fileUrl = window.URL.createObjectURL(blob);
+      //   resolve(this.fileUrl);
+      // }, 'image/jpeg');
     });
   }
 
   render(){
     return(
       <StCropCont> 
-        <StClose>
-          <Close/>
-        </StClose>
+        <StTop>
+          <IconButton onClick={this.props.cancel}>
+            <Close/>
+          </IconButton>
+          <IconButton onClick={this.applyCrop}>
+            <Check/>
+          </IconButton>
+        </StTop>
+
         <ReactCrop
           src={this.props.imgBase64}
+          // crop={crop}
           crop={this.state.crop}
           ruleOfThirds
           onImageLoaded={this.onImageLoaded}
@@ -97,7 +112,7 @@ class imgCrop extends Component {
     )
   }
 
-} export default imgCrop;
+} export default ImgCrop;
 
 const StCropCont = styled(FlexRow)`
   position: absolute;
@@ -110,8 +125,16 @@ const StCropCont = styled(FlexRow)`
   background: black;
 `;
 
-const StClose = styled(IconButton)`
+const StTop = styled(FlexRow)`
+  justify-content: space-between;
+
   position: absolute;
   top: 0;
   z-index: 11;
+
+  width: 100%;
+
+  svg{
+    color: white;
+  }
 `
