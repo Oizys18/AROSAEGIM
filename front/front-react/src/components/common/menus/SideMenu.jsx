@@ -35,6 +35,10 @@ class SideMenu extends Component {
             </>
           }
 
+          {/* 로그인 여부로 조건부 렌더링 */}
+          {/* 일단 임의값 1 로 테스트 할 것 */}
+          <Link to={`mypage/1`}>마이페이지</Link>
+
           <StListCont>
             메뉴 리스트 들어갈 자리
           </StListCont>

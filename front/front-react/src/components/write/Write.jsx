@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import LockOpenOutlinedIcon from "@material-ui/icons/LockOpenOutlined";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+// import LockOpenOutlinedIcon from "@material-ui/icons/LockOpenOutlined";
+// import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import MapIcon from "@material-ui/icons/Map";
 import { IconButton } from "@material-ui/core";
@@ -9,15 +9,20 @@ import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
 import DefaultButton from "../common/buttons/DefaultButton";
 import CtoW from "../../apis/w3w";
+import Switch from "../common/switch/Switch";
+import axios from "axios";
+
 class Write extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.handleTextChange = this.handleTextChange.bind(this);
     this.state = {
-      locked: false,
       location: null,
       w3w: null,
+      text: null,
+      time: Date().slice(0,15),
+      locked: false,
     };
-
   }
 
   getWWW = async (lat, lng) => {
@@ -32,14 +37,14 @@ class Write extends Component {
       // GPS를 지원
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const _lat = position.coords.latitude
-          const _lng = position.coords.longitude
-           
+          const _lat = position.coords.latitude;
+          const _lng = position.coords.longitude;
+
           this.setState({
             location: [_lat, _lng],
           });
 
-          this.getWWW(_lat, _lng)
+          this.getWWW(_lat, _lng);
         },
         function(error) {
           console.error(error);
@@ -55,29 +60,58 @@ class Write extends Component {
     }
   }
 
-  lockOrUnlock = () => {
+  // lockOrUnlock = () => {
+  //   if (this.state.locked) {
+  //     this.setState({ locked: false });
+  //   } else {
+  //     this.setState({ locked: true });
+  //   }
+  // };
+
+  writePost = () => {
+    const data = {};
+    axios
+      .post(process.env.REACT_APP_BACK_URL + "/saegim/", data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  handleTextChange = (value) => {
+    this.setState({ text: value });
+  };
+  changeSwitch = () => {
+    console.log(this.state.locked);
     if (this.state.locked) {
       this.setState({ locked: false });
     } else {
       this.setState({ locked: true });
     }
   };
-
   render() {
-    const locked = this.state.locked;
-    let icon;
-    if (locked) {
-      icon = <LockOutlinedIcon />;
-    } else {
-      icon = <LockOpenOutlinedIcon />;
-    }
+    // const locked = this.state.locked;
+    // let icon;
+    // if (locked) {
+    //   icon = <LockOutlinedIcon />;
+    // } else {
+    //   icon = <LockOpenOutlinedIcon />;
+    // }
 
     return (
       <Wrapper>
         <Container>
-          <Lock onClick={this.lockOrUnlock}>{icon}</Lock>
+          <Chip text={this.state.time} />
+          <Switch
+            locked={this.state.locked}
+            changeSwitch={this.changeSwitch}
+            color="primary"
+            labelText={this.state.locked ? "비공개" : "공개"}
+            labelPlacement="start"
+          />
           <Text>
-            <TextInput />
+            <TextInput onTextChange={this.handleTextChange} />
           </Text>
           <Addition>
             <Map onClick={this.getLocation}>
@@ -91,7 +125,23 @@ class Write extends Component {
             </Tag>
           </Addition>
           <ButtonContainer>
-            <DefaultButton text="작성" onClick={() => alert('작성완료!')}/>
+            <DefaultButton
+              text="작성"
+              onClick={() =>
+                alert(
+                  " w3w: " +
+                    this.state.w3w +
+                    "\n 잠금여부: " +
+                    this.state.locked +
+                    "\n location: " +
+                    this.state.location +
+                    "\n text: " +
+                    this.state.text +
+                    "\n \n 작성완료"
+                )
+              }
+            />
+            {/* <DefaultButton text="작성" onClick={() => this.writePost()} /> */}
           </ButtonContainer>
         </Container>
       </Wrapper>
@@ -126,16 +176,16 @@ const Container = styled.div`
   align-items: center;
   border-radius: 16px;
 `;
-const Lock = styled(IconButton)`
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  background-color: transparent;
-  border: none;
-  grid-column: 4 / 4;
-  grid-row: 1 / 1;
-  outline: none;
-`;
+// const Lock = styled(IconButton)`
+//   justify-content: center;
+//   align-items: center;
+//   display: flex;
+//   background-color: transparent;
+//   border: none;
+//   grid-column: 4 / 4;
+//   grid-row: 1 / 1;
+//   outline: none;
+// `;
 const Text = styled.div`
   justify-content: center;
   align-items: center;

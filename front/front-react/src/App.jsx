@@ -10,6 +10,7 @@ import Login from "./components/account/Login";
 import Signup from "./components/account/Signup";
 import SaegimListPage from "./components/saegim/SaegimListPage";
 import SaegimDetail from "./components/saegim/SaegimDetail";
+import MyPage from "./components/account/MyPage";
 
 class App extends Component {
   constructor(props) {
@@ -91,7 +92,7 @@ class App extends Component {
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        
+        <Route path="/mypage/:id" component={MyPage} />
       </Storage.Provider>
     );
   }
