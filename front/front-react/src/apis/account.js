@@ -3,7 +3,7 @@ import axios from 'axios'
 export const login = async (email, pw) => {
   const resData = await axios({
     method: 'post',
-    url: `${process.env.REACT_APP_URL}/user/login`,
+    url: `${process.env.REACT_APP_BASE_URL}/user/login`,
     data: {
       email: email,
       password: pw,
@@ -18,7 +18,7 @@ export const login = async (email, pw) => {
 export const signup = async (_email, _pw, _name) => {
   const _res = await axios({
     method: 'post',
-    url: `${process.env.REACT_APP_URL}/user/`,
+    url: `${process.env.REACT_APP_BASE_URL}/user/`,
     data: {
       email: _email,
       password: _pw,

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+
+import styled from 'styled-components';
 import { Slide, Zoom, IconButton } from '@material-ui/core';
-import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
+import { AddAPhoto, Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
-import LogoAnimation from '../common/logo/LogoAnimation'
+import ImgUp from '../common/image/ImgUp';
 import UserInput from '../common/inputs/UserInput';
 import Modal from '../common/modal/Modal'
 import * as AM from './AccountMethod';
@@ -18,6 +20,11 @@ class Signup extends Component {
       slideIn: true,
 
       alertModal: false,
+
+      imgFile: '',
+      imgBase64: '',
+      imgCrop: '',
+      imgCropBase64: '',
 
       email: '',
       emailLabel: '이메일',
@@ -41,6 +48,24 @@ class Signup extends Component {
     return new Promise(resolve => {
       this.setState(state, resolve);
     });
+  }
+
+  imgUpload = (e) => {
+    e.preventDefault();
+    const _reader = new FileReader();
+    const _imgFile = e.target.files[0];
+
+    _reader.readAsDataURL(_imgFile);
+    _reader.onloadend = () => {
+      this.setState({
+        imgBase64: _reader.result,
+      })
+    }
+  }
+  imgCrop = (croped) => {
+    this.setState({
+      imgCropedBase64: croped
+    })
   }
 
   handleInput = async (e) => {
@@ -139,6 +164,12 @@ class Signup extends Component {
           <AS.StBackBtn onClick={this.handleCancel}>
             <ArrowBack/>
           </AS.StBackBtn>
+
+          <ImgUp signup 
+            imgBase64={this.state.imgBase64} 
+            imgUpload={this.imgUpload}
+            imgCrop={this.imgCrop}
+          />
 
           <UserInput 
             id='email' 
