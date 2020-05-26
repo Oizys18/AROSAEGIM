@@ -13,19 +13,18 @@ class TextInput extends Component {
   render() {
     const value = this.props.value;
     return (
-      <div>
-          <CustomInput
-            id="saegim-text"
-            placeholder="당신의 추억을 새겨주세요"
-            multiline
-            rows={5}
-            rowsMax={6}
-            margin="dense"
-            variant="outlined"
-            value={value}
-            onChange={this.handleChange}
-          />
-      </div>
+      <CustomInput
+        id="saegim-text"
+        placeholder={this.props.placeholder}
+        multiline
+        fullWidth
+        rows={7}
+        rowsMax={7}
+        margin="dense"
+        variant="outlined"
+        value={value}
+        onChange={this.handleChange}
+      />
     );
   }
 }
@@ -33,5 +32,6 @@ export default TextInput;
 
 const CustomInput = styled(TextField)`
   width: 100%;
+  text-align: center;
   background-color: transparent;
 `;

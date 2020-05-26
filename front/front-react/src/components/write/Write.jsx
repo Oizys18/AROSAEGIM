@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-// import LockOpenOutlinedIcon from "@material-ui/icons/LockOpenOutlined";
-// import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import MapIcon from "@material-ui/icons/Map";
 import { IconButton } from "@material-ui/core";
@@ -20,7 +18,7 @@ class Write extends Component {
       location: null,
       w3w: null,
       text: null,
-      time: Date().slice(0,15),
+      time: Date().slice(0, 15),
       locked: false,
     };
   }
@@ -31,7 +29,9 @@ class Write extends Component {
       w3w: www.data.words,
     });
   };
-
+  getLocation = () => {
+    //지도 컴포넌트 열어서 위치 정확하게 수정하기
+  };
   componentDidMount() {
     if (navigator.geolocation) {
       // GPS를 지원
@@ -60,18 +60,16 @@ class Write extends Component {
     }
   }
 
-  // lockOrUnlock = () => {
-  //   if (this.state.locked) {
-  //     this.setState({ locked: false });
-  //   } else {
-  //     this.setState({ locked: true });
-  //   }
-  // };
-
   writePost = () => {
-    const data = {};
+    const data = {
+      location: this.state.location,
+      w3w: this.state.w3w,
+      text: this.state.text,
+      time: this.state.time,
+      locked: this.state.locked,
+    };
     axios
-      .post(process.env.REACT_APP_BACK_URL + "/saegim/", data)
+      .post(process.env.REACT_APP_BACK_URL + "saegim/", data)
       .then((res) => {
         console.log(res);
       })
@@ -91,40 +89,37 @@ class Write extends Component {
     }
   };
   render() {
-    // const locked = this.state.locked;
-    // let icon;
-    // if (locked) {
-    //   icon = <LockOutlinedIcon />;
-    // } else {
-    //   icon = <LockOpenOutlinedIcon />;
-    // }
-
     return (
       <Wrapper>
         <Container>
-          <Chip text={this.state.time} />
-          <Switch
-            locked={this.state.locked}
-            changeSwitch={this.changeSwitch}
-            color="primary"
-            labelText={this.state.locked ? "비공개" : "공개"}
-            labelPlacement="start"
-          />
-          <Text>
-            <TextInput onTextChange={this.handleTextChange} />
-          </Text>
-          <Addition>
-            <Map onClick={this.getLocation}>
-              <MapIcon />
-              <span>{this.state.w3w}</span>
-            </Map>
-            <Tag onClick={() => alert("태그 곧 넣을게요ㅠ")}>
-              <LocalOfferIcon />
-              <Chip size="small" text="태그1" />
-              <Chip size="small" text="태그2" />
-            </Tag>
-          </Addition>
-          <ButtonContainer>
+          <Top>
+            <Chip text={this.state.time} />
+            <Switch
+              locked={this.state.locked}
+              changeSwitch={this.changeSwitch}
+              color="primary"
+              labelText={this.state.locked ? "비공개" : "공개"}
+              labelPlacement="start"
+            />
+          </Top>
+          <Middle>
+            <Text
+              placeholder="당신의 추억을 새겨주세요"
+              onTextChange={this.handleTextChange}
+            />
+          </Middle>
+          <Bottom>
+            <Addition>
+              <Map onClick={this.getLocation}>
+                <MapIcon />
+                <span>{this.state.w3w}</span>
+              </Map>
+              <Tag onClick={() => alert("태그 곧 넣을게요ㅠ")}>
+                <LocalOfferIcon />
+                <Chip size="small" text="태그1" />
+                <Chip size="small" text="태그2" />
+              </Tag>
+            </Addition>
             <DefaultButton
               text="작성"
               onClick={() =>
@@ -142,7 +137,7 @@ class Write extends Component {
               }
             />
             {/* <DefaultButton text="작성" onClick={() => this.writePost()} /> */}
-          </ButtonContainer>
+          </Bottom>
         </Container>
       </Wrapper>
     );
@@ -168,35 +163,31 @@ const Container = styled.div`
   margin-right: 8vw;
   width: 84vw;
   height: 48vh;
-  display: grid;
-  grid-template-rows: 1fr 4fr 2fr;
-  grid-template-columns: 1fr 8fr 1fr;
-  justify-content: center;
+  display: flex;
+  justify-content: space-between;
   flex-direction: column;
-  align-items: center;
   border-radius: 16px;
 `;
-// const Lock = styled(IconButton)`
-//   justify-content: center;
-//   align-items: center;
-//   display: flex;
-//   background-color: transparent;
-//   border: none;
-//   grid-column: 4 / 4;
-//   grid-row: 1 / 1;
-//   outline: none;
-// `;
-const Text = styled.div`
+
+const Top = styled.div`
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+`;
+const Middle = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
-  grid-column: 1 / 5;
-  grid-row: 2 / 2;
 `;
-const Addition = styled.div`
-  grid-column: 1 / 3;
-  grid-row: 3 / 3;
+
+const Bottom = styled.div`
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
 `;
+
+const Text = styled(TextInput)``;
+const Addition = styled.div``;
 
 const Map = styled(IconButton)`
   justify-content: center;
@@ -217,9 +208,4 @@ const Tag = styled(IconButton)`
   border: none;
   outline: none;
   font-size: 16px;
-`;
-
-const ButtonContainer = styled.div`
-  grid-column: 4 / 4;
-  grid-row: 3 / 3;
 `;
