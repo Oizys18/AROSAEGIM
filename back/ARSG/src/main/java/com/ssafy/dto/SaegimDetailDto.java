@@ -3,13 +3,11 @@ package com.ssafy.dto;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.PropertyMap;
 
 import com.ssafy.configuration.ConfigurationUtilFactory;
-import com.ssafy.entity.Hashtag;
 import com.ssafy.entity.Saegim;
 import com.ssafy.entity.User;
 
@@ -24,7 +22,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class SaegimDto {
+public class SaegimDetailDto {
 	@NonNull
 	private Long id;
 	@NonNull
@@ -43,25 +41,42 @@ public class SaegimDto {
     private String w3w;
     private String image;
     private String record;
-    private Integer secret;
-    private List<HashtagDto> tags = new ArrayList<HashtagDto>(); 
+    private int secret;
     
-    public static SaegimDto of(Saegim saegim) {
-    	PropertyMap<Saegim, SaegimDto> saegimMap = new PropertyMap<Saegim, SaegimDto>() {
+	private List<LikesDto> likes = new ArrayList<LikesDto>();
+    private List<HashtagDto> tags = new ArrayList<HashtagDto>(); 
+    private List<CommentDto> comments = new ArrayList<CommentDto>();
+    
+    public static SaegimDetailDto of(Saegim saegim) {
+    	PropertyMap<Saegim, SaegimDetailDto> saegimDetailMap = new PropertyMap<Saegim, SaegimDetailDto>() {
     		@Override
     		protected void configure() {
+    			List<LikesDto> likesDto
+    			= saegim.getLikes().stream()
+    			.map(likes->LikesDto.of(likes))
+    			.collect(Collectors.toList());
+    			
+    			map().setLikes(likesDto);
+    			
     			List<HashtagDto> hashtagsDto
     			= saegim.getTaggings().stream()
     			.map(tagging->HashtagDto.of(tagging))
     			.collect(Collectors.toList());
     			
     			map().setTags(hashtagsDto);
+    			
+//    			List<CommentDto> commentDto
+//    			= saegim.getComments().stream()
+//    			.map(comment->CommentDto.of(comment))
+//    			.collect(Collectors.toList());
+//    			
+//    			map().setComments(commentDto);
     		}
     	};
-    	if(ConfigurationUtilFactory.modelmapper().getTypeMap(Saegim.class, SaegimDto.class) == null)
-    		ConfigurationUtilFactory.modelmapper().addMappings(saegimMap);
+    	if(ConfigurationUtilFactory.modelmapper().getTypeMap(Saegim.class, SaegimDetailDto.class) == null)
+    		ConfigurationUtilFactory.modelmapper().addMappings(saegimDetailMap);
     	
-    	SaegimDto dto = ConfigurationUtilFactory.modelmapper().map(saegim, SaegimDto.class);
+    	SaegimDetailDto dto = ConfigurationUtilFactory.modelmapper().map(saegim, SaegimDetailDto.class);
     	return dto;
     }
 }

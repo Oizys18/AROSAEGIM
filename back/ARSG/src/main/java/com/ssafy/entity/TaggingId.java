@@ -13,7 +13,7 @@ import lombok.*;
 public class TaggingId implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@NonNull
-	private Long saegim_id;	
+	private Long saegimId;	
 	@NonNull
-	private Long tag_id;
+	private Long tagId;
 }
