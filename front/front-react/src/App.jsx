@@ -44,7 +44,7 @@ class App extends Component {
     else {
       const _email = sessionStorage.getItem('ARSG email')
       if(_email === null){
-        this.props.history.replace('/login')
+        this.props.history.replace('/list')
       }
       else{
         this.setState({ isLogin: true })
