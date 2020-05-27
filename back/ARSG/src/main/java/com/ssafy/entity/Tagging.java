@@ -10,22 +10,28 @@ import lombok.*;
 
 @Entity
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
 @IdClass(TaggingId.class)
 public class Tagging  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	private Long tag_id;
-	@Id
-	private Long saegim_id;
+	@Id @NonNull
+	@Column(name="tag_id", nullable=false)
+	private Long tagId;
+	@Id @NonNull
+	@Column(name="saegim_id", nullable=false)
+	private Long saegimId;
 	
-//	@JsonIgnore
-//	@ManyToOne @JoinColumn(name = "saegim_id", insertable=false, updatable=false)
-//	private Saegim saegim;
-//	
-//	@JsonIgnore
-//	@ManyToOne @JoinColumn(name = "tag_id", insertable=false, updatable=false)
-//	private Hashtag hashtag;
+	@ManyToOne @JoinColumn(name = "saegim_id", insertable=false, updatable=false)
+	private Saegim SAEGIM;
+	
+	@ManyToOne @JoinColumn(name = "tag_id", insertable=false, updatable=false)
+	private Hashtag HASHTAG;
+
+	public static Tagging of(Hashtag tag, Saegim saegim) {
+		return new Tagging(tag.getId(), saegim.getId());
+	}
+
 }

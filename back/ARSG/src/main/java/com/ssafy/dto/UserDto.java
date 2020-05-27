@@ -1,15 +1,19 @@
 package com.ssafy.dto;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializable;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
+import org.modelmapper.PropertyMap;
 
-import lombok.*;
+import com.ssafy.configuration.ConfigurationUtilFactory;
+import com.ssafy.entity.User;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -26,4 +30,21 @@ public class UserDto {
 
 	private List<LikesDto> likes = new ArrayList<LikesDto>();
 
+    public static UserDto of(User user) {
+    	PropertyMap<User, UserDto> userMap = new PropertyMap<User, UserDto>() {
+    		@Override
+    		protected void configure() {
+    			List<LikesDto> likesDto
+    			= user.getLikes().stream()
+    			.map(likes->LikesDto.of(likes))
+    			.collect(Collectors.toList());
+    			
+    			map().setLikes(likesDto);
+    		}
+    	};
+    	if(ConfigurationUtilFactory.modelmapper().getTypeMap(User.class, UserDto.class) == null)
+    		ConfigurationUtilFactory.modelmapper().addMappings(userMap);
+    	UserDto dto = ConfigurationUtilFactory.modelmapper().map(user, UserDto.class);
+    	return dto;
+    }
 }
