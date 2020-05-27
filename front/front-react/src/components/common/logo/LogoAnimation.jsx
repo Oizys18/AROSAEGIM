@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { Zoom } from '@material-ui/core';
 // import logo from '..';
 
 class LogoAnimation extends Component {
   render() {
     return (
+      <Zoom in={true}>
       <StAnima>
         <div className="logo">
           <img src="/ARSG logo.png" alt="" style={{width : '140px'}}/>
@@ -16,6 +18,7 @@ class LogoAnimation extends Component {
           <div className="word">아로새김</div>
         </div>
       </StAnima>
+      </Zoom>
     )
   }
 }

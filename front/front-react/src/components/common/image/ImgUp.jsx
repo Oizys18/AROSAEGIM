@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 import styled from 'styled-components';
+import { Zoom } from '@material-ui/core';
 import { Person } from '@material-ui/icons';
-import { FlexRow, FlexColumn } from '../../../styles/DispFlex'
+import { FlexRow, FlexColumn } from '../../../styles/DispFlex';
 
 class ImgUp extends Component {
   render(){
@@ -10,28 +11,30 @@ class ImgUp extends Component {
       <>
       {
         this.props.signup && 
-        <StProfileCont>
-          <input
-            id="imgUpload"
-            type="file"
-            accept="image/*"
-            onClick={(e) => {e.target.value = null}} //연속적으로 같은 파일 선택 시 해줘야하는
-            onChange={this.props.imgUpload}
-          />
-          <StProfile>
-            <label htmlFor="imgUpload">
-            {
-              this.props.cropedImgBase64 === '' ?
-              <Person/>
-              :
-              <StPrev src={this.props.cropedImgBase64}/>
-            }
-            </label>
-          </StProfile>
+        <Zoom in={true}>
+          <StProfileCont>
+            <input
+              id="imgUpload"
+              type="file"
+              accept="image/*"
+              onClick={(e) => {e.target.value = null}} //연속적으로 같은 파일 선택 시 해줘야하는
+              onChange={this.props.imgUpload}
+            />
+            <StProfile>
+              <label htmlFor="imgUpload">
+              {
+                this.props.cropedImgBase64 === '' ?
+                <Person/>
+                :
+                <StPrev src={this.props.cropedImgBase64}/>
+              }
+              </label>
+            </StProfile>
 
-          <div className='label'>프로필 사진</div>
+            <div className='label'>프로필 사진</div>
 
-        </StProfileCont>
+          </StProfileCont>
+        </Zoom>
       }
       </>
     )

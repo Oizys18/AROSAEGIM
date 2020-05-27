@@ -5,6 +5,7 @@ import { Slide, Zoom, } from '@material-ui/core';
 import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
+import BackBtn from  '../common/buttons/BackBtn';
 import ImgUp from '../common/image/ImgUp';
 import ImgCrop from '../common/image/ImgCrop';
 import UserInput from '../common/inputs/UserInput';
@@ -157,7 +158,7 @@ class Signup extends Component {
     }
   }
 
-  handleCancel = async () => {
+  handleBack = async () => {
     await this.setStateAsync({ slideIn: false })
     this.props.history.goBack()
   }
@@ -168,9 +169,11 @@ class Signup extends Component {
       <Slide in={this.state.slideIn} direction="left">
         <AS.StFormCont height={this.context.appHeight}>
           
-          <AS.StBackBtn onClick={this.handleCancel}>
+          {/* <AS.StBackBtn onClick={this.handleBack}>
             <ArrowBack/>
-          </AS.StBackBtn>
+          </AS.StBackBtn> */}
+
+          <BackBtn handleBack={this.handleBack}/>
 
           <ImgUp signup 
             imgBase64={this.state.imgBase64}

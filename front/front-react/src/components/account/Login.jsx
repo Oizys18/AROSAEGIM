@@ -6,6 +6,7 @@ import { Slide, Zoom, Checkbox, FormControlLabel } from '@material-ui/core';
 import { Email, Lock, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
+import BackBtn from  '../common/buttons/BackBtn';
 import LogoAnimation from '../common/logo/LogoAnimation';
 import UserInput from '../common/inputs/UserInput';
 import Modal from '../common/modal/Modal';
@@ -96,7 +97,7 @@ class Login extends Component {
     }
   }
   
-  handleCancel = async () => {
+  handleBack = async () => {
     await this.setStateAsync({ slideIn: false })
     this.props.history.goBack()
   }
@@ -106,9 +107,10 @@ class Login extends Component {
       <Slide in={this.state.slideIn} direction="left">
         <AS.StFormCont height={this.context.appHeight}>
           
-          <AS.StBackBtn onClick={this.handleCancel}>
+          {/* <AS.StBackBtn onClick={this.handleBack}>
             <ArrowBack/>
-          </AS.StBackBtn>
+          </AS.StBackBtn> */}
+          <BackBtn handleBack={this.handleBack}/>
           
           <LogoAnimation/>
 
