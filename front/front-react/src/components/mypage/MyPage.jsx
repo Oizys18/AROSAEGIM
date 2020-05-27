@@ -7,8 +7,8 @@ import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import BookmarkBorderOutlinedIcon from "@material-ui/icons/BookmarkBorderOutlined";
 import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
-
 import { Link } from "react-router-dom";
+import TabPanel from "./TabPanel";
 
 class MyPage extends Component {
   listItem;
@@ -84,7 +84,7 @@ class MyPage extends Component {
   componentDidMount() {
     this.setState({
       printData: this.getData()
-    })
+    });
   };
 
   selectChange = async (e) => {
@@ -131,16 +131,16 @@ class MyPage extends Component {
       }
     );
 
-    const PrintList = this.state.data.map((saegim, i) => {
-      return (
-        <SaegimItem>
-          <StLink to={`list/${saegim.id}`}>
-            <div>{saegim.w3w}</div>
-            <div>{saegim.content}</div>
-          </StLink>
-        </SaegimItem>
-      )
-    });
+    // const PrintList = this.state.data.map((saegim, i) => {
+    //   return (
+    //     <SaegimItem>
+    //       <StLink to={`list/${saegim.id}`}>
+    //         <div>{saegim.w3w}</div>
+    //         <div>{saegim.content}</div>
+    //       </StLink>
+    //     </SaegimItem>
+    //   )
+    // });
 
     return (
       <div>
@@ -170,10 +170,10 @@ class MyPage extends Component {
                 indicatorColor="none"
                 onChange={this.tabChange}
               >
-                <Tab icon={<CreateOutlinedIcon/>} value={0}></Tab>
-                <Tab icon={<FavoriteBorderOutlinedIcon/>} value={1}></Tab>
-                <Tab icon={<BookmarkBorderOutlinedIcon/>} value={2}></Tab>
-                <Tab icon={<MessageOutlinedIcon/>} value={3}></Tab>
+                <Tab icon={<CreateOutlinedIcon/>} value={0} />
+                <Tab icon={<FavoriteBorderOutlinedIcon/>} value={1} />
+                <Tab icon={<BookmarkBorderOutlinedIcon/>} value={2} />
+                <Tab icon={<MessageOutlinedIcon/>} value={3} />
               </Tabs>
             </UserSaegim>
           </UserInfo>
@@ -195,7 +195,26 @@ class MyPage extends Component {
             <SaegimShortList
               ref={div => (this.listItem = div)}
             >
-              {PrintList}
+              <TabPanel
+                value={this.state.currentTab}
+                index={0}
+                data={this.state.data}
+              />
+              <TabPanel
+                value={this.state.currentTab}
+                index={1}
+                data={this.state.data}
+              />
+              <TabPanel
+                value={this.state.currentTab}
+                index={2}
+                data={this.state.data}
+              />
+              <TabPanel
+                value={this.state.currentTab}
+                index={3}
+                data={this.state.data}
+              />
             </SaegimShortList>
           </SaegimInfo>
         </Wrapper>
@@ -216,11 +235,11 @@ const Wrapper = styled.div`
 
 const UserInfo = styled.div`
   position: relative;
-  top: 8vh;
+  top: 8%;
   padding: 16px 16px 0px 16px;
   background-color: #f1f1f1;
-  width: 84vw;
-  height: 10vh;
+  width: 80%;
+  height: 10%;
   margin-bottom: 24px;
   border-radius: 0.4em;
 `;
@@ -249,9 +268,9 @@ const User = styled.div`
 `;
 
 const SaegimInfo = styled.div`
-  height: 60vh;
-  width: 84vw;
-  top: 8vh;
+  height: 60%;
+  width: 80%;
+  top: 8%;
   
   margin-top: 8px;
   padding: 16px;
@@ -309,4 +328,4 @@ const StLink = styled(Link)`
       opacity: 60%;
     }
     align-self: right;
-  `
+  `;
