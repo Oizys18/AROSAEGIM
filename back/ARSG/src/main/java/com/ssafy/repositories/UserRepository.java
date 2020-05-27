@@ -12,4 +12,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	User findByName(String name);
 	List<User> findAll();
 	long count();
+	
+	@Transactional
+	long removeById(Long userid);
 }

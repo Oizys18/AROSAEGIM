@@ -12,25 +12,27 @@ import lombok.*;
 
 @Entity
 @NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
 @IdClass(LikesId.class)
 @Transactional
+@Table(name="likes")
 public class Likes implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 //	@EmbeddedId
 //	private LikeId likeId;
-	@Id
-	private Long saegim_id;
-	@Id
-	private Long user_id;
+	@Id @NonNull
+	@Column(name="saegim_id", nullable=false)
+	private Long saegimId;
+	@Id @NonNull
+	@Column(name="user_id", nullable=false)
+	private Long userId;
 	
-	@JsonIgnore
-	@ManyToOne @JoinColumn(name = "saegim_id", insertable=false, updatable=false)
-	private Saegim saegim;
+	@ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "saegim_id", insertable=false, updatable=false)
+	private Saegim SAEGIM;
 	
-	@JsonIgnore
-	@ManyToOne @JoinColumn(name = "user_id", insertable=false, updatable=false)
-	private User user;
+	@ManyToOne(fetch = FetchType.EAGER) @JoinColumn(name = "user_id", insertable=false, updatable=false)
+	private User USER;
 }
