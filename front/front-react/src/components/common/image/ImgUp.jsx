@@ -1,49 +1,38 @@
 import React, { Component } from 'react';
 
 import styled from 'styled-components';
-import { AddAPhoto, Person } from '@material-ui/icons';
+import { Person } from '@material-ui/icons';
 import { FlexRow, FlexColumn } from '../../../styles/DispFlex'
 
-import ImgCrop from './ImgCrop'
-
 class ImgUp extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      imgW: 0,
-      imgH: 0,
-      cropedImg: '',
-    }
-  }
-
   render(){
     return(
       <>
+      {
+        this.props.signup && 
         <StProfileCont>
           <input
             id="imgUpload"
             type="file"
             accept="image/*"
+            onClick={(e) => {e.target.value = null}} //연속적으로 같은 파일 선택 시 해줘야하는
             onChange={this.props.imgUpload}
           />
           <StProfile>
             <label htmlFor="imgUpload">
             {
-              this.props.imgBase64 === '' ?
+              this.props.cropedImgBase64 === '' ?
               <Person/>
               :
-              <StPrev imgBase64={this.props.imgBase64}/>
+              <StPrev src={this.props.cropedImgBase64}/>
             }
             </label>
           </StProfile>
 
           <div className='label'>프로필 사진</div>
 
-          {
-            this.props.imgBase64 !== '' && 
-            <ImgCrop imgBase64={this.props.imgBase64} imgCrop={this.props.imgCrop}/>
-          }
         </StProfileCont>
+      }
       </>
     )
   }
@@ -85,31 +74,14 @@ const StProfile = styled(FlexRow)`
   overflow: hidden;
 
   *{
-    width: 40vw;
-    height: 40vw;
+    width: 35vw;
+    height: 35vw;
   }
 `;
 
 const StPrev = styled.div`
-  background-image: url(${props => props.imgBase64});
+  background-image: url(${props => props.src});
   background-repeat: no-repeat;
   background-position: center center;
-`
-
-const StOpacityBack = styled(FlexRow)`
-  position: fixed;
-  top: 0;
-  z-index: 110;
-
-  width: 100%;
-  height: 100%;
-
-  background: black;
-`;
-
-const StCropCont = styled.div`
-  img{
-    width: 300px;
-    height: 300px;
-  }
+  background-size: 35vw;
 `
