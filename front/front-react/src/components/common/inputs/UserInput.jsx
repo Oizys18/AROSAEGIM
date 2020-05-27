@@ -32,20 +32,38 @@ class UserInput extends Component {
 } export default UserInput;
 
 const StInput = styled(TextField)`
-  /* ${props => {
-    if(props.valid === 'invalid'){
-    }
-    else{
-      return(css`
-        label{
+  ${props => {
+    if(props.valid === 'init'){
+      return css`
+        .MuiInputBase-root{
           color: gray;
         }
-        label.Mui-focused{
-          color: skyblue;
+        & .Mui-focused{
+          &.MuiFormLabel-root, .MuiSvgIcon-root{
+            color: green;
+          }
         }
-        
-
-      `)
+        & .MuiOutlinedInput-root.Mui-focused fieldset{
+          border-color: green;  
+        }
+      `
     }
-  }} */
+    else if(props.valid === 'invalid'){
+      return css`
+        .MuiSvgIcon-root{
+          color: red;
+        }
+      `
+    }
+    else if(props.valid === 'valid'){
+      return css`
+        .MuiFormLabel-root,.MuiSvgIcon-root{
+          color: green;
+        }
+        & .MuiOutlinedInput-root fieldset, & .MuiOutlinedInput-root.Mui-focused fieldset{
+          border-color: green;
+        }
+      `
+    }
+  }}
 `;

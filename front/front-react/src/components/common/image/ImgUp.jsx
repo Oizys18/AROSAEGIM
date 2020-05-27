@@ -40,6 +40,8 @@ class ImgUp extends Component {
 
 
 const StProfileCont = styled(FlexColumn)`
+  margin: 8px;
+
   input {
     position: absolute;
     width: 1px;
@@ -55,7 +57,6 @@ const StProfileCont = styled(FlexColumn)`
     padding: 0;
     border-radius: 10px;
   }
-
 
   .label {
     margin-top: 0.4rem;

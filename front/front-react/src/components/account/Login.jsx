@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+
+import styled from 'styled-components';
 import { Slide, Zoom, Checkbox, FormControlLabel } from '@material-ui/core';
 import { Email, Lock, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
-import LogoAnimation from '../common/logo/LogoAnimation'
-import UserInput from '../common/inputs/UserInput'
-import * as AM from './AccountMethod'
-import * as AS from '../../styles/account/AccountStyles'
+import LogoAnimation from '../common/logo/LogoAnimation';
+import UserInput from '../common/inputs/UserInput';
+import Modal from '../common/modal/Modal';
+import * as AM from './AccountMethod';
+import * as AS from '../../styles/account/AccountStyles';
+import * as AA from '../../apis/AccountAPI';
 
 class Login extends Component {
   constructor(props){
     super(props);
     this.state = {
       slideIn: true,
+
+      alertModal: false,
 
       email: '',
       emailLabel: '이메일',
@@ -72,15 +78,22 @@ class Login extends Component {
   }
 
   handleSubmit = async () => {
-    console.log(process.env.REACT_APP_URL)
-    localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
-    if(this.state.autoLogin){
-      localStorage.setItem('ARSG email', this.state.email)
+    if(AM.checkAllValid('login', this.state)){
+      const _resData = await AA.login(this.state)
+      console.log(_resData)
+
+      // localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
+      // if(this.state.autoLogin){
+      //   localStorage.setItem('ARSG email', this.state.email)
+      // }
+      // else {
+      //   sessionStorage.setItem('ARSG email', this.state.email)
+      // }
+      // window.location.href = '/'
     }
-    else {
-      sessionStorage.setItem('ARSG email', this.state.email)
+    else{
+      this.setState({ alertModal: true })
     }
-    window.location.href = '/'
   }
   
   handleCancel = async () => {
@@ -117,8 +130,9 @@ class Login extends Component {
             icon={this.changeIcon('pw')} 
           />
 
-          <FormControlLabel
+          <StCheckBox
             control={<Checkbox 
+                      color="default"
                       checked={this.state.autoLogin} 
                       onChange={this.handleAutoLogin}/>}
             label="자동 로그인"
@@ -131,9 +145,22 @@ class Login extends Component {
           <AS.StLinkCont>
             <Link to='/signup' replace>가입하기</Link>
           </AS.StLinkCont>
+
+          <Modal
+            on={this.state.alertModal} 
+            msg={`입력이\n올바르지 않습니다.`}
+            click={() => { this.setState({ alertModal:false }) }} 
+          />
+
         </AS.StFormCont>
       </Slide>
     )
   }
 } export default Login;
 Login.contextType = Storage;
+
+const StCheckBox = styled(FormControlLabel)`
+  & .Mui-checked{
+    color: green;
+  }
+`;

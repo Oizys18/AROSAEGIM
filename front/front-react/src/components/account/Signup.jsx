@@ -8,10 +8,10 @@ import { Storage } from '../../storage/Storage';
 import ImgUp from '../common/image/ImgUp';
 import ImgCrop from '../common/image/ImgCrop';
 import UserInput from '../common/inputs/UserInput';
-import Modal from '../common/modal/Modal'
+import Modal from '../common/modal/Modal';
 import * as AM from './AccountMethod';
 import * as AS from '../../styles/account/AccountStyles';
-import * as axios from '../../apis/account'
+import * as AA from '../../apis/AccountAPI';
 
 class Signup extends Component {
   constructor(props){
@@ -147,20 +147,10 @@ class Signup extends Component {
     }
   }
 
-  checkAllValid = () => {
-    if (
-      this.state.emailValid === "valid" &&
-      this.state.pwValid === "valid" &&
-      this.state.pwCheckValid === "valid" &&
-      this.state.nickNameValid === "valid"
-    ) return true
-    else return false
-  }
-
-  handleSubmit = () => { 
-    if(this.checkAllValid()){
-      axios.signup(this.state.email, this.state.pw, this.state.nickName)
-      
+  handleSubmit = async () => { 
+    if(AM.checkAllValid('signup', this.state)){
+      const _resData = await AA.signup(this.state)
+      console.log(_resData)
     }
     else{
       this.setState({ alertModal: true })
@@ -195,6 +185,7 @@ class Signup extends Component {
               imgBase64={this.state.imgBase64}
               imgW={this.state.imgW}
               imgH={this.state.imgH}
+              mode={"profile"}
               apply={this.imgCrop}
               cancel={() => {this.setState({ imgFile: '', imgBase64: '', cropMode: false, })}}
             />
