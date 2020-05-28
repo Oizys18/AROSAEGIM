@@ -88,8 +88,6 @@ class CardItem extends Component {
         this.onChangeData(this.props.idx)
         this.onSwiped();
       }
-
-      // this.listElement.className = "BouncingListItem";
       this.left = 0;
       if (this.state.currentId !== this.props.saegim.id) {
         this.listElement.style.animation = 'zoom 1s ease-out';
