@@ -9,6 +9,7 @@ import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
 import { Link } from "react-router-dom";
 import TabPanel from "./TabPanel";
 import MyPageMenu from "./MyPageMenu";
+import * as UA from "../../apis/UserAPI"
 
 class MyPage extends Component {
   listItem;
@@ -16,6 +17,7 @@ class MyPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userId: 1,
       currentTab: 0,
       mySaegim: 'time',
       like: 'time',
@@ -25,50 +27,14 @@ class MyPage extends Component {
         { value: 'location', text: '장소 별로 보기'},
         { value: 'tag', text: '태그 별로 보기'}
       ],
-      data: [
-        {
-          id: 1,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 2,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 3,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 4,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 5,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 6,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 7,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 8,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        }
-      ]
+      //
+      data: []
     }
   };
+
+  getUserId() {
+    // userid 가져와야함
+  }
 
   selectChange = async (e) => {
     const _name = e.target.name;
@@ -84,8 +50,32 @@ class MyPage extends Component {
     })
   };
 
+  getData = async () => {
+    const _userId = this.state.user
+    let _data = []
+    if (this.state.currentTab === 0) {
+      const _data = await UA.getCreatedSaegim(_userId)
+    } else if (this.state.currentTab === 1) {
+      const _data = await UA.getLikedSaegim(_userId)
+    } else {
+      const _data = await UA.getCommentedSaegim(_userId)
+    }
+    await this.setState({
+      data: _data
+    })
+    console.log(_data)
+    console.log('set data')
+  }
+
+  componentDidMount() {
+    this.getData()
+  }
+
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state !== prevState) {
+    if (this.state.currentTab !== prevState.currentTab ||
+      this.state[MyPageMenu[this.state.currentTab].value] !== prevState[MyPageMenu[this.state.currentTab].value]
+    ) {
+      this.getData()
     }
   }
 
