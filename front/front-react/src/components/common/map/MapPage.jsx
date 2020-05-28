@@ -295,22 +295,27 @@ const ButtonWrapper = styled.div`
 
 const dummyItems = [
   {
+    id: 1,
     title: "카카오",
     latlng: [33.450705, 126.570677],
   },
   {
+    id: 2,
     title: "생태연못",
     latlng: [33.450936, 126.569477],
   },
   {
+    id: 3,
     title: "텃밭",
     latlng: [33.450879, 126.56994],
   },
   {
+    id: 4,
     title: "근린공원",
     latlng: [33.451393, 126.570738],
   },
   {
+    id: 5,
     title: "할리스",
     latlng: [37.50083104531534, 127.03694678811341],
   },
