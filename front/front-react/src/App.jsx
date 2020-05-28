@@ -10,7 +10,7 @@ import Login from "./components/account/Login";
 import Signup from "./components/account/Signup";
 import SaegimListPage from "./components/saegim/SaegimListPage";
 import SaegimDetail from "./components/saegim/SaegimDetail";
-import MyPage from "./components/account/MyPage";
+import MyPage from "./components/mypage/MyPage";
 
 class App extends Component {
   constructor(props) {
@@ -72,6 +72,7 @@ class App extends Component {
         {// 사이드메뉴랑, 상단바(햄버거), 하단네비는 그냥 조건부 렌더링으로 작성
         ( this.props.location.pathname === "/map" ||
           this.props.location.pathname === "/write" ||
+          this.props.location.pathname === "/mypage" ||
           this.props.location.pathname.includes("/list")
         ) && (
           <>
@@ -94,7 +95,7 @@ class App extends Component {
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/mypage/:id" component={MyPage} />
+        <Route path="/mypage" component={MyPage} />
       </Storage.Provider>
     );
   }
