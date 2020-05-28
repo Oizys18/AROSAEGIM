@@ -10,11 +10,13 @@ import MapView from './MapView';
 import MapListItem from "./MapListItem";
 import RoadView from './RoadView';
 
+import * as SA from '../../../apis/SaegimAPI';
+
 class MapPage extends Component {
   constructor(props){
     super(props)
     this.state = {
-      items: dummyItems,
+      items: [],
 
       mv: null,
 
@@ -56,6 +58,26 @@ class MapPage extends Component {
     await this.setStateAsync({ mv: _mapView })
     this.getMkrLi()
 
+    await this.setStateAsync({bounds: _mapView.getBounds()})
+    
+    // get items from Backend with map center position
+    const meter = SA.boundsToMeter({
+      lat1: this.state.bounds.getSouthWest().getLat(),
+      lon1: this.state.bounds.getSouthWest().getLng(),
+      lat2: this.state.bounds.getNorthEast().getLat(),
+      lon2: this.state.bounds.getNorthEast().getLng(),
+    })
+
+    let items = await SA.getSaegimNearMe({
+      lat: this.state.center.getLat(),
+      lng: this.state.center.getLng(),
+      meter: meter
+    })
+
+    await this.setStateAsync({
+      items: items
+    })
+
     const _scale = _container.childNodes[1]
     _scale.style = `
       position: absolute; 
@@ -67,7 +89,6 @@ class MapPage extends Component {
       bottom: 64px; 
       color: rgb(0, 0, 0);
     `
-
   }
   componentWillUnmount(){
     kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLvCt)
@@ -110,7 +131,7 @@ class MapPage extends Component {
 
   selectItem = (item) => {
     // console.log(item);
-    this.panTo({ lat: item.latlng[0], lng: item.latlng[1] });
+    this.panTo({ lat: item.latitude, lng: item.longitude });
     this.setState({ selected: { status: true, item: item } });
   };
 
@@ -135,16 +156,24 @@ class MapPage extends Component {
   // function for development
   addRndItemInView = () => {
     const bounds = this.state.mv.getBounds();
-    console.log(bounds)
-    const rndLatLng = [
-      this.generateRandom(bounds.ka, bounds.ja),
-      this.generateRandom(bounds.da, bounds.ia),
-    ];
+    const rndLat = this.generateRandom(bounds.ka, bounds.ja)
+    const rndLng = this.generateRandom(bounds.da, bounds.ia)
+  
     const lastItem = this.state.items[this.state.items.length - 1];
     const newItem = {
-      id: lastItem.id + 1,
-      title: `new item ${lastItem.id + 1}`,
-      latlng: rndLatLng,
+      id: lastItem? lastItem.id + 1 : 1,
+      title: `new item ${lastItem ? lastItem.id + 1: 1}`,
+      contents: "안녕하세요. 코로나때문에 사람들을 많이 못 보니 쓸쓸하기도 하고 기분이 다운되네요. 다들 어떠신가요?",
+      image: null,
+      latitude: rndLat,
+      longitude: rndLng,
+      record: null,
+      regDate: 1590650953712,
+      secret: 0,
+      tags: [],
+      userId: 2006,
+      userName: "aaaa",
+      w3w: "무릎.한글.튤립",
     };
     this.setState({
       items: this.state.items.concat(newItem),
@@ -295,28 +324,41 @@ const ButtonWrapper = styled.div`
 
 const dummyItems = [
   {
-    id: 1,
     title: "카카오",
     latlng: [33.450705, 126.570677],
   },
   {
-    id: 2,
     title: "생태연못",
     latlng: [33.450936, 126.569477],
   },
   {
-    id: 3,
     title: "텃밭",
     latlng: [33.450879, 126.56994],
   },
   {
-    id: 4,
     title: "근린공원",
     latlng: [33.451393, 126.570738],
   },
   {
-    id: 5,
     title: "할리스",
     latlng: [37.50083104531534, 127.03694678811341],
   },
 ];
+
+/*
+data 양식
+
+contents: "안녕하세요"
+id: 2009
+image: null
+latitude: 37.50083104531534
+longitude: 127.03694678811341
+record: null
+regDate: 1590650953712
+secret: 0
+tags: []
+userId: 2006
+userName: "aaaa"
+w3w: "무릎.한글.튤립"
+  
+  */
