@@ -12,41 +12,41 @@ class SaegimListPage extends Component {
       location:
         [0, 0]
       ,
-      // data: [
-      //   {
-      //     id: 1,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 2,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 3,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 4,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 5,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 6,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 7,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 8,
-      //     contents: '내 용 자 리'
-      //   }
-      // ],
-      data: []
+      data: [
+        {
+          id: 1,
+          contents: '내 용 자 리'
+        },
+        {
+          id: 2,
+          contents: '내 용 자 리'
+        },
+        {
+          id: 3,
+          contents: '내 용 자 리'
+        },
+        {
+          id: 4,
+          contents: '내 용 자 리'
+        },
+        {
+          id: 5,
+          contents: '내 용 자 리'
+        },
+        {
+          id: 6,
+          contents: '내 용 자 리'
+        },
+        {
+          id: 7,
+          contents: '내 용 자 리'
+        },
+        {
+          id: 8,
+          contents: '내 용 자 리'
+        }
+      ],
+      // data: []
     }
   }
 
@@ -91,7 +91,7 @@ class SaegimListPage extends Component {
   }
 
   componentDidMount() {
-    this.getCurrentLocation()
+    // this.getCurrentLocation()
   }
 
   render() {

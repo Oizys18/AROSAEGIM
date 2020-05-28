@@ -166,7 +166,7 @@ class CardItem extends Component {
                     {saegim.contents}, id: {saegim.id}
                   </Contents>
                   <StLinkDiv>
-                  <StLink to={{pathname: `/list/${saegim.id}/`}}>
+                  <StLink to={`/list/${saegim.id}/`}>
                     더보기
                   </StLink>
                 </StLinkDiv>

@@ -21,6 +21,7 @@ export const getSaegimListByLocation = async (latlng) => {
 }
 
 export const getSaegimDetailById = async (id) => {
+  console.log(id)
   const _res = await axios ({
     method: 'get',
     url: `${BASE_URL}/saegims/${id}/detail`,
@@ -29,5 +30,5 @@ export const getSaegimDetailById = async (id) => {
     }
   })
 
-  return _res.data;
+  return _res.data.data;
 }

@@ -5,23 +5,25 @@ import styled from "styled-components";
 import { ArrowBack } from "@material-ui/icons";
 import bgImage from "../../assets/images/sample_img.jpg"
 import { Lock, LockOpen } from "@material-ui/icons";
+import * as SA from "../../apis/SaegimAPI"
 
 class SaegimDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: '',
-      user_id: '',
-      user_name: '',
-      contents: '이것은 상세보기에서 보이는 카드',
-      images: '',
-      w3w: '',
-      longitude: '',
-      latitude: '',
-      registered_datetime: '',
-      isLocked: 0,
-      like: '',
-      tags: ''
+      data: {
+        user_id: '',
+        user_name: '',
+        contents: '이것은 상세보기에서 보이는 카드',
+        images: '',
+        w3w: '',
+        longitude: '',
+        latitude: '',
+        registered_datetime: '',
+        isLocked: 0,
+        like: '',
+        tags: ''
+      }
     };
     this.goBack = this.goBack.bind(this);
   }
@@ -30,8 +32,10 @@ class SaegimDetail extends Component {
     this.props.history.goBack();
   }
 
-  getSaegimDetail() {
-    // 상세정보 가져오는 api 추가
+  getSaegimDetail = async () => {
+    const _data = await SA.getSaegimDetailById(this.props.match.params.id)
+    this.setState({ data: _data})
+    console.log(this.state.data)
   }
 
   componentDidMount() {
