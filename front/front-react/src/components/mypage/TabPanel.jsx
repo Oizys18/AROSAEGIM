@@ -20,10 +20,6 @@ class TabPanel extends Component {
         hidden={this.props.value !== this.props.index}
       >
         {PrintList}
-        {/*<StLink to={`list/${this.props.saegim.id}`}>*/}
-        {/*  <div>{this.props.saegim.w3w}</div>*/}
-        {/*  <div>{this.props.saegim.content}</div>*/}
-        {/*</StLink>*/}
       </div>
     )
   }

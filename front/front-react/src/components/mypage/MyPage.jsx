@@ -5,10 +5,10 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
-import BookmarkBorderOutlinedIcon from "@material-ui/icons/BookmarkBorderOutlined";
 import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
 import { Link } from "react-router-dom";
 import TabPanel from "./TabPanel";
+import MyPageMenu from "./MyPageMenu";
 
 class MyPage extends Component {
   listItem;
@@ -17,10 +17,9 @@ class MyPage extends Component {
     super(props);
     this.state = {
       currentTab: 0,
-      tabValues: ['mySaegim', 'like', 'commented', 'bookMark'],
-      tabTitles: ['내가 작성한 새김', '공감한 새김', '되새긴 새김', '덧새긴 새김'],
       mySaegim: 'time',
-      bookMark: 'time',
+      like: 'time',
+      commented: 'time',
       options: [
         { value: 'time', text: '시간 순으로 보기'},
         { value: 'location', text: '장소 별로 보기'},
@@ -67,24 +66,8 @@ class MyPage extends Component {
           w3w: '///모니터.숨은.자꾸',
           content: '내 용 자 리'
         }
-      ],
-      preItems: 0,
-      items: 3,
-      printData: []
+      ]
     }
-  };
-
-  getData() {
-    let _result = this.state.data.slice(this.state.preItems, this.state.items)
-    this.setState({
-      printData: _result
-    })
-  };
-
-  componentDidMount() {
-    this.setState({
-      printData: this.getData()
-    });
   };
 
   selectChange = async (e) => {
@@ -103,25 +86,8 @@ class MyPage extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state !== prevState) {
-      console.log('update')
-      this._infiniteScroll()
     }
   }
-
-  _infiniteScroll = () => {
-    let _scrollHeight = this.listItem.scrollHeight;
-    let _scrollTop = this.listItem.scrollTop;
-    let _clientHeight = this.listItem.height;
-    console.log(_scrollHeight, _scrollTop, _clientHeight)
-
-    if (_scrollTop + _clientHeight === _scrollHeight) {
-      this.setState({
-        preItems: this.state.items,
-        items: this.state.items + 3
-      });
-      this.getData()
-    }
-  };
 
   render() {
     const PrintOptions = this.state.options.map((option) => {
@@ -155,15 +121,6 @@ class MyPage extends Component {
               </UserEmail>
             </User>
             <UserSaegim>
-              {/*<SaegimCount>*/}
-              {/*  작성 00 개*/}
-              {/*</SaegimCount>*/}
-              {/*<SaegimCount>*/}
-              {/*  되새김 00 개*/}
-              {/*</SaegimCount>*/}
-              {/*<SaegimCount>*/}
-              {/*  덧새김 00 개*/}
-              {/*</SaegimCount>*/}
               <Tabs
                 value={this.state.currentTab}
                 textColor="primary"
@@ -172,25 +129,24 @@ class MyPage extends Component {
               >
                 <Tab icon={<CreateOutlinedIcon/>} value={0} />
                 <Tab icon={<FavoriteBorderOutlinedIcon/>} value={1} />
-                <Tab icon={<BookmarkBorderOutlinedIcon/>} value={2} />
-                <Tab icon={<MessageOutlinedIcon/>} value={3} />
+                <Tab icon={<MessageOutlinedIcon/>} value={2} />
               </Tabs>
             </UserSaegim>
           </UserInfo>
           <SaegimInfo value={this.state.currentTab}>
             <ListInfo>
-            <ListTitle>{this.state.tabTitles[this.state.currentTab]}</ListTitle>
-            <StSelect
-              autowidth
-              value={this.state.mySaegim}
-              onChange={this.selectChange}
-              inputProps={{
-                name: 'mySaegim',
-                id: 'mySaegim',
-              }}
-            >
-              {PrintOptions}
-            </StSelect>
+            <ListTitle>{MyPageMenu[this.state.currentTab].title}</ListTitle>
+              <StSelect
+                autowidth
+                value={this.state[MyPageMenu[this.state.currentTab].value]}
+                onChange={this.selectChange}
+                inputProps={{
+                  name: MyPageMenu[this.state.currentTab].value,
+                  id: MyPageMenu[this.state.currentTab].value,
+                }}
+              >
+                {PrintOptions}
+              </StSelect>
             </ListInfo>
             <SaegimShortList
               ref={div => (this.listItem = div)}
@@ -287,7 +243,7 @@ const SaegimInfo = styled.div`
     position: absolute;
     width: 0;
     height: 0;
-    left: ${props => ([11, 32, 53, 74][props.value])}%;
+    left: ${props => ([20, 40, 60][props.value])}%;
     border: 24px solid transparent;
     border-bottom-color: #f1f1f1;
     border-top: 0;
@@ -295,8 +251,6 @@ const SaegimInfo = styled.div`
     transition: all ease .7s;
   }
 `;
-
-
 
 const StSelect = styled(Select)`
   font-size: 0.9rem;
@@ -306,10 +260,6 @@ const SaegimShortList = styled.div`
   overflow: auto;
 `;
 
-const SaegimItem = styled.div`
-  margin: 16px;
-  text-decoration: none;
-`;
 
 const ListInfo = styled.div`
   display: flex;
@@ -321,11 +271,3 @@ const ListInfo = styled.div`
 
 const ListTitle = styled.div``;
 
-const StLink = styled(Link)`
-    color: inherit;
-    text-decoration: none;
-    &:focus, &:hover, &:active {
-      opacity: 60%;
-    }
-    align-self: right;
-  `;

@@ -1,14 +1,10 @@
 const MyPageMenu = [
   {
     value: 'mySaegim',
-    title: '내가 작성한 새김'
+    title: '내가 작성한 새김',
   },
   {
     value: 'like',
-    title: '공감한 새김'
-  },
-  {
-    value: 'bookMark',
     title: '덧새긴 새김'
   },
   {
