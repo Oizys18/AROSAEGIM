@@ -1,10 +1,12 @@
+import * as AA from '../../apis/AccountAPI'
+
 const regExp = {
   email: /^(([^<>()\\[\].,;:\s@"]+(\.[^<>()\\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i,
   pw: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z0-9]{6,15}$/,
   nickName: /^[A-Za-z0-9_]{4,16}$/,
 };
 
-export const checkEmail = ( curStr ) => {
+export const checkEmail = (curStr) => {
   let emailLabel = '이메일'
   let emailValid = 'init'
 
@@ -20,7 +22,7 @@ export const checkEmail = ( curStr ) => {
   return { emailLabel, emailValid }
 }
 
-export const checkPW = ( curStr ) => {
+export const checkPW = (curStr) => {
   let pwLabel = '비밀번호'
   let pwValid = 'init'
 
@@ -36,7 +38,7 @@ export const checkPW = ( curStr ) => {
   return { pwLabel, pwValid }
 }
 
-export const checkPWCheck = ( curPW, curStr ) => {
+export const checkPWCheck = (curPW, curStr) => {
   let pwCheckLabel = '비밀번호 확인'
   let pwCheckValid = 'init'
 
@@ -52,13 +54,18 @@ export const checkPWCheck = ( curPW, curStr ) => {
   return { pwCheckLabel, pwCheckValid }
 }
 
-export const checkNickName = ( curStr ) => {
+export const checkNickName = (curStr) => {
   let nickNameLabel = '닉네임'
   let nickNameValid = 'init'
 
   if(curStr !== '') {
     if (regExp.nickName.test(curStr)) {
       nickNameValid = 'valid'
+
+      if(AA.getUserByNickname(curStr)){
+        nickNameLabel = "닉네임이 중복됩니다!"
+        nickNameValid = 'invalid'
+      }
     }
     else {
       nickNameLabel = "영문, 숫자, '_' 포함 4~16자"
@@ -66,4 +73,24 @@ export const checkNickName = ( curStr ) => {
     }
   }
   return { nickNameLabel, nickNameValid }
+}
+
+export const checkAllValid = (page, data) => {
+  if(page === 'login'){
+    if (
+      data.emailValid === "valid" &&
+      data.pwValid === "valid"
+    ) return true
+    else return false
+  }
+  else{
+    if (
+      data.emailValid === "valid" &&
+      data.pwValid === "valid" &&
+      data.pwCheckValid === "valid" &&
+      data.nickNameValid === "valid"
+    ) return true
+    else return false
+  }
+  
 }

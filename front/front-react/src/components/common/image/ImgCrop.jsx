@@ -6,7 +6,7 @@ import 'react-image-crop/dist/ReactCrop.css'
 import styled from 'styled-components';
 import { IconButton, } from '@material-ui/core';
 import { Close, Check } from '@material-ui/icons';
-import { FlexRow, } from '../../../styles/DispFlex'
+import { FlexRow, } from '../../../styles/DispFlex';
 
 import * as IM from './ImgMethod'
 
@@ -14,7 +14,7 @@ class ImgCrop extends Component {
   constructor(props){
     super(props);
     this.state = {
-      crop: IM.calcSize(this.props.imgW, this.props.imgH),
+      crop: IM.calcSize(this.props.imgW, this.props.imgH, this.props.mode),
     }
   }
 
@@ -37,9 +37,7 @@ class ImgCrop extends Component {
   };
 
   async makeClientCrop(crop) {
-    console.log('a;sldkfj;sl')
     if (this.imageRef && crop.width && crop.height) {
-      console.log('a;sldkfj;slasdfasdf')
       const croppedImageUrl = await this.getCroppedImg(
         this.imageRef,
         crop,
@@ -70,7 +68,7 @@ class ImgCrop extends Component {
     );
 
     return new Promise((resolve, reject) => {
-      console.log(canvas.toDataURL())
+      // console.log(canvas.toDataURL())
       resolve(canvas.toDataURL())
 
       // canvas.toBlob(blob => {

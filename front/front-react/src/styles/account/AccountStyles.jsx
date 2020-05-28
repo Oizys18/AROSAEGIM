@@ -1,7 +1,7 @@
 import DefaultButton from '../../components/common/buttons/DefaultButton'
 import { FlexRow, FlexColumn } from '../DispFlex'
 import styled from 'styled-components';
-import { IconButton } from '@material-ui/core';
+// import { IconButton } from '@material-ui/core';
 
 export const StFormCont = styled(FlexColumn)`
   position: relative;
@@ -9,12 +9,12 @@ export const StFormCont = styled(FlexColumn)`
   height: ${props => props.height}px;
 `;
 
-export const StBackBtn = styled(IconButton)`
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: 0;
-`;
+// export const StBackBtn = styled(IconButton)`
+//   position: absolute;
+//   z-index: 1;
+//   top: 0;
+//   left: 0;
+// `;
 
 export const StBtnCont = styled(FlexRow)`
   display: flex;

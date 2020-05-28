@@ -38,15 +38,17 @@ class App extends Component {
     const _autoLogin = localStorage.getItem('ARSG autoLogin')
     if(_autoLogin === 'true'){
       const _email = localStorage.getItem('ARSG email')
+      this.setState({ isLogin: true })
       this.props.history.replace('/map')
     }
     else {
       const _email = sessionStorage.getItem('ARSG email')
-      if(_email !== null){
-        this.props.history.replace('/map')
+      if(_email === null){
+        this.props.history.replace('/list')
       }
       else{
-        this.props.history.replace('/signup')
+        this.setState({ isLogin: true })
+        this.props.history.replace('/map')
       }
     }
   }
