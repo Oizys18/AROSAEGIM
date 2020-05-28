@@ -27,13 +27,13 @@ public class SaegimRestController extends EntityRestController{
 	private CommentService commentService;
 	
 	@ApiOperation("모든 새김 정보 List")
-	@GetMapping("/")
+	@GetMapping()
 	public ResponseEntity<Map<String, Object>> getSaegims() throws Exception{
 		return handleSuccess(saegimService.getSaegims());
 	}
 	@ApiOperation("새로운 새김 등록")
-	@PostMapping("/")
-	public ResponseEntity<Map<String, Object>> postSaegim(SaegimFormDto saegimFormDto) throws Exception{
+	@PostMapping()
+	public ResponseEntity<Map<String, Object>> postSaegim(@RequestBody SaegimFormDto saegimFormDto) throws Exception{
 		return handleSuccess(saegimService.postSaegim(saegimFormDto));
 	}
 	@ApiOperation("saegimId로 새김 정보 검색")
@@ -43,7 +43,7 @@ public class SaegimRestController extends EntityRestController{
 	}
 	@ApiOperation("saegimId로 새김 정보 수정")
 	@PutMapping("/{saegimid}")
-	public ResponseEntity<Map<String, Object>> putSaegim(@PathVariable("saegimid") long saegimId, SaegimFormDto saegimFormDto) throws Exception{
+	public ResponseEntity<Map<String, Object>> putSaegim(@PathVariable("saegimid") long saegimId, @RequestBody SaegimFormDto saegimFormDto) throws Exception{
 		return handleSuccess(saegimService.putSaegim(saegimId, saegimFormDto));
 	}
 	@ApiOperation("saegimId으로 새김 정보 삭제")
@@ -74,7 +74,7 @@ public class SaegimRestController extends EntityRestController{
 	}
 	@ApiOperation("saegimId로 새로운 댓글 등록")
 	@PostMapping("/{saegimid}/comments")
-	public ResponseEntity<Map<String, Object>> postCommentOfSaegimBySid(@PathVariable("saegimid") long saegimId, CommentFormDto commentFormDto) throws Exception{
+	public ResponseEntity<Map<String, Object>> postCommentOfSaegimBySid(@PathVariable("saegimid") long saegimId, @RequestBody CommentFormDto commentFormDto) throws Exception{
 		return handleSuccess(commentService.postCommentOfSaegimBySid(saegimId, commentFormDto));
 	}
 	@ApiOperation("saegimId와 commentID로 댓글 수정")

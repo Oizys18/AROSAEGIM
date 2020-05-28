@@ -21,4 +21,6 @@ public class UserFormDto {
 	private String name;
 	@NonNull
 	private String password;
+	
+	private String profileImage;
 }

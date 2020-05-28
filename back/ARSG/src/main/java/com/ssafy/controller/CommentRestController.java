@@ -14,13 +14,13 @@ import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/comments")
 public class CommentRestController extends EntityRestController{
 	@Autowired
 	private CommentService commentService;
 	
 	@ApiOperation("모든 댓글 정보 검색")
-	@GetMapping("/")
+	@GetMapping()
 	public ResponseEntity<Map<String, Object>> getLikes() throws Exception{
 		return handleSuccess(commentService.getComments());
 	}

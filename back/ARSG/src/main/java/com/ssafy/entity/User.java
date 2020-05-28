@@ -1,23 +1,32 @@
 package com.ssafy.entity;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.ssafy.configuration.ConfigurationUtilFactory;
 import com.ssafy.dto.UserFormDto;
+import com.ssafy.util.UtilFactory;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor @RequiredArgsConstructor @AllArgsConstructor
@@ -35,12 +44,15 @@ public class User {
 	private String name;
 	@NonNull
 	private String password;
+	
+	@Column(name="profile_image")
+	private String profileImage;
 
 	@OneToMany(mappedBy="USER", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@ApiModelProperty(hidden = true)
 	private Set<Likes> likes = new HashSet<Likes>();
 	
 	public static User of(UserFormDto userFormDto) {
-		return ConfigurationUtilFactory.modelmapper().map(userFormDto, User.class);
+		return UtilFactory.getModelMapper().map(userFormDto, User.class);
 	}
 }

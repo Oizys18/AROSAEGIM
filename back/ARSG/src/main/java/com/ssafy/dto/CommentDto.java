@@ -2,11 +2,16 @@ package com.ssafy.dto;
 
 import java.util.Date;
 
-import com.ssafy.configuration.ConfigurationUtilFactory;
-import com.ssafy.entity.Comment;
-import com.ssafy.entity.Tagging;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 
-import lombok.*;
+import com.ssafy.entity.Comment;
+import com.ssafy.util.UtilFactory;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,7 +25,7 @@ public class CommentDto {
 	private String contents;
 	
 	public static CommentDto of(Comment comment) {
-		CommentDto dto = ConfigurationUtilFactory.modelmapper().map(comment, CommentDto.class);
+		CommentDto dto = UtilFactory.getModelMapper().map(comment, CommentDto.class);
 		return dto;
 	}
 }

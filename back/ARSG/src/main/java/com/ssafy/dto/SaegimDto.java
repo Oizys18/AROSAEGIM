@@ -3,15 +3,14 @@ package com.ssafy.dto;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
+import org.modelmapper.convention.MatchingStrategies;
 
-import com.ssafy.configuration.ConfigurationUtilFactory;
-import com.ssafy.entity.Hashtag;
 import com.ssafy.entity.Saegim;
-import com.ssafy.entity.User;
+import com.ssafy.util.UtilFactory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +43,7 @@ public class SaegimDto {
     private String image;
     private String record;
     private Integer secret;
+    
     private List<HashtagDto> tags = new ArrayList<HashtagDto>(); 
     
     public static SaegimDto of(Saegim saegim) {
@@ -58,10 +58,9 @@ public class SaegimDto {
     			map().setTags(hashtagsDto);
     		}
     	};
-    	if(ConfigurationUtilFactory.modelmapper().getTypeMap(Saegim.class, SaegimDto.class) == null)
-    		ConfigurationUtilFactory.modelmapper().addMappings(saegimMap);
-    	
-    	SaegimDto dto = ConfigurationUtilFactory.modelmapper().map(saegim, SaegimDto.class);
+    	ModelMapper modelMapper = UtilFactory.getModelMapper();
+    	modelMapper.addMappings(saegimMap);
+    	SaegimDto dto = modelMapper.map(saegim, SaegimDto.class);
     	return dto;
     }
 }

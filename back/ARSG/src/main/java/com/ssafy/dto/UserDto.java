@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
+import org.modelmapper.convention.MatchingStrategies;
 
-import com.ssafy.configuration.ConfigurationUtilFactory;
 import com.ssafy.entity.User;
+import com.ssafy.util.UtilFactory;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +27,8 @@ public class UserDto {
 	private String email;
 	@NonNull
 	private String name;
-	@NonNull
-	private String password;
+	
+	private String profileImage;
 
 	private List<LikesDto> likes = new ArrayList<LikesDto>();
 
@@ -42,9 +44,9 @@ public class UserDto {
     			map().setLikes(likesDto);
     		}
     	};
-    	if(ConfigurationUtilFactory.modelmapper().getTypeMap(User.class, UserDto.class) == null)
-    		ConfigurationUtilFactory.modelmapper().addMappings(userMap);
-    	UserDto dto = ConfigurationUtilFactory.modelmapper().map(user, UserDto.class);
+    	ModelMapper modelMapper = UtilFactory.getModelMapper();
+    	modelMapper.addMappings(userMap);
+    	UserDto dto = modelMapper.map(user, UserDto.class);
     	return dto;
     }
 }

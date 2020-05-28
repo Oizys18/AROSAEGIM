@@ -19,7 +19,7 @@ public class LikesRestController extends EntityRestController{
 	private LikesService likesService;
 	
 	@ApiOperation("모든 좋아요 정보 검색")
-	@GetMapping("/")
+	@GetMapping()
 	public ResponseEntity<Map<String, Object>> getLikes() throws Exception{
 		return handleSuccess(likesService.getLikes());
 	}

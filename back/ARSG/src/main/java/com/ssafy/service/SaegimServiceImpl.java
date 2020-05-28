@@ -56,9 +56,15 @@ public class SaegimServiceImpl implements SaegimService {
 	@Override
 	public SaegimDetailDto getDetailBySaegimId(long saegimId) {
 		Saegim saegim = saegimRepository.findById(saegimId);
-		saegim.setLikes(likesRepository.findBySaegimId(saegim.getId()));
-		saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId()));
-		saegim.setComments(commentRepository.findBySaegimId(saegim.getId()));
+		saegim.setLikes(
+				likesRepository.findBySaegimId(
+						saegimId));
+		saegim.setTaggings(
+				taggingRepository.findBySaegimId(
+						saegimId));
+		saegim.setComments(
+				commentRepository.findBySaegimId(
+						saegimId));
 		return SaegimDetailDto.of(saegim);
 //				.orElseThrow(() -> 
 //        		new RestException(HttpStatus.NOT_FOUND, "Not found board"));
@@ -91,13 +97,17 @@ public class SaegimServiceImpl implements SaegimService {
 	}
 	@Override
 	public List<SaegimDto> getSaegimsByUserId(long userId) {
-		return saegimRepository.findByUserId(userId).stream()
+		List<Saegim> saegimList = saegimRepository.findByUserId(userId);
+		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
+		return saegimList.stream()
 				.map(saegim->SaegimDto.of(saegim))
 				.collect(Collectors.toList());
 	}
 	@Override
 	public List<SaegimDto> getSaegims() {
-		return saegimRepository.findAll().stream()
+		List<Saegim> saegimList = saegimRepository.findAll();
+		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
+		return saegimList.stream()
 				.map(saegim->SaegimDto.of(saegim))
 				.collect(Collectors.toList());
 	}
@@ -108,12 +118,13 @@ public class SaegimServiceImpl implements SaegimService {
 
 	@Override
 	public List<SaegimDto> getSaegimsByGeo(double lat, double lng, int meter) {
-		List<Saegim> list = new ArrayList<Saegim>();
+		List<Saegim> saegimList = new ArrayList<Saegim>();
 		for (Saegim saegim : saegimRepository.findAll()) {
 			if(distance(saegim.getLatitude(), saegim.getLongitude(), lat, lng) <= meter)
-				list.add(saegim);
+				saegimList.add(saegim);
 		}
-		return list.stream()
+		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
+		return saegimList.stream()
 				.map(saegim->SaegimDto.of(saegim))
 				.collect(Collectors.toList());
 	}

@@ -1,11 +1,10 @@
 package com.ssafy.dto;
 
-import org.modelmapper.PropertyMap;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 
-import com.ssafy.configuration.ConfigurationUtilFactory;
 import com.ssafy.entity.Likes;
-import com.ssafy.entity.Saegim;
-import com.ssafy.entity.User;
+import com.ssafy.util.UtilFactory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +29,7 @@ public class LikesDto {
 //    	};
 //    	if(ConfigurationUtilFactory.modelmapper().getTypeMap(Likes.class, LikesDto.class) == null)
 //    		ConfigurationUtilFactory.modelmapper().addMappings(likesMap);
-    	LikesDto dto = ConfigurationUtilFactory.modelmapper().map(likes, LikesDto.class);
+    	LikesDto dto = UtilFactory.getModelMapper().map(likes, LikesDto.class);
     	dto.setUserName(likes.getUSER().getName());
     	return dto;
     }

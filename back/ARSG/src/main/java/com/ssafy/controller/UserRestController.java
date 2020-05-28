@@ -30,13 +30,18 @@ public class UserRestController extends EntityRestController{
 	private LikesService likesService;
 
 	@ApiOperation("모든 회원 정보 List")
-	@GetMapping("/")
+	@GetMapping()
 	public ResponseEntity<Map<String, Object>> getUsers() throws Exception{
 		return handleSuccess(userService.getUsers());
 	}
 	@ApiOperation("user 정보로 회원 등록")
-	@PostMapping("/")
-	public ResponseEntity<Map<String, Object>> postUser(UserFormDto userFormDto) throws Exception{
+	@PostMapping()
+	public ResponseEntity<Map<String, Object>> postUser(@RequestBody UserFormDto userFormDto) throws Exception{
+		System.out.println("======================== UserFormDto ========================");
+		System.out.println(userFormDto.getEmail());
+		System.out.println(userFormDto.getName());
+		System.out.println(userFormDto.getPassword());
+		System.out.println(userFormDto.getProfileImage().length());
 		return handleSuccess(userService.postUser(userFormDto));
 	}
 	@ApiOperation("userId으로 회원 정보 검색")
@@ -46,7 +51,7 @@ public class UserRestController extends EntityRestController{
 	}
 	@ApiOperation("userId으로 회원 정보 수정")
 	@PutMapping("/{userid}")
-	public ResponseEntity<Map<String, Object>> putUser(@PathVariable("userid") long userid, UserFormDto userFormDto) throws Exception{
+	public ResponseEntity<Map<String, Object>> putUser(@PathVariable("userid") long userid, @RequestBody UserFormDto userFormDto) throws Exception{
 		return handleSuccess(userService.putUser(userid, userFormDto));
 	}
 	@ApiOperation("userId으로 회원 정보 삭제")
@@ -85,7 +90,7 @@ public class UserRestController extends EntityRestController{
 	// 추가
 	@ApiOperation("id, pw로 로그인")
 	@PostMapping("/login")
-	public ResponseEntity<Map<String, Object>> loginUser(LoginFormDto loginFormDto) throws Exception{
+	public ResponseEntity<Map<String, Object>> loginUser(@RequestBody LoginFormDto loginFormDto) throws Exception{
 		UserDto tmp = userService.loginUser(loginFormDto);
 		if(tmp != null)
 			return handleSuccess(tmp);
