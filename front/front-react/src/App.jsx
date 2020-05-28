@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { Route, withRouter, Switch } from "react-router-dom";
+
+import {Slide} from '@material-ui/core'
+
 import { Storage } from "./storage/Storage";
 import TopBar from "./components/common/menus/TopBar";
 import SideMenu from "./components/common/menus/SideMenu";
@@ -17,6 +20,7 @@ class App extends Component {
     super(props);
     this.state = {
       appHeight: window.innerHeight,
+      curPage: '/list',
 
       isLogin: false,
       handleLogin: this.handleLogin,
@@ -39,7 +43,7 @@ class App extends Component {
     if(_autoLogin === 'true'){
       const _email = localStorage.getItem('ARSG email')
       this.setState({ isLogin: true })
-      this.props.history.replace('/map')
+      this.props.history.replace('/list')
     }
     else {
       const _email = sessionStorage.getItem('ARSG email')
@@ -50,6 +54,13 @@ class App extends Component {
         this.setState({ isLogin: true })
         this.props.history.replace('/map')
       }
+    }
+  }
+  componentDidUpdate(prevProps, prevState){
+    if(prevState.curPage !== this.props.location.pathname){
+      this.setState({
+        curPage: this.props.location.pathname
+      })
     }
   }
 
@@ -85,7 +96,7 @@ class App extends Component {
           </>
         )}
 
-        <Route exact path="/" component={SaegimListPage} />
+        {/* <Route exact path="/" component={SaegimListPage} /> */}
         <Switch>
           <Route path="/list/:id" component={SaegimDetail} />
           <Route path="/list" component={SaegimListPage} />

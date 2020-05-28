@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import {Storage} from '../../storage/Storage'
 import SaegimList from "./SaegimList";
 import CardItem from "./CardItem";
 import styled from "styled-components";
-import { Zoom } from "@material-ui/core";
+import { Zoom, Slide } from "@material-ui/core";
 
 class SaegimListPage extends Component {
   constructor(props) {
@@ -62,6 +63,12 @@ class SaegimListPage extends Component {
   }
 
   render() {
+    let _dir = 'left'
+    if(this.context.curPage === '/map'){
+      _dir = 'right'
+    }
+
+
     const data = this.state.data.slice(0, 5);
     const PrintCard = data.map((saegim, idx) => {
       return (
@@ -77,19 +84,28 @@ class SaegimListPage extends Component {
     });
 
     return (
-      <Wrapper>
-        <StList>
-          <SaegimList>
-            {PrintCard}
-          </SaegimList>
-        </StList>
-        {/*<CardView />*/}
-      </Wrapper>
+      <StCont>
+        <Slide in={true} direction={_dir}>
+        <Wrapper>
+          <StList>
+            <SaegimList>
+              {PrintCard}
+            </SaegimList>
+          </StList>
+          {/*<CardView />*/}
+        </Wrapper>
+        </Slide>
+      </StCont>
     );
   }
 }
 
 export default SaegimListPage;
+SaegimListPage.contextType = Storage;
+
+const StCont = styled.div`
+  overflow: hidden;
+`;
 
 const Wrapper = styled.div `
   display: flex;

@@ -4,7 +4,7 @@ import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css'
 
 import styled from 'styled-components';
-import { IconButton, } from '@material-ui/core';
+import { IconButton, Zoom } from '@material-ui/core';
 import { Close, Check } from '@material-ui/icons';
 import { FlexRow, } from '../../../styles/DispFlex';
 
@@ -16,6 +16,13 @@ class ImgCrop extends Component {
     this.state = {
       crop: IM.calcSize(this.props.imgW, this.props.imgH, this.props.mode),
     }
+  }
+
+  componentDidMount(){
+    console.log(this.state.crop)
+  }
+  componentDidUpdate(){
+    console.log(this.state.crop)
   }
 
   applyCrop = () => {
@@ -32,8 +39,8 @@ class ImgCrop extends Component {
 
   onCropChange = (crop, percentCrop) => {
     // You could also use percentCrop:
-    // this.setState({ crop: percentCrop });
-    this.setState({ crop });
+    this.setState({ crop: percentCrop });
+    // this.setState({ crop });
   };
 
   async makeClientCrop(crop) {
@@ -87,11 +94,13 @@ class ImgCrop extends Component {
 
   render(){
     return(
+      <Zoom in={true}>
       <StCropCont> 
         <StTop>
           <IconButton onClick={this.props.cancel}>
             <Close/>
           </IconButton>
+          <div className='txt'>미리보기</div>
           <IconButton onClick={this.applyCrop}>
             <Check/>
           </IconButton>
@@ -99,7 +108,6 @@ class ImgCrop extends Component {
 
         <ReactCrop
           src={this.props.imgBase64}
-          // crop={crop}
           crop={this.state.crop}
           ruleOfThirds
           onImageLoaded={this.onImageLoaded}
@@ -107,6 +115,7 @@ class ImgCrop extends Component {
           onChange={this.onCropChange}
         />
       </StCropCont>
+      </Zoom>
     )
   }
 
@@ -132,7 +141,7 @@ const StTop = styled(FlexRow)`
 
   width: 100%;
 
-  svg{
+  svg, .txt{
     color: white;
   }
 `

@@ -54,20 +54,20 @@ export const checkPWCheck = (curPW, curStr) => {
   return { pwCheckLabel, pwCheckValid }
 }
 
-export const checkNickName = (curStr) => {
+export const checkNickName = async (curStr) => {
   let nickNameLabel = '닉네임'
   let nickNameValid = 'init'
 
   if(curStr !== '') {
     if (regExp.nickName.test(curStr)) {
       nickNameValid = 'valid'
-
-      if(AA.getUserByNickname(curStr)){
+      if(await AA.getUserByNickname(curStr)){
         nickNameLabel = "닉네임이 중복됩니다!"
         nickNameValid = 'invalid'
       }
     }
     else {
+      console.log('asodinf')
       nickNameLabel = "영문, 숫자, '_' 포함 4~16자"
       nickNameValid = 'invalid'
     }

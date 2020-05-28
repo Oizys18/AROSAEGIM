@@ -101,7 +101,7 @@ class Signup extends Component {
     }
     else if(e.currentTarget.id === 'nickName') {
       await this.setStateAsync({ nickName: e.currentTarget.value })
-      this.setState( AM.checkNickName(this.state.nickName) )
+      this.setState( await AM.checkNickName(this.state.nickName) )
     }
   }
 

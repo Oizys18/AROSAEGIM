@@ -18,41 +18,31 @@ export const login = async (data) => {
 
 export const signup = async (data) => {
 
-  const {imgBase64, cropedImgBase64, email, pw, name} = data;
+  const {imgBase64, cropedImgBase64, email, pw, nickName} = data;
+
 
   const _res = await axios({
     method: 'post',
-    url: `${process.env.REACT_APP_BASE_URL}/user/`,
+    url: `${process.env.REACT_APP_BASE_URL}/users/`,
     data: {
-      image: imgBase64,
-      preview: cropedImgBase64,
+      // image: imgBase64,
+      // preview: cropedImgBase64,
       email: email,
       password: pw,
-      name: name
+      name: nickName,
+      // email: 'sj@sj.com',
+      // password: 'a123123',
+      // name: '_SJ_'
     }
   })
 
   return _res.data;
 }
 
-export const getUserByNickname = async (nick) => {
-  const _res = await axios({
-    method: 'get',
-    url: `${process.env.REACT_APP_BASE_URL}/user/nickname/${nick}`
-  })
-
-  if(_res.data.status === 'success'){
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-
 export const getUserByEmail = async (email) => {
   const _res = await axios({
     method: 'get',
-    url: `${process.env.REACT_APP_BASE_URL}/user/email/${email}`
+    url: `${process.env.REACT_APP_BASE_URL}/user/email?email=${email}`
   })
 
   if(_res.data.status === 'success'){
@@ -62,3 +52,18 @@ export const getUserByEmail = async (email) => {
     return null;
   }
 }
+
+export const getUserByNickname = async (nick) => {
+  const _res = await axios({
+    method: 'get',
+    url: `${process.env.REACT_APP_BASE_URL}/users/name?name=${nick}`
+  })
+
+  if(_res.data.state === 'success'){
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+

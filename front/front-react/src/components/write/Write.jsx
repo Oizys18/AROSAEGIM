@@ -4,7 +4,7 @@ import styled from "styled-components";
 // import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import MapIcon from "@material-ui/icons/Map";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Slide } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
 import DefaultButton from "../common/buttons/DefaultButton";
@@ -101,6 +101,7 @@ class Write extends Component {
 
     return (
       <Wrapper>
+        <Slide in={true} direction='left'>
         <Container>
           <Chip text={this.state.time} />
           <Switch
@@ -144,6 +145,7 @@ class Write extends Component {
             {/* <DefaultButton text="작성" onClick={() => this.writePost()} /> */}
           </ButtonContainer>
         </Container>
+        </Slide>
       </Wrapper>
     );
   }
@@ -157,6 +159,8 @@ const Wrapper = styled.div`
   width: auto;
   height: 100vh;
   background-color: #e6d7bb;
+
+  overflow: hidden;
 `;
 
 const Container = styled.div`
