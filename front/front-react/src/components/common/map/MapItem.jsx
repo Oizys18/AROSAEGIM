@@ -1,9 +1,9 @@
 /*global kakao*/
 import React, { Component } from "react";
 import styled from "styled-components";
-import imgLeft from "../../../assets/balloon/balloon-left@2x.png";
-import imgMiddle from "../../../assets/balloon/balloon-middle@2x.png";
-import imgRight from "../../../assets/balloon/balloon-right@2x.png";
+import imgLeft from "../../../assets/balloon/balloon-left-filled@2x.png";
+import imgMiddle from "../../../assets/balloon/balloon-middle-filled@2x.png";
+import imgRight from "../../../assets/balloon/balloon-right-filled@2x.png";
 
 class MapItem extends Component {
   constructor(props) {
@@ -107,7 +107,8 @@ const ItemRight = styled.div`
 
 const TextMiddle = styled.div`
   position: relative;
-  bottom: 10px;
+  bottom: 16px;
+  border: solid #20ad77 1px;
   border-radius: 2px;
   padding: 2px;
   color: #20ad77;
