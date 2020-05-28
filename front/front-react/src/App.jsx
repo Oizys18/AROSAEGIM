@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, withRouter, Switch } from "react-router-dom";
 
-import {Slide} from '@material-ui/core'
+import { Slide } from '@material-ui/core'
 
 import { Storage } from "./storage/Storage";
 import TopBar from "./components/common/menus/TopBar";
@@ -13,22 +13,26 @@ import Login from "./components/account/Login";
 import Signup from "./components/account/Signup";
 import SaegimListPage from "./components/saegim/SaegimListPage";
 import SaegimDetail from "./components/saegim/SaegimDetail";
-import MyPage from "./components/account/MyPage";
+import MyPage from "./components/mypage/MyPage";
+import { getUserByEmail } from "./apis/AccountAPI";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       appHeight: window.innerHeight,
+
+      sideMenu: false,
+      toggleSideMenu: this.toggleSideMenu,
+
       curPage: '/list',
+      curSaegimIdx: 0,
+      curMap: [],
 
       isLogin: false,
       handleLogin: this.handleLogin,
 
-      userInitPage: "/list",
-
-      sideMenu: false,
-      toggleSideMenu: this.toggleSideMenu,
+      userInfo: {},
     };
   }
 
@@ -42,7 +46,10 @@ class App extends Component {
     const _autoLogin = localStorage.getItem('ARSG autoLogin')
     if(_autoLogin === 'true'){
       const _email = localStorage.getItem('ARSG email')
-      this.setState({ isLogin: true })
+      this.setState({ 
+        isLogin: true,
+        userInfo: (await getUserByEmail(_email)).data
+      })
       this.props.history.replace('/list')
     }
     else {
@@ -51,7 +58,10 @@ class App extends Component {
         this.props.history.replace('/list')
       }
       else{
-        this.setState({ isLogin: true })
+        this.setState({ 
+          isLogin: true,
+          userInfo: (await getUserByEmail(_email)).data
+        })
         this.props.history.replace('/map')
       }
     }
@@ -68,12 +78,13 @@ class App extends Component {
     this.setState({ sideMenu: !this.state.sideMenu });
   };
 
-  changePage = (e) => {
-    if (e.currentTarget.id === "write"
+  changePage = async (e) => {
+    const _id = e.currentTarget.id
+    if (_id === "write"
     ) {
-      this.props.history.push(`/${e.currentTarget.id}`);
+      this.props.history.push(`/${_id}`);
     } else {
-      this.props.history.replace(`/${e.currentTarget.id}`);
+      this.props.history.replace(`/${_id}`);
     }
   };
 
@@ -83,14 +94,21 @@ class App extends Component {
         {// 사이드메뉴랑, 상단바(햄버거), 하단네비는 그냥 조건부 렌더링으로 작성
         ( this.props.location.pathname === "/map" ||
           this.props.location.pathname === "/write" ||
+          this.props.location.pathname === "/mypage" ||
           this.props.location.pathname.includes("/list")
         ) && (
           <>
-            <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu} />
+            <Slide in={this.props.location.pathname !== "/map"} direction="down" unmountOnExit mountOnEnter>
+              <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
+            </Slide>
+            {/* <Slide in={this.props.location.pathname === "/map"} direction="down" unmountOnExit mountOnEnter>
+              <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
+            </Slide> */}
             <SideMenu
               on={this.state.sideMenu}
               toggle={this.toggleSideMenu}
               isLogin={this.state.isLogin}
+              userInfo={this.state.userInfo}
             />
             <BotNav changePage={this.changePage} />
           </>
@@ -105,7 +123,7 @@ class App extends Component {
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/mypage/:id" component={MyPage} />
+        <Route path="/mypage" component={MyPage} />
       </Storage.Provider>
     );
   }

@@ -66,7 +66,7 @@ class Login extends Component {
   handleInput = async (e) => {
     if(e.currentTarget.id === 'email'){
       await this.setStateAsync({ email: e.currentTarget.value })
-      this.setState( AM.checkEmail(this.state.email) )
+      this.setState( await AM.checkLoginEmail(this.state.email) )
     }
     else {
       await this.setStateAsync({ pw: e.currentTarget.value })
@@ -80,17 +80,14 @@ class Login extends Component {
 
   handleSubmit = async () => {
     if(AM.checkAllValid('login', this.state)){
-      const _resData = await AA.login(this.state)
-      console.log(_resData)
-
-      // localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
-      // if(this.state.autoLogin){
-      //   localStorage.setItem('ARSG email', this.state.email)
-      // }
-      // else {
-      //   sessionStorage.setItem('ARSG email', this.state.email)
-      // }
-      // window.location.href = '/'
+      localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
+      if(this.state.autoLogin){
+        localStorage.setItem('ARSG email', this.state.email)
+      }
+      else {
+        sessionStorage.setItem('ARSG email', this.state.email)
+      }
+      window.location.href = '/'
     }
     else{
       this.setState({ alertModal: true })

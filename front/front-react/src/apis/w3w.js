@@ -4,7 +4,7 @@ import axios from "axios";
 // lat + lng -> W3W
 export function CtoW(lat, lng) {
   const url = "https://api.what3words.com/v3/convert-to-3wa?coordinates=";
-  const APIKEY = process.env.REACT_APP_APIKEY;
+  const APIKEY = process.env.REACT_APP_W3W_API;
   // axios
   //   .get(url + lat + "," + lng + "&language=ko&key=" + APIKEY)
   //   .then((res) => {

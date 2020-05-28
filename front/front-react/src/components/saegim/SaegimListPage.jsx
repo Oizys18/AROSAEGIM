@@ -63,9 +63,9 @@ class SaegimListPage extends Component {
   }
 
   render() {
-    let _dir = 'left'
-    if(this.context.curPage === '/map'){
-      _dir = 'right'
+    let _dir = 'right'
+    if(this.context.curPage === '/list'){
+      _dir = 'left'
     }
 
 

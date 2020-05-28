@@ -1,51 +1,49 @@
 import axios from 'axios'
 
-export const login = async (data) => {
+export const login = async (state) => {
 
-  const {email, pw} = data
+  const {email, pw} = state
 
   const _res = await axios({
     method: 'post',
-    url: `${process.env.REACT_APP_BASE_URL}/user/login`,
+    url: `${process.env.REACT_APP_BASE_URL}/users/login`,
     data: {
       email: email,
       password: pw,
     }
   })
-
   return _res.data;
 }
 
-export const signup = async (data) => {
+export const signup = async (state) => {
 
-  const {imgBase64, cropedImgBase64, email, pw, nickName} = data;
-
+  const {email, pw, nickName} = state;
+  let _profile = null
+  if(state.cropedImgBase64 !== ''){
+    _profile = state.cropedImgBase64
+  }
 
   const _res = await axios({
     method: 'post',
-    url: `${process.env.REACT_APP_BASE_URL}/users/`,
+    url: `${process.env.REACT_APP_BASE_URL}/users`,
     data: {
-      // image: imgBase64,
-      // preview: cropedImgBase64,
       email: email,
       password: pw,
       name: nickName,
-      // email: 'sj@sj.com',
-      // password: 'a123123',
-      // name: '_SJ_'
-    }
+      profileImage: _profile,
+    },
   })
-
   return _res.data;
 }
 
 export const getUserByEmail = async (email) => {
   const _res = await axios({
     method: 'get',
-    url: `${process.env.REACT_APP_BASE_URL}/user/email?email=${email}`
+    url: `${process.env.REACT_APP_BASE_URL}/users/email?email=${email}`
   })
 
-  if(_res.data.status === 'success'){
+
+  if(_res.data.state === 'success'){
     return _res.data;
   }
   else {

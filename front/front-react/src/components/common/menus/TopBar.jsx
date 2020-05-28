@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import Hamburger from '../buttons/Hamburger'
 import styled from 'styled-components';
-import { Slide } from '@material-ui/core';
 
 class TopBar extends Component {
   render(){
     return(
-      <Slide in={true} direction="down">
-        <StTopCont>
-          <Hamburger on={this.props.on} toggle={this.props.toggle}/>
-          <StLogo>로고</StLogo>
-        </StTopCont>
-      </Slide>
+      <StTopCont>
+        <Hamburger on={this.props.on} toggle={this.props.toggle}/>
+        <StLogo>로고</StLogo>
+      </StTopCont>
     )
   }
 } export default TopBar;

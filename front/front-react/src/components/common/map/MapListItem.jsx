@@ -18,6 +18,9 @@ export default class MapListItem extends Component {
 }
 
 const CardContainer = styled.div`
+  position: absolute;
   width: auto;
   max-width: 100%;
+  z-index: 5;
+  bottom: 120px;
 `

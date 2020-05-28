@@ -89,7 +89,7 @@ class Signup extends Component {
   handleInput = async (e) => {
     if(e.currentTarget.id === 'email'){
       await this.setStateAsync({ email: e.currentTarget.value })
-      this.setState( AM.checkEmail(this.state.email) )
+      this.setState( await AM.checkSignupEmail(this.state.email) )
     }
     else if(e.currentTarget.id === 'pw') {
       await this.setStateAsync({ pw: e.currentTarget.value })

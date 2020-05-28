@@ -2,9 +2,9 @@ import React, {Component} from "react";
 import Card from "../common/cards/Card";
 // import DefaultButton from "../common/buttons/DefaultButton";
 import styled from "styled-components";
-import { ArrowBack } from "@material-ui/icons";
 import bgImage from "../../assets/images/sample_img.jpg"
-import { Lock, LockOpen } from "@material-ui/icons";
+import { Zoom } from "@material-ui/core";
+import { ArrowBack, Lock, LockOpen } from "@material-ui/icons";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -40,6 +40,7 @@ class SaegimDetail extends Component {
 
   render() {
     return (
+      <Zoom in={true}>
       <Wrapper>
       <Contents>
         <BackGround />
@@ -72,6 +73,7 @@ class SaegimDetail extends Component {
         </div>
       </Communication>
       </Wrapper>
+      </Zoom>
     );
   }
 }

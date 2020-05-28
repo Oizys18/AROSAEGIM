@@ -18,13 +18,6 @@ class ImgCrop extends Component {
     }
   }
 
-  componentDidMount(){
-    console.log(this.state.crop)
-  }
-  componentDidUpdate(){
-    console.log(this.state.crop)
-  }
-
   applyCrop = () => {
     this.props.apply(this.state.croppedImageUrl)
   }
