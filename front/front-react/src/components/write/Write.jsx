@@ -19,16 +19,14 @@ class Write extends Component {
       if (this.state.write) {
         return <WriteComplete />;
       } else {
-        return <WriteSaegim />;
+        return <WriteSaegim changeWrite={this.changeWrite} />;
       }
     };
     return (
       <Wrapper>
-        <Container>
-          <Zoom in={true}>
-            <Written />
-          </Zoom>
-        </Container>
+        <Zoom in={true}>
+          <Written />
+        </Zoom>
       </Wrapper>
     );
   }
@@ -39,12 +37,10 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: auto;
-  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
   background-color: #e6d7bb;
-`;
-const Container = styled.div`
-  justify-content: center;
-  align-items: center;
-  display: flex;
+  width: 100vw;
+  height: 100vh;
 `;

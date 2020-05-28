@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import MapIcon from "@material-ui/icons/Map";
-import { IconButton } from "@material-ui/core";
+import { IconButton, Input } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
 import DefaultButton from "../common/buttons/DefaultButton";
+import CreateIcon from "@material-ui/icons/Create";
 import CtoW from "../../apis/w3w";
 import Switch from "../common/switch/Switch";
-// import axios from "axios";
+import axios from "axios";
 
 class WriteSaegim extends Component {
   constructor(props) {
@@ -19,8 +20,8 @@ class WriteSaegim extends Component {
       location: null,
       w3w: null,
       text: null,
-      time: Date().slice(0, 15),
       locked: false,
+      tags: [],
     };
   }
   handleChange = () => {
@@ -65,31 +66,30 @@ class WriteSaegim extends Component {
   }
 
   writePost = () => {
-    // const data = {
-    //   UId: 1,
-    //   uName: "hello",
-    //   contents: this.state.text,
-    //   latitude: this.state.location[0],
-    //   longitude: this.state.location[1],
-    //   regDate: this.state.time,
-    //   secret: this.state.locked,
-    //   tags: "test",
-    //   w3w: this.state.w3w,
-    // }; 
-    this.handleChange()
-    // axios
-    //   .post("https://k02a2051.p.ssafy.io/api/saegim/", data)
-    //   // .post(process.env.REACT_APP_BASE_URL + "saegim/", data)
-    //   .then((res) => {
-    //     this.handleChange()
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    // this.handleChange();
+    const data = {
+      contents: this.state.text,
+      latitude: this.state.location[0],
+      longitude: this.state.location[1],
+      secret: this.state.locked,
+      tags: ["test"],
+      userId: 1,
+      userName: "hello",
+      w3w: this.state.w3w,
+    };
+    axios
+      .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
+      .then((res) => {
+        this.handleChange();
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   handleTextChange = (value) => {
     this.setState({ text: value });
+    
   };
   changeSwitch = () => {
     console.log(this.state.locked);
@@ -99,107 +99,105 @@ class WriteSaegim extends Component {
       this.setState({ locked: true });
     }
   };
+  createTag = (newTag) => {
+    this.setState({ tags: this.state.tags.concat(newTag) });
+    console.log(this.state.tags);
+  };
   render() {
     return (
-      <Container>
+      <Wrapper>
         <Top>
-          <Chip text={this.state.time} />
-          <Switch
-            locked={this.state.locked}
-            changeSwitch={this.changeSwitch}
-            color="primary"
-            labelText={this.state.locked ? "비공개" : "공개"}
-            labelPlacement="start"
+          <Chip
+            size="medium"
+            text={"/// " + this.state.w3w}
+            onClick={this.getLocation}
           />
         </Top>
-        <Middle>
-          <Text
+        <Container>
+          <TextInput
             placeholder="당신의 추억을 새겨주세요"
             onTextChange={this.handleTextChange}
           />
-        </Middle>
-        <Bottom>
-          <Addition>
-            <Map onClick={this.getLocation}>
-              <MapIcon />
-              <span>{this.state.w3w}</span>
-            </Map>
+          <Bottom>
+            {/* <Addition> */}
+            <Switch
+              locked={this.state.locked}
+              changeSwitch={this.changeSwitch}
+              color="primary"
+              labelText={this.state.locked ? "비공개" : "공개"}
+              labelPlacement="start"
+            />
             <Tag onClick={() => alert("태그 곧 넣을게요ㅠ")}>
-              <LocalOfferIcon />
-              <Chip size="small" text="태그1" />
-              <Chip size="small" text="태그2" />
+              {this.state.tags.map((tag,i) => {
+                return (<Chip size="small" text={tag} key={i}/> )
+              })}
+              {/* <Chip size="small" text="태그1" /> */}
             </Tag>
-          </Addition>
-          {/* <DefaultButton
-                text="작성"
-                onClick={() =>
-                  alert(
-                    " w3w: " +
-                      this.state.w3w +
-                      "\n 잠금여부: " +
-                      this.state.locked +
-                      "\n location: " +
-                      this.state.location +
-                      "\n text: " +
-                      this.state.text +
-                      "\n \n 작성완료"
-                  )
-                }
-              /> */}
-          <DefaultButton text="작성" onClick={() => this.writePost()} />
-        </Bottom>
-      </Container>
+          </Bottom>
+        </Container>
+        <CreateWrapper>
+          <CreateTag onClick={() => this.createTag("hello")}>
+            <LocalOfferIcon />
+          </CreateTag>
+          <CreateButton onClick={() => this.writePost()}>
+            <CreateIcon />
+          </CreateButton>
+        </CreateWrapper>
+      </Wrapper>
     );
   }
 }
 export default WriteSaegim;
-
+const Wrapper = styled.div`
+  position: absolute;
+  top: 8vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+`;
 const Container = styled.div`
+  width: 80vw;
   padding: 8px;
-  /* position: absolute; */
-  /* left:8vw; */
-  /* top:16vh; */
-  /* bottom: 16vh; */
-  background-color: #dcc29b;
-  /* margin-left: 8vw;
-  margin-right: 8vw;
-  width: 84vw; */
-  /* height: 48vh; */
+  background-color: ghostwhite;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   border-radius: 16px;
 `;
-
 const Top = styled.div`
+  margin: 4vh;
   justify-content: space-between;
-  align-items: center;
-  display: flex;
-`;
-const Middle = styled.div`
-  justify-content: center;
   align-items: center;
   display: flex;
 `;
 
 const Bottom = styled.div`
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   display: flex;
 `;
 
-const Text = styled(TextInput)``;
-const Addition = styled.div``;
-
-const Map = styled(IconButton)`
-  justify-content: center;
+const CreateWrapper = styled.div`
+  justify-content: flex-end;
+  width: 80vw;
+  flex-direction: row;
   align-items: center;
   display: flex;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  font-size: 16px;
 `;
+const CreateTag = styled(IconButton)`
+  background: white;
+  padding: 0.25em;
+  margin-top: 10px;
+  margin-right: 10px;
+`;
+const CreateButton = styled(IconButton)`
+  background: white;
+  padding: 0.25em;
+  margin-top: 10px;
+`;
+
 const Tag = styled(IconButton)`
   margin: none;
   padding: none;
