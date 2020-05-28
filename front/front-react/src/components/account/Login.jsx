@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 import { Slide, Zoom, Checkbox, FormControlLabel } from '@material-ui/core';
-import { Email, Lock, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
+import { Email, Lock, CheckCircle, Warning, } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
 import BackBtn from  '../common/buttons/BackBtn';
@@ -111,7 +111,7 @@ class Login extends Component {
             <ArrowBack/>
           </AS.StBackBtn> */}
           <BackBtn handleBack={this.handleBack}/>
-          
+
           <LogoAnimation/>
 
           <UserInput 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Slide, Zoom, } from '@material-ui/core';
-import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
+import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
 import BackBtn from  '../common/buttons/BackBtn';
