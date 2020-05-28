@@ -8,7 +8,7 @@ import Chip from "../common/chip/Chip";
 import DefaultButton from "../common/buttons/DefaultButton";
 import CtoW from "../../apis/w3w";
 import Switch from "../common/switch/Switch";
-import axios from "axios";
+// import axios from "axios";
 
 class WriteSaegim extends Component {
   constructor(props) {
@@ -65,27 +65,28 @@ class WriteSaegim extends Component {
   }
 
   writePost = () => {
-    const data = {
-      UId: 1,
-      uName: "hello",
-      contents: this.state.text,
-      latitude: this.state.location[0],
-      longitude: this.state.location[1],
-      regDate: this.state.time,
-      secret: this.state.locked,
-      tags: "test",
-      w3w: this.state.w3w,
-    };
-    axios
-      .post("https://k02a2051.p.ssafy.io/api/saegim/", data)
-      // .post(process.env.REACT_APP_BASE_URL + "saegim/", data)
-      .then((res) => {
-        this.handleChange()
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // const data = {
+    //   UId: 1,
+    //   uName: "hello",
+    //   contents: this.state.text,
+    //   latitude: this.state.location[0],
+    //   longitude: this.state.location[1],
+    //   regDate: this.state.time,
+    //   secret: this.state.locked,
+    //   tags: "test",
+    //   w3w: this.state.w3w,
+    // }; 
+    this.handleChange()
+    // axios
+    //   .post("https://k02a2051.p.ssafy.io/api/saegim/", data)
+    //   // .post(process.env.REACT_APP_BASE_URL + "saegim/", data)
+    //   .then((res) => {
+    //     this.handleChange()
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
   handleTextChange = (value) => {
     this.setState({ text: value });
