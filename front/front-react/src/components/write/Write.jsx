@@ -20,7 +20,7 @@ class Write extends Component {
       if (this.state.write) {
         return <WriteComplete />;
       } else {
-        return <WriteSaegim />;
+        return <WriteSaegim changeWrite={this.changeWrite} />;
       }
     };
     return (
@@ -42,8 +42,9 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: auto;
-  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
   background-color: #e6d7bb;
 
   overflow: hidden;

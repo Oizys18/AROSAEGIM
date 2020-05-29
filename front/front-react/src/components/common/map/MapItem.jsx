@@ -31,8 +31,8 @@ class MapItem extends Component {
   showOnMap = () => {
     const customOverlay = new kakao.maps.CustomOverlay({
       position: new kakao.maps.LatLng(
-        this.props.item.latlng[0],
-        this.props.item.latlng[1]
+        this.props.item.latitude,
+        this.props.item.longitude
       ),
       content: this.myRef.current,
       yAnchor: 1,
@@ -66,7 +66,7 @@ class MapItem extends Component {
       <ItemContainer ref={this.myRef} onClick={this.clickEvent}>
         <ItemLeft />
         <ItemMiddle>
-          <TextMiddle>{this.props.item.title}</TextMiddle>
+          <TextMiddle>{this.props.item.contents.slice(0,5)}{this.props.item.contents.length > 5 ? '...' : ''}</TextMiddle>
         </ItemMiddle>
         <ItemRight />
       </ItemContainer>

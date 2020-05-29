@@ -1,17 +1,25 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import MapItem from './MapItem';
+import React, { Component } from "react";
+import styled from "styled-components";
+import MapItem from "./MapItem";
 
 class MapView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: this.props.items,
+    };
+    this.itemRefs = [];
+  }
 
-  // componentDidMount() {
-  //   console.log('mapview mounted')
-  // }
+  componentDidMount() {
+    // this.overlayItems();
+    // console.log(this.props.items);
+  }
 
-  // componentDidUpdate() {
-  //   console.log('mapview updated')
-  // }
-  
+  componentDidUpdate() {
+    // console.log(this.props.items, this.itemRefs);
+  }
+
   overlayItems = () => {
     const itemRefs = [];
     const items = this.props.items.map((el, index) => {
@@ -29,17 +37,26 @@ class MapView extends Component {
       return item;
     });
     this.itemRefs = itemRefs;
-    return items;
+    this.items = items;
+    return items
   };
 
   selectItem = (item) => {
-    this.props.selectItem(item)
-  }
+    this.props.selectItem(item);
+  };
 
   render() {
+    const list = this.state.items.map(
+      (el, index) => (<MapItem map={this.props.map}
+        item={el}
+        key={index}
+        selectItem={this.selectItem}
+      />)
+    );
+
     return (
       <>
-        <StView id="mapView" hidden={this.props.hide}/>
+        <StView id="mapView" hidden={this.props.hide} />
         {this.props.status === 'list' && this.overlayItems()}
       </>
     );

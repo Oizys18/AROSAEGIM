@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import Hamburger from '../buttons/Hamburger'
 import styled from 'styled-components';
+import inlineLogo from "../../../assets/logo/inline-logo-white@2x.png";
 
 class TopBar extends Component {
   render(){
     return(
       <StTopCont>
         <Hamburger on={this.props.on} toggle={this.props.toggle}/>
-        <StLogo>로고</StLogo>
+        <StLogo></StLogo>
       </StTopCont>
     )
   }
@@ -24,6 +25,7 @@ const StTopCont = styled.div`
   background: gray;
   width: 100%;
   height: 48px;
+  padding-top: 2px;
 `;
 
 const StLogo = styled.div`
@@ -31,10 +33,14 @@ const StLogo = styled.div`
   justify-content: center;
   align-items: center;
 
-  width: 50%;
+  width: 168px;
   height: 100%;
   
-  background: #f2f2f2;
+  /* background: #f2f2f2; */
+  background-image: url(${inlineLogo});
+  background-size: 50%;
+  background-position: center center;
+  background-repeat: no-repeat;
   border: 3px solid gray;
   box-sizing: border-box;
 `;
