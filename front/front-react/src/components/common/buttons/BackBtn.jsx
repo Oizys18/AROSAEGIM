@@ -6,7 +6,7 @@ import { ArrowBack } from '@material-ui/icons';
 class BackBtn extends Component {
   render(){
     return(
-      <Zoom in={true} timeout={700}>
+      <Zoom in={true} timeout={400}>
         <StBackBtn onClick={this.props.handleBack}>
           <ArrowBack/>
         </StBackBtn>

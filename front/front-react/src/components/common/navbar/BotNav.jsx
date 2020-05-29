@@ -30,25 +30,26 @@ class BotNav extends Component {
   }
 
   render(){
+    const _pathname = this.props.location.pathname
     return(
       <Slide in={true} direction='up' timeout={500}>
         <StNavCont>
 
           <Zoom in={true} timeout={500}>
-            <StBtn id="list" disableRipple onClick={this.props.changePage} clicked={this.props.location.pathname === '/list'}>
-              <Dashboard fontSize={this.props.location.pathname === '/list' ? 'large' : 'default'}/>
+            <StBtn id="list" disableRipple onClick={this.props.changePage} clicked={_pathname === '/list' ? 'clicked' : 'none'}>
+              <Dashboard fontSize={_pathname === '/list' ? 'large' : 'default'}/>
             </StBtn>
           </Zoom>
 
           <Zoom in={true} timeout={500}>
-            <StBtn id="map" disableRipple onClick={this.props.changePage} clicked={this.props.location.pathname === '/map'}>
-              <Explore fontSize={this.props.location.pathname === '/map' ? 'large' : 'default'}/>
+            <StBtn id="map" disableRipple onClick={this.props.changePage} clicked={_pathname === '/map' ? 'clicked' : 'none'}>
+              <Explore fontSize={_pathname === '/map' ? 'large' : 'default'}/>
             </StBtn>
           </Zoom>
 
           <Zoom in={true} timeout={500}>
-            <StBtn id="write" disableRipple onClick={this.props.changePage} clicked={this.props.location.pathname === '/write'}>
-              <Create fontSize={this.props.location.pathname === '/write' ? 'large' : 'default'}/>
+            <StBtn id="write" disableRipple onClick={this.props.changePage} clicked={_pathname === '/write' ? 'clicked' : 'none'}>
+              <Create fontSize={_pathname === '/write' ? 'large' : 'default'}/>
             </StBtn>
           </Zoom>
 
@@ -75,5 +76,5 @@ const StBtn = styled(IconButton)`
   width: 56px;
   height: 56px;
 
-  color: rgba(255, 255, 255, ${ props => props.clicked ? 1 : 0.5 });
+  color: rgba(255, 255, 255, ${ props => props.clicked === 'clicked' ? 1 : 0.5 });
 `;
