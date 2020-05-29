@@ -1,11 +1,12 @@
 /*global kakao*/
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import {IconButton, Zoom} from '@material-ui/core';
+import {IconButton, Zoom, Slide} from '@material-ui/core';
 import {Map, Streetview} from '@material-ui/icons';
 import {FlexColumn} from '../../../styles/DispFlex';
 import DefaultButton from "../buttons/DefaultButton";
 
+import {Storage} from '../../../storage/Storage'
 import MapView from './MapView';
 import MapListItem from "./MapListItem";
 import RoadView from './RoadView';
@@ -237,11 +238,15 @@ class MapPage extends Component {
   }
 
   render(){
+    let _dir = 'left'
+    if(this.context.curPage === '/write'){
+      _dir = 'right'
+    }
+
     return(
       <StMapCont>
+        <Slide in={true} direction={_dir}>
         <StViewCont>
-          <Zoom in={true}>
-            <>
             <StBtnCont>
               <IconButton disableRipple onClick={this.tglView}>{this.changeIcon()}</IconButton>
             </StBtnCont>
@@ -263,8 +268,6 @@ class MapPage extends Component {
                 />
               </>
             )}
-            </>
-          </Zoom>
 
           <MapView
             map={this.state.mv}
@@ -282,13 +285,16 @@ class MapPage extends Component {
           />
 
         </StViewCont>
+        </Slide>
       </StMapCont>
     )
   }
 } export default MapPage;
+MapPage.contextType = Storage;
 
 
 const StMapCont = styled(FlexColumn)`
+  overflow: hidden;
   height: 100vh;
 `;
 

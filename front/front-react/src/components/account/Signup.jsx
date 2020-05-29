@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Slide, Zoom, } from '@material-ui/core';
-import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
+import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
 import BackBtn from  '../common/buttons/BackBtn';
@@ -89,7 +89,7 @@ class Signup extends Component {
   handleInput = async (e) => {
     if(e.currentTarget.id === 'email'){
       await this.setStateAsync({ email: e.currentTarget.value })
-      this.setState( AM.checkEmail(this.state.email) )
+      this.setState( await AM.checkSignupEmail(this.state.email) )
     }
     else if(e.currentTarget.id === 'pw') {
       await this.setStateAsync({ pw: e.currentTarget.value })
@@ -101,7 +101,7 @@ class Signup extends Component {
     }
     else if(e.currentTarget.id === 'nickName') {
       await this.setStateAsync({ nickName: e.currentTarget.value })
-      this.setState( AM.checkNickName(this.state.nickName) )
+      this.setState( await AM.checkNickName(this.state.nickName) )
     }
   }
 

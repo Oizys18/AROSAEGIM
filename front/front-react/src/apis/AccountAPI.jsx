@@ -1,47 +1,63 @@
 import axios from 'axios'
 
-export const login = async (data) => {
+export const login = async (state) => {
 
-  const {email, pw} = data
+  const {email, pw} = state
 
   const _res = await axios({
     method: 'post',
-    url: `${process.env.REACT_APP_BASE_URL}/user/login`,
+    url: `${process.env.REACT_APP_BASE_URL}/users/login`,
     data: {
       email: email,
       password: pw,
     }
   })
-
   return _res.data;
 }
 
-export const signup = async (data) => {
+export const signup = async (state) => {
 
-  const {imgBase64, cropedImgBase64, email, pw, name} = data;
+  const {email, pw, nickName} = state;
+  let _profile = null
+  if(state.cropedImgBase64 !== ''){
+    _profile = state.cropedImgBase64
+  }
 
   const _res = await axios({
     method: 'post',
-    url: `${process.env.REACT_APP_BASE_URL}/user/`,
+    url: `${process.env.REACT_APP_BASE_URL}/users`,
     data: {
-      image: imgBase64,
-      preview: cropedImgBase64,
       email: email,
       password: pw,
-      name: name
-    }
+      name: nickName,
+      profileImage: _profile,
+    },
+  })
+  return _res.data;
+}
+
+export const getUserByEmail = async (email) => {
+  const _res = await axios({
+    method: 'get',
+    url: `${process.env.REACT_APP_BASE_URL}/users/email?email=${email}`
   })
 
-  return _res.data;
+
+  if(_res.data.state === 'success'){
+    return _res.data;
+  }
+  else {
+    return null;
+  }
 }
 
 export const getUserByNickname = async (nick) => {
   const _res = await axios({
     method: 'get',
-    url: `${process.env.REACT_APP_BASE_URL}/user/nickname/${nick}`
+    url: `${process.env.REACT_APP_BASE_URL}/users/name?name=${nick}`
   })
 
-  if(_res.data.status === 'success'){
+  if(_res.data.state === 'success'){
     return true;
   }
   else {
@@ -49,16 +65,3 @@ export const getUserByNickname = async (nick) => {
   }
 }
 
-export const getUserByEmail = async (email) => {
-  const _res = await axios({
-    method: 'get',
-    url: `${process.env.REACT_APP_BASE_URL}/user/email/${email}`
-  })
-
-  if(_res.data.status === 'success'){
-    return _res.data;
-  }
-  else {
-    return null;
-  }
-}

@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { Route, withRouter, Switch } from "react-router-dom";
+
+import { Slide } from '@material-ui/core'
+
 import { Storage } from "./storage/Storage";
 import TopBar from "./components/common/menus/TopBar";
 import SideMenu from "./components/common/menus/SideMenu";
@@ -11,6 +14,7 @@ import Signup from "./components/account/Signup";
 import SaegimListPage from "./components/saegim/SaegimListPage";
 import SaegimDetail from "./components/saegim/SaegimDetail";
 import MyPage from "./components/mypage/MyPage";
+import { getUserByEmail } from "./apis/AccountAPI";
 
 class App extends Component {
   constructor(props) {
@@ -18,13 +22,17 @@ class App extends Component {
     this.state = {
       appHeight: window.innerHeight,
 
+      sideMenu: false,
+      toggleSideMenu: this.toggleSideMenu,
+
+      curPage: '/list',
+      curSaegimIdx: 0,
+      curMap: [],
+
       isLogin: false,
       handleLogin: this.handleLogin,
 
-      userInitPage: "/list",
-
-      sideMenu: false,
-      toggleSideMenu: this.toggleSideMenu,
+      userInfo: {},
     };
   }
 
@@ -38,8 +46,11 @@ class App extends Component {
     const _autoLogin = localStorage.getItem('ARSG autoLogin')
     if(_autoLogin === 'true'){
       const _email = localStorage.getItem('ARSG email')
-      this.setState({ isLogin: true })
-      this.props.history.replace('/map')
+      this.setState({ 
+        isLogin: true,
+        userInfo: (await getUserByEmail(_email)).data
+      })
+      this.props.history.replace('/list')
     }
     else {
       const _email = sessionStorage.getItem('ARSG email')
@@ -47,9 +58,19 @@ class App extends Component {
         this.props.history.replace('/list')
       }
       else{
-        this.setState({ isLogin: true })
+        this.setState({ 
+          isLogin: true,
+          userInfo: (await getUserByEmail(_email)).data
+        })
         this.props.history.replace('/map')
       }
+    }
+  }
+  componentDidUpdate(prevProps, prevState){
+    if(prevState.curPage !== this.props.location.pathname){
+      this.setState({
+        curPage: this.props.location.pathname
+      })
     }
   }
 
@@ -57,12 +78,13 @@ class App extends Component {
     this.setState({ sideMenu: !this.state.sideMenu });
   };
 
-  changePage = (e) => {
-    if (e.currentTarget.id === "write"
+  changePage = async (e) => {
+    const _id = e.currentTarget.id
+    if (_id === "write"
     ) {
-      this.props.history.push(`/${e.currentTarget.id}`);
+      this.props.history.push(`/${_id}`);
     } else {
-      this.props.history.replace(`/${e.currentTarget.id}`);
+      this.props.history.replace(`/${_id}`);
     }
   };
 
@@ -76,17 +98,23 @@ class App extends Component {
           this.props.location.pathname.includes("/list")
         ) && (
           <>
-            <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu} />
+            <Slide in={this.props.location.pathname !== "/map"} direction="down" unmountOnExit mountOnEnter>
+              <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
+            </Slide>
+            {/* <Slide in={this.props.location.pathname === "/map"} direction="down" unmountOnExit mountOnEnter>
+              <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
+            </Slide> */}
             <SideMenu
               on={this.state.sideMenu}
               toggle={this.toggleSideMenu}
               isLogin={this.state.isLogin}
+              userInfo={this.state.userInfo}
             />
             <BotNav changePage={this.changePage} />
           </>
         )}
 
-        <Route exact path="/" component={SaegimListPage} />
+        {/* <Route exact path="/" component={SaegimListPage} /> */}
         <Switch>
           <Route path="/list/:id" component={SaegimDetail} />
           <Route path="/list" component={SaegimListPage} />

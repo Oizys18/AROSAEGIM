@@ -64,7 +64,7 @@ const StNavCont = styled(FlexRow)`
   position: fixed;
   z-index: 100;
   bottom: 0;
-  width: 100%;
+  width: 100vw;
   height: 56px;
   background: #f2f2f2;
 `;

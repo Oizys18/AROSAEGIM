@@ -30,7 +30,10 @@ class SideMenu extends Component {
 
           {
             this.props.isLogin ? 
-            <div>로그인 시 유저 정보</div>
+            <>
+              <div>로그인 시 유저 정보</div>
+              <img src={this.props.userInfo.profileImage} alt='alt'/>
+            </>
             :
             <>
               <Link to='login'>로그인</Link>

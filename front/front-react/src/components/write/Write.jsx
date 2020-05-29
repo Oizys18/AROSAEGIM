@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import Zoom from "@material-ui/core/Zoom";
+// import Zoom from "@material-ui/core/Zoom";
+import {Zoom, Slide} from "@material-ui/core";
 import WriteSaegim from "./WriteSaegim";
 import WriteComplete from "./WriteComplete";
 
@@ -24,9 +25,13 @@ class Write extends Component {
     };
     return (
       <Wrapper>
-        <Zoom in={true}>
-          <Written />
-        </Zoom>
+        <Slide in={true} direction='left'>
+        <Container>
+          <Zoom in={true}>
+            <Written />
+          </Zoom>
+        </Container>
+        </Slide>
       </Wrapper>
     );
   }
@@ -41,6 +46,11 @@ const Wrapper = styled.div`
   top: 0;
   left: 0;
   background-color: #e6d7bb;
-  width: 100vw;
-  height: 100vh;
+
+  overflow: hidden;
+`;
+const Container = styled.div`
+  justify-content: center;
+  align-items: center;
+  display: flex;
 `;
