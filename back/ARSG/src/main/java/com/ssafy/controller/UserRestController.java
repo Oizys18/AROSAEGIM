@@ -95,6 +95,6 @@ public class UserRestController extends EntityRestController{
 		if(tmp != null)
 			return handleSuccess(tmp);
 		else
-			return handleFail("login fail", HttpStatus.I_AM_A_TEAPOT);
+			return handleSuccess("login fail");
 	}
 }
