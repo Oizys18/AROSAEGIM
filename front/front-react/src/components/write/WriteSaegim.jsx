@@ -11,7 +11,7 @@ import CtoW from "../../apis/w3w";
 import Switch from "../common/switch/Switch";
 import axios from "axios";
 import PhotoIcon from "@material-ui/icons/AddPhotoAlternate";
-import {getUserByEmail} from "../../apis/AccountAPI";
+import { getUserByEmail } from "../../apis/AccountAPI";
 class WriteSaegim extends Component {
   constructor(props) {
     super(props);
@@ -81,20 +81,19 @@ class WriteSaegim extends Component {
       userName: "hello",
       w3w: this.state.w3w,
     };
-    console.log(data)
-    // if (this.state.text) {
-    //   axios
-    //     .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
-    //     .then((res) => {
-    //       this.handleChange(res.data);
-    //       // console.log(res.data);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // } else {
-    //   this.setState({ error: 1 });
-    // }
+    if (this.state.text) {
+      axios
+        .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
+        .then((res) => {
+          this.handleChange(res.data);
+          // console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      this.setState({ error: 1 });
+    }
   };
   handleTextChange = (value) => {
     this.setState({ text: value });
@@ -112,12 +111,14 @@ class WriteSaegim extends Component {
     this.setState({ tags: this.state.tags.concat(newTag) });
     // console.log(this.state.tags);
   };
+
   getUserInfo = async () => {
     const _email = localStorage.getItem('ARSG email')
     this.setState({
         userInfo: (await getUserByEmail(_email)).data
       })
   }
+
   render() {
     const ErrorMsg = () => {
       if (this.state.error) {
