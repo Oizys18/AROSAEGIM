@@ -87,7 +87,7 @@ class ImgCrop extends Component {
 
   render(){
     return(
-      <Zoom in={true}>
+      // <Zoom in={true}>
       <StCropCont> 
         <StTop>
           <IconButton onClick={this.props.cancel}>
@@ -108,7 +108,7 @@ class ImgCrop extends Component {
           onChange={this.onCropChange}
         />
       </StCropCont>
-      </Zoom>
+      // </Zoom>
     )
   }
 

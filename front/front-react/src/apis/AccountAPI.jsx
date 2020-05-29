@@ -18,7 +18,7 @@ export const login = async (state) => {
 export const signup = async (state) => {
 
   const {email, pw, nickName} = state;
-  let _profile = null
+  let _profile = ''
   if(state.cropedImgBase64 !== ''){
     _profile = state.cropedImgBase64
   }

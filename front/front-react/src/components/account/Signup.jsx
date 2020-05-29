@@ -85,6 +85,13 @@ class Signup extends Component {
       cropedImgBase64: croped,
     })
   }
+  cancelCrop = () => {
+    this.setState({ 
+      imgFile: '', 
+      imgBase64: '', 
+      cropMode: false, 
+    })
+  }
 
   handleInput = async (e) => {
     if(e.currentTarget.id === 'email'){
@@ -152,6 +159,9 @@ class Signup extends Component {
     if(AM.checkAllValid('signup', this.state)){
       const _resData = await AA.signup(this.state)
       console.log(_resData)
+      if(_resData.state === 'success'){
+        this.props.history.replace('/login')
+      }
     }
     else{
       this.setState({ alertModal: true })
@@ -169,10 +179,6 @@ class Signup extends Component {
       <Slide in={this.state.slideIn} direction="left">
         <AS.StFormCont height={this.context.appHeight}>
           
-          {/* <AS.StBackBtn onClick={this.handleBack}>
-            <ArrowBack/>
-          </AS.StBackBtn> */}
-
           <BackBtn handleBack={this.handleBack}/>
 
           <ImgUp signup 
@@ -190,7 +196,7 @@ class Signup extends Component {
               imgH={this.state.imgH}
               mode={"profile"}
               apply={this.imgCrop}
-              cancel={() => {this.setState({ imgFile: '', imgBase64: '', cropMode: false, })}}
+              cancel={this.cancelCrop}
             />
           }
 

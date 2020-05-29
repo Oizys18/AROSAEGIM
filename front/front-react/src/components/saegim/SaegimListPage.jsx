@@ -118,13 +118,13 @@ class SaegimListPage extends Component {
     return (
       <StCont>
         <Slide in={true} direction={_dir}>
-            <Wrapper>
-              <StList>
-                <SaegimList>
-                  {PrintCard}
-                </SaegimList>
-              </StList>
-            </Wrapper>
+          <Wrapper>
+            <StList>
+              <SaegimList>
+                {PrintCard}
+              </SaegimList>
+            </StList>
+          </Wrapper>
         </Slide>
       </StCont>
     );
