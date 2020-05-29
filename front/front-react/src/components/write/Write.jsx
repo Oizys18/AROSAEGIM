@@ -27,17 +27,23 @@ class Write extends Component {
       }
     };
     return (
-      <Slide in={true} direction="left">
-        <Wrapper>
-          <Container>
-            <Written />
-          </Container>
-        </Wrapper>
-      </Slide>
+      <StCont>
+        <Slide in={true} direction="left">
+          <Wrapper>
+            <Container>
+              <Written />
+            </Container>
+          </Wrapper>
+        </Slide>
+      </StCont>
     );
   }
 }
 export default Write;
+
+const StCont = styled.div`
+  overflow: hidden;
+`;
 
 const Wrapper = styled.div`
   background-color: #e6d7bb;
@@ -46,6 +52,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const Container = styled.div`
   justify-content: center;
   align-items: center;

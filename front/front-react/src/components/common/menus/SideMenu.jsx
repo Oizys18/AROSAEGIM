@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Slide, IconButton } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
+import { FlexColumn } from '../../../styles/DispFlex'
 
 import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
 
-
+import UserInfo from './UserInfo';
 
 
 class SideMenu extends Component {
@@ -20,7 +21,7 @@ class SideMenu extends Component {
         <StOpacityBack onClick={this.props.toggle}/> 
       }
 
-      <Slide in={this.props.on} direction='right' >
+      <Slide in={this.props.on} direction='right'>
         <StMenuCont>
           
           <StTopCont>
@@ -28,13 +29,17 @@ class SideMenu extends Component {
             <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
           </StTopCont>
 
+          {this.props.isLogin &&  
+            <UserInfo on={this.props.on}/>
+          }
+          
+          <Slide in={this.props.on} direction='right' timeout={700}>
+          <StListCont>
           {
             this.props.isLogin ? 
             <>
-              <div>로그인 시 유저 정보</div>
-              <img src={this.props.userInfo.profileImage} alt='alt'/>
-              <div onClick={this.props.logout}>로그아웃</div>
-              <Link to={`mypage`}>마이페이지</Link>
+            <Link to={`mypage`}>마이페이지</Link>
+            <div onClick={this.props.logout}>로그아웃</div>
             </>
             :
             <>
@@ -42,10 +47,8 @@ class SideMenu extends Component {
               <Link to='signup'>회원가입</Link>
             </>
           }
-
-          <StListCont>
-            메뉴 리스트 들어갈 자리
           </StListCont>
+          </Slide>
 
         </StMenuCont>
       </Slide>
@@ -115,8 +118,13 @@ const StCloseBtn = styled(IconButton)`
 `;
 
 const StListCont = styled.div`
+  display: flex;
+  flex-direction: column;
+
   height: 100%;
 
-  border: 3px solid darkgreen;
-  box-sizing: border-box;
+  margin: 8px;
+
+  /* border: 3px solid darkgreen;
+  box-sizing: border-box; */
 `;
