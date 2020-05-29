@@ -33,12 +33,12 @@ class SideMenu extends Component {
             <>
               <div>로그인 시 유저 정보</div>
               <img src={this.props.userInfo.profileImage} alt='alt'/>
+              <Link to={`mypage`}>마이페이지</Link>
             </>
             :
             <>
               <Link to='login'>로그인</Link>
               <Link to='signup'>회원가입</Link>
-              <Link to={`mypage`}>마이페이지</Link>
 
             </>
           }
