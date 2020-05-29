@@ -21,6 +21,7 @@ class Login extends Component {
       slideIn: true,
 
       alertModal: false,
+      modalMsg: '',
 
       email: '',
       emailLabel: '이메일',
@@ -80,6 +81,9 @@ class Login extends Component {
 
   handleSubmit = async () => {
     if(AM.checkAllValid('login', this.state)){
+      const _resData = await AA.login(this.state)
+      console.log(_resData)
+      
       localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
       if(this.state.autoLogin){
         localStorage.setItem('ARSG email', this.state.email)
@@ -90,8 +94,12 @@ class Login extends Component {
       window.location.href = '/'
     }
     else{
-      this.setState({ alertModal: true })
+      this.setState({ 
+        alertModal: true,
+        modalMsg: `입력이\n올바르지 않습니다.`
+      })
     }
+
   }
   
   handleBack = async () => {
@@ -144,7 +152,7 @@ class Login extends Component {
 
           <Modal
             on={this.state.alertModal} 
-            msg={`입력이\n올바르지 않습니다.`}
+            msg={this.state.modalMsg}
             click={() => { this.setState({ alertModal:false }) }} 
           />
 

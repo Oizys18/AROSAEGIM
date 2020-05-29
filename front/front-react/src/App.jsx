@@ -31,6 +31,7 @@ class App extends Component {
 
       isLogin: false,
       userInfo: {},
+      handleLogout: this.handleLogout,
     };
   }
 
@@ -116,7 +117,7 @@ class App extends Component {
               toggle={this.toggleSideMenu}
               isLogin={this.state.isLogin}
               logout={this.handleLogout}
-              userInfo={this.state.userInfo}
+              // userInfo={this.state.userInfo}
             />
             <BotNav changePage={this.changePage} />
           </>

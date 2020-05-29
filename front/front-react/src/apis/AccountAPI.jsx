@@ -12,7 +12,13 @@ export const login = async (state) => {
       password: pw,
     }
   })
-  return _res.data;
+
+  if(_res.data.state === 'success'){
+    return true;
+  }
+  else{
+    return false;
+  }
 }
 
 export const signup = async (state) => {
@@ -41,8 +47,6 @@ export const getUserByEmail = async (email) => {
     method: 'get',
     url: `${process.env.REACT_APP_BASE_URL}/users/email?email=${email}`
   })
-
-
   if(_res.data.state === 'success'){
     return _res.data;
   }
