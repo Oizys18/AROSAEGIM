@@ -23,15 +23,13 @@ class App extends Component {
       appHeight: window.innerHeight,
 
       sideMenu: false,
-      toggleSideMenu: this.toggleSideMenu,
+      // toggleSideMenu: this.toggleSideMenu,
 
       curPage: '/list',
       curSaegimIdx: 0,
       curMap: [],
 
       isLogin: false,
-      handleLogin: this.handleLogin,
-
       userInfo: {},
     };
   }
@@ -74,6 +72,15 @@ class App extends Component {
     }
   }
 
+  handleLogout = () => {
+    localStorage.clear()
+    sessionStorage.clear()
+    this.setState({ 
+      isLogin: false,
+      userInfo: {},
+    })
+  }
+
   toggleSideMenu = () => {
     this.setState({ sideMenu: !this.state.sideMenu });
   };
@@ -108,6 +115,7 @@ class App extends Component {
               on={this.state.sideMenu}
               toggle={this.toggleSideMenu}
               isLogin={this.state.isLogin}
+              logout={this.handleLogout}
               userInfo={this.state.userInfo}
             />
             <BotNav changePage={this.changePage} />

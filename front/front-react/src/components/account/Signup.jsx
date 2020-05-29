@@ -152,6 +152,9 @@ class Signup extends Component {
     if(AM.checkAllValid('signup', this.state)){
       const _resData = await AA.signup(this.state)
       console.log(_resData)
+      if(_resData.state === 'success'){
+        this.props.history.replace('/login')
+      }
     }
     else{
       this.setState({ alertModal: true })

@@ -33,7 +33,7 @@ export const signup = async (state) => {
       profileImage: _profile,
     },
   })
-  return _res.data;
+  return _res;
 }
 
 export const getUserByEmail = async (email) => {

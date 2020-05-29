@@ -104,9 +104,6 @@ class Login extends Component {
       <Slide in={this.state.slideIn} direction="left">
         <AS.StFormCont height={this.context.appHeight}>
           
-          {/* <AS.StBackBtn onClick={this.handleBack}>
-            <ArrowBack/>
-          </AS.StBackBtn> */}
           <BackBtn handleBack={this.handleBack}/>
 
           <LogoAnimation/>
