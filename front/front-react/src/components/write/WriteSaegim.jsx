@@ -12,6 +12,8 @@ import Switch from "../common/switch/Switch";
 import axios from "axios";
 import PhotoIcon from "@material-ui/icons/AddPhotoAlternate";
 import { getUserByEmail } from "../../apis/AccountAPI";
+import { Storage } from "../../storage/Storage"
+
 class WriteSaegim extends Component {
   constructor(props) {
     super(props);
@@ -113,10 +115,13 @@ class WriteSaegim extends Component {
   };
 
   getUserInfo = async () => {
-    const _email = localStorage.getItem('ARSG email')
+    // const _email = localStorage.getItem('ARSG email')
+    // this.setState({
+    //     userInfo: (await getUserByEmail(_email)).data
+    //   })
     this.setState({
-        userInfo: (await getUserByEmail(_email)).data
-      })
+      userInfo: this.context.userInfo
+    })
   }
 
   render() {
@@ -173,6 +178,9 @@ class WriteSaegim extends Component {
   }
 }
 export default WriteSaegim;
+WriteSaegim.contextType = Storage;
+
+
 const Error = styled.div`
   color: red;
   font-size: 10px;

@@ -18,5 +18,7 @@ class Hamburger extends Component {
 const StHamburger = styled(IconButton)`
   position: fixed;
   left: 0;
-  z-index: 101; 
+  z-index: 101;
+   
+  color: white;
 `

@@ -4,15 +4,11 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Slide, IconButton } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
-import { FlexColumn } from '../../../styles/DispFlex'
-
 import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
 
 import UserInfo from './UserInfo';
 
-
 class SideMenu extends Component {
-
   render(){
     return(
       <>
@@ -66,7 +62,7 @@ const StOpacityBack = styled.div`
   height: 100%;
 
   background: black;
-  opacity: 0.3;
+  opacity: 0.5;
 `;
 
 const StMenuCont = styled.div`

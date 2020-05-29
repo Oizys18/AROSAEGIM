@@ -4,7 +4,7 @@ import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css'
 
 import styled from 'styled-components';
-import { IconButton, Zoom } from '@material-ui/core';
+import { IconButton, } from '@material-ui/core';
 import { Close, Check } from '@material-ui/icons';
 import { FlexRow, } from '../../../styles/DispFlex';
 
@@ -68,7 +68,6 @@ class ImgCrop extends Component {
     );
 
     return new Promise((resolve, reject) => {
-      // console.log(canvas.toDataURL())
       resolve(canvas.toDataURL())
 
       // canvas.toBlob(blob => {
@@ -93,7 +92,10 @@ class ImgCrop extends Component {
           <IconButton onClick={this.props.cancel}>
             <Close/>
           </IconButton>
-          <div className='txt'>미리보기</div>
+          {
+            this.props.mode !== 'profile' &&
+            <div className='txt'>미리보기 영역설정</div>
+          }
           <IconButton onClick={this.applyCrop}>
             <Check/>
           </IconButton>

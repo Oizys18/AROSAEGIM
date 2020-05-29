@@ -46,7 +46,7 @@ const StCont = styled.div`
 `;
 
 const Wrapper = styled.div`
-  background-color: #e6d7bb;
+  /* background-color: #e6d7bb; */
   height: 100vh;
   display: flex;
   justify-content: center;

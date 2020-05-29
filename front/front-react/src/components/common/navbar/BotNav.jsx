@@ -35,19 +35,19 @@ class BotNav extends Component {
         <StNavCont>
 
           <Zoom in={true} timeout={500}>
-            <StBtn id="list" onClick={this.props.changePage} disableRipple>
+            <StBtn id="list" disableRipple onClick={this.props.changePage} clicked={this.props.location.pathname === '/list'}>
               <Dashboard fontSize={this.props.location.pathname === '/list' ? 'large' : 'default'}/>
             </StBtn>
           </Zoom>
 
           <Zoom in={true} timeout={500}>
-            <StBtn id="map" onClick={this.props.changePage} disableRipple>
+            <StBtn id="map" disableRipple onClick={this.props.changePage} clicked={this.props.location.pathname === '/map'}>
               <Explore fontSize={this.props.location.pathname === '/map' ? 'large' : 'default'}/>
             </StBtn>
           </Zoom>
 
           <Zoom in={true} timeout={500}>
-            <StBtn id="write" onClick={this.props.changePage} disableRipple>
+            <StBtn id="write" disableRipple onClick={this.props.changePage} clicked={this.props.location.pathname === '/write'}>
               <Create fontSize={this.props.location.pathname === '/write' ? 'large' : 'default'}/>
             </StBtn>
           </Zoom>
@@ -66,10 +66,14 @@ const StNavCont = styled(FlexRow)`
   bottom: 0;
   width: 100vw;
   height: 56px;
-  background: #f2f2f2;
+  background: rgba(0, 0, 0, 0.7);
+  /* background: rgba(242, 242, 242, 0.5); */
+  /* background: #f2f2f2; */
 `;
 
 const StBtn = styled(IconButton)`
   width: 56px;
   height: 56px;
+
+  color: rgba(255, 255, 255, ${ props => props.clicked ? 1 : 0.5 });
 `;

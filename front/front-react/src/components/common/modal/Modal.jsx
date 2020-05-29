@@ -22,7 +22,7 @@ class Modal extends Component {
             <StMsgCont>{this.confirmMsg(this.props.msg)}</StMsgCont>
             <StBtnCont>
             {
-              this.props.confirm ? 
+              this.props.mode === 'confirm' ? 
               <>
                 <Button id="yes" variant="outlined" onClick={this.props.click}>예</Button>
                 <Button id="no" variant="outlined" onClick={this.props.click}>아니요</Button>
@@ -48,7 +48,7 @@ const StOpacityBack = styled.div`
   height: 100%;
 
   background: black;
-  opacity: 0.3;
+  opacity: 0.5;
 `;
 
 const StModalCont = styled.div`
