@@ -8,7 +8,8 @@ import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutline
 import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
 import TabPanel from "./TabPanel";
 import MyPageMenu from "./MyPageMenu";
-import * as UA from "../../apis/UserAPI"
+import { getCommentedSaegim, getLikedSaegim, getCreatedSaegim } from "../../apis/UserAPI"
+import { getUserByEmail } from "../../apis/AccountAPI";
 
 class MyPage extends Component {
   listItem;
@@ -26,14 +27,10 @@ class MyPage extends Component {
         { value: 'location', text: '장소 별로 보기'},
         { value: 'tag', text: '태그 별로 보기'}
       ],
-      //
-      data: []
+      data: [],
+      userInfo: {}
     }
   };
-
-  getUserId() {
-    // userid 가져와야함
-  }
 
   selectChange = async (e) => {
     const _name = e.target.name;
@@ -43,30 +40,31 @@ class MyPage extends Component {
   };
 
   tabChange = async (e, val) => {
-    console.log(val)
     await this.setState({
       currentTab: val
     })
   };
 
   getData = async () => {
-    const _userId = this.state.user
+    const _userId = this.state.userInfo.id
     let _data = []
     if (this.state.currentTab === 0) {
-      const _data = await UA.getCreatedSaegim(_userId)
+      const _data = await getCreatedSaegim(_userId)
     } else if (this.state.currentTab === 1) {
-      const _data = await UA.getLikedSaegim(_userId)
+      const _data = await getLikedSaegim(_userId)
     } else {
-      const _data = await UA.getCommentedSaegim(_userId)
+      const _data = await getCommentedSaegim(_userId)
     }
     await this.setState({
       data: _data
     })
-    console.log(_data)
-    console.log('set data')
   }
 
   async componentDidMount() {
+    const _email = localStorage.getItem('ARSG email')
+    this.setState({
+        userInfo: (await getUserByEmail(_email)).data
+      })
     await this.getData()
   }
 
@@ -92,10 +90,10 @@ class MyPage extends Component {
           <UserInfo>
             <User>
               <UserName>
-                최솔지
+                {this.state.userInfo.name}
               </UserName>
               <UserEmail>
-                soulg@ssafy.com
+                {this.state.userInfo.email}
               </UserEmail>
             </User>
             <UserSaegim>
@@ -221,7 +219,7 @@ const SaegimInfo = styled.div`
     position: absolute;
     width: 0;
     height: 0;
-    left: ${props => ([20, 40, 60][props.value])}%;
+    left: ${props => ([20, 43, 65][props.value])}%;
     border: 24px solid transparent;
     border-bottom-color: #f1f1f1;
     border-top: 0;

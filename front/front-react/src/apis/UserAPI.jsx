@@ -10,7 +10,6 @@ export const getCreatedSaegim = async (id) => {
       userid: id
     }
   })
-  console.log(_res)
   return _res.data.data;
 }
 
