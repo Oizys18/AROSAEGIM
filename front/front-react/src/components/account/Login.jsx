@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 import { Slide, Zoom, Checkbox, FormControlLabel } from '@material-ui/core';
-import { Email, Lock, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
+import { Email, Lock, CheckCircle, Warning, } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
 import BackBtn from  '../common/buttons/BackBtn';
@@ -66,7 +66,7 @@ class Login extends Component {
   handleInput = async (e) => {
     if(e.currentTarget.id === 'email'){
       await this.setStateAsync({ email: e.currentTarget.value })
-      this.setState( AM.checkEmail(this.state.email) )
+      this.setState( await AM.checkLoginEmail(this.state.email) )
     }
     else {
       await this.setStateAsync({ pw: e.currentTarget.value })
@@ -80,17 +80,14 @@ class Login extends Component {
 
   handleSubmit = async () => {
     if(AM.checkAllValid('login', this.state)){
-      const _resData = await AA.login(this.state)
-      console.log(_resData)
-
-      // localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
-      // if(this.state.autoLogin){
-      //   localStorage.setItem('ARSG email', this.state.email)
-      // }
-      // else {
-      //   sessionStorage.setItem('ARSG email', this.state.email)
-      // }
-      // window.location.href = '/'
+      localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
+      if(this.state.autoLogin){
+        localStorage.setItem('ARSG email', this.state.email)
+      }
+      else {
+        sessionStorage.setItem('ARSG email', this.state.email)
+      }
+      window.location.href = '/'
     }
     else{
       this.setState({ alertModal: true })
@@ -111,7 +108,7 @@ class Login extends Component {
             <ArrowBack/>
           </AS.StBackBtn> */}
           <BackBtn handleBack={this.handleBack}/>
-          
+
           <LogoAnimation/>
 
           <UserInput 

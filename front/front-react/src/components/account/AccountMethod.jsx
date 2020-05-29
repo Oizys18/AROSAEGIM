@@ -6,13 +6,37 @@ const regExp = {
   nickName: /^[A-Za-z0-9_]{4,16}$/,
 };
 
-export const checkEmail = (curStr) => {
+export const checkLoginEmail = async (curStr) => {
   let emailLabel = '이메일'
   let emailValid = 'init'
 
   if(curStr !== '') {
     if (regExp.email.test(curStr)) {
       emailValid = 'valid'
+      if(await AA.getUserByEmail(curStr) === null){
+        emailLabel = "없는 계정입니다!"
+        emailValid = 'invalid'
+      }
+    }
+    else {
+      emailLabel = '이메일 양식을 지켜주세요'
+      emailValid = 'invalid'
+    }
+  }
+  return { emailLabel, emailValid }
+}
+
+export const checkSignupEmail = async (curStr) => {
+  let emailLabel = '이메일'
+  let emailValid = 'init'
+
+  if(curStr !== '') {
+    if (regExp.email.test(curStr)) {
+      emailValid = 'valid'
+      if(await AA.getUserByEmail(curStr)){
+        emailLabel = "이미 계정이 존재합니다!"
+        emailValid = 'invalid'
+      }
     }
     else {
       emailLabel = '이메일 양식을 지켜주세요'
@@ -54,15 +78,14 @@ export const checkPWCheck = (curPW, curStr) => {
   return { pwCheckLabel, pwCheckValid }
 }
 
-export const checkNickName = (curStr) => {
+export const checkNickName = async (curStr) => {
   let nickNameLabel = '닉네임'
   let nickNameValid = 'init'
 
   if(curStr !== '') {
     if (regExp.nickName.test(curStr)) {
       nickNameValid = 'valid'
-
-      if(AA.getUserByNickname(curStr)){
+      if(await AA.getUserByNickname(curStr)){
         nickNameLabel = "닉네임이 중복됩니다!"
         nickNameValid = 'invalid'
       }

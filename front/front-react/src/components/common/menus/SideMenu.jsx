@@ -5,6 +5,9 @@ import styled from 'styled-components';
 import { Slide, IconButton } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 
+import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
+
+
 
 
 class SideMenu extends Component {
@@ -21,13 +24,16 @@ class SideMenu extends Component {
         <StMenuCont>
           
           <StTopCont>
-            <StLogo>대애충 로고</StLogo>
+            <StLogo></StLogo>
             <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
           </StTopCont>
 
           {
             this.props.isLogin ? 
-            <div>로그인 시 유저 정보</div>
+            <>
+              <div>로그인 시 유저 정보</div>
+              <img src={this.props.userInfo.profileImage} alt='alt'/>
+            </>
             :
             <>
               <Link to='login'>로그인</Link>
@@ -89,9 +95,17 @@ const StTopCont = styled.div`
 
 const StLogo = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
 
-  border: 3px solid darkblue;
+  width: 168px;
+  height: 100%;
+  
+  /* background: #f2f2f2; */
+  background-image: url(${inlineLogo});
+  background-size: 50%;
+  background-position: center center;
+  background-repeat: no-repeat;
   box-sizing: border-box;
 `;
 

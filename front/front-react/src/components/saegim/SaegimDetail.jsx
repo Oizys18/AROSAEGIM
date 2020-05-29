@@ -2,12 +2,12 @@ import React, {Component} from "react";
 import Card from "../common/cards/Card";
 // import DefaultButton from "../common/buttons/DefaultButton";
 import styled from "styled-components";
-import { ArrowBack } from "@material-ui/icons";
 import bgImage from "../../assets/images/sample_img.jpg"
-import { Lock, LockOpen } from "@material-ui/icons";
+import { ArrowBack, Lock, LockOpen } from "@material-ui/icons";
 import * as SA from "../../apis/SaegimAPI"
 import Time from "../common/time/Time";
 import Chip from "../common/chip/Chip"
+import { Zoom } from "@material-ui/core";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -52,6 +52,7 @@ class SaegimDetail extends Component {
     })
 
     return (
+      <Zoom in={true}>
       <Wrapper>
       <Contents>
         <BackGround bgImage={this.state.data.image ? this.state.data.image : bgImage}/>
@@ -85,6 +86,7 @@ class SaegimDetail extends Component {
         </div>
       </Communication>
       </Wrapper>
+      </Zoom>
     );
   }
 }
