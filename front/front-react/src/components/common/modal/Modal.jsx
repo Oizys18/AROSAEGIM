@@ -76,8 +76,8 @@ const StConfirmCont = styled.div`
   .top-deco{
     width: 100%;
     height: 20%;
-    /* background: linear-gradient(to right, #66ffff 22%, #ff99cc 100%); */
-    background: gray;
+    background: linear-gradient(to bottom right, #ffcc66 0%, #ff9999 100%);
+    /* background: gray; */
     border: 2px solid white;
     border-radius: 15px 15px 0 0;
     box-sizing: border-box;

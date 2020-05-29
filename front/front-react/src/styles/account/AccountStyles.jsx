@@ -14,6 +14,8 @@ export const StFormCont = styled(FlexColumn)`
   /* height: 100vh; */
   /* height: ${props => props.height}px; */
   background: rgba(255, 255, 255, 0.9);
+  /* background: linear-gradient(to bottom right, #ffcc66 0%, #ff9999 100%); */
+  
   /* background: rgba(0, 0, 0, 0.7); */
   padding: 16px;
   border-radius: 10px;
