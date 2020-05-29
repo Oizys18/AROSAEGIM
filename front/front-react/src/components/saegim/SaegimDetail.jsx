@@ -6,23 +6,15 @@ import { ArrowBack } from "@material-ui/icons";
 import bgImage from "../../assets/images/sample_img.jpg"
 import { Lock, LockOpen } from "@material-ui/icons";
 import * as SA from "../../apis/SaegimAPI"
+import Time from "../common/time/Time";
+import Chip from "../common/chip/Chip"
 
 class SaegimDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {
-        user_id: '',
-        user_name: '',
-        contents: '이것은 상세보기에서 보이는 카드',
-        images: '',
-        w3w: '',
-        longitude: '',
-        latitude: '',
-        registered_datetime: '',
-        isLocked: 0,
-        like: '',
-        tags: ''
+        tags: []
       }
     };
     this.goBack = this.goBack.bind(this);
@@ -34,45 +26,62 @@ class SaegimDetail extends Component {
 
   getSaegimDetail = async () => {
     const _data = await SA.getSaegimDetailById(this.props.match.params.id)
-    this.setState({ data: _data})
-    console.log(this.state.data)
+    await this.setStateAsync({ data: _data })
   }
 
-  componentDidMount() {
-    this.getSaegimDetail();
+  async componentDidMount() {
+    await this.getSaegimDetail();
+  }
+
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve);
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.data.tags !== prevState.tags) {
+    }
   }
 
   render() {
+    const PrintChip = this.state.data.tags.map((tag) => {
+      return (
+        <Chip text={tag.name} key={tag.id}/>
+      )
+    })
+
     return (
       <Wrapper>
       <Contents>
-        <BackGround />
-        <Location>위 치 자 리</Location>
-        <Registered>작 성 시 간</Registered>
+        <BackGround bgImage={this.state.data.image ? this.state.data.image : bgImage}/>
+        <Location>{this.state.data.w3w}</Location>
+        <Registered>
+          <Time regTime={this.state.data.regDate} />
+        </Registered>
         <CardWrapper>
           <Card>
-            <div>{this.state.user_name}</div>
-            <div>{this.state.contents}</div>
+            <div>{this.state.data.contents}</div>
           </Card>
         </CardWrapper>
         <Tags>
-          태 그 자 리
+          {PrintChip}
+          {/*{this.state.tags[0].id}*/}
         </Tags>
         <LockIcon>
-          {this.state.isLocked ? <Lock /> : <LockOpen />}
+          {this.state.data.secret ? <Lock /> : <LockOpen />}
          </LockIcon>
       </Contents>
       <Communication>
         <Likes>
+          <div>{this.state.data.userName}</div>
           <div>공감</div>
-          <div>북마크</div>
         </Likes>
         <Comments>
           <div>댓 글 자 리 </div>
         </Comments>
         <div onClick={this.goBack} >
           <ArrowBack />
-          뒤로가기 임시자리
         </div>
       </Communication>
       </Wrapper>
@@ -102,11 +111,12 @@ const Contents = styled.div `
   grid-template-rows: repeat(5, 20%);
   grid-template-columns: repeat(5, 20%);
   grid-template-areas:
-    "location location . date date"
+    "location location location date date"
     ". contents contents contents ."
     ". contents contents contents ."
     ". contents contents contents ."
     "tags tags tags . isLocked";
+  align-items: center;
 `
 
 const BackGround = styled.div `
@@ -116,7 +126,7 @@ const BackGround = styled.div `
   height: 100%;
   width: 100%;
   
-  background-image: url(${bgImage});
+  background-image: url(${props => props.bgImage});
   background-size: 100% 100%;
   opacity: 0.7;
 `

@@ -4,7 +4,7 @@ const BASE_URL =  process.env.REACT_APP_BASE_URL
 
 export const getSaegimListByLocation = async (latlng) => {
   const [ lat, lng ] = latlng
-  const meter = 10
+  const meter = 50
   console.log(latlng, lat, lng)
   const _data = {
     lat: lat,
@@ -17,6 +17,7 @@ export const getSaegimListByLocation = async (latlng) => {
     url: `${BASE_URL}/saegims/latlng`,
     params: _data
   })
+  console.log(_res.data.data)
   return _res.data.data;
 }
 
