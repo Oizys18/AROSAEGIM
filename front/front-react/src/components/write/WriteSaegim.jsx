@@ -10,7 +10,7 @@ import CreateIcon from "@material-ui/icons/Create";
 import CtoW from "../../apis/w3w";
 import Switch from "../common/switch/Switch";
 import axios from "axios";
-
+import PhotoIcon from "@material-ui/icons/AddPhotoAlternate";
 class WriteSaegim extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +23,7 @@ class WriteSaegim extends Component {
       locked: 0,
       tags: [],
       error: 0,
-      image:null,
+      image: null,
     };
   }
   handleChange = (data) => {
@@ -147,6 +147,9 @@ class WriteSaegim extends Component {
           </Bottom>
         </Container>
         <CreateWrapper>
+          <CreateImg onClick={() => console.log("img!")}>
+            <PhotoIcon />
+          </CreateImg>
           <CreateTag onClick={() => this.createTag("hello")}>
             <LocalOfferIcon />
           </CreateTag>
@@ -201,17 +204,23 @@ const CreateWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   display: flex;
+  margin-top: 10px;
 `;
 const CreateTag = styled(IconButton)`
+  color: default;
   background: white;
   padding: 0.25em;
-  margin-top: 10px;
   margin-right: 10px;
 `;
 const CreateButton = styled(IconButton)`
   background: white;
   padding: 0.25em;
-  margin-top: 10px;
+`;
+
+const CreateImg = styled(IconButton)`
+  background: white;
+  padding: 0.25em;
+  margin-right: 10px;
 `;
 
 const Tag = styled(IconButton)`
