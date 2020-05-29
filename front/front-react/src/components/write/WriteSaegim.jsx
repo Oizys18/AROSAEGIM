@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import MapIcon from "@material-ui/icons/Map";
-import { IconButton, Input } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
 import DefaultButton from "../common/buttons/DefaultButton";
@@ -20,7 +20,7 @@ class WriteSaegim extends Component {
       location: null,
       w3w: null,
       text: null,
-      locked: false,
+      locked: 0,
       tags: [],
     };
   }
@@ -89,14 +89,13 @@ class WriteSaegim extends Component {
   };
   handleTextChange = (value) => {
     this.setState({ text: value });
-    
   };
   changeSwitch = () => {
     console.log(this.state.locked);
     if (this.state.locked) {
-      this.setState({ locked: false });
+      this.setState({ locked: 0 });
     } else {
-      this.setState({ locked: true });
+      this.setState({ locked: 1 });
     }
   };
   createTag = (newTag) => {
@@ -119,7 +118,6 @@ class WriteSaegim extends Component {
             onTextChange={this.handleTextChange}
           />
           <Bottom>
-            {/* <Addition> */}
             <Switch
               locked={this.state.locked}
               changeSwitch={this.changeSwitch}
@@ -128,10 +126,9 @@ class WriteSaegim extends Component {
               labelPlacement="start"
             />
             <Tag onClick={() => alert("태그 곧 넣을게요ㅠ")}>
-              {this.state.tags.map((tag,i) => {
-                return (<Chip size="small" text={tag} key={i}/> )
+              {this.state.tags.map((tag, i) => {
+                return <Chip size="small" text={tag} key={i} />;
               })}
-              {/* <Chip size="small" text="태그1" /> */}
             </Tag>
           </Bottom>
         </Container>
