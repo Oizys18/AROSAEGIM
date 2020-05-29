@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import Card from "../common/cards/Card";
 import "./CardItem.css"
+import Time from "../common/time/Time";
 
 class CardItem extends Component {
   listElement;
@@ -88,8 +89,6 @@ class CardItem extends Component {
         this.onChangeData(this.props.idx)
         this.onSwiped();
       }
-
-      // this.listElement.className = "BouncingListItem";
       this.left = 0;
       if (this.state.currentId !== this.props.saegim.id) {
         this.listElement.style.animation = 'zoom 1s ease-out';
@@ -160,18 +159,20 @@ class CardItem extends Component {
             >
               <Card>
                 <StCard>
-                  <Location>위 치 자 리</Location>
-                  <Registered>작 성 시 간</Registered>
+                  <Location>{saegim.w3w}</Location>
+                  <Registered>
+                    <Time regTime={saegim.regDate} />
+                  </Registered>
                   <Contents>
-                    {saegim.contents}, id: {saegim.id}
+                    {saegim.secret ? "비밀글입니다" : saegim.contents}
                   </Contents>
                   <StLinkDiv>
-                  <StLink to={{pathname: `/list/${saegim.id}/`}}>
+                  <StLink to={`/list/${saegim.id}/`}>
                     더보기
                   </StLink>
                 </StLinkDiv>
                 <Comments>
-                  <div>댓 글 자 리 </div>
+                  <div>{saegim.userName}</div>
                 </Comments>
                 </StCard>
               </Card>
@@ -204,11 +205,12 @@ const StCard = styled.div`
   grid-template-rows: repeat(5, minmax(8vh, auto));
   grid-template-columns: repeat(5, minmax(16vw, auto)) ;
   grid-template-areas:
-    "location location . date date"
+    "location location location date date"
     ". contents contents contents ."
     ". contents contents contents ."
     ". contents contents contents ."
     "link . . comments comments";
+  align-items: center;
 `
 
 const Contents = styled.div`
@@ -238,4 +240,5 @@ const StackedCard = styled.div `
   bottom: ${props => 20 + props.idx * 3}%;
   transform: scale(${props => 1.0 - ((props.idx+1) * 0.05)});
   animation: ${zoom} 2s ease;
+  display: ${props => props.idx > 5 && 'none'};
 `
