@@ -8,6 +8,7 @@ import * as SA from "../../apis/SaegimAPI"
 import Time from "../common/time/Time";
 import Chip from "../common/chip/Chip"
 import { Zoom } from "@material-ui/core";
+import SaegimDetailButton from "./SaegimDetailButton";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -83,6 +84,7 @@ class SaegimDetail extends Component {
         <div onClick={this.goBack} >
           <ArrowBack />
         </div>
+        <SaegimDetailButton />
       </Communication>
       </Wrapper>
       </Zoom>
