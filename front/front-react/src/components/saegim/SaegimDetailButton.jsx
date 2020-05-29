@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import styled from "styled-components";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Fab from "@material-ui/core/Fab";
@@ -29,9 +30,9 @@ class SaegimDetailButton extends Component {
     return(
       <div>
       <Button aria-controls="fab-menu" aria-haspopup="true" onClick={this.handleClick}>
-        <Fab size="small">
+        <StFab size="small">
         <MoreVertIcon />
-        </Fab>
+        </StFab>
       </Button>
         <Menu
           id="fab-menu"
@@ -48,3 +49,7 @@ class SaegimDetailButton extends Component {
 }
 
 export default SaegimDetailButton;
+
+const StFab = styled(Fab)`
+  background-color: white;
+`
