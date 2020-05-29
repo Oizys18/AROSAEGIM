@@ -17,7 +17,6 @@ export const getSaegimListByLocation = async (latlng) => {
     url: `${BASE_URL}/saegims/latlng`,
     params: _data
   })
-  console.log(_res.data.data)
   return _res.data.data;
 }
 
@@ -30,7 +29,6 @@ export const getSaegimDetailById = async (id) => {
       saegimid: id
     }
   })
-
   return _res.data.data;
 }
 

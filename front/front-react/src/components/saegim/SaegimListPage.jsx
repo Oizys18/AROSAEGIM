@@ -92,8 +92,8 @@ class SaegimListPage extends Component {
   }
 
   componentDidMount() {
-    // this.getCurrentLocation()
-    this.getSaegimList()
+    this.getCurrentLocation()
+    // this.getSaegimList()
   }
 
   render() {

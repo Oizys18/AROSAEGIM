@@ -67,7 +67,6 @@ class SaegimDetail extends Component {
         </CardWrapper>
         <Tags>
           {PrintChip}
-          {/*{this.state.tags[0].id}*/}
         </Tags>
         <LockIcon>
           {this.state.data.secret ? <Lock /> : <LockOpen />}
