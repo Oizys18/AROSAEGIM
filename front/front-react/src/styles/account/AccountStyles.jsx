@@ -6,6 +6,7 @@ import styled from 'styled-components';
 export const StFormCont = styled(FlexColumn)`
   position: relative;
   /* background: linear-gradient(to bottom, #ffffcc 0%, #ff9999 100%); */
+  /* height: 100vh; */
   height: ${props => props.height}px;
 `;
 

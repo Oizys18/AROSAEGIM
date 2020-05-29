@@ -17,7 +17,7 @@ class ImgUp extends Component {
               id="imgUpload"
               type="file"
               accept="image/*"
-              onClick={(e) => {e.target.value = null}} //연속적으로 같은 파일 선택 시 해줘야하는
+              onClick={(e) => {e.target.value = null}} //연속적으로 같은 파일 선택 시 해줘야하는 설정
               onChange={this.props.imgUpload}
             />
             <StProfile>
