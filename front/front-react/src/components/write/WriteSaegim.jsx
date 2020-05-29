@@ -11,6 +11,7 @@ import CtoW from "../../apis/w3w";
 import Switch from "../common/switch/Switch";
 import axios from "axios";
 import PhotoIcon from "@material-ui/icons/AddPhotoAlternate";
+import {getUserByEmail} from "../../apis/AccountAPI";
 class WriteSaegim extends Component {
   constructor(props) {
     super(props);
@@ -24,6 +25,7 @@ class WriteSaegim extends Component {
       tags: [],
       error: 0,
       image: null,
+      userInfo: {}
     };
   }
   handleChange = (data) => {
@@ -52,6 +54,7 @@ class WriteSaegim extends Component {
           });
 
           this.getWWW(_lat, _lng);
+          this.getUserInfo();
         },
         function(error) {
           console.error(error);
@@ -74,23 +77,24 @@ class WriteSaegim extends Component {
       longitude: this.state.location[1],
       secret: this.state.locked,
       tags: ["test"],
-      userId: 1,
+      userId: this.state.userInfo.id,
       userName: "hello",
       w3w: this.state.w3w,
     };
-    if (this.state.text) {
-      axios
-        .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
-        .then((res) => {
-          this.handleChange(res.data);
-          // console.log(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      this.setState({ error: 1 });
-    }
+    console.log(data)
+    // if (this.state.text) {
+    //   axios
+    //     .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
+    //     .then((res) => {
+    //       this.handleChange(res.data);
+    //       // console.log(res.data);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // } else {
+    //   this.setState({ error: 1 });
+    // }
   };
   handleTextChange = (value) => {
     this.setState({ text: value });
@@ -108,6 +112,12 @@ class WriteSaegim extends Component {
     this.setState({ tags: this.state.tags.concat(newTag) });
     // console.log(this.state.tags);
   };
+  getUserInfo = async () => {
+    const _email = localStorage.getItem('ARSG email')
+    this.setState({
+        userInfo: (await getUserByEmail(_email)).data
+      })
+  }
   render() {
     const ErrorMsg = () => {
       if (this.state.error) {
