@@ -6,7 +6,6 @@ import Tab from "@material-ui/core/Tab";
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
-import { Link } from "react-router-dom";
 import TabPanel from "./TabPanel";
 import MyPageMenu from "./MyPageMenu";
 import * as UA from "../../apis/UserAPI"
@@ -67,8 +66,8 @@ class MyPage extends Component {
     console.log('set data')
   }
 
-  componentDidMount() {
-    this.getData()
+  async componentDidMount() {
+    await this.getData()
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -86,17 +85,6 @@ class MyPage extends Component {
         )
       }
     );
-
-    // const PrintList = this.state.data.map((saegim, i) => {
-    //   return (
-    //     <SaegimItem>
-    //       <StLink to={`list/${saegim.id}`}>
-    //         <div>{saegim.w3w}</div>
-    //         <div>{saegim.content}</div>
-    //       </StLink>
-    //     </SaegimItem>
-    //   )
-    // });
 
     return (
       <div>
