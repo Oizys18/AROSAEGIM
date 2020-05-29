@@ -12,12 +12,13 @@ export const login = async (state) => {
       password: pw,
     }
   })
+  console.log(_res.data)
 
-  if(_res.data.state === 'success'){
-    return true;
+  if(_res.data.data === 'login fail'){
+    return false;
   }
   else{
-    return false;
+    return true;
   }
 }
 

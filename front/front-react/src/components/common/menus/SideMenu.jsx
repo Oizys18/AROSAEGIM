@@ -82,7 +82,7 @@ const StMenuCont = styled.div`
 
   background: white;
 
-  border: 3px solid black;
+  border: 3px solid gray;
   box-sizing: border-box;
 `;
 

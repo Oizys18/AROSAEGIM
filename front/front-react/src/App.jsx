@@ -74,7 +74,8 @@ class App extends Component {
   }
 
   handleLogout = () => {
-    localStorage.clear()
+    localStorage.setItem('ARSG autoLogin', false)
+    localStorage.removeItem('ARSG email')
     sessionStorage.clear()
     this.setState({ 
       isLogin: false,

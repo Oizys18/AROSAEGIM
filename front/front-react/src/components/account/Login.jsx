@@ -82,16 +82,24 @@ class Login extends Component {
   handleSubmit = async () => {
     if(AM.checkAllValid('login', this.state)){
       const _resData = await AA.login(this.state)
-      console.log(_resData)
-      
-      localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
-      if(this.state.autoLogin){
-        localStorage.setItem('ARSG email', this.state.email)
+      // console.log(_resData)
+      if(_resData){
+        localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
+        if(this.state.autoLogin){
+          localStorage.setItem('ARSG email', this.state.email)
+        }
+        else {
+          localStorage.removeItem('ARSG email')
+          sessionStorage.setItem('ARSG email', this.state.email)
+        }
+        window.location.href = '/'
       }
       else {
-        sessionStorage.setItem('ARSG email', this.state.email)
+        this.setState({ 
+          alertModal: true,
+          modalMsg: `비밀번호를\n확인해주세요!`
+        })
       }
-      window.location.href = '/'
     }
     else{
       this.setState({ 
