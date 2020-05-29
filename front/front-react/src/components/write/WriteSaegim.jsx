@@ -22,10 +22,12 @@ class WriteSaegim extends Component {
       text: null,
       locked: 0,
       tags: [],
+      error: 0,
+      image:null,
     };
   }
-  handleChange = () => {
-    this.props.changeWrite();
+  handleChange = (data) => {
+    this.props.changeWrite(data);
   };
 
   getWWW = async (lat, lng) => {
@@ -66,7 +68,6 @@ class WriteSaegim extends Component {
   }
 
   writePost = () => {
-    // this.handleChange();
     const data = {
       contents: this.state.text,
       latitude: this.state.location[0],
@@ -77,21 +78,26 @@ class WriteSaegim extends Component {
       userName: "hello",
       w3w: this.state.w3w,
     };
-    axios
-      .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
-      .then((res) => {
-        this.handleChange();
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (this.state.text) {
+      axios
+        .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
+        .then((res) => {
+          this.handleChange(res.data);
+          // console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      this.setState({ error: 1 });
+    }
   };
   handleTextChange = (value) => {
     this.setState({ text: value });
+    this.setState({ error: 0 });
   };
   changeSwitch = () => {
-    console.log(this.state.locked);
+    // console.log(this.state.locked);
     if (this.state.locked) {
       this.setState({ locked: 0 });
     } else {
@@ -100,9 +106,16 @@ class WriteSaegim extends Component {
   };
   createTag = (newTag) => {
     this.setState({ tags: this.state.tags.concat(newTag) });
-    console.log(this.state.tags);
+    // console.log(this.state.tags);
   };
   render() {
+    const ErrorMsg = () => {
+      if (this.state.error) {
+        return <Error>텍스트를 입력해주세요!</Error>;
+      } else {
+        return <div></div>;
+      }
+    };
     return (
       <Wrapper>
         <Top>
@@ -117,6 +130,7 @@ class WriteSaegim extends Component {
             placeholder="당신의 추억을 새겨주세요"
             onTextChange={this.handleTextChange}
           />
+          <ErrorMsg />
           <Bottom>
             <Switch
               locked={this.state.locked}
@@ -145,6 +159,11 @@ class WriteSaegim extends Component {
   }
 }
 export default WriteSaegim;
+const Error = styled.div`
+  color: red;
+  font-size: 10px;
+`;
+
 const Wrapper = styled.div`
   position: absolute;
   top: 8vh;

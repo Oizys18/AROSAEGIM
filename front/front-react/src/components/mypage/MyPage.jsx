@@ -6,9 +6,10 @@ import Tab from "@material-ui/core/Tab";
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
-import { Link } from "react-router-dom";
 import TabPanel from "./TabPanel";
 import MyPageMenu from "./MyPageMenu";
+import { getCommentedSaegim, getLikedSaegim, getCreatedSaegim } from "../../apis/UserAPI"
+import { getUserByEmail } from "../../apis/AccountAPI";
 
 class MyPage extends Component {
   listItem;
@@ -16,6 +17,7 @@ class MyPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      userId: 1,
       currentTab: 0,
       mySaegim: 'time',
       like: 'time',
@@ -25,48 +27,8 @@ class MyPage extends Component {
         { value: 'location', text: '장소 별로 보기'},
         { value: 'tag', text: '태그 별로 보기'}
       ],
-      data: [
-        {
-          id: 1,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 2,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 3,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 4,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 5,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 6,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 7,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        },
-        {
-          id: 8,
-          w3w: '///모니터.숨은.자꾸',
-          content: '내 용 자 리'
-        }
-      ]
+      data: [],
+      userInfo: {}
     }
   };
 
@@ -78,14 +40,39 @@ class MyPage extends Component {
   };
 
   tabChange = async (e, val) => {
-    console.log(val)
     await this.setState({
       currentTab: val
     })
   };
 
+  getData = async () => {
+    const _userId = this.state.userInfo.id
+    let _data = []
+    if (this.state.currentTab === 0) {
+      const _data = await getCreatedSaegim(_userId)
+    } else if (this.state.currentTab === 1) {
+      const _data = await getLikedSaegim(_userId)
+    } else {
+      const _data = await getCommentedSaegim(_userId)
+    }
+    await this.setState({
+      data: _data
+    })
+  }
+
+  async componentDidMount() {
+    const _email = localStorage.getItem('ARSG email')
+    this.setState({
+        userInfo: (await getUserByEmail(_email)).data
+      })
+    await this.getData()
+  }
+
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state !== prevState) {
+    if (this.state.currentTab !== prevState.currentTab ||
+      this.state[MyPageMenu[this.state.currentTab].value] !== prevState[MyPageMenu[this.state.currentTab].value]
+    ) {
+      this.getData()
     }
   }
 
@@ -97,27 +84,16 @@ class MyPage extends Component {
       }
     );
 
-    // const PrintList = this.state.data.map((saegim, i) => {
-    //   return (
-    //     <SaegimItem>
-    //       <StLink to={`list/${saegim.id}`}>
-    //         <div>{saegim.w3w}</div>
-    //         <div>{saegim.content}</div>
-    //       </StLink>
-    //     </SaegimItem>
-    //   )
-    // });
-
     return (
       <div>
         <Wrapper>
           <UserInfo>
             <User>
               <UserName>
-                최솔지
+                {this.state.userInfo.name}
               </UserName>
               <UserEmail>
-                soulg@ssafy.com
+                {this.state.userInfo.email}
               </UserEmail>
             </User>
             <UserSaegim>
@@ -243,7 +219,7 @@ const SaegimInfo = styled.div`
     position: absolute;
     width: 0;
     height: 0;
-    left: ${props => ([20, 40, 60][props.value])}%;
+    left: ${props => ([20, 43, 65][props.value])}%;
     border: 24px solid transparent;
     border-bottom-color: #f1f1f1;
     border-top: 0;

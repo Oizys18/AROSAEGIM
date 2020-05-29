@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 // import Zoom from "@material-ui/core/Zoom";
-import {Zoom, Slide} from "@material-ui/core";
+import { Zoom, Slide } from "@material-ui/core";
 import WriteSaegim from "./WriteSaegim";
 import WriteComplete from "./WriteComplete";
 
@@ -10,44 +10,41 @@ class Write extends Component {
     super(props);
     this.state = {
       write: false,
+      id: null,
     };
   }
-  changeWrite = () => {
+  changeWrite = (data) => {
     this.setState({ write: true });
+    this.setState({ id: data.data.id });
+    // console.log(data.data.id)
   };
   render() {
     const Written = () => {
       if (this.state.write) {
-        return <WriteComplete />;
+        return <WriteComplete id={this.state.id} />;
       } else {
         return <WriteSaegim changeWrite={this.changeWrite} />;
       }
     };
     return (
-      <Wrapper>
-        <Slide in={true} direction='left'>
-        <Container>
-          <Zoom in={true}>
+      <Slide in={true} direction="left">
+        <Wrapper>
+          <Container>
             <Written />
-          </Zoom>
-        </Container>
-        </Slide>
-      </Wrapper>
+          </Container>
+        </Wrapper>
+      </Slide>
     );
   }
 }
 export default Write;
 
 const Wrapper = styled.div`
+  background-color: #e6d7bb;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: #e6d7bb;
-
-  overflow: hidden;
 `;
 const Container = styled.div`
   justify-content: center;
