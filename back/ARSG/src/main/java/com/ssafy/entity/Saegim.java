@@ -18,8 +18,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.dto.SaegimFormDto;
@@ -58,7 +56,6 @@ public class Saegim {
     private Double latitude;
     private Double longitude;
     private String w3w;
-    private String image;
     private String record;
     private Integer secret;
     
@@ -70,6 +67,9 @@ public class Saegim {
     
     @OneToMany(mappedBy="SAEGIM", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Comment> comments = new HashSet<Comment>();
+    
+    @OneToMany(mappedBy="SAEGIM", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Image> images = new HashSet<Image>();
     
     public static Saegim of(SaegimFormDto saegimFormDto) {
     	Saegim saegim = UtilFactory.getModelMapper().map(saegimFormDto, Saegim.class);

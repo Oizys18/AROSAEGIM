@@ -33,4 +33,5 @@ public class SaegimFormDto {
 	@ApiParam(hidden = true)
 	private Date regDate = new Date();
     private List<String> tags = new ArrayList<String>(); 
+    private List<String> images = new ArrayList<String>(); 
 }

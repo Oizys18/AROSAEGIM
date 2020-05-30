@@ -14,9 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-
 import com.ssafy.dto.CommentFormDto;
 import com.ssafy.util.UtilFactory;
 

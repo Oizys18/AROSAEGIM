@@ -2,9 +2,6 @@ package com.ssafy.dto;
 
 import java.util.Date;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-
 import com.ssafy.entity.Comment;
 import com.ssafy.util.UtilFactory;
 

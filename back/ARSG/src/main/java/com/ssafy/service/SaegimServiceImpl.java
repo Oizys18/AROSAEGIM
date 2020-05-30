@@ -25,6 +25,8 @@ public class SaegimServiceImpl implements SaegimService {
 	private CommentRepository commentRepository;
 	@Autowired
 	private HashtagRepository hashtagRepository;
+	@Autowired
+	private ImageRepository imageRepository;
 	
 	private static double distance(double lat1, double lon1, double lat2, double lon2) {
 		
@@ -51,6 +53,7 @@ public class SaegimServiceImpl implements SaegimService {
 	public SaegimDto getSaegimBySaegimId(long saegimId) {
 		Saegim saegim = saegimRepository.findById(saegimId);
 		saegim.setTaggings(taggingRepository.findBySaegimId(saegimId));
+		saegim.setImages(imageRepository.findBySaegimId(saegimId));
 		return SaegimDto.of(saegim);
 	}
 	@Override
@@ -76,24 +79,26 @@ public class SaegimServiceImpl implements SaegimService {
 			Hashtag ht = hashtagRepository.findByName(tag);
 			if(ht == null) {
 				ht = new Hashtag(tag);
-				ht.setId(null);
 				hashtagRepository.save(ht);
 			}
 			tags.add(ht);
 		}
 		Saegim saegim = Saegim.of(saegimFormDto);
 		saegim = saegimRepository.save(saegim);
+		long sId = saegim.getId();
+		System.out.println("============= saegim ID =============");
+		System.out.println("sId : " + sId);
+		System.out.println("============= saegim ID =============");
 		List<Tagging> taggings = new ArrayList<Tagging>();
 		for (Hashtag hashtag : tags) {
-			Tagging tagging = new Tagging(hashtag.getId(), saegim.getId());
+			Tagging tagging = new Tagging(hashtag.getId(), sId);
 			taggingRepository.save(tagging);
 			taggings.add(tagging);
 		}
-		if(saegim != null) {
-			return getSaegimBySaegimId(saegim.getId());
-		} else {
-			return null;
+		for (String img : saegimFormDto.getImages()) {
+			imageRepository.save(new Image(sId, img));
 		}
+		return getSaegimBySaegimId(saegim.getId());
 	}
 	@Override
 	public List<SaegimDto> getSaegimsByUserId(long userId) {
