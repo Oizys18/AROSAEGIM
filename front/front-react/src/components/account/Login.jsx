@@ -116,7 +116,7 @@ class Login extends Component {
           <AS.StFormCont>
             <LogoAnimation/>
 
-            <UserInput 
+            <UserInput
               id='email' 
               value={this.state.email}
               label={this.state.emailLabel} 

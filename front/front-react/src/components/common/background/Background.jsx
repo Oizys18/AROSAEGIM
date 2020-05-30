@@ -29,8 +29,8 @@ const StCont = styled.div`
   position: fixed;
   z-index: -2;
 
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 
   background: url(${props => props.src}) no-repeat center center fixed;
   -webkit-background-size: cover;
@@ -40,8 +40,8 @@ const StCont = styled.div`
 `;
 
 const StOpacity = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   
   background: black;
   opacity: 0.7;

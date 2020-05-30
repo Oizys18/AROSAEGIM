@@ -11,7 +11,24 @@ class BotNav extends Component {
     super(props);
     this.state={
       curPage: this.props.location.pathname,
+      sildeIn: true,
     }
+  }
+
+  toggle = () => {
+    if(this.props.appH !== window.innerHeight){
+      this.setState({ sildeIn: false })
+    }
+    else{
+      this.setState({ sildeIn: true })
+    }
+  }
+
+  componentDidUpdate(){
+    window.addEventListener('resize', this.toggle)
+  }
+  componentWillUnmount(){
+    window.removeEventListener('resize', this.toggle)
   }
 
   setStateAsync(state) {
@@ -32,7 +49,8 @@ class BotNav extends Component {
   render(){
     const _pathname = this.props.location.pathname
     return(
-      <Slide in={true} direction='up' timeout={500}>
+      <Slide in={this.state.sildeIn} direction='up' timeout={this.state.sildeIn ? 500 : 100}>
+      {/* <Slide in={true} direction='up' timeout={500}> */}
         <StNavCont>
 
           <Zoom in={true} timeout={500}>

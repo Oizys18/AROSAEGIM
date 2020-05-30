@@ -244,7 +244,7 @@ class MapPage extends Component {
     }
 
     return(
-      <StMapCont>
+      <StMapCont height={this.context.appHeight}>
         <Slide in={true} direction={_dir}>
         <StViewCont>
             <StBtnCont>
@@ -295,7 +295,8 @@ MapPage.contextType = Storage;
 
 const StMapCont = styled(FlexColumn)`
   overflow: hidden;
-  height: 100vh;
+  height: ${props => props.height}px;
+  /* height: 100vh; */
 `;
 
 const StViewCont = styled.div`

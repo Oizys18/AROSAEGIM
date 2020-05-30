@@ -68,14 +68,16 @@ const StConfirmCont = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 60%;
-  height: 30%;
+  min-height: 30%;
+  /* height: 30%; */
   background-color: white;
   border-radius: 15px;
   opacity: 1;
 
   .top-deco{
     width: 100%;
-    height: 20%;
+    height: 36px;
+    /* height: 20%; */
     background: linear-gradient(to bottom right, #ffcc66 0%, #ff9999 100%);
     /* background: gray; */
     border: 2px solid white;
@@ -87,7 +89,7 @@ const StConfirmCont = styled.div`
 const StMsgCont = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 1rem 0 1rem;
+  margin: 16px 1rem 16px 1rem;
   text-align: center;
 `
 

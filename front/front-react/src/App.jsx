@@ -7,6 +7,7 @@ import { Storage } from "./storage/Storage";
 import Loading from "./components/common/background/Loading";
 import Background from "./components/common/background/Background";
 import TopBar from "./components/common/menus/TopBar";
+import SearchBar from "./components/common/search/SearchBar"
 import SideMenu from "./components/common/menus/SideMenu";
 import BotNav from "./components/common/navbar/BotNav";
 import Modal from "./components/common/modal/Modal"
@@ -26,7 +27,7 @@ class App extends Component {
       appHeight: window.innerHeight,
 
       sideMenu: false,
-      // toggleSideMenu: this.toggleSideMenu,
+      toggleSideMenu: this.toggleSideMenu,
 
       curPage: '/list',
       curSaegimIdx: 0,
@@ -59,13 +60,11 @@ class App extends Component {
         isLogin: true,
         userInfo: (await getUserByEmail(_email)).data
       })
-      // this.props.history.replace('/list')
       this.goFirstPage('/list')
     }
     else {
       const _email = sessionStorage.getItem('ARSG email')
       if(_email === null){
-        // this.props.history.replace('/list')
         this.goFirstPage('/list')
       }
       else{
@@ -73,7 +72,6 @@ class App extends Component {
           isLogin: true,
           userInfo: (await getUserByEmail(_email)).data
         })
-        // this.props.history.replace('/list')
         this.goFirstPage('/list')
       }
     }
@@ -86,7 +84,7 @@ class App extends Component {
     }
   }
 
-  popModal = (msg, situ, mode) => {
+  popModal = async (msg, situ, mode) => {
     this.setState({
       modal: true,
       modalMsg: msg,
@@ -96,27 +94,23 @@ class App extends Component {
   }
   handleModal = (e) => {
     const _ans = e.currentTarget.id
-    if(this.state.modalMode === 'confirm'){
-      if(this.state.modalSitu === 'need login' && _ans === 'yes'){
+    if(this.state.modalMode === 'confirm' && _ans === 'yes'){
+      if(this.state.modalSitu === 'need login'){
         this.props.history.push('/login')
       }
+      else if(this.state.modalSitu === 'logout'){
+        this.setState({ sideMenu: false })
+        localStorage.setItem('ARSG autoLogin', false)
+        localStorage.removeItem('ARSG email')
+        sessionStorage.clear()
+        window.location.href = '/'
+      }
     }
-    this.setState({
-      modal: false,
-      // modalMsg: '',
-      // modalSitu: '',
-      // modalMode: '',
-    })
+    this.setState({ modal: false })
   }
 
   handleLogout = () => {
-    localStorage.setItem('ARSG autoLogin', false)
-    localStorage.removeItem('ARSG email')
-    sessionStorage.clear()
-    this.setState({ 
-      isLogin: false,
-      userInfo: {},
-    })
+    this.popModal('로그아웃 하시겠습니까?', 'logout', 'confirm')
   }
 
   toggleSideMenu = () => {
@@ -136,7 +130,7 @@ class App extends Component {
         this.props.history.push(`/${_id}`);
       }
       else{
-        this.popModal('로그인 후 이용이\n가능합니다.\n 로그인 하시겠습니까?', 'need login', 'confirm')
+        this.popModal('로그인 후\n이용할 수 있습니다.\n\n로그인 하시겠습니까?', 'need login', 'confirm')
       }
     } 
     else {
@@ -157,16 +151,17 @@ class App extends Component {
             <Slide in={this.props.location.pathname !== "/map"} direction="down" unmountOnExit mountOnEnter>
               <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
             </Slide>
-            {/* <Slide in={this.props.location.pathname === "/map"} direction="down" unmountOnExit mountOnEnter>
-              <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
-            </Slide> */}
+            <Slide in={this.props.location.pathname === "/map"} direction="down" unmountOnExit mountOnEnter>
+              <SearchBar/>
+            </Slide>
+
             <SideMenu
               on={this.state.sideMenu}
               toggle={this.toggleSideMenu}
               isLogin={this.state.isLogin}
-              logout={this.handleLogout}
             />
-            <BotNav changePage={this.changePage} />
+            
+            <BotNav appH={this.state.appHeight} changePage={this.changePage}/>
           </>
         )}
 
