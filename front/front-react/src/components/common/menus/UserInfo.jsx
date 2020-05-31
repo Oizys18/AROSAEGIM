@@ -16,7 +16,6 @@ class UserInfo extends Component{
         <StCont>
           <StAvatar src={this.context.userInfo.profileImage}/>
           <StNick>{this.context.userInfo.name}</StNick>
-          {/* <StLogout onClick={this.context.handleLogout}><ExitToApp/></StLogout> */}
         </StCont>
       </Slide>
     )
@@ -27,13 +26,19 @@ UserInfo.contextType = Storage;
 
 const StCont = styled(FlexRow)`
   justify-content: space-between;
+  margin: 8px;
+  /* margin: 8px 8px 0 8px; */
   padding: 8px 8px 0 8px;
-  margin: 8px 8px 0 8px;
 `;
 
 const StAvatar = styled(Avatar)`
   width: 30%;
   height: auto;
+
+  .MuiAvatar-fallback{
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const StNick = styled.div`
@@ -41,8 +46,4 @@ const StNick = styled.div`
   word-break: break-all;
   width: 100%;
   margin: 0 16px 0 16px;
-`;
-
-const StLogout = styled(IconButton)`
-  padding: 0;
 `;

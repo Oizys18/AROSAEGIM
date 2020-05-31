@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import {Slide, Grow, Divider, IconButton, Button, MenuItem, InputBase, Popper} from '@material-ui/core';
+import {Slide, Grow, Divider, IconButton, Button, InputBase, } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
-import {FlexColumn} from '../../../styles/DispFlex'
+import { FlexColumn } from '../../../styles/DispFlex'
 
 class SearchBar extends Component {
 
@@ -10,43 +10,61 @@ class SearchBar extends Component {
     super(props)
     this.state = {
       select: '장소',
-      open: false,
+      selectOpen: false,
+
+      value: '',
     }
   }
 
   openSelect = (e) => {
     this.setState({ 
-      open: !this.state.open 
+      selectOpen: !this.state.selectOpen 
     })
   }
   handleSelect = (e) => {
     this.setState({
       select: e.currentTarget.id,
-      open: !this.state.open
+      selectOpen: !this.state.selectOpen
     })
+  }
+
+  handleInput = (e) => {
+    this.setState({
+      value: e.currentTarget.value
+    })
+  }
+
+  handleSearch = (e) => {
+
   }
 
   render(){
     return(
-      <Slide in={true} direction='down'>
+      <Slide in={this.props.on} direction='down'>
         <StCont> 
           <StSearch>
-          <StSelectCont>
-          <StSelectBtn onClick={this.openSelect}>{this.state.select}</StSelectBtn>
-          <Grow in={this.state.open} mountOnEnter unmountOnExit>
-            <StSelectList>
-              <StSelectBtn id='장소' onClick={this.handleSelect}>장소</StSelectBtn>
-              <StSelectBtn id='새김' onClick={this.handleSelect}>새김</StSelectBtn>
-            </StSelectList>
-          </Grow>
-          </StSelectCont>
 
-          <Divider orientation="vertical" />
-          <InputBase /> 
-          <Divider orientation="vertical" />
-          <IconButton type="submit">
-            <Search/>
-          </IconButton>
+            <StSelectCont>
+              <StSelectBtn onClick={this.openSelect}>{this.state.select}</StSelectBtn>
+              <Grow in={this.state.selectOpen} mountOnEnter unmountOnExit>
+                <StSelectList>
+                  <StSelectBtn id='장소' onClick={this.handleSelect}>장소</StSelectBtn>
+                  <StSelectBtn id='새김' onClick={this.handleSelect}>새김</StSelectBtn>
+                </StSelectList>
+              </Grow>
+            </StSelectCont>
+
+            <Divider orientation="vertical" />
+            
+            <InputBase 
+              placeholder={this.state.select === '장소' ? '장소 검색' : '지도 내에서 새김 검색'}
+              onChange={this.handleInput}
+            />
+            
+            <Divider orientation="vertical"/>
+
+            <IconButton onClick={this.handleSearch}><Search/></IconButton>
+          
           </StSearch>
         </StCont>
       </Slide>
@@ -71,11 +89,13 @@ const StCont = styled.div`
 `;
 
 const StSearch = styled.div`
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
+
+  width: 100%;
+  height: 100%;
+
   border-radius: 5px;
   background: white;
 `;

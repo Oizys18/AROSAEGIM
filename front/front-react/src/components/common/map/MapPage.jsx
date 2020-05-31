@@ -246,7 +246,9 @@ class MapPage extends Component {
 
     return(
       <StMapCont height={this.context.appHeight}>
-        <SearchBar/>
+
+        <SearchBar on={!this.state.roadView}/>
+        
         <Slide in={true} direction={_dir}>
         <StViewCont>
           

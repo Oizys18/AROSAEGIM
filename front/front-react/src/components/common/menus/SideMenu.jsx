@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
-import { Slide, IconButton } from '@material-ui/core';
+import { Slide, IconButton, Divider } from '@material-ui/core';
 import { Close, VpnKey, AssignmentInd, Face, ExitToApp } from '@material-ui/icons';
 import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
 
@@ -35,16 +34,16 @@ class SideMenu extends Component {
             {
               this.props.isLogin ? 
               <>
-                <hr/>
+                <Divider />
                 <SideMenuBtn link='mypage' txt={'마이페이지'} icon={<Face/>}/>
                 <SideMenuBtn link='logout' txt={'로그아웃'} icon={<ExitToApp/>}/>
-                <hr/>
+                <Divider />
               </>
               :
               <>
                 <SideMenuBtn link='login' txt={'로그인'} icon={<VpnKey/>}/>
                 <SideMenuBtn link='signup' txt={'회원가입'} icon={<AssignmentInd/>}/>
-                <hr/>
+                <Divider />
               </>
             }
             </StListCont>
@@ -123,11 +122,6 @@ const StListCont = styled.div`
   height: 100%;
   padding: 8px;
   /* padding: 8px 0 8px 0; */
-
-  hr{
-    width: 95%;
-    color: gray;
-  }
 
   /* border: 3px solid darkgreen;
   box-sizing: border-box; */
