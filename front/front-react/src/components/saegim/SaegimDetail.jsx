@@ -9,6 +9,7 @@ import Time from "../common/time/Time";
 import Chip from "../common/chip/Chip"
 import { Zoom } from "@material-ui/core";
 import SaegimDetailButton from "./SaegimDetailButton";
+import {getUserByEmail} from "../../apis/AccountAPI";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class SaegimDetail extends Component {
     this.state = {
       data: {
         tags: []
-      }
+      },
+      userId: ""
     };
     this.goBack = this.goBack.bind(this);
   }
@@ -31,7 +33,12 @@ class SaegimDetail extends Component {
   }
 
   async componentDidMount() {
+    const _email = localStorage.getItem('ARSG email')
+    this.setState({
+        userId: (await getUserByEmail(_email)).data.id
+      })
     await this.getSaegimDetail();
+    console.log(this.state.data)
   }
 
   setStateAsync(state) {
@@ -85,9 +92,11 @@ class SaegimDetail extends Component {
       <BackButton onClick={this.goBack} >
         <ArrowBack />
       </BackButton>
-      <StButton>
-        <SaegimDetailButton id={this.props.match.params.id}/>
-      </StButton>
+        {this.state.userId === this.state.data.userId &&
+          <StButton>
+            <SaegimDetailButton id={this.props.match.params.id}/>
+          </StButton>
+        }
       </Wrapper>
       </Zoom>
     );
