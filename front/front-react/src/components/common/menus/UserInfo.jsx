@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link, withRouter, } from 'react-router-dom';
+import { withRouter, } from 'react-router-dom';
 
 import styled from 'styled-components';
 import { IconButton, Avatar, Slide } from '@material-ui/core';
-import {  } from '@material-ui/icons';
+import { ExitToApp } from '@material-ui/icons';
 import { FlexRow } from '../../../styles/DispFlex'
 
 import { Storage } from '../../../storage/Storage'
@@ -25,18 +25,25 @@ class UserInfo extends Component{
 UserInfo.contextType = Storage;
 
 const StCont = styled(FlexRow)`
-  justify-content: flex-start	;
+  justify-content: space-between;
   margin: 8px;
+  /* margin: 8px 8px 0 8px; */
+  padding: 8px 8px 0 8px;
 `;
 
 const StAvatar = styled(Avatar)`
-  width: 20%;
+  width: 30%;
   height: auto;
+
+  .MuiAvatar-fallback{
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const StNick = styled.div`
-  margin-left: 16px;
-  /* width: 70%; */
-  /* text-align: center; */
   font-size: 120%;
+  word-break: break-all;
+  width: 100%;
+  margin: 0 16px 0 16px;
 `;

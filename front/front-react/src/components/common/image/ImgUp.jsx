@@ -77,6 +77,8 @@ const StProfile = styled(FlexRow)`
 
   overflow: hidden;
 
+  color: #f2f2f2;
+
   *{
     width: 35vw;
     height: 35vw;

@@ -4,9 +4,13 @@ import { Route, withRouter, Switch } from "react-router-dom";
 import { Slide } from '@material-ui/core'
 
 import { Storage } from "./storage/Storage";
+import Loading from "./components/common/background/Loading";
+import Background from "./components/common/background/Background";
 import TopBar from "./components/common/menus/TopBar";
+// import SearchBar from "./components/common/search/SearchBar";
 import SideMenu from "./components/common/menus/SideMenu";
 import BotNav from "./components/common/navbar/BotNav";
+import Modal from "./components/common/modal/Modal"
 import MapPage from "./components/common/map/MapPage";
 import Write from "./components/write/Write";
 import Login from "./components/account/Login";
@@ -23,7 +27,7 @@ class App extends Component {
       appHeight: window.innerHeight,
 
       sideMenu: false,
-      // toggleSideMenu: this.toggleSideMenu,
+      toggleSideMenu: this.toggleSideMenu,
 
       curPage: '/list',
       curSaegimIdx: 0,
@@ -32,6 +36,13 @@ class App extends Component {
       isLogin: false,
       userInfo: {},
       handleLogout: this.handleLogout,
+
+      modal: false,
+      modalMsg: '',
+      modalSitu: '',
+      modalMode: '',
+      popModal: this.popModal,
+      handleModal: this.handleModal,
     };
   }
 
@@ -49,19 +60,19 @@ class App extends Component {
         isLogin: true,
         userInfo: (await getUserByEmail(_email)).data
       })
-      this.props.history.replace('/list')
+      this.goFirstPage('/list')
     }
     else {
       const _email = sessionStorage.getItem('ARSG email')
       if(_email === null){
-        this.props.history.replace('/list')
+        this.goFirstPage('/list')
       }
       else{
         this.setState({ 
           isLogin: true,
           userInfo: (await getUserByEmail(_email)).data
         })
-        this.props.history.replace('/map')
+        this.goFirstPage('/list')
       }
     }
   }
@@ -73,25 +84,56 @@ class App extends Component {
     }
   }
 
-  handleLogout = () => {
-    localStorage.clear()
-    sessionStorage.clear()
-    this.setState({ 
-      isLogin: false,
-      userInfo: {},
+  popModal = async (msg, situ, mode) => {
+    this.setState({
+      modal: true,
+      modalMsg: msg,
+      modalSitu: situ,
+      modalMode: mode,
     })
+  }
+  handleModal = (e) => {
+    const _ans = e.currentTarget.id
+    if(this.state.modalMode === 'confirm' && _ans === 'yes'){
+      if(this.state.modalSitu === 'need login'){
+        this.props.history.push('/login')
+      }
+      else if(this.state.modalSitu === 'logout'){
+        this.setState({ sideMenu: false })
+        localStorage.setItem('ARSG autoLogin', false)
+        localStorage.removeItem('ARSG email')
+        sessionStorage.clear()
+        window.location.href = '/'
+      }
+    }
+    this.setState({ modal: false })
+  }
+
+  handleLogout = () => {
+    this.popModal('로그아웃 하시겠습니까?', 'logout', 'confirm')
   }
 
   toggleSideMenu = () => {
     this.setState({ sideMenu: !this.state.sideMenu });
   };
 
+  goFirstPage = (page) => {
+    setTimeout(() => {
+      this.props.history.replace(page)
+    }, 2000);
+  }
+
   changePage = async (e) => {
     const _id = e.currentTarget.id
-    if (_id === "write"
-    ) {
-      this.props.history.push(`/${_id}`);
-    } else {
+    if (_id === "write") {
+      if(this.state.isLogin) {
+        this.props.history.push(`/${_id}`);
+      }
+      else{
+        this.popModal('로그인 후\n이용할 수 있습니다.\n\n로그인 하시겠습니까?', 'need login', 'confirm')
+      }
+    } 
+    else {
       this.props.history.replace(`/${_id}`);
     }
   };
@@ -99,7 +141,7 @@ class App extends Component {
   render() {
     return (
       <Storage.Provider value={this.state}>
-        {// 사이드메뉴랑, 상단바(햄버거), 하단네비는 그냥 조건부 렌더링으로 작성
+        {// 사이드 메뉴랑, 상단바(햄버거), 하단네비는 그냥 조건부 렌더링으로 작성
         ( this.props.location.pathname === "/map" ||
           this.props.location.pathname === "/write" ||
           this.props.location.pathname === "/mypage" ||
@@ -110,20 +152,28 @@ class App extends Component {
               <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
             </Slide>
             {/* <Slide in={this.props.location.pathname === "/map"} direction="down" unmountOnExit mountOnEnter>
-              <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
+              <SearchBar/>
             </Slide> */}
+
             <SideMenu
               on={this.state.sideMenu}
               toggle={this.toggleSideMenu}
               isLogin={this.state.isLogin}
-              logout={this.handleLogout}
-              // userInfo={this.state.userInfo}
             />
-            <BotNav changePage={this.changePage} />
+            
+            <BotNav appH={this.state.appHeight} changePage={this.changePage}/>
           </>
         )}
 
-        {/* <Route exact path="/" component={SaegimListPage} /> */}
+        <Background/>
+        <Modal
+          on={this.state.modal} 
+          msg={this.state.modalMsg}
+          mode={this.state.modalMode}
+          click={this.handleModal} 
+        />
+
+        <Route exact path="/" component={Loading} />
         <Switch>
           <Route path="/list/:id" component={SaegimDetail} />
           <Route path="/list" component={SaegimListPage} />

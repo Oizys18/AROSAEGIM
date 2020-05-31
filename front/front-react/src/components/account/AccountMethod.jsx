@@ -19,7 +19,7 @@ export const checkLoginEmail = async (curStr) => {
       }
     }
     else {
-      emailLabel = '이메일 양식을 지켜주세요'
+      emailLabel = '이메일 양식을 지켜주세요.'
       emailValid = 'invalid'
     }
   }
@@ -39,7 +39,7 @@ export const checkSignupEmail = async (curStr) => {
       }
     }
     else {
-      emailLabel = '이메일 양식을 지켜주세요'
+      emailLabel = '이메일 양식을 지켜주세요.'
       emailValid = 'invalid'
     }
   }

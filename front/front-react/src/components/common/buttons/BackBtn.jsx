@@ -6,7 +6,7 @@ import { ArrowBack } from '@material-ui/icons';
 class BackBtn extends Component {
   render(){
     return(
-      <Zoom in={true} timeout={700}>
+      <Zoom in={true} timeout={400}>
         <StBackBtn onClick={this.props.handleBack}>
           <ArrowBack/>
         </StBackBtn>
@@ -20,4 +20,6 @@ export const StBackBtn = styled(IconButton)`
   z-index: 1;
   top: 0;
   left: 0;
+
+  color: white;
 `;

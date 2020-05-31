@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
-import { Slide, IconButton } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
-import { FlexColumn } from '../../../styles/DispFlex'
-
+import { Slide, IconButton, Divider } from '@material-ui/core';
+import { Close, VpnKey, AssignmentInd, Face, ExitToApp } from '@material-ui/icons';
 import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
 
 import UserInfo from './UserInfo';
-
+import SideMenuBtn from './SideMenuBtn';
 
 class SideMenu extends Component {
 
@@ -25,29 +22,31 @@ class SideMenu extends Component {
         <StMenuCont>
           
           <StTopCont>
-            <StLogo></StLogo>
+            <StLogo/>
             <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
           </StTopCont>
 
-          {this.props.isLogin &&  
+          {this.props.isLogin && 
             <UserInfo on={this.props.on}/>
           }
-          
           <Slide in={this.props.on} direction='right' timeout={700}>
-          <StListCont>
-          {
-            this.props.isLogin ? 
-            <>
-            <Link to={`mypage`}>마이페이지</Link>
-            <div onClick={this.props.logout}>로그아웃</div>
-            </>
-            :
-            <>
-              <Link to='login'>로그인</Link>
-              <Link to='signup'>회원가입</Link>
-            </>
-          }
-          </StListCont>
+            <StListCont>
+            {
+              this.props.isLogin ? 
+              <>
+                <Divider />
+                <SideMenuBtn link='mypage' txt={'마이페이지'} icon={<Face/>}/>
+                <SideMenuBtn link='logout' txt={'로그아웃'} icon={<ExitToApp/>}/>
+                <Divider />
+              </>
+              :
+              <>
+                <SideMenuBtn link='login' txt={'로그인'} icon={<VpnKey/>}/>
+                <SideMenuBtn link='signup' txt={'회원가입'} icon={<AssignmentInd/>}/>
+                <Divider />
+              </>
+            }
+            </StListCont>
           </Slide>
 
         </StMenuCont>
@@ -66,7 +65,7 @@ const StOpacityBack = styled.div`
   height: 100%;
 
   background: black;
-  opacity: 0.3;
+  opacity: 0.5;
 `;
 
 const StMenuCont = styled.div`
@@ -82,8 +81,8 @@ const StMenuCont = styled.div`
 
   background: white;
 
-  border: 3px solid black;
-  box-sizing: border-box;
+  /* border: 3px solid gray;
+  box-sizing: border-box; */
 `;
 
 const StTopCont = styled.div`
@@ -120,10 +119,9 @@ const StCloseBtn = styled(IconButton)`
 const StListCont = styled.div`
   display: flex;
   flex-direction: column;
-
   height: 100%;
-
-  margin: 8px;
+  padding: 8px;
+  /* padding: 8px 0 8px 0; */
 
   /* border: 3px solid darkgreen;
   box-sizing: border-box; */
