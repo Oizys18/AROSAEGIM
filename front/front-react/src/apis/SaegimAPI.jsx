@@ -62,3 +62,15 @@ export const getSaegimNearMe = async (data) => {
     return [];
   }
 };
+
+export const delSaegim = async (id) => {
+  console.log(id)
+  const _res = await axios ({
+    method: 'delete',
+    url: `${BASE_URL}/saegims/${id}`,
+    params: {
+      saegimid: id
+    }
+  })
+  return _res.data.data;
+}

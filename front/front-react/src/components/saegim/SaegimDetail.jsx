@@ -81,11 +81,13 @@ class SaegimDetail extends Component {
         <Comments>
           <div>댓 글 자 리 </div>
         </Comments>
-        <div onClick={this.goBack} >
-          <ArrowBack />
-        </div>
-        <SaegimDetailButton />
       </Communication>
+      <BackButton onClick={this.goBack} >
+        <ArrowBack />
+      </BackButton>
+      <StButton>
+        <SaegimDetailButton id={this.props.match.params.id}/>
+      </StButton>
       </Wrapper>
       </Zoom>
     );
@@ -180,3 +182,15 @@ const Likes = styled.div`
 const Comments = styled.div`
   padding: 16px
 `
+
+const StButton = styled.div`
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
+`;
+
+const BackButton= styled.div`
+  position: absolute;
+  bottom: 10%;
+  left: 5%;
+`;
