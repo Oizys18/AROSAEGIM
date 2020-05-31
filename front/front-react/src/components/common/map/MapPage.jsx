@@ -6,7 +6,8 @@ import {Map, Streetview} from '@material-ui/icons';
 import {FlexColumn} from '../../../styles/DispFlex';
 import DefaultButton from "../buttons/DefaultButton";
 
-import {Storage} from '../../../storage/Storage'
+import {Storage} from '../../../storage/Storage';
+import SearchBar from "../search/SearchBar";
 import MapView from './MapView';
 import MapListItem from "./MapListItem";
 import RoadView from './RoadView';
@@ -245,8 +246,10 @@ class MapPage extends Component {
 
     return(
       <StMapCont height={this.context.appHeight}>
+        <SearchBar/>
         <Slide in={true} direction={_dir}>
         <StViewCont>
+          
             <StBtnCont>
               <IconButton disableRipple onClick={this.tglView}>{this.changeIcon()}</IconButton>
             </StBtnCont>
