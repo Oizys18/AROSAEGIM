@@ -89,7 +89,11 @@ class Comment extends Component{
           {PrintComment}
         </StCommentList>
           { !this.state.ovfl &&
+            this.state.comments.length > 5 &&
             <MoreView onClick={this.handleClick}>더보기</MoreView>
+          }
+          { this.state.comments.length < 1 &&
+            <StDescription>첫 되새김을 남겨주세요.</StDescription>
           }
         <StCommentInput>
           <CommentInput value={this.state.contents} onChange={this.handleInput} />
@@ -119,4 +123,10 @@ const MoreView = styled.div`
   margin: 8px 0 0 16px;
   font-size: 0.9rem;
   color: #818181;
+`;
+
+const StDescription = styled.div`
+  font-size: 0.9rem;
+  color: #818181;
+  margin-left: 16px;
 `;
