@@ -12,7 +12,7 @@ import Switch from "../common/switch/Switch";
 import axios from "axios";
 import PhotoIcon from "@material-ui/icons/AddPhotoAlternate";
 import { getUserByEmail } from "../../apis/AccountAPI";
-import { Storage } from "../../storage/Storage"
+import { Storage } from "../../storage/Storage";
 
 class WriteSaegim extends Component {
   constructor(props) {
@@ -26,10 +26,26 @@ class WriteSaegim extends Component {
       locked: 0,
       tags: [],
       error: 0,
-      image: null,
-      userInfo: {}
+      userInfo: {},
+      imgBase64: [],
     };
+    this.inputReference = React.createRef();
   }
+
+  fileUploadAction = () => this.inputReference.current.click();
+
+  fileUploadInputChange = async (e) => {
+    e.preventDefault();
+    const _reader = new FileReader();
+    const _imgFile = e.target.files[0];
+    _reader.readAsDataURL(_imgFile);
+    _reader.onloadend = () => {
+      this.setState({
+        imgBase64: this.state.imgBase64.concat(_reader.result),
+      });
+    };
+  };
+
   handleChange = (data) => {
     this.props.changeWrite(data);
   };
@@ -75,12 +91,13 @@ class WriteSaegim extends Component {
   writePost = () => {
     const data = {
       contents: this.state.text,
+      imageSources: this.state.imgBase64,
       latitude: this.state.location[0],
       longitude: this.state.location[1],
       secret: this.state.locked,
-      tags: ["test"],
+      tags: this.state.tags,
       userId: this.state.userInfo.id,
-      userName: "hello",
+      userName: this.state.userInfo.name,
       w3w: this.state.w3w,
     };
     if (this.state.text) {
@@ -88,7 +105,6 @@ class WriteSaegim extends Component {
         .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
         .then((res) => {
           this.handleChange(res.data);
-          // console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -102,7 +118,6 @@ class WriteSaegim extends Component {
     this.setState({ error: 0 });
   };
   changeSwitch = () => {
-    // console.log(this.state.locked);
     if (this.state.locked) {
       this.setState({ locked: 0 });
     } else {
@@ -111,7 +126,6 @@ class WriteSaegim extends Component {
   };
   createTag = (newTag) => {
     this.setState({ tags: this.state.tags.concat(newTag) });
-    // console.log(this.state.tags);
   };
 
   getUserInfo = async () => {
@@ -120,9 +134,9 @@ class WriteSaegim extends Component {
     //     userInfo: (await getUserByEmail(_email)).data
     //   })
     this.setState({
-      userInfo: this.context.userInfo
-    })
-  }
+      userInfo: this.context.userInfo,
+    });
+  };
 
   render() {
     const ErrorMsg = () => {
@@ -163,7 +177,15 @@ class WriteSaegim extends Component {
           </Bottom>
         </Container>
         <CreateWrapper>
-          <CreateImg onClick={() => console.log("img!")}>
+          <input
+            type="file"
+            hidden
+            id="imgUpload"
+            accept="image/*"
+            ref={this.inputReference}
+            onChange={this.fileUploadInputChange}
+          />
+          <CreateImg onClick={this.fileUploadAction}>
             <PhotoIcon />
           </CreateImg>
           <CreateTag onClick={() => this.createTag("hello")}>
@@ -179,7 +201,6 @@ class WriteSaegim extends Component {
 }
 export default WriteSaegim;
 WriteSaegim.contextType = Storage;
-
 
 const Error = styled.div`
   color: red;
