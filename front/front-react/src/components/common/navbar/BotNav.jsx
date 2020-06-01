@@ -14,27 +14,29 @@ class BotNav extends Component {
       sildeIn: true,
     }
   }
+  
+  setStateAsync(state) {return new Promise(resolve => {this.setState(state, resolve)})}
 
-  toggle = () => {
-    if(this.props.appH !== window.innerHeight){
-      this.setState({ sildeIn: false })
-    }
-    else{
-      this.setState({ sildeIn: true })
-    }
-  }
-
-  componentDidUpdate(){
+  componentDidMount(){
     window.addEventListener('resize', this.toggle)
+    document.addEventListener('click', this.toggle)
   }
   componentWillUnmount(){
     window.removeEventListener('resize', this.toggle)
+    document.removeEventListener('click', this.toggle)
   }
-
-  setStateAsync(state) {
-    return new Promise(resolve => {
-      this.setState(state, resolve);
-    });
+  
+  toggle = () => {
+    if(this.props.appH !== window.innerHeight){ this.setState({ sildeIn: false }) }
+    else{
+      if(this.props.location.pathname === '/map'){
+        if(document.getElementById('roadView'))
+          this.setState({ sildeIn: false })
+        else 
+          this.setState({ sildeIn: true }) 
+      }
+      else this.setState({ sildeIn: true }) 
+    }
   }
 
   handlePage = async (e) => {
@@ -42,7 +44,6 @@ class BotNav extends Component {
       await this.setStateAsync({
         curPage: this.props.location.pathname
       })
-      
     }
   }
 
@@ -50,7 +51,6 @@ class BotNav extends Component {
     const _pathname = this.props.location.pathname
     return(
       <Slide in={this.state.sildeIn} direction='up' timeout={this.state.sildeIn ? 500 : 100}>
-      {/* <Slide in={true} direction='up' timeout={500}> */}
         <StNavCont>
 
           <Zoom in={true} timeout={500}>

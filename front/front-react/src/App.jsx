@@ -6,7 +6,7 @@ import { Slide } from '@material-ui/core'
 import { Storage } from "./storage/Storage";
 import Loading from "./components/common/background/Loading";
 import Background from "./components/common/background/Background";
-import TopBar from "./components/common/menus/TopBar";
+import TopBar from "./components/common/navbar/TopBar";
 // import SearchBar from "./components/common/search/SearchBar";
 import SideMenu from "./components/common/menus/SideMenu";
 import BotNav from "./components/common/navbar/BotNav";
@@ -46,11 +46,7 @@ class App extends Component {
     };
   }
 
-  setStateAsync(state) {
-    return new Promise((resolve) => {
-      this.setState(state, resolve);
-    });
-  }
+  setStateAsync(state) { return new Promise((resolve) => { this.setState(state, resolve) }) }
 
   async componentDidMount(){
     const _autoLogin = localStorage.getItem('ARSG autoLogin')
@@ -151,9 +147,6 @@ class App extends Component {
             <Slide in={this.props.location.pathname !== "/map"} direction="down" unmountOnExit mountOnEnter>
               <TopBar on={this.state.sideMenu} toggle={this.toggleSideMenu}/>
             </Slide>
-            {/* <Slide in={this.props.location.pathname === "/map"} direction="down" unmountOnExit mountOnEnter>
-              <SearchBar/>
-            </Slide> */}
 
             <SideMenu
               on={this.state.sideMenu}
