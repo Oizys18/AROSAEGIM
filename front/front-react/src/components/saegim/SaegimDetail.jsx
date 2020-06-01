@@ -8,6 +8,8 @@ import * as SA from "../../apis/SaegimAPI"
 import Time from "../common/time/Time";
 import Chip from "../common/chip/Chip"
 import { Zoom } from "@material-ui/core";
+import SaegimDetailButton from "./SaegimDetailButton";
+import {getUserByEmail} from "../../apis/AccountAPI";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -15,7 +17,8 @@ class SaegimDetail extends Component {
     this.state = {
       data: {
         tags: []
-      }
+      },
+      userId: ""
     };
     this.goBack = this.goBack.bind(this);
   }
@@ -30,7 +33,12 @@ class SaegimDetail extends Component {
   }
 
   async componentDidMount() {
+    const _email = localStorage.getItem('ARSG email')
+    this.setState({
+        userId: (await getUserByEmail(_email)).data.id
+      })
     await this.getSaegimDetail();
+    console.log(this.state.data)
   }
 
   setStateAsync(state) {
@@ -80,10 +88,15 @@ class SaegimDetail extends Component {
         <Comments>
           <div>댓 글 자 리 </div>
         </Comments>
-        <div onClick={this.goBack} >
-          <ArrowBack />
-        </div>
       </Communication>
+      <BackButton onClick={this.goBack} >
+        <ArrowBack />
+      </BackButton>
+        {this.state.userId === this.state.data.userId &&
+          <StButton>
+            <SaegimDetailButton id={this.props.match.params.id}/>
+          </StButton>
+        }
       </Wrapper>
       </Zoom>
     );
@@ -178,3 +191,15 @@ const Likes = styled.div`
 const Comments = styled.div`
   padding: 16px
 `
+
+const StButton = styled.div`
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
+`;
+
+const BackButton= styled.div`
+  position: absolute;
+  bottom: 10%;
+  left: 5%;
+`;
