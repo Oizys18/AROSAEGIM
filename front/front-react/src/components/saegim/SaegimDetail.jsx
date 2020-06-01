@@ -11,6 +11,7 @@ import { Zoom } from "@material-ui/core";
 import SaegimDetailButton from "./SaegimDetailButton";
 import {getUserByEmail} from "../../apis/AccountAPI";
 import Comment from "./Comment";
+import Like from "./Like";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -19,9 +20,11 @@ class SaegimDetail extends Component {
       data: {
         tags: []
       },
-      userId: ""
+      userId: "",
+      updateFlagByLike: false
     };
     this.goBack = this.goBack.bind(this);
+    this.setUpdateLike = this.setUpdateLike.bind(this);
   }
 
   goBack() {
@@ -43,6 +46,12 @@ class SaegimDetail extends Component {
     console.log(this.props)
   }
 
+  setUpdateLike(flag) {
+    this.setState({
+      updateFlagByLike: flag
+    })
+  }
+
   setStateAsync(state) {
     return new Promise((resolve) => {
       this.setState(state, resolve);
@@ -51,6 +60,14 @@ class SaegimDetail extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.data.tags !== prevState.tags) {
+    }
+    if (this.state.updateFlagByLike === true) {
+      this.getSaegimDetail()
+      this.setState({
+        updateFlagByLike: false
+      })
+      console.log('디테일 다시 가져옴')
+      console.log(this.state.data.likes)
     }
   }
 
@@ -84,7 +101,12 @@ class SaegimDetail extends Component {
           <Communication>
             <Likes>
               <div>{this.state.data.userName}</div>
-              <div>공감</div>
+              <div>
+                <Like
+                  setUpdateLike={this.setUpdateLike}
+                  id={this.props.match.params.id}
+                  likes={this.state.data.likes}/>
+              </div>
             </Likes>
             <Comments>
               <Comment id={this.props.match.params.id} />

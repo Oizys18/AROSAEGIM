@@ -1,18 +1,6 @@
 import axios from "axios";
-import { getUserByEmail } from "./AccountAPI";
 
 const BASE_URL =  process.env.REACT_APP_BASE_URL
-const userEmail = localStorage.getItem('ARSG email')
-
-const getUserInfo = async (email) => {
-  const _res = await getUserByEmail(email)
-  const _user = {
-    userId: _res.id,
-    userName: _res.name
-  };
-  return _user
-}
-
 
 export const getCommentBySaegim = async (id) => {
   console.log(id)
