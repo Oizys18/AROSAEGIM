@@ -240,7 +240,9 @@ class MapPage extends Component {
 
   render(){
     let _dir = 'left'
-    if(this.context.curPage === '/write'){
+    if(this.context.curPage === '/write' || 
+       this.context.curPage === '/login' || 
+       this.context.curPage === '/signup'){
       _dir = 'right'
     }
 
@@ -249,7 +251,7 @@ class MapPage extends Component {
 
         <SearchBar on={!this.state.roadView}/>
         
-        <Slide in={true} direction={_dir}>
+        <Slide in={true} direction={_dir} timeout={400}>
         <StViewCont>
           
             <StBtnCont>

@@ -16,26 +16,24 @@ class SearchBar extends Component {
     }
   }
 
-  openSelect = (e) => {
-    this.setState({ 
-      selectOpen: !this.state.selectOpen 
-    })
+  openSelect = () => {
+    this.setState({ selectOpen: true })
   }
+  closeSelect = () => {
+    this.setState({ selectOpen: false })
+  }
+
   handleSelect = (e) => {
-    this.setState({
-      select: e.currentTarget.id,
-      selectOpen: !this.state.selectOpen
-    })
+    this.closeSelect()
+    this.setState({ select: e.currentTarget.id })
   }
 
   handleInput = (e) => {
-    this.setState({
-      value: e.currentTarget.value
-    })
+    this.setState({ value: e.currentTarget.value })
   }
 
   handleSearch = (e) => {
-
+    this.closeSelect()
   }
 
   render(){
@@ -58,6 +56,7 @@ class SearchBar extends Component {
             
             <InputBase 
               placeholder={this.state.select === '장소' ? '장소 검색' : '지도 내에서 새김 검색'}
+              onClick={this.closeSelect}
               onChange={this.handleInput}
             />
             
