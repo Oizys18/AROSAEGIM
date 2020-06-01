@@ -10,7 +10,7 @@ import Chip from "../common/chip/Chip"
 import { Zoom } from "@material-ui/core";
 import SaegimDetailButton from "./SaegimDetailButton";
 import {getUserByEmail} from "../../apis/AccountAPI";
-import CommentList from "./CommentList";
+import Comment from "./Comment";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -87,7 +87,7 @@ class SaegimDetail extends Component {
               <div>공감</div>
             </Likes>
             <Comments>
-              <div><CommentList id={this.props.match.params.id}/></div>
+              <Comment id={this.props.match.params.id} />
             </Comments>
           </Communication>
           <BackButton onClick={this.goBack}>

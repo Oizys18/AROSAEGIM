@@ -10,6 +10,7 @@ class CommentInput extends Component{
     return (
         <StInput
           type='text'
+          placeholder='추억을 함께 되새기세요.'
           value={this.props.value}
           onChange={this.props.onChange}
         />

@@ -27,16 +27,16 @@ export const getCommentBySaegim = async (id) => {
   return _res.data.data;
 }
 
-export const writeComment = async (data, id) => {
+export const writeComment = async (data, id, userInfo) => {
   const saegimId = id
-  const userInfo = await getUserByEmail(userEmail)
+  // const userInfo = await getUserByEmail(userEmail)
   console.log(userInfo)
   const _data = {
     contents: data.contents,
     regDate: new Date(),
     saegimId: saegimId,
-    userId: userInfo.data.id,
-    userName: userInfo.data.name
+    userId: userInfo.id,
+    userName: userInfo.name
   }
   console.log(_data)
   const _res = await axios({
