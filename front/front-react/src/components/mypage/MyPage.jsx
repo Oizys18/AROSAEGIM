@@ -46,18 +46,22 @@ class MyPage extends Component {
   };
 
   getData = async () => {
+    console.log(this.state.currentTab)
     const _userId = this.state.userInfo.id
-    let _data = []
     if (this.state.currentTab === 0) {
-      const _data = await getCreatedSaegim(_userId)
+      await this.setState({
+        data: await getCreatedSaegim(_userId)
+      })
     } else if (this.state.currentTab === 1) {
-      const _data = await getLikedSaegim(_userId)
-    } else {
-      const _data = await getCommentedSaegim(_userId)
+      await this.setState({
+        data: await getLikedSaegim(_userId)
+      })
+    } else if (this.state.currentTab === 2) {
+      await this.setState({
+        data: await getCommentedSaegim(_userId)
+      })
     }
-    await this.setState({
-      data: _data
-    })
+    console.log(this.state.data)
   }
 
   async componentDidMount() {
@@ -73,6 +77,7 @@ class MyPage extends Component {
       this.state[MyPageMenu[this.state.currentTab].value] !== prevState[MyPageMenu[this.state.currentTab].value]
     ) {
       this.getData()
+      console.log(this.state.data)
     }
   }
 
