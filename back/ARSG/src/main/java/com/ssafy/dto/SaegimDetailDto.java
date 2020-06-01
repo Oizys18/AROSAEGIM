@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
-import org.modelmapper.convention.MatchingStrategies;
 
 import com.ssafy.entity.Saegim;
 import com.ssafy.util.UtilFactory;
@@ -40,13 +39,13 @@ public class SaegimDetailDto {
     private Double longitude;
 	@NonNull
     private String w3w;
-    private String image;
     private String record;
     private Integer secret;
     
 	private List<LikesDto> likes = new ArrayList<LikesDto>();
     private List<HashtagDto> tags = new ArrayList<HashtagDto>(); 
     private List<CommentDto> comments = new ArrayList<CommentDto>();
+    private List<ImageDto> images = new ArrayList<ImageDto>();
     
     public static SaegimDetailDto of(Saegim saegim) {
     	PropertyMap<Saegim, SaegimDetailDto> saegimDetailMap = new PropertyMap<Saegim, SaegimDetailDto>() {
@@ -72,6 +71,13 @@ public class SaegimDetailDto {
     			.collect(Collectors.toList());
     			
     			map().setComments(commentDto);
+
+    			List<ImageDto> ImageDtos
+    			= saegim.getImages().stream()
+    			.map(image->ImageDto.of(image))
+    			.collect(Collectors.toList());
+    			
+    			map().setImages(ImageDtos);
     		}
     	};
     	ModelMapper modelMapper = UtilFactory.getModelMapper();
