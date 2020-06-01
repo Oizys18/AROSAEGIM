@@ -5,6 +5,8 @@ import CardItem from "./CardItem";
 import styled from "styled-components";
 import * as SA from "../../apis/SaegimAPI"
 import { Zoom, Slide } from "@material-ui/core";
+import MyPageMenu from "../mypage/MyPageMenu";
+import Select from "@material-ui/core/Select";
 
 class SaegimListPage extends Component {
   constructor(props) {
@@ -13,42 +15,16 @@ class SaegimListPage extends Component {
       location:
         [37.498584699999995, 127.0337029]
       ,
-      // data: [
-      //   {
-      //     id: 1,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 2,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 3,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 4,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 5,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 6,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 7,
-      //     contents: '내 용 자 리'
-      //   },
-      //   {
-      //     id: 8,
-      //     contents: '내 용 자 리'
-      //   }
-      // ],
+      options: [
+        { value: 100, text: '100m', idx: 0},
+        { value: 500, text: '500m', idx: 1},
+        { value: 1000, text: '1km', idx: 2}
+      ],
+      selectedOption: 0,
+      distance: 100,
       data: []
     }
+    this.selectChange = this.selectChange.bind(this);
   }
 
   changeData = () => {
@@ -59,8 +35,19 @@ class SaegimListPage extends Component {
     })
   }
 
+  async selectChange(e) {
+    await this.setState({
+      selectedOption: e.target.value,
+    })
+    await this.setState({
+      distance: this.state.options[this.state.selectedOption].value
+    })
+    console.log('범위 바꿈')
+    console.log(this.state)
+  }
+
   getSaegimList = async () => {
-    const _data = await SA.getSaegimListByLocation(this.state.location)
+    const _data = await SA.getSaegimListByLocation(this.state.location, this.state.distance)
     this.setState({
       data: _data
     })
@@ -94,6 +81,15 @@ class SaegimListPage extends Component {
   componentDidMount() {
     this.getCurrentLocation()
     // this.getSaegimList()
+    console.log(this.state.options[this.state.selectedOption].text)
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.distance !== prevState.distance) {
+      this.getSaegimList()
+      console.log('리스트 새로 받음')
+      console.log(this.state)
+    }
   }
 
   render() {
@@ -115,8 +111,22 @@ class SaegimListPage extends Component {
       )
     });
 
+    const PrintOptions = this.state.options.map((option) => {
+        return (
+          <option value={option.idx} key={option.idx}>{option.text}</option>
+        )
+      }
+    );
+
     return (
       <StCont>
+        <StSelect
+          autowidth
+          value={this.state.distance}
+          onChange={this.selectChange}
+        >
+          {PrintOptions}
+        </StSelect>
         <Slide in={true} direction={_dir}>
           <Wrapper height={this.context.appHeight}>
             <StList>
@@ -150,3 +160,11 @@ const Wrapper = styled.div `
 const StList = styled.div `
   margin-top: 48px;
 `
+
+const StSelect = styled(Select)`
+  font-size: 0.9rem;
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  color: white;
+`;

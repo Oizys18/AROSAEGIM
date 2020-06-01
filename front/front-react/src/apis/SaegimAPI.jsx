@@ -2,14 +2,14 @@ import axios from "axios";
 
 const BASE_URL =  process.env.REACT_APP_BASE_URL
 
-export const getSaegimListByLocation = async (latlng) => {
+export const getSaegimListByLocation = async (latlng, meter) => {
   const [ lat, lng ] = latlng
-  const meter = 50
+  const _meter = meter
   console.log(latlng, lat, lng)
   const _data = {
     lat: lat,
     lng: lng,
-    meter: meter
+    meter: _meter
   }
   console.log(_data)
   const _res = await axios({
