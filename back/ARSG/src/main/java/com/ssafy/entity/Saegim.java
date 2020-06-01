@@ -11,7 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.dto.SaegimFormDto;
 import com.ssafy.util.UtilFactory;
 
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,8 +36,8 @@ import lombok.Setter;
 @Table(name = "saegim")
 @Transactional
 public class Saegim {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue
+    @ApiParam(hidden = true)
     private Long id;
     
     @NonNull

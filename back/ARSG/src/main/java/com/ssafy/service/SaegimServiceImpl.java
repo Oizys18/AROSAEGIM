@@ -59,15 +59,10 @@ public class SaegimServiceImpl implements SaegimService {
 	@Override
 	public SaegimDetailDto getDetailBySaegimId(long saegimId) {
 		Saegim saegim = saegimRepository.findById(saegimId);
-		saegim.setLikes(
-				likesRepository.findBySaegimId(
-						saegimId));
-		saegim.setTaggings(
-				taggingRepository.findBySaegimId(
-						saegimId));
-		saegim.setComments(
-				commentRepository.findBySaegimId(
-						saegimId));
+		saegim.setLikes(likesRepository.findBySaegimId(saegimId));
+		saegim.setTaggings(taggingRepository.findBySaegimId(saegimId));
+		saegim.setComments(commentRepository.findBySaegimId(saegimId));
+		saegim.setImages(imageRepository.findBySaegimId(saegimId));
 		return SaegimDetailDto.of(saegim);
 //				.orElseThrow(() -> 
 //        		new RestException(HttpStatus.NOT_FOUND, "Not found board"));
@@ -86,24 +81,22 @@ public class SaegimServiceImpl implements SaegimService {
 		Saegim saegim = Saegim.of(saegimFormDto);
 		saegim = saegimRepository.save(saegim);
 		long sId = saegim.getId();
-		System.out.println("============= saegim ID =============");
-		System.out.println("sId : " + sId);
-		System.out.println("============= saegim ID =============");
 		List<Tagging> taggings = new ArrayList<Tagging>();
 		for (Hashtag hashtag : tags) {
 			Tagging tagging = new Tagging(hashtag.getId(), sId);
 			taggingRepository.save(tagging);
 			taggings.add(tagging);
 		}
-		for (String img : saegimFormDto.getImages()) {
+		for (String img : saegimFormDto.getImageSources()) {
 			imageRepository.save(new Image(sId, img));
 		}
-		return getSaegimBySaegimId(saegim.getId());
+		return getSaegimBySaegimId(sId);
 	}
 	@Override
 	public List<SaegimDto> getSaegimsByUserId(long userId) {
 		List<Saegim> saegimList = saegimRepository.findByUserId(userId);
 		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
+		saegimList.forEach(saegim->saegim.setImages(imageRepository.findBySaegimId(saegim.getId())));
 		return saegimList.stream()
 				.map(saegim->SaegimDto.of(saegim))
 				.collect(Collectors.toList());
@@ -112,6 +105,7 @@ public class SaegimServiceImpl implements SaegimService {
 	public List<SaegimDto> getSaegims() {
 		List<Saegim> saegimList = saegimRepository.findAll();
 		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
+		saegimList.forEach(saegim->saegim.setImages(imageRepository.findBySaegimId(saegim.getId())));
 		return saegimList.stream()
 				.map(saegim->SaegimDto.of(saegim))
 				.collect(Collectors.toList());
@@ -129,6 +123,7 @@ public class SaegimServiceImpl implements SaegimService {
 				saegimList.add(saegim);
 		}
 		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
+		saegimList.forEach(saegim->saegim.setImages(imageRepository.findBySaegimId(saegim.getId())));
 		return saegimList.stream()
 				.map(saegim->SaegimDto.of(saegim))
 				.collect(Collectors.toList());
@@ -149,6 +144,10 @@ public class SaegimServiceImpl implements SaegimService {
 				hashtagRepository.save(ht);
 			}
 			tags.add(ht);
+		}
+		imageRepository.removeBysaegimId(saegimId);
+		for (String img : saegimFormDto.getImageSources()) {
+			imageRepository.save(new Image(saegimId, img));
 		}
 		Saegim saegim = Saegim.of(saegimFormDto);
 		saegim.setId(saegimId);

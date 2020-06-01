@@ -15,5 +15,7 @@ public interface ImageRepository extends JpaRepository<Image, Integer> {
 	List<Image> findAll();
 	
 	@Transactional
-	void removeById(Long commentId);
+	void removeById(Long imageId);
+	@Transactional
+	void removeBysaegimId(Long saegimId);
 }
