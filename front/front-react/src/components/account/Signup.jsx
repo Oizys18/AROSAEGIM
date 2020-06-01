@@ -9,7 +9,6 @@ import BackBtn from  '../common/buttons/BackBtn';
 import ImgUp from '../common/image/ImgUp';
 import ImgCrop from '../common/image/ImgCrop';
 import UserInput from '../common/inputs/UserInput';
-import Modal from '../common/modal/Modal';
 import * as AM from './AccountMethod';
 import * as AS from '../../styles/account/AccountStyles';
 import * as AA from '../../apis/AccountAPI';
@@ -85,6 +84,13 @@ class Signup extends Component {
       cropedImgBase64: croped,
     })
   }
+  cancelCrop = () => {
+    this.setState({ 
+      imgFile: '', 
+      imgBase64: '', 
+      cropMode: false, 
+    })
+  }
 
   handleInput = async (e) => {
     if(e.currentTarget.id === 'email'){
@@ -152,9 +158,13 @@ class Signup extends Component {
     if(AM.checkAllValid('signup', this.state)){
       const _resData = await AA.signup(this.state)
       console.log(_resData)
+      if(_resData.state === 'success'){
+        this.props.history.replace('/login')
+      }
     }
     else{
-      this.setState({ alertModal: true })
+      // this.setState({ alertModal: true })
+      this.context.popModal( `입력이\n올바르지 않습니다!`, 'signup', 'alert')
     }
   }
 
@@ -166,86 +176,78 @@ class Signup extends Component {
   render(){
     
     return(
-      <Slide in={this.state.slideIn} direction="left">
-        <AS.StFormCont height={this.context.appHeight}>
-          
-          {/* <AS.StBackBtn onClick={this.handleBack}>
-            <ArrowBack/>
-          </AS.StBackBtn> */}
+      <AS.StWraper height={this.context.appHeight}>
+        <BackBtn handleBack={this.handleBack}/>
+        
+        <Slide in={this.state.slideIn} direction="left">
+          <AS.StFormCont>
 
-          <BackBtn handleBack={this.handleBack}/>
-
-          <ImgUp signup 
-            imgBase64={this.state.imgBase64}
-            imgUpload={this.imgUpload}
-            cropedImgBase64={this.state.cropedImgBase64}
-          />
-
-          {
-            this.state.cropMode &&
-            <ImgCrop 
-              imgFile={this.state.imgFile} 
+            <ImgUp signup 
               imgBase64={this.state.imgBase64}
-              imgW={this.state.imgW}
-              imgH={this.state.imgH}
-              mode={"profile"}
-              apply={this.imgCrop}
-              cancel={() => {this.setState({ imgFile: '', imgBase64: '', cropMode: false, })}}
+              imgUpload={this.imgUpload}
+              cropedImgBase64={this.state.cropedImgBase64}
             />
-          }
 
-          <UserInput 
-            id='email' 
-            value={this.state.email}
-            label={this.state.emailLabel} 
-            valid={this.state.emailValid}
-            onChange={this.handleInput}
-            icon={this.changeIcon('email')} 
-          />
+            {
+              this.state.cropMode &&
+              <ImgCrop 
+                imgFile={this.state.imgFile} 
+                imgBase64={this.state.imgBase64}
+                imgW={this.state.imgW}
+                imgH={this.state.imgH}
+                mode={"profile"}
+                apply={this.imgCrop}
+                cancel={this.cancelCrop}
+              />
+            }
 
-          <UserInput 
-            id='pw' 
-            value={this.state.pw} 
-            label={this.state.pwLabel} 
-            valid={this.state.pwValid}
-            onChange={this.handleInput}
-            icon={this.changeIcon('pw')} 
-          />
+            <UserInput 
+              id='email' 
+              value={this.state.email}
+              label={this.state.emailLabel} 
+              valid={this.state.emailValid}
+              onChange={this.handleInput}
+              icon={this.changeIcon('email')} 
+            />
 
-          <UserInput 
-            id='pwCheck' 
-            value={this.state.pwCheck} 
-            label={this.state.pwCheckLabel} 
-            valid={this.state.pwCheckValid}
-            onChange={this.handleInput}
-            icon={this.changeIcon('pwCheck')} 
-          />
+            <UserInput 
+              id='pw' 
+              value={this.state.pw} 
+              label={this.state.pwLabel} 
+              valid={this.state.pwValid}
+              onChange={this.handleInput}
+              icon={this.changeIcon('pw')} 
+            />
 
-          <UserInput 
-            id='nickName' 
-            value={this.state.nickName} 
-            label={this.state.nickNameLabel} 
-            valid={this.state.nickNameValid}
-            onChange={this.handleInput}
-            icon={this.changeIcon('nickName')} 
-          />
-          
-          <AS.StBtnCont>
-            <AS.StBtn text="가입" onClick={this.handleSubmit}/>
-          </AS.StBtnCont>
+            <UserInput 
+              id='pwCheck' 
+              value={this.state.pwCheck} 
+              label={this.state.pwCheckLabel} 
+              valid={this.state.pwCheckValid}
+              onChange={this.handleInput}
+              icon={this.changeIcon('pwCheck')} 
+            />
 
-          <AS.StLinkCont>
-            <Link to='/login' replace>로그인</Link>
-          </AS.StLinkCont>
+            <UserInput 
+              id='nickName' 
+              value={this.state.nickName} 
+              label={this.state.nickNameLabel} 
+              valid={this.state.nickNameValid}
+              onChange={this.handleInput}
+              icon={this.changeIcon('nickName')} 
+            />
+            
+            <AS.StBtnCont>
+              <AS.StBtn text="가입" onClick={this.handleSubmit}/>
+            </AS.StBtnCont>
 
-          <Modal
-            on={this.state.alertModal} 
-            msg={`입력이\n올바르지 않습니다.`}
-            click={() => { this.setState({ alertModal:false }) }} 
-          />
+            <AS.StLinkCont>
+              <Link to='/login' replace>로그인</Link>
+            </AS.StLinkCont>
 
-        </AS.StFormCont>
-      </Slide>
+          </AS.StFormCont>
+        </Slide>
+      </AS.StWraper>
     )
   }
 } export default Signup;

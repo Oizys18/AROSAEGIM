@@ -11,7 +11,24 @@ class BotNav extends Component {
     super(props);
     this.state={
       curPage: this.props.location.pathname,
+      sildeIn: true,
     }
+  }
+
+  toggle = () => {
+    if(this.props.appH !== window.innerHeight){
+      this.setState({ sildeIn: false })
+    }
+    else{
+      this.setState({ sildeIn: true })
+    }
+  }
+
+  componentDidUpdate(){
+    window.addEventListener('resize', this.toggle)
+  }
+  componentWillUnmount(){
+    window.removeEventListener('resize', this.toggle)
   }
 
   setStateAsync(state) {
@@ -30,25 +47,27 @@ class BotNav extends Component {
   }
 
   render(){
+    const _pathname = this.props.location.pathname
     return(
-      <Slide in={true} direction='up' timeout={500}>
+      <Slide in={this.state.sildeIn} direction='up' timeout={this.state.sildeIn ? 500 : 100}>
+      {/* <Slide in={true} direction='up' timeout={500}> */}
         <StNavCont>
 
           <Zoom in={true} timeout={500}>
-            <StBtn id="list" onClick={this.props.changePage} disableRipple>
-              <Dashboard fontSize={this.props.location.pathname === '/list' ? 'large' : 'default'}/>
+            <StBtn id="list" disableRipple onClick={this.props.changePage} clicked={_pathname === '/list' ? 'clicked' : 'none'}>
+              <Dashboard fontSize={_pathname === '/list' ? 'large' : 'default'}/>
             </StBtn>
           </Zoom>
 
           <Zoom in={true} timeout={500}>
-            <StBtn id="map" onClick={this.props.changePage} disableRipple>
-              <Explore fontSize={this.props.location.pathname === '/map' ? 'large' : 'default'}/>
+            <StBtn id="map" disableRipple onClick={this.props.changePage} clicked={_pathname === '/map' ? 'clicked' : 'none'}>
+              <Explore fontSize={_pathname === '/map' ? 'large' : 'default'}/>
             </StBtn>
           </Zoom>
 
           <Zoom in={true} timeout={500}>
-            <StBtn id="write" onClick={this.props.changePage} disableRipple>
-              <Create fontSize={this.props.location.pathname === '/write' ? 'large' : 'default'}/>
+            <StBtn id="write" disableRipple onClick={this.props.changePage} clicked={_pathname === '/write' ? 'clicked' : 'none'}>
+              <Create fontSize={_pathname === '/write' ? 'large' : 'default'}/>
             </StBtn>
           </Zoom>
 
@@ -66,10 +85,14 @@ const StNavCont = styled(FlexRow)`
   bottom: 0;
   width: 100vw;
   height: 56px;
-  background: #f2f2f2;
+  background: rgba(0, 0, 0, 0.7);
+  /* background: rgba(242, 242, 242, 0.5); */
+  /* background: #f2f2f2; */
 `;
 
 const StBtn = styled(IconButton)`
   width: 56px;
   height: 56px;
+
+  color: rgba(255, 255, 255, ${ props => props.clicked === 'clicked' ? 1 : 0.5 });
 `;

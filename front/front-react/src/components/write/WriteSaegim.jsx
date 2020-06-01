@@ -10,6 +10,9 @@ import CreateIcon from "@material-ui/icons/Create";
 import CtoW from "../../apis/w3w";
 import Switch from "../common/switch/Switch";
 import axios from "axios";
+import PhotoIcon from "@material-ui/icons/AddPhotoAlternate";
+import { getUserByEmail } from "../../apis/AccountAPI";
+import { Storage } from "../../storage/Storage"
 
 class WriteSaegim extends Component {
   constructor(props) {
@@ -23,7 +26,8 @@ class WriteSaegim extends Component {
       locked: 0,
       tags: [],
       error: 0,
-      image:null,
+      image: null,
+      userInfo: {}
     };
   }
   handleChange = (data) => {
@@ -52,6 +56,7 @@ class WriteSaegim extends Component {
           });
 
           this.getWWW(_lat, _lng);
+          this.getUserInfo();
         },
         function(error) {
           console.error(error);
@@ -74,7 +79,7 @@ class WriteSaegim extends Component {
       longitude: this.state.location[1],
       secret: this.state.locked,
       tags: ["test"],
-      userId: 1,
+      userId: this.state.userInfo.id,
       userName: "hello",
       w3w: this.state.w3w,
     };
@@ -108,6 +113,17 @@ class WriteSaegim extends Component {
     this.setState({ tags: this.state.tags.concat(newTag) });
     // console.log(this.state.tags);
   };
+
+  getUserInfo = async () => {
+    // const _email = localStorage.getItem('ARSG email')
+    // this.setState({
+    //     userInfo: (await getUserByEmail(_email)).data
+    //   })
+    this.setState({
+      userInfo: this.context.userInfo
+    })
+  }
+
   render() {
     const ErrorMsg = () => {
       if (this.state.error) {
@@ -147,6 +163,9 @@ class WriteSaegim extends Component {
           </Bottom>
         </Container>
         <CreateWrapper>
+          <CreateImg onClick={() => console.log("img!")}>
+            <PhotoIcon />
+          </CreateImg>
           <CreateTag onClick={() => this.createTag("hello")}>
             <LocalOfferIcon />
           </CreateTag>
@@ -159,6 +178,9 @@ class WriteSaegim extends Component {
   }
 }
 export default WriteSaegim;
+WriteSaegim.contextType = Storage;
+
+
 const Error = styled.div`
   color: red;
   font-size: 10px;
@@ -201,17 +223,23 @@ const CreateWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   display: flex;
+  margin-top: 10px;
 `;
 const CreateTag = styled(IconButton)`
+  color: default;
   background: white;
   padding: 0.25em;
-  margin-top: 10px;
   margin-right: 10px;
 `;
 const CreateButton = styled(IconButton)`
   background: white;
   padding: 0.25em;
-  margin-top: 10px;
+`;
+
+const CreateImg = styled(IconButton)`
+  background: white;
+  padding: 0.25em;
+  margin-right: 10px;
 `;
 
 const Tag = styled(IconButton)`

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 // import Zoom from "@material-ui/core/Zoom";
 import { Zoom, Slide } from "@material-ui/core";
+import {Storage} from '../../storage/Storage'
 import WriteSaegim from "./WriteSaegim";
 import WriteComplete from "./WriteComplete";
 
@@ -27,25 +28,34 @@ class Write extends Component {
       }
     };
     return (
-      <Slide in={true} direction="left">
-        <Wrapper>
-          <Container>
-            <Written />
-          </Container>
-        </Wrapper>
-      </Slide>
+      <StCont>
+        <Slide in={true} direction="left">
+          <Wrapper height={this.context.appHeight}>
+            <Container>
+              <Written />
+            </Container>
+          </Wrapper>
+        </Slide>
+      </StCont>
     );
   }
 }
 export default Write;
+Write.contextType = Storage;
+
+const StCont = styled.div`
+  overflow: hidden;
+`;
 
 const Wrapper = styled.div`
-  background-color: #e6d7bb;
-  height: 100vh;
+  /* background-color: #e6d7bb; */
+  height: ${props => props.height}px;
+  /* height: 100vh; */
   display: flex;
   justify-content: center;
   align-items: center;
 `;
+
 const Container = styled.div`
   justify-content: center;
   align-items: center;

@@ -12,13 +12,20 @@ export const login = async (state) => {
       password: pw,
     }
   })
-  return _res.data;
+  console.log(_res.data)
+
+  if(_res.data.data === 'login fail'){
+    return false;
+  }
+  else{
+    return true;
+  }
 }
 
 export const signup = async (state) => {
 
   const {email, pw, nickName} = state;
-  let _profile = null
+  let _profile = ''
   if(state.cropedImgBase64 !== ''){
     _profile = state.cropedImgBase64
   }
@@ -41,8 +48,6 @@ export const getUserByEmail = async (email) => {
     method: 'get',
     url: `${process.env.REACT_APP_BASE_URL}/users/email?email=${email}`
   })
-
-
   if(_res.data.state === 'success'){
     return _res.data;
   }

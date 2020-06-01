@@ -5,6 +5,7 @@ import styled from "styled-components";
 import locationPin from "../../../assets/point/point-notfilled@2x.png";
 import timeIcon from "../../../assets/time/time@2x.png";
 import balloonIcon from "../../../assets/balloon/balloon-whole@2x.png";
+import { getTimeDeltaString } from "../time/TimeFunctinon";
 
 export default class MapListItem extends Component {
   render() {
@@ -20,7 +21,7 @@ export default class MapListItem extends Component {
           </StFlexContainer>
           <StFlexContainer>
             <StTimeIcon />
-            <StText>{this.props.item ? ' ' + new Date(this.props.item.regDate).toDateString() : " "}</StText>
+            <StText>{this.props.item ? ' ' + getTimeDeltaString(this.props.item.regDate) : " "}</StText>
           </StFlexContainer>
           <StButtonWrapper>
             <DefaultButton
@@ -62,8 +63,8 @@ const StLocationIcon = styled.div`
 
 const StTimeIcon = styled.div`
   margin: 2px;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   background-image: url(${timeIcon});
   background-size: cover;
 `;

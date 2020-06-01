@@ -9,7 +9,6 @@ import { Storage } from '../../storage/Storage';
 import BackBtn from  '../common/buttons/BackBtn';
 import LogoAnimation from '../common/logo/LogoAnimation';
 import UserInput from '../common/inputs/UserInput';
-import Modal from '../common/modal/Modal';
 import * as AM from './AccountMethod';
 import * as AS from '../../styles/account/AccountStyles';
 import * as AA from '../../apis/AccountAPI';
@@ -21,6 +20,7 @@ class Login extends Component {
       slideIn: true,
 
       alertModal: false,
+      modalMsg: '',
 
       email: '',
       emailLabel: '이메일',
@@ -80,17 +80,25 @@ class Login extends Component {
 
   handleSubmit = async () => {
     if(AM.checkAllValid('login', this.state)){
-      localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
-      if(this.state.autoLogin){
-        localStorage.setItem('ARSG email', this.state.email)
+      const _resData = await AA.login(this.state)
+      // console.log(_resData)
+      if(_resData){
+        localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
+        if(this.state.autoLogin){
+          localStorage.setItem('ARSG email', this.state.email)
+        }
+        else {
+          localStorage.removeItem('ARSG email')
+          sessionStorage.setItem('ARSG email', this.state.email)
+        }
+        window.location.href = '/'
       }
       else {
-        sessionStorage.setItem('ARSG email', this.state.email)
+        this.context.popModal(`비밀번호를\n확인해주세요!`, 'login', 'alert')
       }
-      window.location.href = '/'
     }
     else{
-      this.setState({ alertModal: true })
+      this.context.popModal(`입력이\n올바르지 않습니다!`, 'login','alert')
     }
   }
   
@@ -101,58 +109,50 @@ class Login extends Component {
 
   render(){
     return(
-      <Slide in={this.state.slideIn} direction="left">
-        <AS.StFormCont height={this.context.appHeight}>
-          
-          {/* <AS.StBackBtn onClick={this.handleBack}>
-            <ArrowBack/>
-          </AS.StBackBtn> */}
-          <BackBtn handleBack={this.handleBack}/>
+      <AS.StWraper height={this.context.appHeight}> 
+        <BackBtn handleBack={this.handleBack}/>
 
-          <LogoAnimation/>
+        <Slide in={this.state.slideIn} direction="left">
+          <AS.StFormCont>
+            <LogoAnimation/>
 
-          <UserInput 
-            id='email' 
-            value={this.state.email}
-            label={this.state.emailLabel} 
-            valid={this.state.emailValid}
-            onChange={this.handleInput}
-            icon={this.changeIcon('email')} 
-          />
+            <UserInput
+              id='email' 
+              value={this.state.email}
+              label={this.state.emailLabel} 
+              valid={this.state.emailValid}
+              onChange={this.handleInput}
+              icon={this.changeIcon('email')} 
+            />
 
-          <UserInput 
-            id='pw' 
-            value={this.state.pw} 
-            label={this.state.pwLabel} 
-            valid={this.state.pwValid}
-            onChange={this.handleInput}
-            icon={this.changeIcon('pw')} 
-          />
+            <UserInput 
+              id='pw' 
+              value={this.state.pw} 
+              label={this.state.pwLabel} 
+              valid={this.state.pwValid}
+              onChange={this.handleInput}
+              icon={this.changeIcon('pw')} 
+            />
 
-          <StCheckBox
-            control={<Checkbox 
-                      color="default"
-                      checked={this.state.autoLogin} 
-                      onChange={this.handleAutoLogin}/>}
-            label="자동 로그인"
-          />
-          
-          <AS.StBtnCont>
-            <AS.StBtn text="로그인" onClick={this.handleSubmit}/>
-          </AS.StBtnCont>
+            <StCheckBox
+              control={<Checkbox 
+                        color="default"
+                        checked={this.state.autoLogin} 
+                        onChange={this.handleAutoLogin}/>}
+              label="자동 로그인"
+            />
+            
+            <AS.StBtnCont>
+              <AS.StBtn text="로그인" onClick={this.handleSubmit}/>
+            </AS.StBtnCont>
 
-          <AS.StLinkCont>
-            <Link to='/signup' replace>가입하기</Link>
-          </AS.StLinkCont>
+            <AS.StLinkCont>
+              <Link to='/signup' replace>가입하기</Link>
+            </AS.StLinkCont>
 
-          <Modal
-            on={this.state.alertModal} 
-            msg={`입력이\n올바르지 않습니다.`}
-            click={() => { this.setState({ alertModal:false }) }} 
-          />
-
-        </AS.StFormCont>
-      </Slide>
+          </AS.StFormCont>
+        </Slide>
+      </AS.StWraper>
     )
   }
 } export default Login;

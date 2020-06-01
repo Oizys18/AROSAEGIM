@@ -118,13 +118,13 @@ class SaegimListPage extends Component {
     return (
       <StCont>
         <Slide in={true} direction={_dir}>
-            <Wrapper>
-              <StList>
-                <SaegimList>
-                  {PrintCard}
-                </SaegimList>
-              </StList>
-            </Wrapper>
+          <Wrapper height={this.context.appHeight}>
+            <StList>
+              <SaegimList>
+                {PrintCard}
+              </SaegimList>
+            </StList>
+          </Wrapper>
         </Slide>
       </StCont>
     );
@@ -139,10 +139,11 @@ const StCont = styled.div`
 `;
 
 const Wrapper = styled.div `
+  height: ${props => props.height}px;
   display: flex;
   justify-content: center;
   text-align: center;
-  height: 100vh;
+  /* height: 100vh; */
   flex-direction: column;
 `
 
