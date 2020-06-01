@@ -10,6 +10,7 @@ import Chip from "../common/chip/Chip"
 import { Zoom } from "@material-ui/core";
 import SaegimDetailButton from "./SaegimDetailButton";
 import {getUserByEmail} from "../../apis/AccountAPI";
+import Comment from "./Comment";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -39,6 +40,7 @@ class SaegimDetail extends Component {
       })
     await this.getSaegimDetail();
     console.log(this.state.data)
+    console.log(this.props)
   }
 
   setStateAsync(state) {
@@ -58,48 +60,47 @@ class SaegimDetail extends Component {
         <Chip text={tag.name} key={tag.id}/>
       )
     })
-
     return (
       <Zoom in={true}>
-      <Wrapper>
-      <Contents>
-        <BackGround bgImage={this.state.data.image ? this.state.data.image : bgImage}/>
-        <Location>{this.state.data.w3w}</Location>
-        <Registered>
-          <Time regTime={this.state.data.regDate} />
-        </Registered>
-        <CardWrapper>
-          <Card>
-            <div>{this.state.data.contents}</div>
-          </Card>
-        </CardWrapper>
-        <Tags>
-          {PrintChip}
-        </Tags>
-        <LockIcon>
-          {this.state.data.secret ? <Lock /> : <LockOpen />}
-         </LockIcon>
-      </Contents>
-      <Communication>
-        <Likes>
-          <div>{this.state.data.userName}</div>
-          <div>공감</div>
-        </Likes>
-        <Comments>
-          <div>댓 글 자 리 </div>
-        </Comments>
-      </Communication>
-      <BackButton onClick={this.goBack} >
-        <ArrowBack />
-      </BackButton>
-        {this.state.userId === this.state.data.userId &&
+        <Wrapper>
+          <Contents>
+            <BackGround bgImage={this.state.data.image ? this.state.data.image : bgImage}/>
+            <Location>{this.state.data.w3w}</Location>
+            <Registered>
+              <Time regTime={this.state.data.regDate}/>
+            </Registered>
+            <CardWrapper>
+              <Card>
+                <div>{this.state.data.contents}</div>
+              </Card>
+            </CardWrapper>
+            <Tags>
+              {PrintChip}
+            </Tags>
+            <LockIcon>
+              {this.state.data.secret ? <Lock/> : <LockOpen/>}
+            </LockIcon>
+          </Contents>
+          <Communication>
+            <Likes>
+              <div>{this.state.data.userName}</div>
+              <div>공감</div>
+            </Likes>
+            <Comments>
+              <Comment id={this.props.match.params.id} />
+            </Comments>
+          </Communication>
+          <BackButton onClick={this.goBack}>
+            <ArrowBack/>
+          </BackButton>
+          {this.state.userId === this.state.data.userId &&
           <StButton>
             <SaegimDetailButton id={this.props.match.params.id}/>
           </StButton>
-        }
-      </Wrapper>
+          }
+        </Wrapper>
       </Zoom>
-    );
+    )
   }
 }
 
@@ -179,6 +180,7 @@ const Registered = styled.div `
 
 const Communication = styled.div`
   height: 50%;
+  background-color: white;
 `
 
 const Likes = styled.div`
