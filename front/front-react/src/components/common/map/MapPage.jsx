@@ -294,8 +294,8 @@ MapPage.contextType = Storage;
 
 const StMapCont = styled(FlexColumn)`
   overflow: hidden;
-  /* height: ${props => props.height}px; */
-  height: 100vh;
+  height: ${props => props.height}px;
+  /* height: 100vh; */
 `;
 
 const StViewCont = styled.div`

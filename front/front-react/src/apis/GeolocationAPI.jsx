@@ -8,7 +8,7 @@ export const getPosition = () => {
     navigator.geolocation.getCurrentPosition(success, error, option);
   }
   else{
-    alert("GPS를 지원하지 않습니다");
+    alert("GPS를 지원하지 않는 디바이스 입니다!");
   }
 }
 
@@ -20,6 +20,22 @@ const success = (position) => {
 }
 
 const error = (err) => {
-  alert(err)
+  var msg = null;
+  switch(err.code) {
+    case err.PERMISSION_DENIED:
+        msg = "사용자가 위치 정보 수집을 거부.";
+        break;
+    case err.POSITION_UNAVAILABLE:
+        msg = "위치 정보 수집 불가.";
+        break;
+    case err.TIMEOUT:
+        msg = "요청 시간 초과.";
+        break;
+    case err.UNKNOWN_ERROR:
+        msg = "알 수 없는 오류.";
+        break;
+    default: break;
+  }
+  alert(msg);
 }
 

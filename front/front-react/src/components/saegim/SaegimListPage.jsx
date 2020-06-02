@@ -145,12 +145,12 @@ const StCont = styled.div`
 `;
 
 const Wrapper = styled.div `
-  /* height: ${props => props.height}px; */
   display: flex;
   justify-content: center;
   text-align: center;
-  height: 100vh;
   flex-direction: column;
+  /* height: 100vh; */
+  height: ${props => props.height}px;
 `
 
 const StList = styled.div `

@@ -49,8 +49,8 @@ const StCont = styled.div`
 
 const Wrapper = styled.div`
   /* background-color: #e6d7bb; */
-  /* height: ${props => props.height}px; */
-  height: 100vh;
+  height: ${props => props.height}px;
+  /* height: 100vh; */
   display: flex;
   justify-content: center;
   align-items: center;
