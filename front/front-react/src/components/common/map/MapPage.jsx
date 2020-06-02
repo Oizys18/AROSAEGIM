@@ -231,7 +231,7 @@ class MapPage extends Component {
 
         <SearchBar on={!this.state.roadView}/>
 
-        <Slide in={true} direction={_dir} timeout={300}>
+        <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
         <StViewCont>
           
           {/* <StRVBtn>
@@ -294,8 +294,8 @@ MapPage.contextType = Storage;
 
 const StMapCont = styled(FlexColumn)`
   overflow: hidden;
-  height: ${props => props.height}px;
-  /* height: 100vh; */
+  /* height: ${props => props.height}px; */
+  height: 100vh;
 `;
 
 const StViewCont = styled.div`

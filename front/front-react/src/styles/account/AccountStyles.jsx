@@ -6,7 +6,8 @@ import styled from 'styled-components';
 export const StWraper = styled(FlexRow)`
   position: relative;
   overflow: hidden;
-  height: ${props => props.height}px;
+  /* height: ${props => props.height}px; */
+  height: 100vh;
 `;
 
 export const StFormCont = styled(FlexColumn)`

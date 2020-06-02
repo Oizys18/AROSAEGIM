@@ -123,7 +123,7 @@ class SaegimListPage extends Component {
         >
           {PrintOptions}
         </StSelect>
-        <Slide in={true} direction={_dir} timeout={300}>
+        <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
           <Wrapper height={this.context.appHeight}>
             <StList>
               <SaegimList>
@@ -145,11 +145,11 @@ const StCont = styled.div`
 `;
 
 const Wrapper = styled.div `
-  height: ${props => props.height}px;
+  /* height: ${props => props.height}px; */
   display: flex;
   justify-content: center;
   text-align: center;
-  /* height: 100vh; */
+  height: 100vh;
   flex-direction: column;
 `
 

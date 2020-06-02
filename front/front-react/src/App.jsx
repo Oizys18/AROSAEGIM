@@ -76,6 +76,9 @@ class App extends Component {
     }
   }
   componentDidUpdate(prevProps, prevState){
+    if(this.state.appHeight !== window.innerHeight){
+      this.setState({ appHeight: window.innerHeight })
+    }
     if(prevState.curPage !== this.props.location.pathname){
       this.setState({
         curPage: this.props.location.pathname

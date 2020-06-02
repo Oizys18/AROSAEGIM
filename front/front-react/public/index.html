@@ -12,14 +12,24 @@
     <!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2820969c0132ab6234a3db24b7a37921&libraries=services,clusterer,drawing"></script> -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAO_API%&libraries=services,clusterer,drawing"></script>
     
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" /> -->
+
+    <!-- 안드로이드 홈 화면 추가 시 상단 주소창 제거 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- 안드로이드 홈 화면 추가 시 아이콘 -->
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" />
+    
+    <!-- ios 홈 화면 추가 시 상단 주소창 제거 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- ios 홈 화면 추가 시 아이콘 -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Web site created using create-react-app"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
