@@ -11,7 +11,7 @@ export const addLike = async (saegimid, userid) => {
       userid: userid
     }
   })
-  console.log(_res)
+  // console.log('addLike: ', _res)
   return _res.data.data
 }
 
@@ -24,7 +24,18 @@ export const delLike = async (saegimid, userid) => {
       userid: userid
     }
   })
-  console.log(_res)
+  // console.log('delLike: ', _res)
   return _res.data.data
 }
 
+export const getLike = async (saegimid) => {
+  const _res = await axios({
+    method: 'get',
+    url: `${BASE_URL}/saegims/${saegimid}/likes`,
+    params: {
+      saegimid: saegimid
+    }
+  })
+  // console.log('getLike: ', _res)
+  return _res.data.data
+}

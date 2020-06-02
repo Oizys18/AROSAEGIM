@@ -3,7 +3,7 @@ import { Storage } from "../../storage/Storage";
 import styled from "styled-components";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import { addLike, delLike } from "../../apis/LikeAPI"
+import { addLike, delLike, getLike } from "../../apis/LikeAPI"
 
 class Like extends Component{
   constructor(props) {
@@ -17,7 +17,7 @@ class Like extends Component{
   }
 
   async handleClick() {
-    if (this.state.isLike === true) {
+    if (this.state.isLike === false) {
       await this.like()
     } else {
       await this.dislike()
@@ -40,11 +40,14 @@ class Like extends Component{
   }
 
   async getSaegimLikes() {
-    if (this.props.likes !== undefined) {
-      await this.setState({
-      likes: this.props.likes
+    const _likes = await getLike(this.props.id)
+    const userList = _likes.map((like) => {
+      return like.userId
     })
-    }
+    await this.setState({
+      likes: userList
+    })
+    // console.log(this.state.likes)
   }
 
   async userInLikes() {
@@ -61,7 +64,6 @@ class Like extends Component{
 
   async initState() {
     await this.getSaegimLikes()
-    console.log(this.state.likes)
     await this.userInLikes()
   }
 
@@ -69,7 +71,7 @@ class Like extends Component{
     await this.setState({
       userInfo: this.context.userInfo
     })
-    console.log(this.state.userInfo)
+    // console.log(this.state.userInfo)
     await this.initState()
   }
 
@@ -81,15 +83,24 @@ class Like extends Component{
 
   render() {
     return(
-      <div>
+      <StLike>
+        <div>덧새김</div>
         {this.state.isLike === true
           ? <FavoriteIcon onClick={this.handleClick} />
           : <FavoriteBorderIcon onClick={this.handleClick} />
         }
-      </div>
+        <div>{this.state.likes.length}</div>
+      </StLike>
     )
   }
 }
 
 export default Like;
 Like.contextType = Storage;
+
+const StLike = styled.div`
+  display: flex;
+  width: 120%;
+  align-items: center;
+  justify-content: space-between;
+`;

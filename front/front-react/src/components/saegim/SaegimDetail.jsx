@@ -42,8 +42,8 @@ class SaegimDetail extends Component {
         userId: (await getUserByEmail(_email)).data.id
       })
     await this.getSaegimDetail();
-    console.log(this.state.data)
-    console.log(this.props)
+    // console.log(this.state.data)
+    // console.log(this.props)
   }
 
   setUpdateLike(flag) {
@@ -61,14 +61,14 @@ class SaegimDetail extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.data.tags !== prevState.tags) {
     }
-    if (this.state.updateFlagByLike === true) {
-      this.getSaegimDetail()
-      this.setState({
-        updateFlagByLike: false
-      })
-      console.log('디테일 다시 가져옴')
-      console.log(this.state.data.likes)
-    }
+    // if (this.state.updateFlagByLike === true) {
+    //   this.getSaegimDetail()
+    //   this.setState({
+    //     updateFlagByLike: false
+    //   })
+    //   console.log('디테일 다시 가져옴')
+    //   console.log(this.state.data.likes)
+    // }
   }
 
   render() {
@@ -209,7 +209,7 @@ const Likes = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 16px 0px 16px 0px;
+  padding: 16px 0 16px 0;
 `
 
 const Comments = styled.div`
