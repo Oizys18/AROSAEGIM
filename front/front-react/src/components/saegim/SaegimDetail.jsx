@@ -11,6 +11,7 @@ import { Zoom } from "@material-ui/core";
 import SaegimDetailButton from "./SaegimDetailButton";
 import {getUserByEmail} from "../../apis/AccountAPI";
 import Comment from "./Comment";
+import Like from "./Like";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -19,9 +20,11 @@ class SaegimDetail extends Component {
       data: {
         tags: []
       },
-      userId: ""
+      userId: "",
+      updateFlagByLike: false
     };
     this.goBack = this.goBack.bind(this);
+    this.setUpdateLike = this.setUpdateLike.bind(this);
   }
 
   goBack() {
@@ -39,8 +42,14 @@ class SaegimDetail extends Component {
         userId: (await getUserByEmail(_email)).data.id
       })
     await this.getSaegimDetail();
-    console.log(this.state.data)
-    console.log(this.props)
+    // console.log(this.state.data)
+    // console.log(this.props)
+  }
+
+  setUpdateLike(flag) {
+    this.setState({
+      updateFlagByLike: flag
+    })
   }
 
   setStateAsync(state) {
@@ -52,6 +61,14 @@ class SaegimDetail extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.data.tags !== prevState.tags) {
     }
+    // if (this.state.updateFlagByLike === true) {
+    //   this.getSaegimDetail()
+    //   this.setState({
+    //     updateFlagByLike: false
+    //   })
+    //   console.log('디테일 다시 가져옴')
+    //   console.log(this.state.data.likes)
+    // }
   }
 
   render() {
@@ -84,7 +101,12 @@ class SaegimDetail extends Component {
           <Communication>
             <Likes>
               <div>{this.state.data.userName}</div>
-              <div>공감</div>
+              <div>
+                <Like
+                  setUpdateLike={this.setUpdateLike}
+                  id={this.props.match.params.id}
+                  likes={this.state.data.likes}/>
+              </div>
             </Likes>
             <Comments>
               <Comment id={this.props.match.params.id} />
@@ -187,7 +209,7 @@ const Likes = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 16px 0px 16px 0px;
+  padding: 16px 0 16px 0;
 `
 
 const Comments = styled.div`
