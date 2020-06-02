@@ -16,31 +16,41 @@ class SearchBar extends Component {
     }
   }
 
-  openSelect = (e) => {
-    this.setState({ 
-      selectOpen: !this.state.selectOpen 
-    })
+  componentDidMount(){
+    document.addEventListener('keypress', this.pressEnter)
   }
+  componentWillUpdate(){
+    document.removeEventListener('keypress', this.pressEnter)
+  }
+
+  openSelect = () => {
+    this.setState({ selectOpen: true })
+  }
+  closeSelect = () => {
+    this.setState({ selectOpen: false })
+  }
+
   handleSelect = (e) => {
-    this.setState({
-      select: e.currentTarget.id,
-      selectOpen: !this.state.selectOpen
-    })
+    this.closeSelect()
+    this.setState({ select: e.currentTarget.id })
   }
 
   handleInput = (e) => {
-    this.setState({
-      value: e.currentTarget.value
-    })
+    this.setState({ value: e.currentTarget.value })
   }
 
   handleSearch = (e) => {
+    this.closeSelect()
+  }
+  pressEnter = (e) => {
+    if(e.keyCode === 13){
 
+    }
   }
 
   render(){
     return(
-      <Slide in={this.props.on} direction='down'>
+      <Slide in={this.props.on} direction='down' mountOnEnter unmountOnExit>
         <StCont> 
           <StSearch>
 
@@ -55,9 +65,11 @@ class SearchBar extends Component {
             </StSelectCont>
 
             <Divider orientation="vertical" />
-            
+
             <InputBase 
+              type='search'
               placeholder={this.state.select === '장소' ? '장소 검색' : '지도 내에서 새김 검색'}
+              onFocus={this.closeSelect}
               onChange={this.handleInput}
             />
             
@@ -82,7 +94,7 @@ const StCont = styled.div`
   justify-content: center;
   align-items: center;
 
-  padding: 8px 8px 0 8px;
+  padding: 6px 6px 0 6px;
   width: 100%;
   height: 48px;
   box-sizing: border-box;
@@ -95,9 +107,12 @@ const StSearch = styled.div`
 
   width: 100%;
   height: 100%;
-
-  border-radius: 5px;
   background: white;
+
+  border: 2px solid gray;
+  border-radius: 5px;
+
+  box-sizing: border-box;
 `;
 
 const StSelectCont = styled.div`

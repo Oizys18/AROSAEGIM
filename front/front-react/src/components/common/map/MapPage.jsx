@@ -6,12 +6,14 @@ import {Map, Streetview} from '@material-ui/icons';
 import {FlexColumn} from '../../../styles/DispFlex';
 import DefaultButton from "../buttons/DefaultButton";
 
+import { getPosition } from '../../../apis/GeolocationAPI';
 import {Storage} from '../../../storage/Storage';
 import SearchBar from "../search/SearchBar";
 import MapView from './MapView';
 import MapListItem from "./MapListItem";
 import RoadView from './RoadView';
 
+import * as MM from './MapMethod';
 import * as SA from '../../../apis/SaegimAPI';
 
 class MapPage extends Component {
@@ -25,7 +27,8 @@ class MapPage extends Component {
       rv: null,
       rvc: null,
 
-      center: new kakao.maps.LatLng(37.50083104531534, 127.03694678811341),
+      mapCenter: new kakao.maps.LatLng(37.50083104531534, 127.03694678811341),
+      // mapCenter: null,
       level: 3,
       userCenter: null,
       selected: {
@@ -45,10 +48,15 @@ class MapPage extends Component {
   }
 
   async componentDidMount(){
+    // const _coords = (await getPosition()).coords
+    // const _lat = _coords.latitude
+    // const _lng = _coords.longitude
+
     const _container = document.getElementById("mapView");
     const _options = {
-      center: this.state.center,
-      lever: this.state.level,
+      center: this.state.mapCenter,
+      // center: new kakao.maps.LatLng(_lat, _lng),
+      level: this.state.level,
     }
 
     const _mapView = new kakao.maps.Map(_container, _options);
@@ -57,10 +65,10 @@ class MapPage extends Component {
     // kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
     // kakao.maps.event.addListener(_mapView, "bounds_changed", this.handleBoundsChange)
 
-    await this.setStateAsync({ mv: _mapView })
-    this.getMkrLi()
-
-    await this.setStateAsync({bounds: _mapView.getBounds()})
+    await this.setStateAsync({ 
+      mv: _mapView,
+      bounds: _mapView.getBounds()
+    })
     
     // get items from Backend with map center position
     const meter = SA.boundsToMeter({
@@ -71,8 +79,8 @@ class MapPage extends Component {
     })
 
     let items = await SA.getSaegimNearMe({
-      lat: this.state.center.getLat(),
-      lng: this.state.center.getLng(),
+      lat: this.state.mapCenter.getLat(),
+      lng: this.state.mapCenter.getLng(),
       meter: meter
     })
 
@@ -92,6 +100,7 @@ class MapPage extends Component {
       color: rgb(0, 0, 0);
     `
   }
+
   componentWillUnmount(){
     kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLvCt)
     kakao.maps.event.removeListener(this.state.mv, "center_changed", this.changeLvCt)
@@ -99,15 +108,22 @@ class MapPage extends Component {
     // kakao.maps.event.removeListener(this.state.mv, "bounds_changed", this.handleBoundsChange)
   }
 
-  getMkrLi = () => {
-    dummyItems.forEach((el, idx) => {
-      const mkr = new kakao.maps.Marker({
-        position:  new kakao.maps.LatLng(el.latlng[0], el.latlng[1])
-      });
-      // console.log(this.state.mvView)
-      mkr.setMap(this.state.mv)
+  changeLvCt = () => {
+    this.setState({
+      mapCenter: this.state.mv.getCenter(),
+      level: this.state.mv.getLevel(),
     })
   }
+
+  // getMkrLi = () => {
+  //   dummyItems.forEach((el, idx) => {
+  //     const mkr = new kakao.maps.Marker({
+  //       position:  new kakao.maps.LatLng(el.latlng[0], el.latlng[1])
+  //     });
+  //     // console.log(this.state.mvView)
+  //     mkr.setMap(this.state.mv)
+  //   })
+  // }
 
   // handleDragStart = () => {
   //   this.setState({ mapCenter: this.state.mv.getCenter() });
@@ -120,20 +136,20 @@ class MapPage extends Component {
   // };
 
   // move directly to given center
-  setCenter = (center) => {
-    const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
-    this.state.mv.setCenter(targetCenter);
-  };
+  // setCenter = (center) => {
+  //   const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
+  //   this.state.mv.setCenter(targetCenter);
+  // };
 
-  // move smoothly to given center
-  panTo = (center) => {
-    const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
-    this.state.mv.panTo(targetCenter);
-  };
+  // // move smoothly to given center
+  // panTo = (center) => {
+  //   const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
+  //   this.state.mv.panTo(targetCenter);
+  // };
 
   selectItem = (item) => {
-    // console.log(item);
-    this.panTo({ lat: item.latitude, lng: item.longitude });
+    // this.panTo({ lat: item.latitude, lng: item.longitude });
+    MM.panTo(this.state.mv, item.latitude, item.longitude)
     this.setState({ selected: { status: true, item: item } });
   };
 
@@ -186,61 +202,25 @@ class MapPage extends Component {
     return Math.random() * (max - min) + min;
   };
 
-  changeLvCt = () => {
-    this.setState({
-      center: this.state.mv.getCenter(),
-      level: this.state.mv.getLevel(),
-    })
-  }
-
   tglView = async () => {
     await this.setStateAsync({ roadView: !this.state.roadView })
-
-    if(this.state.roadView){
-      const _cont = document.getElementById('roadView');
-      const _rv = new kakao.maps.Roadview(_cont); //로드뷰 객체
-      const _rvc = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
-      var rvResultValue = {}
-      const _pos = this.state.center
-
-      // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
-      _rvc.getNearestPanoId(_pos, 50, (panoId) => {
-        _rv.setPanoId(panoId, _pos); //panoId와 중심좌표를 통해 로드뷰 실행
-        rvResultValue.panoId = panoId;
-      });
-      this.setState({ rv: _rv, rvc:_rvc }) 
-
-      kakao.maps.event.addListener(_rv, 'init', () => {
-        dummyItems.forEach((el, idx) => {
-          const _mkr = new kakao.maps.Marker({
-            position:  new kakao.maps.LatLng(el.latlng[0], el.latlng[1]),
-            map: _rv
-          });
-          var projection = _rv.getProjection(); // viewpoint(화면좌표)값을 추출할 수 있는 projection 객체를 가져옵니다.
-      
-          // 마커의 position과 altitude값을 통해 viewpoint값(화면좌표)를 추출합니다.
-          var viewpoint = projection.viewpointFromCoords(_mkr.getPosition(), _mkr.getAltitude());
-          _rv.setViewpoint(viewpoint); //로드뷰에 뷰포인트를 설정합니다.
-  
-  
-        })
-      })
-    }
-  };
-
-  changeIcon = () => {
-    return (
-      <>
-        <Map style={{visibility: 'hidden'}}/>
-        <Zoom in={this.state.roadView} style={{position: 'absolute', zIndex: 12,}}><Map/></Zoom>
-        <Zoom in={!this.state.roadView} style={{position: 'absolute', zIndex: 13,}}><Streetview/></Zoom>
-      </>
-    )
   }
+
+  // changeIcon = () => {
+  //   return (
+  //     <>
+  //       <Map style={{visibility: 'hidden'}}/>
+  //       <Zoom in={this.state.roadView} style={{position: 'absolute', zIndex: 12,}}><Map/></Zoom>
+  //       <Zoom in={!this.state.roadView} style={{position: 'absolute', zIndex: 13,}}><Streetview/></Zoom>
+  //     </>
+  //   )
+  // }
 
   render(){
     let _dir = 'left'
-    if(this.context.curPage === '/write'){
+    if(this.context.curPage === '/write' || 
+       this.context.curPage === '/login' || 
+       this.context.curPage === '/signup'){
       _dir = 'right'
     }
 
@@ -248,31 +228,40 @@ class MapPage extends Component {
       <StMapCont height={this.context.appHeight}>
 
         <SearchBar on={!this.state.roadView}/>
-        
-        <Slide in={true} direction={_dir}>
+
+        <Slide in={true} direction={_dir} timeout={400}>
         <StViewCont>
           
-            <StBtnCont>
-              <IconButton disableRipple onClick={this.tglView}>{this.changeIcon()}</IconButton>
-            </StBtnCont>
+          {/* <StRVBtn>
+            <IconButton disableRipple onClick={this.tglView}>{this.changeIcon()}</IconButton>
+          </StRVBtn> */}
+
+          <Zoom in={!this.state.roadView} mountOnEnter unmountOnExit>
+            <StRVBtn onClick={this.tglView}><Streetview/></StRVBtn>
+          </Zoom>
+
+          {
+            !this.state.roadView && 
             <ButtonWrapper>
               <DefaultButton
                 text="add random item"
                 onClick={this.addRndItemInView}
               />
             </ButtonWrapper>
-            {this.state.selected.status && (
-              <>
-                <ButtonWrapper>
-                  <DefaultButton text="prev Item" onClick={this.prevItem} />
-                  <DefaultButton text="next Item" onClick={this.nextItem} />
-                </ButtonWrapper>
-                <MapListItem
-                  item={this.state.selected.item}
-                  closeItem={this.closeItem}
-                />
-              </>
-            )}
+          }
+
+          {this.state.selected.status && (
+            <>
+              <ButtonWrapper>
+                <DefaultButton text="prev Item" onClick={this.prevItem} />
+                <DefaultButton text="next Item" onClick={this.nextItem} />
+              </ButtonWrapper>
+              <MapListItem
+                item={this.state.selected.item}
+                closeItem={this.closeItem}
+              />
+            </>
+          )}
 
           <MapView
             map={this.state.mv}
@@ -282,12 +271,15 @@ class MapPage extends Component {
             hide={this.state.roadView}
           />
 
-          <RoadView 
-            rv={this.state.rv} 
-            rvc={this.state.rvc} 
-            data={dummyItems} 
-            hide={!this.state.roadView}
-          />
+          {
+            this.state.roadView &&
+            <RoadView 
+              center={this.state.mapCenter}
+              items={this.state.items}
+              hide={!this.state.roadView}
+              tglView={this.tglView}
+            />
+          }
 
         </StViewCont>
         </Slide>
@@ -312,15 +304,40 @@ const StViewCont = styled.div`
   background: gray;
 `;
 
-const StBtnCont = styled.div`
+const StRVBtn = styled.div`
   position: absolute;
   z-index: 10;
   top: 64px;
   right: 8px;
 
-  background: darkgray;
+  display: flex;
+  padding: 8px;
+  border: 2px solid gray;
   border-radius: 50%;
+  background: #e6e6e6;
 
+  svg{
+    width: 24px;
+    height: auto;
+  }
+`;
+
+const StCurBtn = styled.div`
+  position: absolute;
+  z-index: 10;
+  top: 64px;
+  right: 8px;
+
+  display: flex;
+  padding: 8px;
+  border: 2px solid gray;
+  border-radius: 50%;
+  background: #e6e6e6;
+
+  svg{
+    width: 24px;
+    height: auto;
+  }
 `;
 
 const ButtonWrapper = styled.div`

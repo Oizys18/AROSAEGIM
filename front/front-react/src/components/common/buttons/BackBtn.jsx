@@ -17,7 +17,7 @@ class BackBtn extends Component {
 
 export const StBackBtn = styled(IconButton)`
   position: absolute;
-  z-index: 1;
+  z-index: 101;
   top: 0;
   left: 0;
 
