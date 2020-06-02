@@ -46,14 +46,6 @@ class MapView extends Component {
   };
 
   render() {
-    const list = this.state.items.map(
-      (el, index) => (<MapItem map={this.props.map}
-        item={el}
-        key={index}
-        selectItem={this.selectItem}
-      />)
-    );
-
     return (
       <>
         <StView id="mapView" hidden={this.props.hide} />

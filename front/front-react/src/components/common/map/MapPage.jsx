@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import {IconButton, Zoom, Slide} from '@material-ui/core';
-import {Map, Streetview} from '@material-ui/icons';
+import {Map, Streetview, MyLocation, MyLocationTwoTone} from '@material-ui/icons';
 import {FlexColumn} from '../../../styles/DispFlex';
 import DefaultButton from "../buttons/DefaultButton";
 
@@ -31,6 +31,8 @@ class MapPage extends Component {
       // mapCenter: null,
       level: 3,
       userCenter: null,
+      usingUserCenter: false,
+
       selected: {
         status: false,
         item: null,
@@ -62,8 +64,8 @@ class MapPage extends Component {
     const _mapView = new kakao.maps.Map(_container, _options);
     kakao.maps.event.addListener(_mapView, "zoom_changed", this.changeLvCt)
     kakao.maps.event.addListener(_mapView, "center_changed", this.changeLvCt)
-    // kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
-    // kakao.maps.event.addListener(_mapView, "bounds_changed", this.handleBoundsChange)
+    kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
+    kakao.maps.event.addListener(_mapView, "dragend", this.handleDragEnd)
 
     await this.setStateAsync({ 
       mv: _mapView,
@@ -99,13 +101,34 @@ class MapPage extends Component {
       bottom: 64px; 
       color: rgb(0, 0, 0);
     `
+    await this.getGeolocation(
+      async (data) => {
+        await this.setStateAsync({
+          center: new kakao.maps.LatLng(data.coords.latitude, data.coords.longitude),
+          userCenter: new kakao.maps.LatLng(data.coords.latitude, data.coords.longitude),
+          userMarker: MM.myLocationMarker(new kakao.maps.LatLng(data.coords.latitude, data.coords.longitude)),
+          usingUserCenter: true
+        })
+        _mapView.panTo(this.state.center)
+        this.showMarker();
+      },
+      (err) => {
+        console.warn(err)
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: Infinity,
+      }
+    )
+
   }
 
   componentWillUnmount(){
     kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLvCt)
     kakao.maps.event.removeListener(this.state.mv, "center_changed", this.changeLvCt)
-    // kakao.maps.event.removeListener(this.state.mv, "dragstart", this.handleDragStart)
-    // kakao.maps.event.removeListener(this.state.mv, "bounds_changed", this.handleBoundsChange)
+    kakao.maps.event.removeListener(this.state.mv, "dragstart", this.handleDragStart)
+    kakao.maps.event.removeListener(this.state.mv, "dragend", this.handleDragEnd)
   }
 
   changeLvCt = () => {
@@ -115,40 +138,39 @@ class MapPage extends Component {
     })
   }
 
-  // getMkrLi = () => {
-  //   dummyItems.forEach((el, idx) => {
-  //     const mkr = new kakao.maps.Marker({
-  //       position:  new kakao.maps.LatLng(el.latlng[0], el.latlng[1])
-  //     });
-  //     // console.log(this.state.mvView)
-  //     mkr.setMap(this.state.mv)
-  //   })
-  // }
+  getGeolocation = async (resolve, reject, options) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject, options); 
+  };
 
-  // handleDragStart = () => {
-  //   this.setState({ mapCenter: this.state.mv.getCenter() });
-  //   this.closeItem();
-  // };
+  handleDragStart = () => {
+    (this.state.selected.status && this.closeItem());
+    (this.state.usingUserCenter && this.setState({usingUserCenter: false}));
+  };
+
+  handleDragEnd = () => {
+    (this.state.selected.status && this.closeItem());
+  };
+
+  tglUserCenter = async () => {
+    await this.setStateAsync({usingUserCenter: !this.state.usingUserCenter});
+    console.log(this.state.userCenter, this.state.usingUserCenter)
+    if (this.state.userCenter && this.state.usingUserCenter) {
+      this.state.mv.panTo(this.state.userCenter)
+      this.showMarker()
+    }
+  }
+
+  showMarker = () => {
+    this.state.userMarker.setMap(null);
+    this.state.userMarker.setMap(this.state.mv);
+  }
 
   // handleBoundsChange = () => {
   //   this.setState({ bounds: this.state.mv.getBounds() });
   //   // this.closeItem();
   // };
 
-  // move directly to given center
-  // setCenter = (center) => {
-  //   const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
-  //   this.state.mv.setCenter(targetCenter);
-  // };
-
-  // // move smoothly to given center
-  // panTo = (center) => {
-  //   const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
-  //   this.state.mv.panTo(targetCenter);
-  // };
-
   selectItem = (item) => {
-    // this.panTo({ lat: item.latitude, lng: item.longitude });
     MM.panTo(this.state.mv, item.latitude, item.longitude)
     this.setState({ selected: { status: true, item: item } });
   };
@@ -239,6 +261,9 @@ class MapPage extends Component {
           <Zoom in={!this.state.roadView} mountOnEnter unmountOnExit>
             <StRVBtn onClick={this.tglView}><Streetview/></StRVBtn>
           </Zoom>
+          <Zoom in={!this.state.roadView} mountOnEnter unmountOnExit>
+            <StCurBtn onClick={this.tglUserCenter}>{this.state.usingUserCenter ? <MyLocation color="primary"/> : <MyLocationTwoTone />}</StCurBtn>
+          </Zoom>
 
           {
             !this.state.roadView && 
@@ -325,7 +350,7 @@ const StRVBtn = styled.div`
 const StCurBtn = styled.div`
   position: absolute;
   z-index: 10;
-  top: 64px;
+  top: 120px;
   right: 8px;
 
   display: flex;
@@ -349,30 +374,6 @@ const ButtonWrapper = styled.div`
   display: flex;
   padding: 0 16px 0 16px;
 `;
-
-
-const dummyItems = [
-  {
-    title: "카카오",
-    latlng: [33.450705, 126.570677],
-  },
-  {
-    title: "생태연못",
-    latlng: [33.450936, 126.569477],
-  },
-  {
-    title: "텃밭",
-    latlng: [33.450879, 126.56994],
-  },
-  {
-    title: "근린공원",
-    latlng: [33.451393, 126.570738],
-  },
-  {
-    title: "할리스",
-    latlng: [37.50083104531534, 127.03694678811341],
-  },
-];
 
 /*
 data 양식
