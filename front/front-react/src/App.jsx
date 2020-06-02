@@ -4,6 +4,7 @@ import { Route, withRouter, Switch } from "react-router-dom";
 import { Slide } from '@material-ui/core'
 
 import { Storage } from "./storage/Storage";
+import { getPosition } from './apis/GeolocationAPI';
 import Loading from "./components/common/background/Loading";
 import Background from "./components/common/background/Background";
 import TopBar from "./components/common/navbar/TopBar";
@@ -49,6 +50,8 @@ class App extends Component {
   setStateAsync(state) { return new Promise((resolve) => { this.setState(state, resolve) }) }
 
   async componentDidMount(){
+    getPosition()
+
     const _autoLogin = localStorage.getItem('ARSG autoLogin')
     if(_autoLogin === 'true'){
       const _email = localStorage.getItem('ARSG email')

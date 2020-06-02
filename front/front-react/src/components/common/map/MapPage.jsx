@@ -27,8 +27,9 @@ class MapPage extends Component {
       rv: null,
       rvc: null,
 
-      mapCenter: new kakao.maps.LatLng(37.50083104531534, 127.03694678811341),
-      // mapCenter: null,
+      // mapCenter: new kakao.maps.LatLng(37.50083104531534, 127.03694678811341),
+      mapCenter: null,
+      // mapCenter: new kakao.maps.LatLng(sessionStorage.getItem('ARSG latitude'), sessionStorage.getItem('ARSG longitude')),
       level: 3,
       userCenter: null,
       selected: {
@@ -48,14 +49,13 @@ class MapPage extends Component {
   }
 
   async componentDidMount(){
-    // const _coords = (await getPosition()).coords
-    // const _lat = _coords.latitude
-    // const _lng = _coords.longitude
-
+    const _lat = sessionStorage.getItem('ARSG latitude');
+    const _lng = sessionStorage.getItem('ARSG longitude');
+    // console.log(Number(_lat), Number(_lng), _lng);
     const _container = document.getElementById("mapView");
     const _options = {
-      center: this.state.mapCenter,
-      // center: new kakao.maps.LatLng(_lat, _lng),
+      // center: this.state.mapCenter,
+      center: new kakao.maps.LatLng(Number(_lat), Number(_lng)),
       level: this.state.level,
     }
 
@@ -66,6 +66,8 @@ class MapPage extends Component {
     // kakao.maps.event.addListener(_mapView, "bounds_changed", this.handleBoundsChange)
 
     await this.setStateAsync({ 
+      mapCenter: _options.center,
+      userCenter: _options.center,
       mv: _mapView,
       bounds: _mapView.getBounds()
     })
@@ -229,7 +231,7 @@ class MapPage extends Component {
 
         <SearchBar on={!this.state.roadView}/>
 
-        <Slide in={true} direction={_dir} timeout={400}>
+        <Slide in={true} direction={_dir} timeout={300}>
         <StViewCont>
           
           {/* <StRVBtn>

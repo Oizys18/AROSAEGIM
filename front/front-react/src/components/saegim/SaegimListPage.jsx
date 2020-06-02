@@ -117,7 +117,7 @@ class SaegimListPage extends Component {
 
     return (
       <StCont>
-        <Slide in={true} direction={_dir} timeout={400}>
+        <Slide in={true} direction={_dir} timeout={300}>
           <Wrapper height={this.context.appHeight}>
             <StList>
               <SaegimList>
