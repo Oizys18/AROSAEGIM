@@ -42,8 +42,6 @@ class SaegimListPage extends Component {
     await this.setState({
       distance: this.state.options[this.state.selectedOption].value
     })
-    console.log('범위 바꿈')
-    console.log(this.state)
   }
 
   getSaegimList = async () => {
@@ -87,8 +85,6 @@ class SaegimListPage extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.distance !== prevState.distance) {
       this.getSaegimList()
-      console.log('리스트 새로 받음')
-      console.log(this.state)
     }
   }
 
@@ -122,7 +118,7 @@ class SaegimListPage extends Component {
       <StCont>
         <StSelect
           autowidth
-          value={this.state.distance}
+          value={this.state.selectedOption}
           onChange={this.selectChange}
         >
           {PrintOptions}
@@ -164,7 +160,17 @@ const StList = styled.div `
 const StSelect = styled(Select)`
   font-size: 0.9rem;
   position: absolute;
-  top: 10%;
+  top: 15%;
   right: 10%;
-  color: white;
+    
+  &:after {
+    border-bottom: none; 
+  }
+  
+  .MuiSelect-select {
+    background-color: white;
+    border-radius: 5px;
+    padding: 8px 24px 8px 8px; 
+  }
+  
 `;
