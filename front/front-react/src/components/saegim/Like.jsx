@@ -85,11 +85,13 @@ class Like extends Component{
     return(
       <StLike>
         <div>덧새김</div>
+        <StIcon>
         {this.state.isLike === true
-          ? <FavoriteIcon onClick={this.handleClick} />
+          ? <FavoriteIcon color={'#ffffff'} onClick={this.handleClick} />
           : <FavoriteBorderIcon onClick={this.handleClick} />
         }
-        <div>{this.state.likes.length}</div>
+        </StIcon>
+        <div style={{ fontWeight: 'bold'}}>{this.state.likes.length}</div>
       </StLike>
     )
   }
@@ -101,6 +103,9 @@ Like.contextType = Storage;
 const StLike = styled.div`
   display: flex;
   width: 120%;
-  align-items: center;
   justify-content: space-between;
+`;
+
+const StIcon = styled.div`
+  color: #ff6262;
 `;
