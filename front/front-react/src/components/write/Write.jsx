@@ -29,7 +29,7 @@ class Write extends Component {
     };
     return (
       <StCont>
-        <Slide in={true} direction="left">
+        <Slide in={true} direction="left" timeout={400}>
           <Wrapper height={this.context.appHeight}>
             <Container>
               <Written />

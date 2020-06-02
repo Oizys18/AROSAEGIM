@@ -123,7 +123,7 @@ class SaegimListPage extends Component {
         >
           {PrintOptions}
         </StSelect>
-        <Slide in={true} direction={_dir}>
+        <Slide in={true} direction={_dir} timeout={400}>
           <Wrapper height={this.context.appHeight}>
             <StList>
               <SaegimList>
