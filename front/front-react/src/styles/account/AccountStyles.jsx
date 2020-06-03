@@ -6,13 +6,14 @@ import styled from 'styled-components';
 export const StWraper = styled(FlexRow)`
   position: relative;
   overflow: hidden;
-  height: ${props => props.height}px;
+  /* height: ${props => props.height}px; */
+  height: 100vh;
 `;
 
 export const StFormCont = styled(FlexColumn)`
   /* position: relative; */
   /* height: 100vh; */
-  /* height: ${props => props.height}px; */
+  height: ${props => props.height}px;
   background: rgba(255, 255, 255, 0.9);
   /* background: linear-gradient(to bottom right, #ffcc66 0%, #ff9999 100%); */
   
