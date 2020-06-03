@@ -5,6 +5,7 @@ import MapWalker from './MapWalker';
 import styled from 'styled-components';
 import { Zoom, Grow, Slide,   } from '@material-ui/core';
 import { Map, ArrowDownward, } from '@material-ui/icons';
+import { FlexRow } from '../../../styles/DispFlex';
 import RoadViewTopBar from "./RoadViewTopBar";
 
 class RoadView extends Component {
@@ -146,9 +147,9 @@ class RoadView extends Component {
   changeIcon = () => {
     return (
       <>
-        <Map style={{visibility: 'hidden'}}/>
-        <Zoom in={!this.state.mmOn} style={{position: 'absolute', zIndex: 12,}}><Map/></Zoom>
-        <Zoom in={this.state.mmOn} style={{position: 'absolute', zIndex: 13,}}><ArrowDownward/></Zoom>
+        {/* <Map style={{visibility: 'hidden'}}/> */}
+        
+        <Zoom in={this.state.mmOn} style={{position: 'absolute', zIndex: 2,}}></Zoom>
       </>
     )
   }
@@ -171,8 +172,11 @@ class RoadView extends Component {
           <StMap id="miniMap"/>
         </Slide>
         
-        <Zoom in={true}>
-          <StBtn onClick={this.toggleMap}>{this.changeIcon()}</StBtn>
+        <Zoom in={this.state.mmOn} mountOnEnter unmountOnExit>
+          <StCloseMMBtn onClick={this.toggleMap}><ArrowDownward/></StCloseMMBtn>
+        </Zoom>
+        <Zoom in={!this.state.mmOn} mountOnEnter unmountOnExit>
+          <StOpenMMBtn onClick={this.toggleMap}>미니맵</StOpenMMBtn>
         </Zoom>
       </>
     )
@@ -185,21 +189,27 @@ const StView = styled.div`
   height: ${props => props.mmOn ? 65 : 100}%;
 `;
 
-const StBtn = styled.div`
+const StBtn = styled(FlexRow)`
   position: absolute;
-  z-index: 10;
   bottom: 16px;
   right: 16px;
 
-  display: flex;
   padding: 4px;
   border: 1px solid gray;
   border-radius: 8px;
   background: #e6e6e6;
+`;
 
+const StOpenMMBtn = styled(StBtn)`
+  z-index: 10;
+  height: 28px;
+`;
+
+const StCloseMMBtn = styled(StBtn)`
+  z-index: 11;
   svg{
     width: 28px;
-    height: auto;
+    height: 28px; 
   }
 `;
 

@@ -12,6 +12,7 @@ import SearchBar from "../search/SearchBar";
 import MapView from './MapView';
 import MapListItem from "./MapListItem";
 import RoadView from './RoadView';
+import MapBtnSet from './MapBtnSet';
 
 import * as MM from './MapMethod';
 import * as SA from '../../../apis/SaegimAPI';
@@ -39,6 +40,12 @@ class MapPage extends Component {
       bounds: null,
 
       roadView: false,
+    }
+
+    this.actions = {
+      tglView: this.tglView,
+      curPos: this.curPos,
+      tglFilter: this.tglFilter,
     }
   }
 
@@ -208,16 +215,6 @@ class MapPage extends Component {
     await this.setStateAsync({ roadView: !this.state.roadView })
   }
 
-  // changeIcon = () => {
-  //   return (
-  //     <>
-  //       <Map style={{visibility: 'hidden'}}/>
-  //       <Zoom in={this.state.roadView} style={{position: 'absolute', zIndex: 12,}}><Map/></Zoom>
-  //       <Zoom in={!this.state.roadView} style={{position: 'absolute', zIndex: 13,}}><Streetview/></Zoom>
-  //     </>
-  //   )
-  // }
-
   render(){
     let _dir = 'left'
     if(this.context.curPage === '/write' || 
@@ -238,9 +235,13 @@ class MapPage extends Component {
             <IconButton disableRipple onClick={this.tglView}>{this.changeIcon()}</IconButton>
           </StRVBtn> */}
 
-          <Zoom in={!this.state.roadView} mountOnEnter unmountOnExit>
+          {/* <Zoom in={!this.state.roadView} mountOnEnter unmountOnExit>
             <StRVBtn onClick={this.tglView}><Streetview/></StRVBtn>
-          </Zoom>
+          </Zoom> */}
+
+          <Slide in={true} direction='left' timeout={700}>
+            <MapBtnSet roadView={this.state.roadView} actions={this.actions}/>
+          </Slide>
 
           {
             !this.state.roadView && 
