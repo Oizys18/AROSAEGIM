@@ -35,14 +35,14 @@ class SideMenu extends Component {
               this.props.isLogin ? 
               <>
                 <Divider />
-                <SideMenuBtn link='mypage' txt={'마이페이지'} icon={<Face/>}/>
-                <SideMenuBtn link='logout' txt={'로그아웃'} icon={<ExitToApp/>}/>
+                <SideMenuBtn link='/mypage' txt={'마이페이지'} icon={<Face/>}/>
+                <SideMenuBtn link='/logout' txt={'로그아웃'} icon={<ExitToApp/>}/>
                 <Divider />
               </>
               :
               <>
-                <SideMenuBtn link='login' txt={'로그인'} icon={<VpnKey/>}/>
-                <SideMenuBtn link='signup' txt={'회원가입'} icon={<AssignmentInd/>}/>
+                <SideMenuBtn link='/login' txt={'로그인'} icon={<VpnKey/>}/>
+                <SideMenuBtn link='/signup' txt={'회원가입'} icon={<AssignmentInd/>}/>
                 <Divider />
               </>
             }
