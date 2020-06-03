@@ -11,10 +11,10 @@ class SideMenuBtn extends Component {
     }
     else{
       if(this.props.link === 'login' || this.props.link === 'signup'){
-        this.props.history.push(`${this.props.link}`)
+        this.props.history.push(`/${this.props.link}`)
       }
       else{
-        this.props.history.replace(`${this.props.link}`)
+        this.props.history.replace(`/${this.props.link}`)
         this.context.toggleSideMenu()
       }
     }

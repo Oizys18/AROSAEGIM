@@ -27,6 +27,9 @@ class MapPage extends Component {
       rvc: null,
 
       mapCenter: new kakao.maps.LatLng(37.50083104531534, 127.03694678811341),
+      // mapCenter: null,
+      // mapCenter: new kakao.maps.LatLng(sessionStorage.getItem('ARSG latitude'), sessionStorage.getItem('ARSG longitude')),
+      
       level: 3,
       userCenter: null,
       usingUserCenter: false,
@@ -47,29 +50,20 @@ class MapPage extends Component {
     });
   }
 
-  componentDidMount() {
-    this.getGeolocation(
-      async (data) => {
-        await this.setStateAsync({
-          center: new kakao.maps.LatLng(data.coords.latitude, data.coords.longitude),
-          userCenter: new kakao.maps.LatLng(data.coords.latitude, data.coords.longitude),
-          usingUserCenter: true
-        })
-      },
-      (err) => {
-        console.warn(err)
-      },
-      {
-        enableHighAccuracy: true,
-        maximumAge: 0,
-        timeout: Infinity,
-      }
-    )
+  async componentDidMount() {
+    const _lat = sessionStorage.getItem('ARSG latitude');
+    const _lng = sessionStorage.getItem('ARSG longitude');
+    // console.log(Number(_lat), Number(_lng), _lng);
+    const _options = {
+      // center: this.state.mapCenter,
+      center: new kakao.maps.LatLng(Number(_lat), Number(_lng)),
+      level: this.state.level,
+    }
+    await this.setStateAsync({ 
+      mapCenter: _options.center,
+      userCenter: _options.center
+    })
   }
-
-  getGeolocation = (resolve, reject, options) => {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options); 
-  };
 
   tglUserCenter = () => {
     this.setState({usingUserCenter: !this.state.usingUserCenter});
@@ -174,7 +168,7 @@ class MapPage extends Component {
 
         <SearchBar on={!this.state.roadView}/>
 
-        <Slide in={true} direction={_dir} timeout={400}>
+        <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
         <StViewCont>
           <Zoom in={!this.state.roadView} mountOnEnter unmountOnExit>
             <StRVBtn onClick={this.tglView}><Streetview/></StRVBtn>
