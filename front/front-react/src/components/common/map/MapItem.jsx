@@ -4,6 +4,9 @@ import styled from "styled-components";
 import imgLeft from "../../../assets/balloon/balloon-left-filled@2x.png";
 import imgMiddle from "../../../assets/balloon/balloon-middle-filled@2x.png";
 import imgRight from "../../../assets/balloon/balloon-right-filled@2x.png";
+import { Slide, Chip } from "@material-ui/core";
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import { getTimeDeltaString } from "../time/TimeFunctinon";
 
 class MapItem extends Component {
   constructor(props) {
@@ -16,14 +19,14 @@ class MapItem extends Component {
   componentDidMount() {
     if (!this.state.on && !!this.props.map ) {
       // do something
-      this.showOnMap();
+      // this.showOnMap();
     }
   }
 
   componentDidUpdate() {
     if (!this.state.on && !!this.props.map ) {
       // do something
-      this.showOnMap();
+      // this.showOnMap();
     } 
   }
 
@@ -67,7 +70,8 @@ class MapItem extends Component {
 
   render() {
     return (
-      <ItemContainer ref={this.myRef} onClick={this.clickEvent}>
+      <ItemContainer onClick={this.clickEvent}>
+        <Chip color="primary" size="small" icon={<AccessTimeIcon />} label={this.props.item ? ' ' + getTimeDeltaString(this.props.item.regDate) : " "}/>
         <ItemLeft />
         <ItemMiddle>
           <TextMiddle>{this.props.item.contents.slice(0,5)}{this.props.item.contents.length > 5 ? '...' : ''}</TextMiddle>
@@ -84,6 +88,18 @@ const ItemContainer = styled.div`
   height: 30px;
   display: flex;
   margin-top: 15px;
+  animation-duration: 1s;
+  animation-name: slidein;
+  @keyframes slidein {
+    from {
+      margin-left: 100%;
+      width: 300%
+    }
+    to {
+      margin-left: 0%;
+      width: 100%;
+    }
+  }
 `;
 
 const ItemLeft = styled.div`
