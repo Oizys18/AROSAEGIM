@@ -37,7 +37,7 @@ class MapBtnSet extends Component {
       <StBtnSetCont>
         <StBtnCont onClick={_actions.tglView}>{this.changeIcon('view')}</StBtnCont>
         <StBtnCont onClick={_actions.goUserCenter}><MyLocation/></StBtnCont>
-        <StBtnCont onClick={_actions.tglFilter}>{this.changeIcon('')}</StBtnCont>
+        {/* <StBtnCont onClick={_actions.tglFilter}>{this.changeIcon('')}</StBtnCont> */}
       </StBtnSetCont>
     )
   }

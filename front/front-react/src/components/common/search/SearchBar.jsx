@@ -9,6 +9,8 @@ class SearchBar extends Component {
   constructor(props){
     super(props)
     this.state = {
+      msg: true, 
+      
       select: '장소',
       selectOpen: false,
 
@@ -18,10 +20,15 @@ class SearchBar extends Component {
 
   componentDidMount(){
     document.addEventListener('keypress', this.pressEnter)
+    this.tgleMsg()
   }
   componentWillUpdate(){
     document.removeEventListener('keypress', this.pressEnter)
+    clearInterval(this.tgleMsg)
   }
+
+  tgleMsg = () => setInterval(() => {this.setState({ msg: !this.state.msg })}, 3000)
+  Msg = () => { return this.state.msg ? this.props.addr : this.props.w3w }
 
   openSelect = () => {
     this.setState({ selectOpen: true })
@@ -68,7 +75,7 @@ class SearchBar extends Component {
 
             <InputBase 
               type='search'
-              placeholder={this.state.select === '장소' ? '장소 검색' : '지도 내에서 새김 검색'}
+              placeholder={this.state.select === '장소' ? `${this.Msg()}` : '지도 내에서 새김 검색'}
               onFocus={this.closeSelect}
               onChange={this.handleInput}
             />

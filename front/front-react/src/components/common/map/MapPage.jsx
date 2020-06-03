@@ -13,7 +13,7 @@ import MapView from './MapView';
 import MapListItem from "./MapListItem";
 import RoadView from './RoadView';
 import MapBtnSet from './MapBtnSet';
-
+import CtoW from '../../../apis/w3w';
 import * as SA from '../../../apis/SaegimAPI';
 
 class MapPage extends Component {
@@ -25,9 +25,12 @@ class MapPage extends Component {
       mv: null,
 
       mapCenter: new kakao.maps.LatLng(37.5012767241426, 127.039600248343), //멀티캠퍼스로 초기화
-      level: 3,
+      level: 4,
       userCenter: new kakao.maps.LatLng(37.5012767241426, 127.039600248343), //멀티캠퍼스로 초기화
-      usingUserCenter: false,
+
+      geocoder: new kakao.maps.services.Geocoder(),
+      addr: '',
+      w3w: '',
 
       selected: {
         status: false,
@@ -57,31 +60,59 @@ class MapPage extends Component {
     const _lng = sessionStorage.getItem('ARSG longitude');
     if(_lat && _lng){
       _options.center = new kakao.maps.LatLng(Number(_lat), Number(_lng))
-      await this.setStateAsync({ 
-        mapCenter: _options.center,
-        userCenter: _options.center,
-      })
     }
-  }
 
-  changeMapCenter = (_mapCenter) => {
-    this.setState({ 
-      mapCenter: _mapCenter 
+    await this.setStateAsync({ 
+      mapCenter: _options.center,
+      userCenter: _options.center,
     })
+
+    this.getAddrW3W()
   }
 
-  tglUserCenter = () => {
-    this.setState({usingUserCenter: !this.state.usingUserCenter});
+  changeMapCenter = async (_mapCenter) => {
+    await this.setStateAsync({ mapCenter: _mapCenter })
+    this.getAddrW3W()
+  }
+
+  //행정 주소, w3w
+  getAddrW3W = async () => {
+    const _lat = this.state.mapCenter.getLat()
+    const _lng = this.state.mapCenter.getLng()
+    
+    this.state.geocoder.coord2RegionCode(_lng, _lat, (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        for(var i = 0; i < result.length; i++) {
+          // 행정동의 region_type 값은 'H' 이므로
+          if (result[i].region_type === 'H') {
+            this.setState({ addr:  result[i].address_name })
+            break;
+          }
+        }
+      }     
+    });
+    const www = await CtoW(_lat, _lng);
+    this.setState({
+      w3w: www.data.words,
+    });
   }
   
   goUserCenter = () => {
-    this.setState({
-      mapCenter: this.state.userCenter
-    });
+    this.setState({ mapCenter: this.state.userCenter });
   }
 
   unsetUsingUserCenter = () => {
-    this.setState({usingUserCenter: false});
+    this.setState({ usingUserCenter: false });
+  }
+
+  unsetAll = () => {
+    this.setState({
+      usingUserCenter: false,
+      selected: {
+        status: false,
+        item: null,
+      },
+    })
   }
 
   showMarker = () => {
@@ -177,7 +208,7 @@ class MapPage extends Component {
     return(
       <StMapCont height={this.context.appHeight}>
 
-        <SearchBar on={!this.state.roadView}/>
+        <SearchBar on={!this.state.roadView} addr={this.state.addr} w3w={this.state.w3w}/>
 
         <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
         <StViewCont>
@@ -208,8 +239,37 @@ class MapPage extends Component {
               />
             </>
           )}
+          
+          {this.state.roadView ?
+            <RoadView 
+              popModal={this.context.popModal}
+              mapCenter={this.state.mapCenter}
+              userCenter={this.state.userCenter}
+              addr={this.state.addr}
+              w3w={this.state.w3w}
+              changeMapCenter={this.changeMapCenter}
+              items={this.state.items}
+              hide={!this.state.roadView}
+              tglView={this.tglView}
+            />
+            :
+            <MapView
+              status="list"
+              mapCenter={this.state.mapCenter}
+              items={this.state.items}
+              hide={this.state.roadView}
+              usingUserCenter={this.state.usingUserCenter}
+              userCenter={this.state.userCenter}
+              changeMapCenter={this.changeMapCenter}
+              unsetUsingUserCenter={this.unsetUsingUserCenter}
+              unsetAll={this.unsetAll}
+              selectItem={this.selectItem}
+              closeItem={this.closeItem}
+              fetchItem={this.fetchItem}
+            />
+          }
 
-          <MapView
+          {/* <MapView
             status="list"
             mapCenter={this.state.mapCenter}
             items={this.state.items}
@@ -218,7 +278,9 @@ class MapPage extends Component {
             userCenter={this.state.userCenter}
             changeMapCenter={this.changeMapCenter}
             unsetUsingUserCenter={this.unsetUsingUserCenter}
+            unsetAll={this.unsetAll}
             selectItem={this.selectItem}
+            closeItem={this.closeItem}
             fetchItem={this.fetchItem}
           />
 
@@ -232,7 +294,7 @@ class MapPage extends Component {
               hide={!this.state.roadView}
               tglView={this.tglView}
             />
-          }
+          } */}
 
         </StViewCont>
         </Slide>
