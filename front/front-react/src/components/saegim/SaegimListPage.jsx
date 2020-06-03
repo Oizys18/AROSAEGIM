@@ -5,7 +5,6 @@ import CardItem from "./CardItem";
 import styled from "styled-components";
 import * as SA from "../../apis/SaegimAPI"
 import { Zoom, Slide } from "@material-ui/core";
-import MyPageMenu from "../mypage/MyPageMenu";
 import Select from "@material-ui/core/Select";
 
 class SaegimListPage extends Component {
@@ -22,7 +21,7 @@ class SaegimListPage extends Component {
       ],
       selectedOption: 0,
       distance: 100,
-      data: []
+      data: [],
     }
     this.selectChange = this.selectChange.bind(this);
   }
@@ -30,8 +29,10 @@ class SaegimListPage extends Component {
   changeData = () => {
     const _dataLeft = this.state.data.slice(0, 1);
     const _dataRight = this.state.data.slice(1);
+    const _data = _dataRight.concat(_dataLeft)
+    this.context.setCurData(_data)
     this.setState({
-      data: _dataRight.concat(_dataLeft)
+      data: _data
     })
   }
 
@@ -77,9 +78,14 @@ class SaegimListPage extends Component {
   }
 
   componentDidMount() {
-    this.getCurrentLocation()
-    // this.getSaegimList()
-    console.log(this.state.options[this.state.selectedOption].text)
+    if (this.context.idxUpdateFlag === true) {
+      this.setState({
+        data: this.context.curData,
+      })
+      this.context.idxUpdate(false)
+    } else {
+      this.getCurrentLocation()
+    }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -94,7 +100,7 @@ class SaegimListPage extends Component {
       _dir = 'left'
     }
     const data = this.state.data;
-    const PrintCard = this.state.data.map((saegim, idx) => {
+    const PrintCard = data.map((saegim, idx) => {
       return (
         <Zoom in={true} timeout={300} key={idx}>
           <CardItem

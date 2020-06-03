@@ -25,14 +25,12 @@ class Comment extends Component{
     await this.setState({
       comments: _comments
     })
-    console.log(this.state.comments)
   }
 
   handleInput = async (e) => {
     await this.setState({
       contents: e.target.value
     })
-    console.log(this.state.contents)
   }
 
   handleSubmit = async () => {
@@ -45,7 +43,6 @@ class Comment extends Component{
       name: this.state.userInfo.name
     }
     const _res = await writeComment(_data, _saegimid, _userInfo)
-    console.log(_res)
     this.setState({
       updateFlag: true,
       contents: ""
@@ -57,11 +54,9 @@ class Comment extends Component{
       ovfl: true,
       updateFlag: true
     })
-    console.log(this.state)
   }
 
   async componentDidMount() {
-    console.log(this.props.id)
     await this.getComments()
     await this.setState({
       userInfo: this.context.userInfo
@@ -112,7 +107,6 @@ const StCommentList = styled.div`
   height: ${props => props.ovfl === false ? '12vh' : '15vh'};
   overflow: ${props => props.ovfl === false ? 'hidden' : 'auto'};
 `;
-
 
 const StCommentInput = styled.div`
   margin-top: 16px;
