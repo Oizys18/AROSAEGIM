@@ -45,6 +45,7 @@ class CardItem extends Component {
     window.addEventListener("mouseup", this.onDragEndMouse);
     window.addEventListener("touchend", this.onDragEndTouch);
     this.changeOrder()
+    console.log(this.props)
   }
 
   onDragStartMouse(e) {
@@ -167,7 +168,7 @@ class CardItem extends Component {
                     {saegim.secret ? "비밀글입니다" : saegim.contents}
                   </Contents>
                   <StLinkDiv>
-                  <StLink to={`/list/${saegim.id}/`}>
+                  <StLink to={`list/${saegim.id}`}>
                     더보기
                   </StLink>
                 </StLinkDiv>
