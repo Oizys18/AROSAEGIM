@@ -9,7 +9,7 @@ import CtoW from "../../apis/w3w";
 import Switch from "../common/switch/Switch";
 import axios from "axios";
 import PhotoIcon from "@material-ui/icons/AddPhotoAlternate";
-import { getUserByEmail } from "../../apis/AccountAPI";
+// import { getUserByEmail } from "../../apis/AccountAPI";
 import { Storage } from "../../storage/Storage";
 import Popover from "@material-ui/core/Popover";
 
