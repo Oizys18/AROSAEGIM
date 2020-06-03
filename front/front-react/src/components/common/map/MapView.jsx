@@ -12,8 +12,15 @@ class MapView extends Component {
     this.state = {
       items: this.props.items,
       mv: null,
+      mapProjection: null,
       userMarker: null,
+      clusterer: null,
+      selectedList: {
+        status: false,
+        items: [],
+      }
     };
+    this.markers = []
   }
 
   setStateAsync(state) {
@@ -57,8 +64,21 @@ class MapView extends Component {
     kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
     kakao.maps.event.addListener(_mapView, "dragend", this.handleDragEnd)
 
+    const _mapProjection = _mapView.getProjection()
+
+    const _clusterer = new kakao.maps.MarkerClusterer({
+      map: _mapView, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+      averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+      minLevel: 1, // 클러스터 할 최소 지도 레벨 
+      disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+    });
+
+    kakao.maps.event.addListener(_clusterer, 'clusterclick', this.handleCluster);
+
     this.setState({
-      mv: _mapView
+      mv: _mapView,
+      mapProjection: _mapProjection,
+      clusterer: _clusterer,
     })
   }
 
@@ -90,6 +110,8 @@ class MapView extends Component {
   handleDragStart = () => {
     // (this.state.selected.status && this.closeItem());
     (this.props.usingUserCenter && this.props.unsetUsingUserCenter());
+    (this.state.selectedList.status && this.unsetSelectedList());
+    (this.props.unsetAll())
   };
 
   handleDragEnd = () => {
@@ -98,7 +120,29 @@ class MapView extends Component {
     // (this.state.usingUserCenter && this.setState({usingUserCenter: false}));
   };
 
-  overlayMarkers = () => {
+  handleCluster = (cluster) => {
+    const items = cluster.getMarkers()
+    const selectedList = {
+      status: true,
+      items: items.map(marker=>marker.item)
+    }
+    this.setState({selectedList: selectedList})
+
+    // set panTo offset
+    const CENTER_OFFSET_RATIO = 0.2; // percentage
+    const width = window.innerWidth;
+    const center_offset = Math.floor(width * CENTER_OFFSET_RATIO);
+
+    const cluster_point = this.state.mapProjection.pointFromCoords(cluster.getCenter())
+    const target_point = new kakao.maps.Point(cluster_point.x + center_offset, cluster_point.y);
+
+    const target_coords = this.state.mapProjection.coordsFromPoint(target_point);
+
+    this.state.mv.panTo(target_coords);
+  }
+
+  overlayMarkers = async () => {
+    // await this.markers.forEach(el=>el.setMap(null));
     const markers = this.props.items.map((el) => {
       const marker = new kakao.maps.Marker(MM.MarkerConfig(el));// new MapMarker(el);
       marker.setMap(this.state.mv)
@@ -110,6 +154,8 @@ class MapView extends Component {
       return marker
     })
     this.markers = markers;
+    this.state.clusterer.clear();
+    this.state.clusterer.addMarkers(markers);
   }
 
   
@@ -140,6 +186,14 @@ class MapView extends Component {
     MM.panTo(this.state.mv, item.latitude, item.longitude)
   };
 
+  overlaySelectedList = () => {
+    return this.state.selectedList.items.map(el=> <MapItem key={el.id} item={el} selectItem={this.selectItem} />)
+  }
+
+  unsetSelectedList = () => {
+    this.setState({selectedList: {status: false, items: []}})
+  }
+
   render() {
     return (
       <>
@@ -153,6 +207,13 @@ class MapView extends Component {
             selectItem={this.selectItem}
           />})}</> */}
         </StView>
+        {this.state.selectedList.status && 
+          <StListCont>
+            <StList>
+              {this.overlaySelectedList()}
+            </StList>
+          </StListCont>
+        }
       </>
     );
   }
@@ -163,3 +224,26 @@ const StView = styled.div`
   width: 100%;
   height: 100%;
 `;
+
+const StListCont = styled.div`
+  position: absolute;
+  width: auto;
+  height: auto;
+  overflow-y: auto;
+  max-height: 50%;
+  max-width: 60%;
+  z-index: 15;
+  top: 50%;
+  right: 0px;
+  padding-right: 8px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  transform: translateY(-50%);
+  /* background: linear-gradient(0.25turn, rgba(255,255,255,0) 80%, #838e83 ); */
+`
+
+const StList = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+`

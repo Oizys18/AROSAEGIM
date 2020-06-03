@@ -73,6 +73,16 @@ class MapPage extends Component {
     this.setState({usingUserCenter: false});
   }
 
+  unsetAll = () => {
+    this.setState({
+      usingUserCenter: false,
+      selected: {
+        status: false,
+        item: null,
+      },
+    })
+  }
+
   showMarker = () => {
     this.state.userMarker.setMap(null);
     this.state.userMarker.setMap(this.state.mv);
@@ -208,7 +218,9 @@ class MapPage extends Component {
             usingUserCenter={this.state.usingUserCenter}
             userCenter={this.state.userCenter}
             unsetUsingUserCenter={this.unsetUsingUserCenter}
+            unsetAll={this.unsetAll}
             selectItem={this.selectItem}
+            closeItem={this.closeItem}
             fetchItem={this.fetchItem}
           />
 

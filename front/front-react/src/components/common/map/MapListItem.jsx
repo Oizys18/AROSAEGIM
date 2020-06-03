@@ -39,7 +39,7 @@ const CardViewContainer = styled.div`
   position: absolute;
   width: auto;
   max-width: 100%;
-  z-index: 5;
+  z-index: 20;
   bottom: 120px;
 `;
 
