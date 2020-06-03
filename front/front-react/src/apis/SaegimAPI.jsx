@@ -53,7 +53,7 @@ export const getSaegimNearMe = async (data) => {
 
   const _res = await axios({
     method: "get",
-    url: `${process.env.REACT_APP_BASE_URL}/saegims/latlng?lat=${lat}&lng=${lng}&meter=${Math.floor(meter)}`,
+    url: `${process.env.REACT_APP_BASE_URL}/saegims/latlng?lat=${lat}&lng=${lng}&meter=${Math.floor(meter / 2)}`,
   });
 
   if (_res.data.state === "success") {

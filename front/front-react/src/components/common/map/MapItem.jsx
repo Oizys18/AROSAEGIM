@@ -14,7 +14,7 @@ class MapItem extends Component {
     this.myRef = React.createRef();
   }
   componentDidMount() {
-    if (!this.state.on && !!this.props.map) {
+    if (!this.state.on && !!this.props.map ) {
       // do something
       this.showOnMap();
     }
@@ -24,7 +24,11 @@ class MapItem extends Component {
     if (!this.state.on && !!this.props.map ) {
       // do something
       this.showOnMap();
-    }
+    } 
+  }
+
+  componentWillUnmount() {
+    // this.customOverlay.setMap(null);
   }
 
   // initial map overlay

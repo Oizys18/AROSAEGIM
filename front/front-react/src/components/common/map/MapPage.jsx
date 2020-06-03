@@ -1,19 +1,18 @@
 /*global kakao*/
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import {IconButton, Zoom, Slide} from '@material-ui/core';
-import {Map, Streetview, MyLocation, MyLocationTwoTone} from '@material-ui/icons';
+import { Zoom, Slide} from '@material-ui/core';
+import {Streetview, MyLocation, MyLocationTwoTone} from '@material-ui/icons';
 import {FlexColumn} from '../../../styles/DispFlex';
 import DefaultButton from "../buttons/DefaultButton";
 
-import { getPosition } from '../../../apis/GeolocationAPI';
+// import { getPosition } from '../../../apis/GeolocationAPI';
 import {Storage} from '../../../storage/Storage';
 import SearchBar from "../search/SearchBar";
 import MapView from './MapView';
 import MapListItem from "./MapListItem";
 import RoadView from './RoadView';
 
-import * as MM from './MapMethod';
 import * as SA from '../../../apis/SaegimAPI';
 
 class MapPage extends Component {
@@ -28,7 +27,6 @@ class MapPage extends Component {
       rvc: null,
 
       mapCenter: new kakao.maps.LatLng(37.50083104531534, 127.03694678811341),
-      // mapCenter: null,
       level: 3,
       userCenter: null,
       usingUserCenter: false,
@@ -49,68 +47,14 @@ class MapPage extends Component {
     });
   }
 
-  async componentDidMount(){
-    // const _coords = (await getPosition()).coords
-    // const _lat = _coords.latitude
-    // const _lng = _coords.longitude
-
-    const _container = document.getElementById("mapView");
-    const _options = {
-      center: this.state.mapCenter,
-      // center: new kakao.maps.LatLng(_lat, _lng),
-      level: this.state.level,
-    }
-
-    const _mapView = new kakao.maps.Map(_container, _options);
-    kakao.maps.event.addListener(_mapView, "zoom_changed", this.changeLvCt)
-    kakao.maps.event.addListener(_mapView, "center_changed", this.changeLvCt)
-    kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
-    kakao.maps.event.addListener(_mapView, "dragend", this.handleDragEnd)
-
-    await this.setStateAsync({ 
-      mv: _mapView,
-      bounds: _mapView.getBounds()
-    })
-    
-    // get items from Backend with map center position
-    const meter = SA.boundsToMeter({
-      lat1: this.state.bounds.getSouthWest().getLat(),
-      lon1: this.state.bounds.getSouthWest().getLng(),
-      lat2: this.state.bounds.getNorthEast().getLat(),
-      lon2: this.state.bounds.getNorthEast().getLng(),
-    })
-
-    let items = await SA.getSaegimNearMe({
-      lat: this.state.mapCenter.getLat(),
-      lng: this.state.mapCenter.getLng(),
-      meter: meter
-    })
-
-    await this.setStateAsync({
-      items: items
-    })
-
-    const _scale = _container.childNodes[1]
-    _scale.style = `
-      position: absolute; 
-      z-index: 1; 
-      margin: 0px 6px; 
-      height: 19px; 
-      line-height: 14px; 
-      left: 0px; 
-      bottom: 64px; 
-      color: rgb(0, 0, 0);
-    `
-    await this.getGeolocation(
+  componentDidMount() {
+    this.getGeolocation(
       async (data) => {
         await this.setStateAsync({
           center: new kakao.maps.LatLng(data.coords.latitude, data.coords.longitude),
           userCenter: new kakao.maps.LatLng(data.coords.latitude, data.coords.longitude),
-          userMarker: MM.myLocationMarker(new kakao.maps.LatLng(data.coords.latitude, data.coords.longitude)),
           usingUserCenter: true
         })
-        _mapView.panTo(this.state.center)
-        this.showMarker();
       },
       (err) => {
         console.warn(err)
@@ -121,57 +65,46 @@ class MapPage extends Component {
         timeout: Infinity,
       }
     )
-
   }
 
-  componentWillUnmount(){
-    kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLvCt)
-    kakao.maps.event.removeListener(this.state.mv, "center_changed", this.changeLvCt)
-    kakao.maps.event.removeListener(this.state.mv, "dragstart", this.handleDragStart)
-    kakao.maps.event.removeListener(this.state.mv, "dragend", this.handleDragEnd)
-  }
-
-  changeLvCt = () => {
-    this.setState({
-      mapCenter: this.state.mv.getCenter(),
-      level: this.state.mv.getLevel(),
-    })
-  }
-
-  getGeolocation = async (resolve, reject, options) => {
+  getGeolocation = (resolve, reject, options) => {
     navigator.geolocation.getCurrentPosition(resolve, reject, options); 
   };
 
-  handleDragStart = () => {
-    (this.state.selected.status && this.closeItem());
-    (this.state.usingUserCenter && this.setState({usingUserCenter: false}));
-  };
+  tglUserCenter = () => {
+    this.setState({usingUserCenter: !this.state.usingUserCenter});
+  }
 
-  handleDragEnd = () => {
-    (this.state.selected.status && this.closeItem());
-  };
-
-  tglUserCenter = async () => {
-    await this.setStateAsync({usingUserCenter: !this.state.usingUserCenter});
-    console.log(this.state.userCenter, this.state.usingUserCenter)
-    if (this.state.userCenter && this.state.usingUserCenter) {
-      this.state.mv.panTo(this.state.userCenter)
-      this.showMarker()
-    }
+  unsetUsingUserCenter = () => {
+    this.setState({usingUserCenter: false});
   }
 
   showMarker = () => {
     this.state.userMarker.setMap(null);
     this.state.userMarker.setMap(this.state.mv);
+    kakao.maps.event.addListener(this.state.userMarker, "click", () => console.log('hello'))
   }
 
-  // handleBoundsChange = () => {
-  //   this.setState({ bounds: this.state.mv.getBounds() });
-  //   // this.closeItem();
-  // };
+  fetchItem = async (bounds, center) => {
+    const meter = SA.boundsToMeter({
+      lat1: bounds.getSouthWest().getLat(),
+      lon1: bounds.getSouthWest().getLng(),
+      lat2: bounds.getNorthEast().getLat(),
+      lon2: bounds.getNorthEast().getLng(),
+    })
+
+    let items = await SA.getSaegimNearMe({
+      lat: center.getLat(),
+      lng: center.getLng(),
+      meter: meter
+    })
+
+    this.setState({
+      items: items
+    })
+  }
 
   selectItem = (item) => {
-    MM.panTo(this.state.mv, item.latitude, item.longitude)
     this.setState({ selected: { status: true, item: item } });
   };
 
@@ -228,16 +161,6 @@ class MapPage extends Component {
     await this.setStateAsync({ roadView: !this.state.roadView })
   }
 
-  // changeIcon = () => {
-  //   return (
-  //     <>
-  //       <Map style={{visibility: 'hidden'}}/>
-  //       <Zoom in={this.state.roadView} style={{position: 'absolute', zIndex: 12,}}><Map/></Zoom>
-  //       <Zoom in={!this.state.roadView} style={{position: 'absolute', zIndex: 13,}}><Streetview/></Zoom>
-  //     </>
-  //   )
-  // }
-
   render(){
     let _dir = 'left'
     if(this.context.curPage === '/write' || 
@@ -253,11 +176,6 @@ class MapPage extends Component {
 
         <Slide in={true} direction={_dir} timeout={400}>
         <StViewCont>
-          
-          {/* <StRVBtn>
-            <IconButton disableRipple onClick={this.tglView}>{this.changeIcon()}</IconButton>
-          </StRVBtn> */}
-
           <Zoom in={!this.state.roadView} mountOnEnter unmountOnExit>
             <StRVBtn onClick={this.tglView}><Streetview/></StRVBtn>
           </Zoom>
@@ -266,7 +184,7 @@ class MapPage extends Component {
           </Zoom>
 
           {
-            !this.state.roadView && 
+            false && !this.state.roadView && 
             <ButtonWrapper>
               <DefaultButton
                 text="add random item"
@@ -289,11 +207,15 @@ class MapPage extends Component {
           )}
 
           <MapView
-            map={this.state.mv}
             status="list"
+            center={this.state.mapCenter}
             items={this.state.items}
-            selectItem={this.selectItem}
             hide={this.state.roadView}
+            usingUserCenter={this.state.usingUserCenter}
+            userCenter={this.state.userCenter}
+            unsetUsingUserCenter={this.unsetUsingUserCenter}
+            selectItem={this.selectItem}
+            fetchItem={this.fetchItem}
           />
 
           {
