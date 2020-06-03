@@ -4,14 +4,16 @@ import Card from "../common/cards/Card";
 import styled from "styled-components";
 import bgImage from "../../assets/images/sample_img.jpg"
 import { ArrowBack, Lock, LockOpen } from "@material-ui/icons";
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import * as SA from "../../apis/SaegimAPI"
-import Time from "../common/time/Time";
+import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 import Chip from "../common/chip/Chip"
 import { Zoom } from "@material-ui/core";
 import SaegimDetailButton from "./SaegimDetailButton";
 import {getUserByEmail} from "../../apis/AccountAPI";
 import Comment from "./Comment";
 import Like from "./Like";
+import {Storage} from "../../storage/Storage";
 
 class SaegimDetail extends Component {
   constructor(props) {
@@ -20,6 +22,7 @@ class SaegimDetail extends Component {
       data: {
         tags: []
       },
+      regDate: "",
       userId: "",
       updateFlagByLike: false
     };
@@ -29,18 +32,23 @@ class SaegimDetail extends Component {
 
   goBack() {
     this.props.history.goBack();
+    this.context.idxUpdate(true);
   }
 
   getSaegimDetail = async () => {
     const _data = await SA.getSaegimDetailById(this.props.match.params.id)
     await this.setStateAsync({ data: _data })
+    const _regDate = getTimeDeltaString(this.state.data.regDate)
+    this.setState({
+      regDate: _regDate
+    })
   }
 
   async componentDidMount() {
-    const _email = localStorage.getItem('ARSG email')
-    if (_email !== null) {
+    const _userInfo = this.context.userInfo
+    if (_userInfo !== {}) {
       this.setState({
-        userId: (await getUserByEmail(_email)).data.id
+        userId: _userInfo.id
       })
     }
     await this.getSaegimDetail();
@@ -58,19 +66,6 @@ class SaegimDetail extends Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state.data.tags !== prevState.tags) {
-    }
-    // if (this.state.updateFlagByLike === true) {
-    //   this.getSaegimDetail()
-    //   this.setState({
-    //     updateFlagByLike: false
-    //   })
-    //   console.log('디테일 다시 가져옴')
-    //   console.log(this.state.data.likes)
-    // }
-  }
-
   render() {
     const PrintChip = this.state.data.tags.map((tag) => {
       return (
@@ -84,7 +79,8 @@ class SaegimDetail extends Component {
             <BackGround bgImage={this.state.data.image ? this.state.data.image : bgImage}/>
             <Location>{this.state.data.w3w}</Location>
             <Registered>
-              <Time regTime={this.state.data.regDate}/>
+              <StAccessTimeIcon />
+              <div>{this.state.regDate}</div>
             </Registered>
             <CardWrapper>
               <Card>
@@ -127,6 +123,7 @@ class SaegimDetail extends Component {
 }
 
 export default SaegimDetail;
+SaegimDetail.contextType = Storage;
 
 const Wrapper = styled.div`
   display: flex;
@@ -199,6 +196,10 @@ const Registered = styled.div `
   justify-content: center;
   color: white;
 `
+
+const StAccessTimeIcon = styled(AccessTimeIcon)`
+  margin-right: 4px;
+`;
 
 const Communication = styled.div`
   height: 50%;

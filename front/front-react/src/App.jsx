@@ -43,6 +43,11 @@ class App extends Component {
       modalMode: '',
       popModal: this.popModal,
       handleModal: this.handleModal,
+
+      curData: [],
+      setCurData: this.setCurData,
+      idxUpdateFlag: false,
+      idxUpdate: this.idxUpdate
     };
   }
 
@@ -133,6 +138,18 @@ class App extends Component {
       this.props.history.replace(`/${_id}`);
     }
   };
+
+  idxUpdate = (flag) => {
+    this.setState({
+      idxUpdateFlag: flag
+    })
+  }
+
+  setCurData = (data) => {
+    this.setState({
+      curData: data
+    })
+  }
 
   render() {
     return (
