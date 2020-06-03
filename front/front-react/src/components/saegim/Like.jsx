@@ -87,7 +87,7 @@ class Like extends Component{
         <div>덧새김</div>
         <StIcon>
         {this.state.isLike === true
-          ? <FavoriteIcon color={'#ffffff'} onClick={this.handleClick} />
+          ? <FavoriteIcon onClick={this.handleClick} />
           : <FavoriteBorderIcon onClick={this.handleClick} />
         }
         </StIcon>
