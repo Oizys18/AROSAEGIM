@@ -1,10 +1,10 @@
 import React, { Component } from "react";
+import { Link } from 'react-router-dom';
 import Card from "../cards/Card";
 import DefaultButton from "../buttons/DefaultButton";
 import styled from "styled-components";
 import locationPin from "../../../assets/point/point-notfilled@2x.png";
 import timeIcon from "../../../assets/time/time@2x.png";
-import balloonIcon from "../../../assets/balloon/balloon-whole@2x.png";
 import { getTimeDeltaString } from "../time/TimeFunctinon";
 
 export default class MapListItem extends Component {
@@ -24,12 +24,9 @@ export default class MapListItem extends Component {
             <StText>{this.props.item ? ' ' + getTimeDeltaString(this.props.item.regDate) : " "}</StText>
           </StFlexContainer>
           <StButtonWrapper>
-            <DefaultButton
-              text="자세히보기"
-              onClick={() => {
-                alert(JSON.stringify(this.props.item));
-              }}
-            />
+            <Link to={`/list/${this.props.item.id}`}>
+              <DefaultButton text="자세히보기" />
+            </Link>
             <DefaultButton text="닫기" onClick={this.props.closeItem} />
           </StButtonWrapper>
         </Card>

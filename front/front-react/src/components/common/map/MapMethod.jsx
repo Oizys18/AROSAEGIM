@@ -1,4 +1,6 @@
 /* global kakao */
+import myLocationImg from "../../../assets/point/myLocation.png";
+import balloon from "../../../assets/balloon/balloon-whole-green@2x.png";
 
 export const setCenter = (kakaoMapObj, lat, lng) => {
   const targetCenter = new kakao.maps.LatLng(lat, lng);
@@ -10,3 +12,24 @@ export const panTo = (kakaoMapObj, lat, lng) => {
   kakaoMapObj.panTo(targetCenter);
 };
 
+const MarkerImage = (itemType) => {
+  const IMAGE_CONST = (itemType === 'user' ? 25 : 15)
+  const imageSrc = (itemType === 'user' ? myLocationImg : balloon);
+  const imageSize = new kakao.maps.Size(IMAGE_CONST * 2, IMAGE_CONST * 2); // 마커이미지의 크기입니다
+  const imageOption = { offset: new kakao.maps.Point(IMAGE_CONST, IMAGE_CONST * 2) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+  // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+  const markerImage = new kakao.maps.MarkerImage(
+    imageSrc,
+    imageSize,
+    imageOption
+  );
+  return markerImage
+}
+
+export const MarkerConfig = (item, itemType) => {
+  return {
+    position: new kakao.maps.LatLng(item.latitude, item.longitude),
+    image: MarkerImage(itemType)
+  }
+}
