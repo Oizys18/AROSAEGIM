@@ -1,19 +1,18 @@
 /*global kakao*/
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import {IconButton, Zoom, Slide} from '@material-ui/core';
-import {Map, Streetview} from '@material-ui/icons';
+import { Zoom, Slide} from '@material-ui/core';
+import {Streetview, MyLocation, MyLocationTwoTone} from '@material-ui/icons';
 import {FlexColumn} from '../../../styles/DispFlex';
 import DefaultButton from "../buttons/DefaultButton";
 
-import { getPosition } from '../../../apis/GeolocationAPI';
+// import { getPosition } from '../../../apis/GeolocationAPI';
 import {Storage} from '../../../storage/Storage';
 import SearchBar from "../search/SearchBar";
 import MapView from './MapView';
 import MapListItem from "./MapListItem";
 import RoadView from './RoadView';
 
-import * as MM from './MapMethod';
 import * as SA from '../../../apis/SaegimAPI';
 
 class MapPage extends Component {
@@ -27,11 +26,14 @@ class MapPage extends Component {
       rv: null,
       rvc: null,
 
-      // mapCenter: new kakao.maps.LatLng(37.50083104531534, 127.03694678811341),
-      mapCenter: null,
+      mapCenter: new kakao.maps.LatLng(37.50083104531534, 127.03694678811341),
+      // mapCenter: null,
       // mapCenter: new kakao.maps.LatLng(sessionStorage.getItem('ARSG latitude'), sessionStorage.getItem('ARSG longitude')),
+      
       level: 3,
       userCenter: null,
+      usingUserCenter: false,
+
       selected: {
         status: false,
         item: null,
@@ -48,110 +50,55 @@ class MapPage extends Component {
     });
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     const _lat = sessionStorage.getItem('ARSG latitude');
     const _lng = sessionStorage.getItem('ARSG longitude');
     // console.log(Number(_lat), Number(_lng), _lng);
-    const _container = document.getElementById("mapView");
     const _options = {
       // center: this.state.mapCenter,
       center: new kakao.maps.LatLng(Number(_lat), Number(_lng)),
       level: this.state.level,
     }
-
-    const _mapView = new kakao.maps.Map(_container, _options);
-    kakao.maps.event.addListener(_mapView, "zoom_changed", this.changeLvCt)
-    kakao.maps.event.addListener(_mapView, "center_changed", this.changeLvCt)
-    // kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
-    // kakao.maps.event.addListener(_mapView, "bounds_changed", this.handleBoundsChange)
-
     await this.setStateAsync({ 
       mapCenter: _options.center,
-      userCenter: _options.center,
-      mv: _mapView,
-      bounds: _mapView.getBounds()
+      userCenter: _options.center
     })
-    
-    // get items from Backend with map center position
+  }
+
+  tglUserCenter = () => {
+    this.setState({usingUserCenter: !this.state.usingUserCenter});
+  }
+
+  unsetUsingUserCenter = () => {
+    this.setState({usingUserCenter: false});
+  }
+
+  showMarker = () => {
+    this.state.userMarker.setMap(null);
+    this.state.userMarker.setMap(this.state.mv);
+    kakao.maps.event.addListener(this.state.userMarker, "click", () => console.log('hello'))
+  }
+
+  fetchItem = async (bounds, center) => {
     const meter = SA.boundsToMeter({
-      lat1: this.state.bounds.getSouthWest().getLat(),
-      lon1: this.state.bounds.getSouthWest().getLng(),
-      lat2: this.state.bounds.getNorthEast().getLat(),
-      lon2: this.state.bounds.getNorthEast().getLng(),
+      lat1: bounds.getSouthWest().getLat(),
+      lon1: bounds.getSouthWest().getLng(),
+      lat2: bounds.getNorthEast().getLat(),
+      lon2: bounds.getNorthEast().getLng(),
     })
 
     let items = await SA.getSaegimNearMe({
-      lat: this.state.mapCenter.getLat(),
-      lng: this.state.mapCenter.getLng(),
+      lat: center.getLat(),
+      lng: center.getLng(),
       meter: meter
     })
 
-    await this.setStateAsync({
+    this.setState({
       items: items
     })
-
-    const _scale = _container.childNodes[1]
-    _scale.style = `
-      position: absolute; 
-      z-index: 1; 
-      margin: 0px 6px; 
-      height: 19px; 
-      line-height: 14px; 
-      left: 0px; 
-      bottom: 64px; 
-      color: rgb(0, 0, 0);
-    `
   }
-
-  componentWillUnmount(){
-    kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLvCt)
-    kakao.maps.event.removeListener(this.state.mv, "center_changed", this.changeLvCt)
-    // kakao.maps.event.removeListener(this.state.mv, "dragstart", this.handleDragStart)
-    // kakao.maps.event.removeListener(this.state.mv, "bounds_changed", this.handleBoundsChange)
-  }
-
-  changeLvCt = () => {
-    this.setState({
-      mapCenter: this.state.mv.getCenter(),
-      level: this.state.mv.getLevel(),
-    })
-  }
-
-  // getMkrLi = () => {
-  //   dummyItems.forEach((el, idx) => {
-  //     const mkr = new kakao.maps.Marker({
-  //       position:  new kakao.maps.LatLng(el.latlng[0], el.latlng[1])
-  //     });
-  //     // console.log(this.state.mvView)
-  //     mkr.setMap(this.state.mv)
-  //   })
-  // }
-
-  // handleDragStart = () => {
-  //   this.setState({ mapCenter: this.state.mv.getCenter() });
-  //   this.closeItem();
-  // };
-
-  // handleBoundsChange = () => {
-  //   this.setState({ bounds: this.state.mv.getBounds() });
-  //   // this.closeItem();
-  // };
-
-  // move directly to given center
-  // setCenter = (center) => {
-  //   const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
-  //   this.state.mv.setCenter(targetCenter);
-  // };
-
-  // // move smoothly to given center
-  // panTo = (center) => {
-  //   const targetCenter = new kakao.maps.LatLng(center.lat, center.lng);
-  //   this.state.mv.panTo(targetCenter);
-  // };
 
   selectItem = (item) => {
-    // this.panTo({ lat: item.latitude, lng: item.longitude });
-    MM.panTo(this.state.mv, item.latitude, item.longitude)
     this.setState({ selected: { status: true, item: item } });
   };
 
@@ -208,16 +155,6 @@ class MapPage extends Component {
     await this.setStateAsync({ roadView: !this.state.roadView })
   }
 
-  // changeIcon = () => {
-  //   return (
-  //     <>
-  //       <Map style={{visibility: 'hidden'}}/>
-  //       <Zoom in={this.state.roadView} style={{position: 'absolute', zIndex: 12,}}><Map/></Zoom>
-  //       <Zoom in={!this.state.roadView} style={{position: 'absolute', zIndex: 13,}}><Streetview/></Zoom>
-  //     </>
-  //   )
-  // }
-
   render(){
     let _dir = 'left'
     if(this.context.curPage === '/write' || 
@@ -233,17 +170,15 @@ class MapPage extends Component {
 
         <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
         <StViewCont>
-          
-          {/* <StRVBtn>
-            <IconButton disableRipple onClick={this.tglView}>{this.changeIcon()}</IconButton>
-          </StRVBtn> */}
-
           <Zoom in={!this.state.roadView} mountOnEnter unmountOnExit>
             <StRVBtn onClick={this.tglView}><Streetview/></StRVBtn>
           </Zoom>
+          <Zoom in={!this.state.roadView} mountOnEnter unmountOnExit>
+            <StCurBtn onClick={this.tglUserCenter}>{this.state.usingUserCenter ? <MyLocation color="primary"/> : <MyLocationTwoTone />}</StCurBtn>
+          </Zoom>
 
           {
-            !this.state.roadView && 
+            false && !this.state.roadView && 
             <ButtonWrapper>
               <DefaultButton
                 text="add random item"
@@ -266,11 +201,15 @@ class MapPage extends Component {
           )}
 
           <MapView
-            map={this.state.mv}
             status="list"
+            center={this.state.mapCenter}
             items={this.state.items}
-            selectItem={this.selectItem}
             hide={this.state.roadView}
+            usingUserCenter={this.state.usingUserCenter}
+            userCenter={this.state.userCenter}
+            unsetUsingUserCenter={this.unsetUsingUserCenter}
+            selectItem={this.selectItem}
+            fetchItem={this.fetchItem}
           />
 
           {
@@ -327,7 +266,7 @@ const StRVBtn = styled.div`
 const StCurBtn = styled.div`
   position: absolute;
   z-index: 10;
-  top: 64px;
+  top: 120px;
   right: 8px;
 
   display: flex;
@@ -351,30 +290,6 @@ const ButtonWrapper = styled.div`
   display: flex;
   padding: 0 16px 0 16px;
 `;
-
-
-const dummyItems = [
-  {
-    title: "카카오",
-    latlng: [33.450705, 126.570677],
-  },
-  {
-    title: "생태연못",
-    latlng: [33.450936, 126.569477],
-  },
-  {
-    title: "텃밭",
-    latlng: [33.450879, 126.56994],
-  },
-  {
-    title: "근린공원",
-    latlng: [33.451393, 126.570738],
-  },
-  {
-    title: "할리스",
-    latlng: [37.50083104531534, 127.03694678811341],
-  },
-];
 
 /*
 data 양식
