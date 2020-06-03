@@ -122,7 +122,7 @@ class App extends Component {
   goFirstPage = (page) => {
     setTimeout(() => {
       this.props.history.replace(page)
-    }, 2000);
+    }, 2500);
   }
 
   changePage = async (e) => {
