@@ -10,6 +10,7 @@ import TabPanel from "./TabPanel";
 import MyPageMenu from "./MyPageMenu";
 import { getCommentedSaegim, getLikedSaegim, getCreatedSaegim } from "../../apis/UserAPI"
 import { getUserByEmail } from "../../apis/AccountAPI";
+import {getSaegimDetailById} from "../../apis/SaegimAPI";
 
 class MyPage extends Component {
   listItem;
@@ -27,14 +28,17 @@ class MyPage extends Component {
         { value: 'location', text: '장소 별로 보기'},
         { value: 'tag', text: '태그 별로 보기'}
       ],
-      data: [],
+      createdData: [],
+      likedData: [],
+      commentedData: [],
+      temp: [],
       userInfo: {}
     }
   };
 
-  selectChange = async (e) => {
+  selectChange(e) {
     const _name = e.target.name;
-    await this.setState({
+    this.setState({
       [_name]: e.target.value
     })
   };
@@ -45,18 +49,22 @@ class MyPage extends Component {
     })
   };
 
-  getData = async () => {
+  async getData() {
     const _userId = this.state.userInfo.id
-    let _data = []
-    if (this.state.currentTab === 0) {
-      const _data = await getCreatedSaegim(_userId)
-    } else if (this.state.currentTab === 1) {
-      const _data = await getLikedSaegim(_userId)
-    } else {
-      const _data = await getCommentedSaegim(_userId)
-    }
-    await this.setState({
-      data: _data
+    this.setState({
+      createdData: await getCreatedSaegim(_userId)
+    })
+    const _data = await getLikedSaegim(_userId)
+    const _temp = []
+    _data.map( async (d) => {
+      const _res = await getSaegimDetailById(d.saegimId)
+      _temp.push(_res)
+    })
+    this.setState({
+      likedData: _temp
+    })
+    this.setState({
+      commentedData: await getCommentedSaegim(_userId)
     })
   }
 
@@ -66,14 +74,6 @@ class MyPage extends Component {
         userInfo: (await getUserByEmail(_email)).data
       })
     await this.getData()
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state.currentTab !== prevState.currentTab ||
-      this.state[MyPageMenu[this.state.currentTab].value] !== prevState[MyPageMenu[this.state.currentTab].value]
-    ) {
-      this.getData()
-    }
   }
 
   render() {
@@ -130,22 +130,17 @@ class MyPage extends Component {
               <TabPanel
                 value={this.state.currentTab}
                 index={0}
-                data={this.state.data}
+                data={this.state.createdData}
               />
               <TabPanel
                 value={this.state.currentTab}
                 index={1}
-                data={this.state.data}
+                data={this.state.likedData}
               />
               <TabPanel
                 value={this.state.currentTab}
                 index={2}
-                data={this.state.data}
-              />
-              <TabPanel
-                value={this.state.currentTab}
-                index={3}
-                data={this.state.data}
+                data={this.state.commentedData}
               />
             </SaegimShortList>
           </SaegimInfo>

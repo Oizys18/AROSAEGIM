@@ -38,12 +38,12 @@ class SaegimDetail extends Component {
 
   async componentDidMount() {
     const _email = localStorage.getItem('ARSG email')
-    this.setState({
+    if (_email !== null) {
+      this.setState({
         userId: (await getUserByEmail(_email)).data.id
       })
+    }
     await this.getSaegimDetail();
-    // console.log(this.state.data)
-    // console.log(this.props)
   }
 
   setUpdateLike(flag) {

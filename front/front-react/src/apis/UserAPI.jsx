@@ -10,6 +10,7 @@ export const getCreatedSaegim = async (id) => {
       userid: id
     }
   })
+  console.log(_res)
   return _res.data.data;
 }
 
@@ -21,7 +22,8 @@ export const getCommentedSaegim = async (id) => {
       userid: id
     }
   })
-  return _res.data;
+  console.log(_res)
+  return _res.data.data;
 }
 
 export const getLikedSaegim = async (id) => {
@@ -32,5 +34,6 @@ export const getLikedSaegim = async (id) => {
       userid: id
     }
   })
-  return _res.data;
+  console.log(_res)
+  return _res.data.data;
 }
