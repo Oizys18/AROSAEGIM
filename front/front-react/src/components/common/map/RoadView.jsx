@@ -115,6 +115,9 @@ class RoadView extends Component {
     const _mapWalker = new MapWalker(this.state.rv.getPosition()) //맵워커 생성
     _mapWalker.setMap(_miniMap); // 맵워커를 지도에 설정한다.
 
+    var _viewpoint = this.state.rv.getViewpoint(); // 맵워커 뷰포트 초기화
+    _mapWalker.setAngle(_viewpoint.pan);
+
     await this.setStateAsync({
       mm: _miniMap,
       mw: _mapWalker
