@@ -16,9 +16,7 @@ class MapView extends Component {
     };
   }
 
-  setStateAsync(state) {
-    return new Promise(resolve => { this.setState(state, resolve) })
-  }
+  setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
 
   async componentDidMount() {
     await this.initMapView();
@@ -28,13 +26,19 @@ class MapView extends Component {
   
   componentDidUpdate(prevProps, prevState) {
     this.overlayMarkers();
-    (!!this.props.userCenter && this.props.usingUserCenter && !this.state.userMarker && this.showUserCenter())
-    if (prevProps.usingUserCenter !== this.props.usingUserCenter){console.log(prevProps, this.props, this.state)}
-    if (prevProps.usingUserCenter !== this.props.usingUserCenter && this.props.usingUserCenter && !!this.state.userMarker) {
-      this.state.userMarker.setPosition(this.props.userCenter)
-      this.state.mv.panTo(this.props.userCenter)
-      // MM.panTo(this.state.mv, this.props.userCenter.getLat(), this.props.userCenter.getLng())
+    if(prevProps.mapCenter !== this.props.mapCenter){
+      console.log(prevProps.mapCenter, this.props.mapCenter)
+      this.state.mv.panTo(this.props.mapCenter);
+      // this.state.userMarker.setPosition(this.props.userCenter)
     }
+    // (!!this.props.userCenter && this.props.usingUserCenter && !this.state.userMarker && this.showUserCenter())
+    // if (prevProps.usingUserCenter !== this.props.usingUserCenter){console.log(prevProps, this.props, this.state)}
+    // if (prevProps.usingUserCenter !== this.props.usingUserCenter && this.props.usingUserCenter && !!this.state.userMarker) {
+    //   
+    //   this.state.mv.panTo(this.props.userCenter)
+    //   // MM.panTo(this.state.mv, this.props.userCenter.getLat(), this.props.userCenter.getLng())
+    // }
+
   }
 
   componentWillUnmount(){
@@ -48,7 +52,7 @@ class MapView extends Component {
   initMapView = () => {
     const _cont = document.getElementById('mapView');
     const _options = {
-      center: this.props.center,
+      center: this.props.mapCenter,
       level: 3,
     }
     const _mapView = new kakao.maps.Map(_cont, _options)
@@ -63,10 +67,11 @@ class MapView extends Component {
   }
 
   changeLvCt = () => {
-    this.setState({
-      mapCenter: this.state.mv.getCenter(),
-      level: this.state.mv.getLevel(),
-    })
+    // this.props.changeMapCenter(this.state.mv.getCenter())
+    // this.setState({
+    //   mapCenter: this.state.mv.getCenter(),
+    //   level: this.state.mv.getLevel(),
+    // })
   }
 
   fetchItem = () => {
@@ -89,10 +94,11 @@ class MapView extends Component {
 
   handleDragStart = () => {
     // (this.state.selected.status && this.closeItem());
-    (this.props.usingUserCenter && this.props.unsetUsingUserCenter());
+    // (this.props.usingUserCenter && this.props.unsetUsingUserCenter());
   };
 
   handleDragEnd = () => {
+    this.props.changeMapCenter(this.state.mv.getCenter())
     this.fetchItem();
     // (this.state.selected.status && this.closeItem());
     // (this.state.usingUserCenter && this.setState({usingUserCenter: false}));

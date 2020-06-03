@@ -24,15 +24,9 @@ class MapPage extends Component {
 
       mv: null,
 
-      rv: null,
-      rvc: null,
-
-      mapCenter: new kakao.maps.LatLng(37.50083104531534, 127.03694678811341),
-      // mapCenter: null,
-      // mapCenter: new kakao.maps.LatLng(sessionStorage.getItem('ARSG latitude'), sessionStorage.getItem('ARSG longitude')),
-      
+      mapCenter: new kakao.maps.LatLng(37.5012767241426, 127.039600248343), //멀티캠퍼스로 초기화
       level: 3,
-      userCenter: null,
+      userCenter: new kakao.maps.LatLng(37.5012767241426, 127.039600248343), //멀티캠퍼스로 초기화
       usingUserCenter: false,
 
       selected: {
@@ -46,34 +40,44 @@ class MapPage extends Component {
 
     this.actions = {
       tglView: this.tglView,
-      curPos: this.curPos,
+      goUserCenter: this.goUserCenter,
       tglFilter: this.tglFilter,
     }
   }
 
-  setStateAsync(state) {
-    return new Promise(resolve => {
-      this.setState(state, resolve);
-    });
-  }
+  setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
 
   async componentDidMount() {
-    const _lat = sessionStorage.getItem('ARSG latitude');
-    const _lng = sessionStorage.getItem('ARSG longitude');
-    // console.log(Number(_lat), Number(_lng), _lng);
-    const _options = {
-      // center: this.state.mapCenter,
-      center: new kakao.maps.LatLng(Number(_lat), Number(_lng)),
+    let _options = {
+      center: this.state.mapCenter,
       level: this.state.level,
     }
-    await this.setStateAsync({ 
-      mapCenter: _options.center,
-      userCenter: _options.center
+
+    const _lat = sessionStorage.getItem('ARSG latitude');
+    const _lng = sessionStorage.getItem('ARSG longitude');
+    if(_lat && _lng){
+      _options.center = new kakao.maps.LatLng(Number(_lat), Number(_lng))
+      await this.setStateAsync({ 
+        mapCenter: _options.center,
+        userCenter: _options.center,
+      })
+    }
+  }
+
+  changeMapCenter = (_mapCenter) => {
+    this.setState({ 
+      mapCenter: _mapCenter 
     })
   }
 
   tglUserCenter = () => {
     this.setState({usingUserCenter: !this.state.usingUserCenter});
+  }
+  
+  goUserCenter = () => {
+    this.setState({
+      mapCenter: this.state.userCenter
+    });
   }
 
   unsetUsingUserCenter = () => {
@@ -178,14 +182,6 @@ class MapPage extends Component {
         <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
         <StViewCont>
           
-          {/* <StRVBtn>
-            <IconButton disableRipple onClick={this.tglView}>{this.changeIcon()}</IconButton>
-          </StRVBtn> */}
-
-          {/* <Zoom in={!this.state.roadView} mountOnEnter unmountOnExit>
-            <StRVBtn onClick={this.tglView}><Streetview/></StRVBtn>
-          </Zoom> */}
-
           <Slide in={true} direction='left' timeout={700}>
             <MapBtnSet roadView={this.state.roadView} actions={this.actions}/>
           </Slide>
@@ -215,11 +211,12 @@ class MapPage extends Component {
 
           <MapView
             status="list"
-            center={this.state.mapCenter}
+            mapCenter={this.state.mapCenter}
             items={this.state.items}
             hide={this.state.roadView}
             usingUserCenter={this.state.usingUserCenter}
             userCenter={this.state.userCenter}
+            changeMapCenter={this.changeMapCenter}
             unsetUsingUserCenter={this.unsetUsingUserCenter}
             selectItem={this.selectItem}
             fetchItem={this.fetchItem}
@@ -228,7 +225,9 @@ class MapPage extends Component {
           {
             this.state.roadView &&
             <RoadView 
-              center={this.state.mapCenter}
+              mapCenter={this.state.mapCenter}
+              userCenter={this.state.userCenter}
+              changeMapCenter={this.changeMapCenter}
               items={this.state.items}
               hide={!this.state.roadView}
               tglView={this.tglView}
@@ -258,66 +257,11 @@ const StViewCont = styled.div`
   background: gray;
 `;
 
-const StRVBtn = styled.div`
-  position: absolute;
-  z-index: 10;
-  top: 64px;
-  right: 8px;
-
-  display: flex;
-  padding: 8px;
-  border: 2px solid gray;
-  border-radius: 50%;
-  background: #e6e6e6;
-
-  svg{
-    width: 24px;
-    height: auto;
-  }
-`;
-
-const StCurBtn = styled.div`
-  position: absolute;
-  z-index: 10;
-  top: 120px;
-  right: 8px;
-
-  display: flex;
-  padding: 8px;
-  border: 2px solid gray;
-  border-radius: 50%;
-  background: #e6e6e6;
-
-  svg{
-    width: 24px;
-    height: auto;
-  }
-`;
-
 const ButtonWrapper = styled.div`
   position: absolute;
   z-index: 10;
-
   bottom: 72px;
 
   display: flex;
   padding: 0 16px 0 16px;
 `;
-
-/*
-data 양식
-
-contents: "안녕하세요"
-id: 2009
-image: null
-latitude: 37.50083104531534
-longitude: 127.03694678811341
-record: null
-regDate: 1590650953712
-secret: 0
-tags: []
-userId: 2006
-userName: "aaaa"
-w3w: "무릎.한글.튤립"
-  
-  */

@@ -12,7 +12,16 @@ class MapBtnSet extends Component {
     }
   }
 
-   changeIcon = () => {
+   changeIcon = (id) => {
+    if(id === 'view')
+    return (
+      <>
+        <Map style={{visibility: 'hidden'}}/>
+        <Zoom in={this.props.roadView} style={{position: 'absolute', zIndex: 1,}}><Map/></Zoom>
+        <Zoom in={!this.props.roadView} style={{position: 'absolute', zIndex: 2,}}><Streetview/></Zoom>
+      </>
+    )
+    else if(id === 'filter')
     return (
       <>
         <Map style={{visibility: 'hidden'}}/>
@@ -26,9 +35,9 @@ class MapBtnSet extends Component {
     const _actions = this.props.actions
     return (
       <StBtnSetCont>
-        <StBtnCont onClick={_actions.tglView}>{this.changeIcon()}</StBtnCont>
-        <StBtnCont onClick={_actions.curPos}><MyLocation/></StBtnCont>
-        <StBtnCont onClick={_actions.tglFilter}><Map/></StBtnCont>
+        <StBtnCont onClick={_actions.tglView}>{this.changeIcon('view')}</StBtnCont>
+        <StBtnCont onClick={_actions.goUserCenter}><MyLocation/></StBtnCont>
+        <StBtnCont onClick={_actions.tglFilter}>{this.changeIcon('')}</StBtnCont>
       </StBtnSetCont>
     )
   }

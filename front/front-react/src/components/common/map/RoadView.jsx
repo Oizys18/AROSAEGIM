@@ -52,7 +52,7 @@ class RoadView extends Component {
     const _roadView = new kakao.maps.Roadview(_cont); //로드뷰 객체
     const _roadViewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
     var rvResultValue = {}
-    const _pos = this.props.center
+    const _pos = this.props.mapCenter
 
     // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
     _roadViewClient.getNearestPanoId(_pos, 50, (panoId) => {
@@ -65,7 +65,7 @@ class RoadView extends Component {
       rvc: _roadViewClient,
     })
 
-    this.changeAddr(this.props.center)
+    this.changeAddr(this.props.mapCenter)
 
     kakao.maps.event.addListener(_roadView, 'position_changed', this.changeRVPos);
     kakao.maps.event.addListener(_roadView, 'viewpoint_changed', this.changeRVVP);
@@ -93,6 +93,7 @@ class RoadView extends Component {
       this.state.mm.panTo(_position) //미니맵 이동
       this.state.mw.setPosition(_position) // 이벤트가 발생할 때마다 로드뷰의 position값을 읽어, map walker에 반영 
     }
+    this.props.changeMapCenter(_position)
   }
   //뷰포인트 변경
   changeRVVP = () => {
@@ -128,11 +129,13 @@ class RoadView extends Component {
   //레벨 변경
   //중심 이동
   changeLvCt = () => {
+
     const _center = this.state.mm.getCenter()
     this.changeAddr(_center)
     this.state.rvc.getNearestPanoId(_center, 50, (panoId) => {
       if(panoId)  this.state.rv.setPanoId(panoId, _center) //panoId와 중심좌표를 통해 로드뷰 실행
     })
+    this.props.changeMapCenter(_center)
   }
   //맵워커 위치 변경
   changeMWCt = () => {
