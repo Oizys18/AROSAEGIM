@@ -146,9 +146,17 @@ class MapPage extends Component {
       meter: meter
     })
 
-    this.setState({
-      items: items
-    })
+    // api로 불러온 객체에 새로운 item이 나왔을 때만 state 변경
+    const itemsDiff = items.filter(el => {
+      const itemIndex = this.state.items.findIndex(stateItem => el.id === stateItem.id)
+      return itemIndex === -1 ? true : false;
+    });
+
+    if (itemsDiff.length > 0) {
+      this.setState({
+        items: this.state.items.concat(itemsDiff)
+      })
+    }
   }
 
   render(){

@@ -55,7 +55,7 @@ class MapItem extends Component {
   // deliver state item to parent
   clickEvent = (e) => {
     e.preventDefault();
-    this.props.selectItem(this.props.item);
+    this.props.selectItem(this.props.item.id);
   };
 
   // show on map

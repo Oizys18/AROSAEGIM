@@ -38,7 +38,10 @@ class MapView extends Component {
   }
   
   componentDidUpdate(prevProps, prevState) {
-    this.overlayMarkers();
+    if(prevProps.items !== this.props.items) {
+      // console.log('re-rendering markers')
+      this.overlayMarkers();
+    }
     if(prevProps.mapCenter !== this.props.mapCenter && this.props.mapCenter === this.props.userCenter){
       this.state.mv.panTo(this.props.mapCenter);
       // this.state.userMarker.setPosition(this.props.userCenter)
@@ -135,7 +138,10 @@ class MapView extends Component {
     const items = cluster.getMarkers()
     const selectedList = {
       status: true,
-      items: items.map(marker=>marker.item)
+      items: items.map(marker=>{
+        const item = this.props.items.find(el => marker.itemId === el.id);
+        return item === undefined ? emptyItem : item
+      })
     }
     this.setState({selectedList: selectedList})
 
@@ -157,10 +163,10 @@ class MapView extends Component {
     const markers = this.props.items.map((el) => {
       const marker = new kakao.maps.Marker(MM.MarkerConfig(el));// new MapMarker(el);
       marker.setMap(this.state.mv)
-      marker.item = el
+      marker.itemId = el.id
       kakao.maps.event.addListener(marker, "click", () => {
-        console.log(marker.item,'marker clicked');
-        this.selectItem(marker.item)
+        console.log(marker.itemId,'marker clicked');
+        this.selectItem(marker.itemId)
       })
       return marker
     })
@@ -191,8 +197,12 @@ class MapView extends Component {
     return items
   };
 
-  selectItem = (item) => {
+  selectItem = (itemId) => {
     // this.props.selectItem(item);
+    const item = this.props.items.find(el => itemId === el.id)
+    if (item === undefined) {
+      return;
+    }
     this.setState({selected: { status: true, item: item }})
     this.props.unsetUsingUserCenter();
     MM.panTo(this.state.mv, item.latitude, item.longitude)
@@ -206,14 +216,14 @@ class MapView extends Component {
     const currentIndex = this.state.selectedList.items.indexOf(this.state.selected.item);
     const prevIndex =
       currentIndex === 0 ? this.state.selectedList.items.length - 1 : currentIndex - 1;
-    this.selectItem(this.state.selectedList.items[prevIndex]);
+    this.selectItem(this.state.selectedList.items[prevIndex].id);
   };
 
   nextItem = () => {
     const currentIndex = this.state.selectedList.items.indexOf(this.state.selected.item);
     const nextIndex =
       currentIndex === this.state.selectedList.items.length - 1 ? 0 : currentIndex + 1;
-    this.selectItem(this.state.selectedList.items[nextIndex]);
+    this.selectItem(this.state.selectedList.items[nextIndex].id);
   };
 
 
@@ -301,3 +311,18 @@ const ButtonWrapper = styled.div`
   display: flex;
   padding: 0 16px 0 16px;
 `;
+
+const emptyItem = {
+  contents: "emptyItem",
+  id: 0,
+  image: null,
+  latitude: 37.50083104531534,
+  longitude: 127.03694678811341,
+  record: null,
+  regDate: 1590650953712,
+  secret: 0,
+  tags: [],
+  userId: 0,
+  userName: "empty",
+  w3w: "empty"
+}
