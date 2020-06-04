@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Storage } from "../../storage/Storage"
-import { getCommentBySaegim, writeComment } from "../../apis/CommentAPI";
+import {getCommentBySaegim, writeComment} from "../../apis/CommentAPI";
 import SmallButton from "../common/buttons/SmallButton";
 import CommentInput from "./CommentInput";
 import CommentItem from "./CommentItem";
@@ -69,13 +69,24 @@ class Comment extends Component{
       this.setState({
         updateFlag: false
       })
+    } else if (this.context.updateFlagByComment === true) {
+      this.getComments()
+      this.context.commentUpdate(false)
     }
   }
 
   render() {
     const PrintComment = this.state.comments.map((comment, i) => {
       return (
-        <CommentItem user={comment.userName} contents={comment.contents} key={i} />
+        <CommentItem
+          user={comment.userName}
+          contents={comment.contents}
+          saegimid={this.props.id}
+          userid={comment.userid}
+          id={comment.id}
+          key={i}
+          handleDelete={this.handleDelete}
+        />
       )
     })
     return (
@@ -84,7 +95,7 @@ class Comment extends Component{
           {PrintComment}
         </StCommentList>
           { !this.state.ovfl &&
-            this.state.comments.length > 5 &&
+            this.state.comments.length > 3 &&
             <MoreView onClick={this.handleClick}>더보기</MoreView>
           }
           { this.state.comments.length < 1 &&

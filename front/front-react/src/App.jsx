@@ -20,6 +20,7 @@ import SaegimListPage from "./components/saegim/SaegimListPage";
 import SaegimDetail from "./components/saegim/SaegimDetail";
 import MyPage from "./components/mypage/MyPage";
 import { getUserByEmail } from "./apis/AccountAPI";
+import { delComment } from "./apis/CommentAPI";
 
 class App extends Component {
   constructor(props) {
@@ -48,7 +49,10 @@ class App extends Component {
       curData: [],
       setCurData: this.setCurData,
       idxUpdateFlag: false,
-      idxUpdate: this.idxUpdate
+      idxUpdate: this.idxUpdate,
+
+      updateFlagByComment: false,
+      commentUpdate: this.commentUpdate
     };
   }
 
@@ -112,6 +116,11 @@ class App extends Component {
         sessionStorage.clear()
         window.location.href = '/'
       }
+      else if (this.state.modalSitu === 'delComment'){
+        // const _res = delComment(this.props.saegimid, this.props.id)
+        // console.log(_res)
+        this.commentUpdate(true)
+      }
     }
     this.setState({ modal: false })
   }
@@ -154,6 +163,12 @@ class App extends Component {
   setCurData = (data) => {
     this.setState({
       curData: data
+    })
+  }
+
+  commentUpdate = (flag) => {
+    this.setState({
+      updateFlagByComment: flag
     })
   }
 

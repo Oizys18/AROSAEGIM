@@ -1,29 +1,50 @@
 import React, { Component } from "react";
+import { Storage } from "../../storage/Storage"
 import styled from "styled-components";
+import { delComment } from "../../apis/CommentAPI";
+import CloseIcon from "@material-ui/icons/Close"
 
 class CommentItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userid: this.context.userInfo.id
+    }
+  }
+
+  handleClick = () => {
+    this.context.popModal('댓글을 삭제하시겠습니까?', 'delComment', 'confirm')
+  }
+
   render() {
     return (
       <Wrapper>
         <StComment>
-        <StUser>{this.props.user}</StUser>
-        <StContents>{this.props.contents}</StContents>
+          <StUser>{this.props.user}</StUser>
+          <StContents>{this.props.contents}</StContents>
         </StComment>
+        {this.state.userid === this.props.userid &&
+          <StIcon onClick={this.handleClick}>
+            <StCloseIcon/>
+          </StIcon>
+        }
       </Wrapper>
     )
   }
 }
 
 export default CommentItem;
+CommentItem.contextType = Storage;
 
 const Wrapper = styled.div`
   display: flex;
-  text-align: center;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const StComment = styled.div`
-  display: flex;
   margin-bottom: 4px;
+  display: flex;
 `;
 
 const StUser = styled.div`
@@ -33,4 +54,11 @@ const StUser = styled.div`
 
 const StContents = styled.div`
   
+`;
+
+const StCloseIcon = styled(CloseIcon)`
+  
+`;
+
+const StIcon = styled.div`
 `;
