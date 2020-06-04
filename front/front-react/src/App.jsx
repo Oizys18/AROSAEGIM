@@ -134,7 +134,7 @@ class App extends Component {
     const _id = e.currentTarget.id
     if (_id === "write") {
       if(this.state.isLogin) {
-        this.props.history.push(`/${_id}`);
+        this.props.history.replace(`/${_id}`);
       }
       else{
         this.popModal('로그인 후\n이용할 수 있습니다.\n\n로그인 하시겠습니까?', 'need login', 'confirm')

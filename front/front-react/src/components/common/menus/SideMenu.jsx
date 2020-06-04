@@ -1,31 +1,115 @@
 import React, { Component } from 'react';
 
 import styled from 'styled-components';
-import { Slide, IconButton, Divider } from '@material-ui/core';
-import { Close, VpnKey, AssignmentInd, Face, ExitToApp } from '@material-ui/icons';
+import { Slide, Switch, IconButton, Divider } from '@material-ui/core';
+import { Close, VpnKey, AssignmentInd, Face, ExitToApp, Timelapse, Today } from '@material-ui/icons';
 import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
 
 import UserInfo from './UserInfo';
 import SideMenuBtn from './SideMenuBtn';
+import FilterMenuBtn from './FilterMenuBtn'
 
 class SideMenu extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      mine: false,
+      startTime: '',
+      endTime: '',
+    }
+  }
+
+
+  renderFilter = () => {
+    return(
+      <>
+      <StTopCont>
+        <div>새김 필터 설정</div>
+        <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
+        <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
+        <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
+      </StTopCont>
+      {
+        this.props.isLogin && 
+        <StMineCont id='my' txt='내 새김만 보기'>
+          내 새김만 보기
+          <Switch
+            checked={this.state.mine}
+            onChange={this.handle}
+          />
+        </StMineCont>
+      }
+      <StListCont>
+        <Divider />
+        <FilterMenuBtn id='simple' txt='간편 시간 설정' icon={<Timelapse/>} handleFilter={this.props.handleFilter}/>
+        <Divider />
+        <FilterMenuBtn id='detail' txt='상세 시간 설정' icon={<Today/>} handleFilter={this.props.handleFilter}/>
+        <Divider />
+      </StListCont>
+      </>
+    )
+  }
+
+  
+  renderStandard = () => {
+    return (
+      <>
+      <StTopCont>
+        <StLogo/>
+        <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
+      </StTopCont>
+      
+      {this.props.isLogin && 
+        <UserInfo on={this.props.on}/>
+      }
+      <Slide in={this.props.on} direction='right' timeout={700}>
+        <StListCont>
+        {
+          this.props.isLogin ? 
+          <>
+            <Divider />
+            <SideMenuBtn link='mypage' txt={'마이페이지'} icon={<Face/>}/>
+            <SideMenuBtn link='logout' txt={'로그아웃'} icon={<ExitToApp/>}/>
+            <Divider />
+          </>
+          :
+          <>
+            <SideMenuBtn link='login' txt={'로그인'} icon={<VpnKey/>}/>
+            <SideMenuBtn link='signup' txt={'회원가입'} icon={<AssignmentInd/>}/>
+            <Divider />
+          </>
+        }
+        </StListCont>
+      </Slide>
+      </>
+    )
+  }
 
   render(){
     return(
       <>
       { 
         this.props.on && 
-        <StOpacityBack onClick={this.props.toggle}/> 
+        <StOpacityBack onClick={this.props.toggle}/>
       }
 
       <Slide in={this.props.on} direction='right'>
         <StMenuCont>
-          
-          <StTopCont>
+          {
+            this.props.filter ? 
+            <>
+              { this.renderFilter() }
+            </>
+            :
+            <>
+              { this.renderStandard() }
+            </>
+          }
+          {/* <StTopCont>
             <StLogo/>
             <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
           </StTopCont>
-
+          
           {this.props.isLogin && 
             <UserInfo on={this.props.on}/>
           }
@@ -47,7 +131,7 @@ class SideMenu extends Component {
               </>
             }
             </StListCont>
-          </Slide>
+          </Slide> */}
 
         </StMenuCont>
       </Slide>
@@ -126,3 +210,8 @@ const StListCont = styled.div`
   /* border: 3px solid darkgreen;
   box-sizing: border-box; */
 `;
+
+
+const StMineCont = styled.div`
+
+`

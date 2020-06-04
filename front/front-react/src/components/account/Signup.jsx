@@ -49,10 +49,18 @@ class Signup extends Component {
     }
   }
 
-  setStateAsync(state) {
-    return new Promise(resolve => {
-      this.setState(state, resolve);
-    });
+  setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
+  
+  componentDidMount(){
+    document.addEventListener('keypress', this.pressEnter)
+  }
+  componentWillUnmount(){
+    document.removeEventListener('keypress', this.pressEnter)
+  }
+  pressEnter = (e) => {
+    if(e.keyCode === 13){
+      this.handleSubmit()
+    }
   }
 
   imgUpload = async (e) => {
