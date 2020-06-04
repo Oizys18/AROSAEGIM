@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import MapItem from "./MapItem";
 import * as MM from "./MapMethod";
+import MapListItem from "./MapListItem";
+import DefaultButton from "../buttons/DefaultButton";
 
 // import MapMarker, {MarkerConfig} from "./MapItemTest";
 
@@ -18,7 +20,11 @@ class MapView extends Component {
       selectedList: {
         status: false,
         items: [],
-      }
+      },
+      selected: {
+        status: false,
+        item: null,
+      },
     };
     this.markers = []
   }
@@ -33,7 +39,7 @@ class MapView extends Component {
   
   componentDidUpdate(prevProps, prevState) {
     this.overlayMarkers();
-    if(prevProps.mapCenter !== this.props.mapCenter){
+    if(prevProps.mapCenter !== this.props.mapCenter && this.props.mapCenter === this.props.userCenter){
       this.state.mv.panTo(this.props.mapCenter);
       // this.state.userMarker.setPosition(this.props.userCenter)
     }
@@ -133,7 +139,7 @@ class MapView extends Component {
     }
     this.setState({selectedList: selectedList})
 
-    // set panTo offset
+    // set panTo offset : show cluseter on slightly left of screen
     const CENTER_OFFSET_RATIO = 0.2; // percentage
     const width = window.innerWidth;
     const center_offset = Math.floor(width * CENTER_OFFSET_RATIO);
@@ -186,10 +192,30 @@ class MapView extends Component {
   };
 
   selectItem = (item) => {
-    this.props.selectItem(item);
+    // this.props.selectItem(item);
+    this.setState({selected: { status: true, item: item }})
     this.props.unsetUsingUserCenter();
     MM.panTo(this.state.mv, item.latitude, item.longitude)
   };
+
+  closeItem = () => {
+    this.setState({selected: { status: false, item: null }})
+  }
+
+  prevItem = () => {
+    const currentIndex = this.state.selectedList.items.indexOf(this.state.selected.item);
+    const prevIndex =
+      currentIndex === 0 ? this.state.selectedList.items.length - 1 : currentIndex - 1;
+    this.selectItem(this.state.selectedList.items[prevIndex]);
+  };
+
+  nextItem = () => {
+    const currentIndex = this.state.selectedList.items.indexOf(this.state.selected.item);
+    const nextIndex =
+      currentIndex === this.state.selectedList.items.length - 1 ? 0 : currentIndex + 1;
+    this.selectItem(this.state.selectedList.items[nextIndex]);
+  };
+
 
   overlaySelectedList = () => {
     return this.state.selectedList.items.map(el=> <MapItem key={el.id} item={el} selectItem={this.selectItem} />)
@@ -218,6 +244,20 @@ class MapView extends Component {
               {this.overlaySelectedList()}
             </StList>
           </StListCont>
+        }
+        {this.state.selected.status && 
+          <>
+            {this.state.selectedList.status &&
+              <ButtonWrapper>
+                <DefaultButton text="prev Item" onClick={this.prevItem} />
+                <DefaultButton text="next Item" onClick={this.nextItem} />
+              </ButtonWrapper>
+            } 
+            <MapListItem
+              item={this.state.selected.item}
+              closeItem={this.closeItem}
+            />
+          </>
         }
       </>
     );
@@ -252,3 +292,12 @@ const StList = styled.div`
   flex-direction: column-reverse;
   align-items: flex-start;
 `
+
+const ButtonWrapper = styled.div`
+  position: absolute;
+  z-index: 10;
+  bottom: 72px;
+
+  display: flex;
+  padding: 0 16px 0 16px;
+`;

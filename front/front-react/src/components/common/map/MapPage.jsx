@@ -32,10 +32,6 @@ class MapPage extends Component {
       addr: '',
       w3w: '',
 
-      selected: {
-        status: false,
-        item: null,
-      },
       bounds: null,
 
       roadView: false,
@@ -115,7 +111,6 @@ class MapPage extends Component {
   handleFilter = (filterValues) => {
 
   }
-  
 
   unsetUsingUserCenter = () => {
     this.setState({ usingUserCenter: false });
@@ -156,59 +151,6 @@ class MapPage extends Component {
     })
   }
 
-  selectItem = (item) => {
-    this.setState({ selected: { status: true, item: item } });
-  };
-
-  closeItem = () => {
-    this.setState({ selected: { status: false, item: null } });
-  };
-
-  prevItem = () => {
-    const currentIndex = this.state.items.indexOf(this.state.selected.item);
-    const prevIndex =
-      currentIndex === 0 ? this.state.items.length - 1 : currentIndex - 1;
-    this.selectItem(this.state.items[prevIndex]);
-  };
-
-  nextItem = () => {
-    const currentIndex = this.state.items.indexOf(this.state.selected.item);
-    const nextIndex =
-      currentIndex === this.state.items.length - 1 ? 0 : currentIndex + 1;
-    this.selectItem(this.state.items[nextIndex]);
-  };
-
-  // function for development
-  addRndItemInView = () => {
-    const bounds = this.state.mv.getBounds();
-    const rndLat = this.generateRandom(bounds.ka, bounds.ja)
-    const rndLng = this.generateRandom(bounds.da, bounds.ia)
-  
-    const lastItem = this.state.items[this.state.items.length - 1];
-    const newItem = {
-      id: lastItem? lastItem.id + 1 : 1,
-      title: `new item ${lastItem ? lastItem.id + 1: 1}`,
-      contents: "안녕하세요. 코로나때문에 사람들을 많이 못 보니 쓸쓸하기도 하고 기분이 다운되네요. 다들 어떠신가요?",
-      image: null,
-      latitude: rndLat,
-      longitude: rndLng,
-      record: null,
-      regDate: 1590650953712,
-      secret: 0,
-      tags: [],
-      userId: 2006,
-      userName: "aaaa",
-      w3w: "무릎.한글.튤립",
-    };
-    this.setState({
-      items: this.state.items.concat(newItem),
-    });
-  };
-
-  generateRandom = (min, max) => {
-    return Math.random() * (max - min) + min;
-  };
-
   render(){
     let _dir = 'left'
     if(this.context.curPage === '/write' || 
@@ -236,29 +178,6 @@ class MapPage extends Component {
             isLogin={this.context.isLogin}
             handleFilter={this.handleFilter}
           />
-
-          {
-            false && !this.state.roadView && 
-            <ButtonWrapper>
-              <DefaultButton
-                text="add random item"
-                onClick={this.addRndItemInView}
-              />
-            </ButtonWrapper>
-          }
-
-          {this.state.selected.status && (
-            <>
-              <ButtonWrapper>
-                <DefaultButton text="prev Item" onClick={this.prevItem} />
-                <DefaultButton text="next Item" onClick={this.nextItem} />
-              </ButtonWrapper>
-              <MapListItem
-                item={this.state.selected.item}
-                closeItem={this.closeItem}
-              />
-            </>
-          )}
           
           {this.state.roadView ?
             <RoadView 
@@ -283,8 +202,6 @@ class MapPage extends Component {
               changeMapCenter={this.changeMapCenter}
               unsetUsingUserCenter={this.unsetUsingUserCenter}
               unsetAll={this.unsetAll}
-              selectItem={this.selectItem}
-              closeItem={this.closeItem}
               fetchItem={this.fetchItem}
             />
           }
@@ -299,8 +216,6 @@ class MapPage extends Component {
             changeMapCenter={this.changeMapCenter}
             unsetUsingUserCenter={this.unsetUsingUserCenter}
             unsetAll={this.unsetAll}
-            selectItem={this.selectItem}
-            closeItem={this.closeItem}
             fetchItem={this.fetchItem}
           />
 
