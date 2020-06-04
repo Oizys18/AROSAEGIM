@@ -3,23 +3,55 @@ import axios from 'axios'
 export const login = async (state) => {
 
   const {email, pw} = state
-
-  const _res = await axios({
-    method: 'post',
-    url: `${process.env.REACT_APP_BASE_URL}/users/login`,
-    data: {
-      email: email,
-      password: pw,
-    }
-  })
-  console.log(_res.data)
-
-  if(_res.data.data === 'login fail'){
-    return false;
-  }
-  else{
-    return true;
-  }
+  // let _res = null;
+    const _res = await axios({
+      method: 'post',
+      url: `${process.env.REACT_APP_BASE_URL}/users/login`,
+      data: {
+        email: email,
+        password: pw,
+      },
+      header: {
+        "content-type": "application/x-www-form-urlencoded"
+      }
+    })
+    
+    console.log(_res)
+    // if(_res.data.data === 'login fail'){
+    //   return false;
+    // }
+    // else{
+    //   console.log(_res.headers)
+    //   // sessionStorage.setItem('ARSG JWT', _res.headers.Authorization)
+    //   debugger
+    //   return true;
+    // }
+  // try{
+  //   await axios({
+  //     method: 'post',
+  //     url: `${process.env.REACT_APP_BASE_URL}/users/login`,
+  //     data: {
+  //       email: email,
+  //       password: pw,
+  //     }
+  //   })
+  //   .then((_res) => {
+  //     console.log(_res)
+  //     if(_res.data.data === 'login fail'){
+  //       return false;
+  //     }
+  //     else{
+  //       console.log(_res.headers)
+  //       // sessionStorage.setItem('ARSG JWT', _res.headers.Authorization)
+  //       debugger
+  //       return true;
+  //     }
+  //   })
+  // }
+  // catch(err){
+  //   console.log(err)
+  //   return false;
+  // }
 }
 
 export const signup = async (state) => {
@@ -46,7 +78,11 @@ export const signup = async (state) => {
 export const getUserByEmail = async (email) => {
   const _res = await axios({
     method: 'get',
-    url: `${process.env.REACT_APP_BASE_URL}/users/email?email=${email}`
+    url: `${process.env.REACT_APP_BASE_URL}/users/email`,
+    params: {
+      email: email
+    }
+    // url: `${process.env.REACT_APP_BASE_URL}/users/email?email=${email}`,
   })
   if(_res.data.state === 'success'){
     return _res.data;
@@ -59,7 +95,11 @@ export const getUserByEmail = async (email) => {
 export const getUserByNickname = async (nick) => {
   const _res = await axios({
     method: 'get',
-    url: `${process.env.REACT_APP_BASE_URL}/users/name?name=${nick}`
+    url: `${process.env.REACT_APP_BASE_URL}/users/name`,
+    params: {
+      name: nick
+    }
+    // url: `${process.env.REACT_APP_BASE_URL}/users/name?name=${nick}`
   })
 
   if(_res.data.state === 'success'){

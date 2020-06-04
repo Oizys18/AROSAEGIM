@@ -37,7 +37,6 @@ class RoadView extends Component {
     }
 
     if(prevProps.mapCenter !== this.props.mapCenter && this.props.mapCenter === this.props.userCenter){
-      
       this.state.rvc.getNearestPanoId(this.props.mapCenter, 100, (panoId) => {
         if(panoId){
           this.state.rv.setPanoId(panoId, this.props.mapCenter);

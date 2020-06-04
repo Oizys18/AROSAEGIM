@@ -5,13 +5,18 @@ import { Slide, Grow } from '@material-ui/core';
 class RoadViewTopBar extends Component {
   constructor(props){
     super(props)
-    this.state = { toggle: true }
+    this.state = { 
+      toggle: true,
+      intervalId: null,
+    }
   }
-  componentDidMount(){ this.tgleTxt() }
-  componentWillUnmount(){ clearInterval(this.tgleTxt) }
-  tgleTxt = () => setInterval(() => {
-    this.setState({ toggle: !this.state.toggle })
-  }, 3000)
+  componentDidMount(){ 
+    const _intervalId = setInterval(() => {this.setState({ toggle: !this.state.toggle })}, 3000)
+    this.setState({ intervalId: _intervalId }) 
+  }
+  componentWillUnmount(){ 
+    clearInterval(this.state.intervalId) 
+  }
 
   render(){
     return(

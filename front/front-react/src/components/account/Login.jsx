@@ -99,7 +99,7 @@ class Login extends Component {
           localStorage.removeItem('ARSG email')
           sessionStorage.setItem('ARSG email', this.state.email)
         }
-        window.location.href = '/'
+        // window.location.href = '/'
       }
       else {
         this.context.popModal(`비밀번호를\n확인해주세요!`, 'login', 'alert')

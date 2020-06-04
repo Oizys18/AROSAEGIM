@@ -112,8 +112,9 @@ class MapPage extends Component {
   tglFilter = () => {
     this.setState({ filter: !this.state.filter })
   };
-  handleFilter = (filterValues) => {
-
+  handleFilter = (e) => {
+    console.log(e.currentTarget.id)
+    console.log(e.currentTarget.id.value)
   }
   
 

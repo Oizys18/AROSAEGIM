@@ -33,7 +33,7 @@ class MapView extends Component {
   
   componentDidUpdate(prevProps, prevState) {
     this.overlayMarkers();
-    if(prevProps.mapCenter !== this.props.mapCenter){
+    if(prevProps.mapCenter !== this.props.mapCenter && this.props.mapCenter === this.props.userCenter){
       this.state.mv.panTo(this.props.mapCenter);
       // this.state.userMarker.setPosition(this.props.userCenter)
     }
