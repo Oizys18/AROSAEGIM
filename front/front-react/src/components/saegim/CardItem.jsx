@@ -5,6 +5,7 @@ import Card from "../common/cards/Card";
 import "./CardItem.css";
 import { Lock } from "@material-ui/icons";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import PhotoIcon from "@material-ui/icons/Photo";
 import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 
 class CardItem extends Component {
@@ -166,6 +167,13 @@ class CardItem extends Component {
                       <div>{getTimeDeltaString(saegim.regDate)}</div>
                     </StTime>
                   </Registered>
+                  {/*{ saegim.images.length > 0 &&*/}
+                    <Image>
+                      <StPhotoIcon/>
+                      <div>{saegim.images.length}</div>
+                    </Image>
+                  {/*}*/}
+
                   {saegim.secret
                     ? <ContentsL>
                         <Lock />
@@ -213,12 +221,23 @@ const StCard = styled.div`
   grid-template-columns: repeat(5, minmax(16vw, auto)) ;
   grid-template-areas:
     "location location location date date"
-    ". contents contents contents ."
+    ". contents contents contents image"
     ". contents contents contents ."
     ". contents contents contents ."
     "link . . comments comments";
   align-items: center;
 `
+
+const Image = styled.div`
+  grid-area: image;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StPhotoIcon = styled(PhotoIcon)`
+  margin-right: 4px;
+`;
 
 const Contents = styled.div`
   grid-area: contents;
@@ -241,7 +260,7 @@ const Location = styled.div`
 `
 
 const Registered = styled.div`
-  grid-area: date
+  grid-area: date;
 `
 
 const zoom = keyframes`
@@ -260,7 +279,7 @@ const StackedCard = styled.div `
 
 const StTime = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 `;
 
