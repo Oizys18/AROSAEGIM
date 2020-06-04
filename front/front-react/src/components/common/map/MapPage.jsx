@@ -1,14 +1,14 @@
 /*global kakao*/
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Zoom, Slide} from '@material-ui/core';
-import {Streetview, MyLocation, MyLocationTwoTone} from '@material-ui/icons';
+import { Slide} from '@material-ui/core';
 import {FlexColumn} from '../../../styles/DispFlex';
 import DefaultButton from "../buttons/DefaultButton";
 
 // import { getPosition } from '../../../apis/GeolocationAPI';
 import {Storage} from '../../../storage/Storage';
 import SearchBar from "../search/SearchBar";
+import SideMenu from "../menus/SideMenu";
 import MapView from './MapView';
 import MapListItem from "./MapListItem";
 import RoadView from './RoadView';
@@ -39,6 +39,12 @@ class MapPage extends Component {
       bounds: null,
 
       roadView: false,
+      filter: false,
+      filterValues: {
+        mine: false,
+        startTime: '',
+        endTime: '',
+      }
     }
 
     this.actions = {
@@ -73,7 +79,7 @@ class MapPage extends Component {
   changeMapCenter = async (_mapCenter) => {
     await this.setStateAsync({ mapCenter: _mapCenter })
     this.getAddrW3W()
-  }
+  };
 
   //행정 주소, w3w
   getAddrW3W = async () => {
@@ -95,11 +101,21 @@ class MapPage extends Component {
     this.setState({
       w3w: www.data.words,
     });
-  }
-  
+  };
+
+  tglView = async () => {
+    await this.setStateAsync({ roadView: !this.state.roadView })
+  };
   goUserCenter = () => {
     this.setState({ mapCenter: this.state.userCenter });
+  };
+  tglFilter = () => {
+    this.setState({ filter: !this.state.filter })
+  };
+  handleFilter = (filterValues) => {
+
   }
+  
 
   unsetUsingUserCenter = () => {
     this.setState({ usingUserCenter: false });
@@ -193,10 +209,6 @@ class MapPage extends Component {
     return Math.random() * (max - min) + min;
   };
 
-  tglView = async () => {
-    await this.setStateAsync({ roadView: !this.state.roadView })
-  }
-
   render(){
     let _dir = 'left'
     if(this.context.curPage === '/write' || 
@@ -213,9 +225,17 @@ class MapPage extends Component {
         <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
         <StViewCont>
           
-          <Slide in={true} direction='left' timeout={700}>
-            <MapBtnSet roadView={this.state.roadView} actions={this.actions}/>
-          </Slide>
+          <MapBtnSet 
+            roadView={this.state.roadView} 
+            actions={this.actions}
+          />
+
+          <SideMenu filter 
+            on={this.state.filter} 
+            toggle={this.actions.tglFilter}
+            isLogin={this.context.isLogin}
+            handleFilter={this.handleFilter}
+          />
 
           {
             false && !this.state.roadView && 

@@ -88,21 +88,6 @@ class RoadView extends Component {
     kakao.maps.event.addListener(_roadView, 'viewpoint_changed', this.changeRVVP);
   }
 
-  //행정 주소, w3w 변경
-  // changeAddr = async (center) => {
-  //   this.state.geocoder.coord2RegionCode(center.getLng(), center.getLat(), (result, status) => {
-  //     if (status === kakao.maps.services.Status.OK) {
-  //       for(var i = 0; i < result.length; i++) {
-  //         // 행정동의 region_type 값은 'H' 이므로
-  //         if (result[i].region_type === 'H') {
-  //           this.setState({ addr:  result[i].address_name })
-  //           break;
-  //         }
-  //       }
-  //     }     
-  //   });
-  // }
-
   //로드뷰 이동
   changeRVPos = () => { 
     const _position = this.state.rv.getPosition()

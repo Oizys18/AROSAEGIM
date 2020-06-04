@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Zoom, } from '@material-ui/core';
-import { Map, Streetview, MyLocation  } from '@material-ui/icons';
+import { Zoom, Slide } from '@material-ui/core';
+import { Map, Streetview, MyLocation, FilterList } from '@material-ui/icons';
 import { FlexRow, FlexColumn } from '../../../styles/DispFlex';
 
 class MapBtnSet extends Component {
@@ -34,21 +34,35 @@ class MapBtnSet extends Component {
   render(){
     const _actions = this.props.actions
     return (
-      <StBtnSetCont>
-        <StBtnCont onClick={_actions.tglView}>{this.changeIcon('view')}</StBtnCont>
-        <StBtnCont onClick={_actions.goUserCenter}><MyLocation/></StBtnCont>
-        {/* <StBtnCont onClick={_actions.tglFilter}>{this.changeIcon('')}</StBtnCont> */}
-      </StBtnSetCont>
+      <>
+      <Slide in={true} direction='left' timeout={700}>
+        <StBtnRT>
+          <StBtnCont className='view' onClick={_actions.tglView}>{this.changeIcon('view')}</StBtnCont>
+          <StBtnCont className='location' onClick={_actions.goUserCenter}><MyLocation/></StBtnCont>
+        </StBtnRT>
+      </Slide>
+      <Zoom in={true} timeout={500}>
+        <StBtnLT>
+          <StBtnCont className='filter' onClick={_actions.tglFilter}><FilterList/></StBtnCont>
+        </StBtnLT>
+      </Zoom>
+      </>
     )
   }
 } export default MapBtnSet;
 
 
-const StBtnSetCont = styled(FlexColumn)`
+const StBtnRT = styled(FlexColumn)`
   position: absolute;
   z-index: 10;
   top: 64px;
   right: 8px;
+`;
+const StBtnLT = styled(FlexColumn)`
+  position: absolute;
+  z-index: 10;
+  top: 64px;
+  left: 8px;
 `;
 
 const StBtnCont = styled(FlexRow)`
@@ -63,5 +77,10 @@ const StBtnCont = styled(FlexRow)`
   svg{
     width: 24px;
     height: 24px;
+  }
+
+  &.filter{
+    margin: 0;
+    border-radius: 10px;
   }
 `

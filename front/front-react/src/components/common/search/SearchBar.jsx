@@ -22,7 +22,7 @@ class SearchBar extends Component {
     document.addEventListener('keypress', this.pressEnter)
     this.tgleMsg()
   }
-  componentWillUpdate(){
+  componentWillUnmount(){
     document.removeEventListener('keypress', this.pressEnter)
     clearInterval(this.tgleMsg)
   }
