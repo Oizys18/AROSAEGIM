@@ -3,7 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Popover from "@material-ui/core/Popover";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import Typography from "@material-ui/core/Typography";
-import SmallButton from "../common/buttons/SmallButton"
+import styled from "styled-components";
+import SmallButton from "../common/buttons/SmallButton";
 const useStyles = makeStyles((theme) => ({
   typography: {
     padding: theme.spacing(2),
@@ -14,15 +15,25 @@ export default function SimplePopover(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [tagText, changeTag] = React.useState(null);
+  const [error, changeError] = React.useState(null);
 
-  const handleTag = (e) =>{
-    console.log(e.target.value)
-    // setState({tagText:e.target.value})
-    // console.log(this.state.tagText)
-  }
+  const handleTag = (e) => {
+    if (e.target.value) {
+      changeTag(e.target.value);
+      changeError(0);
+    } else {
+      changeError(1);
+    }
+  };
   const createTag = () => {
-    props.createTag(this.state.tagText)
-  }
+    if (tagText) {
+      props.createTag(tagText);
+      changeTag(null);
+      setAnchorEl(null);
+    } else {
+      changeError(1);
+    }
+  };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -33,7 +44,17 @@ export default function SimplePopover(props) {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-
+  const ErrorStyle = styled.div`
+    font-size: 8px;
+    color: red;
+  `;
+  const ErrorTxt = () => {
+    if (error) {
+      return <ErrorStyle>태그를 입력해주세요</ErrorStyle>;
+    } else {
+      return <ErrorStyle>　</ErrorStyle>;
+    }
+  };
   return (
     <>
       <LocalOfferIcon aria-describedby={id} onClick={handleClick} />
@@ -52,8 +73,9 @@ export default function SimplePopover(props) {
         }}
       >
         <Typography className={classes.typography}>
-          <input type="text" placeholder="태그작성" onChange={()=>changeTag()}/>
-          <SmallButton text="작성" onClick={handleTag}/>
+          <input type="text" placeholder="태그작성" onChange={handleTag} />
+          <SmallButton text="작성" onClick={createTag} />
+          <ErrorTxt />
         </Typography>
       </Popover>
     </>

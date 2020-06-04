@@ -89,9 +89,9 @@ class WriteSaegim extends Component {
   }
 
   writePost = () => {
-    const data = {
+    let data = {
       contents: this.state.text,
-      imageSources: this.state.imgBase64,
+      // imageSources: this.state.imgBase64,
       latitude: this.state.location[0],
       longitude: this.state.location[1],
       secret: this.state.locked,
@@ -100,6 +100,10 @@ class WriteSaegim extends Component {
       userName: this.state.userInfo.name,
       w3w: this.state.w3w,
     };
+    if (this.state.imageSources) {
+      data["imageSources"] = this.state.imgBase64;
+    }
+    console.log(data);
     if (this.state.text) {
       axios
         .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
@@ -170,12 +174,12 @@ class WriteSaegim extends Component {
               labelText={this.state.locked ? "비공개" : "공개"}
               labelPlacement="start"
             />
-            <Tag>
-              {this.state.tags.map((tag, i) => {
-                return <Chip size="small" text={tag} key={i} />;
-              })}
-            </Tag>
           </Bottom>
+          <Tag>
+            {this.state.tags.map((tag, i) => {
+              return <Chip margin="0.1em" size="small" text={tag} key={i} />;
+            })}
+          </Tag>
         </Container>
         <CreateWrapper>
           <input
@@ -191,7 +195,7 @@ class WriteSaegim extends Component {
             <PhotoIcon />
           </CreateImg>
           <CreateTag onClick={this.openPop}>
-            <SimplePopover onChange={this.createTag}/>
+            <SimplePopover createTag={this.createTag} />
           </CreateTag>
           <CreatePost onClick={this.writePost}>
             <CreateIcon />
@@ -298,14 +302,16 @@ const CreateImg = styled(IconButton)`
   }
 `;
 
-const Tag = styled(IconButton)`
+const Tag = styled.div`
   margin: none;
   padding: none;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   display: flex;
   background-color: transparent;
   border: none;
   outline: none;
   font-size: 16px;
+  margin-left: 16px;
+  flex-wrap: wrap;
 `;
