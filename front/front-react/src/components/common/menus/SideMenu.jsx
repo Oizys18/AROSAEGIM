@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import styled from 'styled-components';
 import { Slide, Switch, IconButton, Divider } from '@material-ui/core';
-import { Close, VpnKey, AssignmentInd, Face, ExitToApp, Timelapse, Today } from '@material-ui/icons';
+import { Close, VpnKey, AssignmentInd, Face, ExitToApp, Timelapse, Today, Build } from '@material-ui/icons';
 import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
 
 import UserInfo from './UserInfo';
@@ -79,6 +79,7 @@ class SideMenu extends Component {
             <Divider />
           </>
         }
+        <SideMenuBtn link="contact" txt={"개발자와 연락"} icon={<Build />} />
         </StListCont>
       </Slide>
       </>
