@@ -50,6 +50,7 @@ class SaegimListPage extends Component {
     this.setState({
       data: _data
     })
+    this.context.setCurData(_data)
   }
 
   getCurrentLocation() {
