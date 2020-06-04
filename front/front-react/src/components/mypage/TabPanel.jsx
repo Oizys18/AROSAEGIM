@@ -69,7 +69,7 @@ class TabPanel extends Component {
       <div
         hidden={this.props.value !== this.props.index}
       >
-        {this.props.data.length > 1 ? PrintList : EmptyList}
+        {this.props.data.length > 0 ? PrintList : EmptyList}
       </div>
     )
   }
