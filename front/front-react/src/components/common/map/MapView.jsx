@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import MapItem from "./MapItem";
 import * as MM from "./MapMethod";
+import MapListItem from "./MapListItem";
+import DefaultButton from "../buttons/DefaultButton";
 
 // import MapMarker, {MarkerConfig} from "./MapItemTest";
 
@@ -18,14 +20,16 @@ class MapView extends Component {
       selectedList: {
         status: false,
         items: [],
-      }
+      },
+      selected: {
+        status: false,
+        item: null,
+      },
     };
     this.markers = []
   }
 
-  setStateAsync(state) {
-    return new Promise(resolve => { this.setState(state, resolve) })
-  }
+  setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
 
   async componentDidMount() {
     await this.initMapView();
@@ -34,14 +38,22 @@ class MapView extends Component {
   }
   
   componentDidUpdate(prevProps, prevState) {
-    this.overlayMarkers();
-    (!!this.props.userCenter && this.props.usingUserCenter && !this.state.userMarker && this.showUserCenter())
-    if (prevProps.usingUserCenter !== this.props.usingUserCenter){console.log(prevProps, this.props, this.state)}
-    if (prevProps.usingUserCenter !== this.props.usingUserCenter && this.props.usingUserCenter && !!this.state.userMarker) {
-      this.state.userMarker.setPosition(this.props.userCenter)
-      this.state.mv.panTo(this.props.userCenter)
-      // MM.panTo(this.state.mv, this.props.userCenter.getLat(), this.props.userCenter.getLng())
+    if(prevProps.items !== this.props.items) {
+      // console.log('re-rendering markers')
+      this.overlayMarkers();
     }
+    if(prevProps.mapCenter !== this.props.mapCenter && this.props.mapCenter === this.props.userCenter){
+      this.state.mv.panTo(this.props.mapCenter);
+      // this.state.userMarker.setPosition(this.props.userCenter)
+    }
+    // (!!this.props.userCenter && this.props.usingUserCenter && !this.state.userMarker && this.showUserCenter())
+    // if (prevProps.usingUserCenter !== this.props.usingUserCenter){console.log(prevProps, this.props, this.state)}
+    // if (prevProps.usingUserCenter !== this.props.usingUserCenter && this.props.usingUserCenter && !!this.state.userMarker) {
+    //   
+    //   this.state.mv.panTo(this.props.userCenter)
+    //   // MM.panTo(this.state.mv, this.props.userCenter.getLat(), this.props.userCenter.getLng())
+    // }
+
   }
 
   componentWillUnmount(){
@@ -55,7 +67,7 @@ class MapView extends Component {
   initMapView = () => {
     const _cont = document.getElementById('mapView');
     const _options = {
-      center: this.props.center,
+      center: this.props.mapCenter,
       level: 3,
     }
     const _mapView = new kakao.maps.Map(_cont, _options)
@@ -83,10 +95,11 @@ class MapView extends Component {
   }
 
   changeLvCt = () => {
-    this.setState({
-      mapCenter: this.state.mv.getCenter(),
-      level: this.state.mv.getLevel(),
-    })
+    // this.props.changeMapCenter(this.state.mv.getCenter())
+    // this.setState({
+    //   mapCenter: this.state.mv.getCenter(),
+    //   level: this.state.mv.getLevel(),
+    // })
   }
 
   fetchItem = () => {
@@ -115,6 +128,7 @@ class MapView extends Component {
   };
 
   handleDragEnd = () => {
+    this.props.changeMapCenter(this.state.mv.getCenter())
     this.fetchItem();
     // (this.state.selected.status && this.closeItem());
     // (this.state.usingUserCenter && this.setState({usingUserCenter: false}));
@@ -124,11 +138,14 @@ class MapView extends Component {
     const items = cluster.getMarkers()
     const selectedList = {
       status: true,
-      items: items.map(marker=>marker.item)
+      items: items.map(marker=>{
+        const item = this.props.items.find(el => marker.itemId === el.id);
+        return item === undefined ? emptyItem : item
+      })
     }
     this.setState({selectedList: selectedList})
 
-    // set panTo offset
+    // set panTo offset : show cluseter on slightly left of screen
     const CENTER_OFFSET_RATIO = 0.2; // percentage
     const width = window.innerWidth;
     const center_offset = Math.floor(width * CENTER_OFFSET_RATIO);
@@ -146,10 +163,10 @@ class MapView extends Component {
     const markers = this.props.items.map((el) => {
       const marker = new kakao.maps.Marker(MM.MarkerConfig(el));// new MapMarker(el);
       marker.setMap(this.state.mv)
-      marker.item = el
+      marker.itemId = el.id
       kakao.maps.event.addListener(marker, "click", () => {
-        console.log(marker.item,'marker clicked');
-        this.selectItem(marker.item)
+        console.log(marker.itemId,'marker clicked');
+        this.selectItem(marker.itemId)
       })
       return marker
     })
@@ -180,11 +197,35 @@ class MapView extends Component {
     return items
   };
 
-  selectItem = (item) => {
-    this.props.selectItem(item);
+  selectItem = (itemId) => {
+    // this.props.selectItem(item);
+    const item = this.props.items.find(el => itemId === el.id)
+    if (item === undefined) {
+      return;
+    }
+    this.setState({selected: { status: true, item: item }})
     this.props.unsetUsingUserCenter();
     MM.panTo(this.state.mv, item.latitude, item.longitude)
   };
+
+  closeItem = () => {
+    this.setState({selected: { status: false, item: null }})
+  }
+
+  prevItem = () => {
+    const currentIndex = this.state.selectedList.items.indexOf(this.state.selected.item);
+    const prevIndex =
+      currentIndex === 0 ? this.state.selectedList.items.length - 1 : currentIndex - 1;
+    this.selectItem(this.state.selectedList.items[prevIndex].id);
+  };
+
+  nextItem = () => {
+    const currentIndex = this.state.selectedList.items.indexOf(this.state.selected.item);
+    const nextIndex =
+      currentIndex === this.state.selectedList.items.length - 1 ? 0 : currentIndex + 1;
+    this.selectItem(this.state.selectedList.items[nextIndex].id);
+  };
+
 
   overlaySelectedList = () => {
     return this.state.selectedList.items.map(el=> <MapItem key={el.id} item={el} selectItem={this.selectItem} />)
@@ -213,6 +254,20 @@ class MapView extends Component {
               {this.overlaySelectedList()}
             </StList>
           </StListCont>
+        }
+        {this.state.selected.status && 
+          <>
+            {this.state.selectedList.status &&
+              <ButtonWrapper>
+                <DefaultButton text="prev Item" onClick={this.prevItem} />
+                <DefaultButton text="next Item" onClick={this.nextItem} />
+              </ButtonWrapper>
+            } 
+            <MapListItem
+              item={this.state.selected.item}
+              closeItem={this.closeItem}
+            />
+          </>
         }
       </>
     );
@@ -247,3 +302,27 @@ const StList = styled.div`
   flex-direction: column-reverse;
   align-items: flex-start;
 `
+
+const ButtonWrapper = styled.div`
+  position: absolute;
+  z-index: 10;
+  bottom: 72px;
+
+  display: flex;
+  padding: 0 16px 0 16px;
+`;
+
+const emptyItem = {
+  contents: "emptyItem",
+  id: 0,
+  image: null,
+  latitude: 37.50083104531534,
+  longitude: 127.03694678811341,
+  record: null,
+  regDate: 1590650953712,
+  secret: 0,
+  tags: [],
+  userId: 0,
+  userName: "empty",
+  w3w: "empty"
+}

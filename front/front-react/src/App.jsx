@@ -19,6 +19,7 @@ import Signup from "./components/account/Signup";
 import SaegimListPage from "./components/saegim/SaegimListPage";
 import SaegimDetail from "./components/saegim/SaegimDetail";
 import MyPage from "./components/mypage/MyPage";
+import Contact from "./components/contact/Contact";
 import { getUserByEmail } from "./apis/AccountAPI";
 
 class App extends Component {
@@ -134,7 +135,7 @@ class App extends Component {
     const _id = e.currentTarget.id
     if (_id === "write") {
       if(this.state.isLogin) {
-        this.props.history.push(`/${_id}`);
+        this.props.history.replace(`/${_id}`);
       }
       else{
         this.popModal('로그인 후\n이용할 수 있습니다.\n\n로그인 하시겠습니까?', 'need login', 'confirm')
@@ -195,6 +196,7 @@ class App extends Component {
           <Route path="/list" component={SaegimListPage} />
         </Switch>
         <Route path="/map" component={MapPage} />
+        <Route path="/contact" component={Contact} />
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
