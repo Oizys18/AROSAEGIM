@@ -22,7 +22,6 @@ class CardItem extends Component {
     super(props);
     this.state = {
       currentId: 0,
-      // colors: ['#b6cfbd', '#c7c4ab', '#a8a09d', '#bca8bf', '#9fa9b5' ]
       colors: ['#FBF2EE', '#f4c6ba', '#f3b3a6', '#d69f94', '#B98B82', '#A76E62' ]
     }
     this.onMouseMove = this.onMouseMove.bind(this);
