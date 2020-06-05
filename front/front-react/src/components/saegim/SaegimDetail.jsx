@@ -4,22 +4,27 @@ import Card from "../common/cards/Card";
 import styled from "styled-components";
 import bgImage from "../../assets/images/sample_img.jpg"
 import { ArrowBack, Lock, LockOpen } from "@material-ui/icons";
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import * as SA from "../../apis/SaegimAPI"
-import Time from "../common/time/Time";
+import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 import Chip from "../common/chip/Chip"
 import { Zoom } from "@material-ui/core";
 import SaegimDetailButton from "./SaegimDetailButton";
-import {getUserByEmail} from "../../apis/AccountAPI";
+import PhotoIcon from "@material-ui/icons/Photo";
 import Comment from "./Comment";
 import Like from "./Like";
+import {Storage} from "../../storage/Storage";
+import Background from "../common/background/Background";
 
 class SaegimDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {
-        tags: []
+        tags: [],
+        images: []
       },
+      regDate: "",
       userId: "",
       updateFlagByLike: false
     };
@@ -29,21 +34,28 @@ class SaegimDetail extends Component {
 
   goBack() {
     this.props.history.goBack();
+    this.context.idxUpdate(true);
   }
 
   getSaegimDetail = async () => {
     const _data = await SA.getSaegimDetailById(this.props.match.params.id)
     await this.setStateAsync({ data: _data })
+    const _regDate = getTimeDeltaString(this.state.data.regDate)
+    this.setState({
+      regDate: _regDate
+    })
+    console.log(this.state.data)
   }
 
   async componentDidMount() {
-    const _email = localStorage.getItem('ARSG email')
-    if (_email !== null) {
+    const _userInfo = this.context.userInfo
+    if (_userInfo !== {}) {
       this.setState({
-        userId: (await getUserByEmail(_email)).data.id
+        userId: _userInfo.id
       })
     }
     await this.getSaegimDetail();
+    console.log(this.state.data.images.length)
   }
 
   setUpdateLike(flag) {
@@ -58,37 +70,35 @@ class SaegimDetail extends Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state.data.tags !== prevState.tags) {
-    }
-    // if (this.state.updateFlagByLike === true) {
-    //   this.getSaegimDetail()
-    //   this.setState({
-    //     updateFlagByLike: false
-    //   })
-    //   console.log('디테일 다시 가져옴')
-    //   console.log(this.state.data.likes)
-    // }
-  }
-
   render() {
     const PrintChip = this.state.data.tags.map((tag) => {
       return (
         <Chip text={tag.name} key={tag.id}/>
       )
     })
+
     return (
       <Zoom in={true}>
         <Wrapper>
           <Contents>
-            <BackGround bgImage={this.state.data.image ? this.state.data.image : bgImage}/>
+            {this.state.data.images.length > 0
+              ? <>
+                  <BackGround bgImage={this.state.data.images[0]}/>
+                  <Image>
+                    <StPhotoIcon/>
+                    <div>{this.state.data.images.length}</div>
+                  </Image>
+                </>
+              : <BackGround />
+            }
             <Location>{this.state.data.w3w}</Location>
             <Registered>
-              <Time regTime={this.state.data.regDate}/>
+              <StAccessTimeIcon />
+              <div>{this.state.regDate}</div>
             </Registered>
             <CardWrapper>
               <Card>
-                <div>{this.state.data.contents}</div>
+                <StCard>{this.state.data.contents}</StCard>
               </Card>
             </CardWrapper>
             <Tags>
@@ -97,6 +107,9 @@ class SaegimDetail extends Component {
             <LockIcon>
               {this.state.data.secret ? <Lock/> : <LockOpen/>}
             </LockIcon>
+            <BackButton onClick={this.goBack}>
+              <ArrowBack/>
+            </BackButton>
           </Contents>
           <Communication>
             <Likes>
@@ -112,9 +125,6 @@ class SaegimDetail extends Component {
               <Comment id={this.props.match.params.id} />
             </Comments>
           </Communication>
-          <BackButton onClick={this.goBack}>
-            <ArrowBack/>
-          </BackButton>
           {this.state.userId === this.state.data.userId &&
           <StButton>
             <SaegimDetailButton id={this.props.match.params.id}/>
@@ -127,6 +137,7 @@ class SaegimDetail extends Component {
 }
 
 export default SaegimDetail;
+SaegimDetail.contextType = Storage;
 
 const Wrapper = styled.div`
   display: flex;
@@ -146,15 +157,15 @@ const Contents = styled.div `
   
   display: grid;
   grid-template-rows: repeat(5, 20%);
-  grid-template-columns: repeat(5, 20%);
+  grid-template-columns: 14% 24% 24% 24% 14%;
   grid-template-areas:
-    "location location location date date"
-    ". contents contents contents ."
+    "goBack location location date date"
+    ". contents contents contents image"
     ". contents contents contents ."
     ". contents contents contents ."
     "tags tags tags . isLocked";
   align-items: center;
-`
+`;
 
 const BackGround = styled.div `
   position: absolute;
@@ -180,8 +191,9 @@ const Tags = styled.div `
   grid-area: tags;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   color: white;
+  margin-left: 24px;
 `
 
 const Location = styled.div `
@@ -199,6 +211,10 @@ const Registered = styled.div `
   justify-content: center;
   color: white;
 `
+
+const StAccessTimeIcon = styled(AccessTimeIcon)`
+  margin-right: 4px;
+`;
 
 const Communication = styled.div`
   height: 50%;
@@ -223,7 +239,28 @@ const StButton = styled.div`
 `;
 
 const BackButton= styled.div`
-  position: absolute;
-  bottom: 10%;
-  left: 5%;
+  grid-area: goBack;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+`;
+
+const Image = styled.div`
+  grid-area: image;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StPhotoIcon = styled(PhotoIcon)`
+  margin-right: 4px;
+`;
+
+const StCard = styled.div`
+  min-height: 15vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  word-break: break-all;
 `;

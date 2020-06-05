@@ -19,6 +19,7 @@ import Signup from "./components/account/Signup";
 import SaegimListPage from "./components/saegim/SaegimListPage";
 import SaegimDetail from "./components/saegim/SaegimDetail";
 import MyPage from "./components/mypage/MyPage";
+import Contact from "./components/contact/Contact";
 import { getUserByEmail } from "./apis/AccountAPI";
 
 class App extends Component {
@@ -44,6 +45,11 @@ class App extends Component {
       modalMode: '',
       popModal: this.popModal,
       handleModal: this.handleModal,
+
+      curData: [],
+      setCurData: this.setCurData,
+      idxUpdateFlag: false,
+      idxUpdate: this.idxUpdate
     };
   }
 
@@ -140,6 +146,18 @@ class App extends Component {
     }
   };
 
+  idxUpdate = (flag) => {
+    this.setState({
+      idxUpdateFlag: flag
+    })
+  }
+
+  setCurData = (data) => {
+    this.setState({
+      curData: data
+    })
+  }
+
   render() {
     return (
       <Storage.Provider value={this.state}>
@@ -178,6 +196,7 @@ class App extends Component {
           <Route path="/list" component={SaegimListPage} />
         </Switch>
         <Route path="/map" component={MapPage} />
+        <Route path="/contact" component={Contact} />
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />

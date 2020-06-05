@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import LocalOfferIcon from "@material-ui/icons/LocalOffer";
+
 import { IconButton } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
@@ -11,7 +11,7 @@ import axios from "axios";
 import PhotoIcon from "@material-ui/icons/AddPhotoAlternate";
 // import { getUserByEmail } from "../../apis/AccountAPI";
 import { Storage } from "../../storage/Storage";
-import Popover from "@material-ui/core/Popover";
+import SimplePopover from "./Writetag";
 
 class WriteSaegim extends Component {
   constructor(props) {
@@ -27,7 +27,6 @@ class WriteSaegim extends Component {
       error: 0,
       userInfo: {},
       imgBase64: [],
-      open: false,
     };
     this.inputReference = React.createRef();
   }
@@ -90,9 +89,9 @@ class WriteSaegim extends Component {
   }
 
   writePost = () => {
-    const data = {
+    let data = {
       contents: this.state.text,
-      imageSources: this.state.imgBase64,
+      // imageSources: this.state.imgBase64,
       latitude: this.state.location[0],
       longitude: this.state.location[1],
       secret: this.state.locked,
@@ -101,12 +100,16 @@ class WriteSaegim extends Component {
       userName: this.state.userInfo.name,
       w3w: this.state.w3w,
     };
+    if (this.state.imageSources) {
+      data["imageSources"] = this.state.imgBase64;
+    }
     console.log(data);
     if (this.state.text) {
       axios
         .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
         .then((res) => {
           this.handleChange(res.data);
+          console.log(data);
         })
         .catch((err) => {
           console.log(err);
@@ -139,17 +142,8 @@ class WriteSaegim extends Component {
   createTag = (newTag) => {
     this.setState({ tags: this.state.tags.concat(newTag) });
   };
-  handleTag = () => {
-    console.log(this.state.tagModal);
-    if (this.state.tagModal) {
-      this.setState({ tagModal: false });
-    } else {
-      this.setState({ tagModal: true });
-    }
-  };
 
   render() {
-
     const ErrorMsg = () => {
       if (this.state.error) {
         return <Error>텍스트를 입력해주세요!</Error>;
@@ -180,12 +174,12 @@ class WriteSaegim extends Component {
               labelText={this.state.locked ? "비공개" : "공개"}
               labelPlacement="start"
             />
-            <Tag>
-              {this.state.tags.map((tag, i) => {
-                return <Chip size="small" text={tag} key={i} />;
-              })}
-            </Tag>
           </Bottom>
+          <Tag>
+            {this.state.tags.map((tag, i) => {
+              return <Chip margin="0.1em" size="small" text={tag} key={i} />;
+            })}
+          </Tag>
         </Container>
         <CreateWrapper>
           <input
@@ -201,27 +195,11 @@ class WriteSaegim extends Component {
             <PhotoIcon />
           </CreateImg>
           <CreateTag onClick={this.openPop}>
-            <Popover
-              id="tag-popover"
-              open={this.state.popOpen}
-              // anchorEl={anchorEl}
-              onClose={this.popClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "center",
-              }}
-            >
-              The content of the Popover.
-            </Popover>
-            <LocalOfferIcon />
+            <SimplePopover createTag={this.createTag} />
           </CreateTag>
-          <CreateButton onClick={this.writePost}>
+          <CreatePost onClick={this.writePost}>
             <CreateIcon />
-          </CreateButton>
+          </CreatePost>
         </CreateWrapper>
         <ImageWrapper>
           {this.state.imgBase64.map((img, i) => {
@@ -304,7 +282,7 @@ const CreateTag = styled(IconButton)`
   }
 `;
 
-const CreateButton = styled(IconButton)`
+const CreatePost = styled(IconButton)`
   background: white;
   padding: 0.25em;
   &:focus {
@@ -324,14 +302,16 @@ const CreateImg = styled(IconButton)`
   }
 `;
 
-const Tag = styled(IconButton)`
+const Tag = styled.div`
   margin: none;
   padding: none;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   display: flex;
   background-color: transparent;
   border: none;
   outline: none;
   font-size: 16px;
+  margin-left: 16px;
+  flex-wrap: wrap;
 `;

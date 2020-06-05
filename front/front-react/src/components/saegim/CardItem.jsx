@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import Card from "../common/cards/Card";
-import "./CardItem.css"
-import Time from "../common/time/Time";
+import "./CardItem.css";
+import { Lock } from "@material-ui/icons";
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import PhotoIcon from "@material-ui/icons/Photo";
+import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 
 class CardItem extends Component {
   listElement;
@@ -19,9 +22,9 @@ class CardItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentId: 0
+      currentId: 0,
+      colors: ['#FBF2EE', '#f4c6ba', '#f3b3a6', '#d69f94', '#B98B82', '#A76E62' ]
     }
-
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
     this.onDragStartMouse = this.onDragStartMouse.bind(this);
@@ -31,7 +34,6 @@ class CardItem extends Component {
     this.onDragEnd = this.onDragEnd.bind(this);
     this.updatePosition = this.updatePosition.bind(this);
     this.onClicked = this.onClicked.bind(this);
-
     this.onSwiped = this.onSwiped.bind(this);
   }
 
@@ -45,7 +47,6 @@ class CardItem extends Component {
     window.addEventListener("mouseup", this.onDragEndMouse);
     window.addEventListener("touchend", this.onDragEndTouch);
     this.changeOrder()
-    console.log(this.props)
   }
 
   onDragStartMouse(e) {
@@ -150,7 +151,7 @@ class CardItem extends Component {
     const length = this.props.length
     return (
       <div className="Wrapper" ref={div => (this.wrapper = div)}>
-        <StackedCard idx={idx} length={length}>
+        <StackedCard idx={idx} length={length} >
             <div
               onClick={this.onClicked}
               ref={div => (this.listElement = div)}
@@ -158,15 +159,31 @@ class CardItem extends Component {
               onTouchStart={this.onDragStartTouch}
               className="ListItem"
             >
-              <Card>
+              <Card
+                color={this.state.colors[idx]}
+              >
                 <StCard>
                   <Location>{saegim.w3w}</Location>
                   <Registered>
-                    <Time regTime={saegim.regDate} />
+                    <StTime>
+                      <StAccessTimeIcon />
+                      <div>{getTimeDeltaString(saegim.regDate)}</div>
+                    </StTime>
                   </Registered>
-                  <Contents>
-                    {saegim.secret ? "비밀글입니다" : saegim.contents}
-                  </Contents>
+                  {/*{ saegim.images.length > 0 &&*/}
+                    <Image>
+                      <StPhotoIcon/>
+                      <div>{saegim.images.length}</div>
+                    </Image>
+                  {/*}*/}
+
+                  {saegim.secret
+                    ? <ContentsL>
+                        <Lock />
+                        비밀글
+                      </ContentsL>
+                    : <Contents>{saegim.contents}</Contents>
+                  }
                   <StLinkDiv>
                   <StLink to={`list/${saegim.id}`}>
                     더보기
@@ -207,16 +224,35 @@ const StCard = styled.div`
   grid-template-columns: repeat(5, minmax(16vw, auto)) ;
   grid-template-areas:
     "location location location date date"
-    ". contents contents contents ."
+    ". contents contents contents image"
     ". contents contents contents ."
     ". contents contents contents ."
     "link . . comments comments";
   align-items: center;
 `
 
+const Image = styled.div`
+  grid-area: image;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StPhotoIcon = styled(PhotoIcon)`
+  margin-right: 4px;
+`;
+
 const Contents = styled.div`
   grid-area: contents;
 `
+
+const ContentsL = styled.div`
+  grid-area: contents;
+  color: #616161;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const Comments = styled.div`
   grid-area: comments;
@@ -227,7 +263,7 @@ const Location = styled.div`
 `
 
 const Registered = styled.div`
-  grid-area: date
+  grid-area: date;
 `
 
 const zoom = keyframes`
@@ -241,5 +277,15 @@ const StackedCard = styled.div `
   bottom: ${props => 20 + props.idx * 3}%;
   transform: scale(${props => 1.0 - ((props.idx+1) * 0.05)});
   animation: ${zoom} 2s ease;
-  display: ${props => props.idx > 5 && 'none'};
+  display: ${props => props.idx > 4 && 'none'};
 `
+
+const StTime = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const StAccessTimeIcon = styled(AccessTimeIcon)`
+  margin-right: 4px;
+`;
