@@ -4,8 +4,8 @@ import SaegimList from "./SaegimList";
 import CardItem from "./CardItem";
 import styled from "styled-components";
 import * as SA from "../../apis/SaegimAPI"
-import { Zoom, Slide } from "@material-ui/core";
-import Select from "@material-ui/core/Select";
+import { Zoom, Slide, Select, MenuItem } from "@material-ui/core";
+// import Select from "@material-ui/core/Select";
 
 class SaegimListPage extends Component {
   constructor(props) {
@@ -116,7 +116,7 @@ class SaegimListPage extends Component {
 
     const PrintOptions = this.state.options.map((option) => {
         return (
-          <option value={option.idx} key={option.idx}>{option.text}</option>
+          <MenuItem value={option.idx} key={option.idx}>{option.text}</MenuItem>
         )
       }
     );
