@@ -38,7 +38,7 @@ class MapBtnSet extends Component {
       <Slide in={true} direction='left' timeout={700}>
         <StBtnRT>
           <StBtnCont className='view' onClick={_actions.tglView}>{this.changeIcon('view')}</StBtnCont>
-          <StBtnCont className='location' onClick={_actions.goUserCenter}><MyLocation/></StBtnCont>
+          <StBtnCont className='location' onClick={_actions.goUserCenter}><MyLocation color={this.props.isUserCenter ? 'primary':''}/></StBtnCont>
         </StBtnRT>
       </Slide>
       <Zoom in={true} timeout={500}>
