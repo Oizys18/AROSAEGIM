@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { TextField, InputAdornment } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/styles';
+import { setPrimaryColor } from '../../../styles/MuiStyles';
 
 class UserInput extends Component {
   render(){
     
     return(
+      // <ThemeProvider theme={setPrimaryColor}>
       <StInput
         variant="outlined"
         margin="dense"
@@ -26,6 +29,7 @@ class UserInput extends Component {
           ),
         }}
       />
+      // </ThemeProvider>
     )
   }
 
