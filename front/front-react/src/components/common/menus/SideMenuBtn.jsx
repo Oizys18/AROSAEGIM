@@ -10,14 +10,23 @@ class SideMenuBtn extends Component {
       this.context.handleLogout()
     }
     else{
-      if(this.props.link === 'login' || this.props.link === 'signup'){
-        this.props.history.push(`/${this.props.link}`)
-      }
-      else{
+      if(this.props.link === 'mypage'){
         this.props.history.replace(`/${this.props.link}`)
         this.context.toggleSideMenu()
       }
+      else{
+        this.props.history.push(`/${this.props.link}`)
+      }
     }
+    // else{
+    //   if(this.props.link === 'login' || this.props.link === 'signup'){
+    //     this.props.history.push(`/${this.props.link}`)
+    //   }
+    //   else{
+    //     this.props.history.replace(`/${this.props.link}`)
+    //     this.context.toggleSideMenu()
+    //   }
+    // }
   }
 
   render(){

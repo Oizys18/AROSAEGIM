@@ -22,8 +22,6 @@ class MapPage extends Component {
     this.state = {
       items: [],
 
-      // mv: null,
-
       mapCenter: new kakao.maps.LatLng(37.5012767241426, 127.039600248343), //멀티캠퍼스로 초기화
       level: 4,
       userCenter: new kakao.maps.LatLng(37.5012767241426, 127.039600248343), //멀티캠퍼스로 초기화
@@ -36,10 +34,11 @@ class MapPage extends Component {
 
       roadView: false,
       filter: false,
-      filterValues: {
+      filterVal:{
         mine: false,
-        startTime: '',
-        endTime: '',
+        term: 24,
+        sTime: this.initSTime(),
+        eTime: new Date(),
       }
     }
 
@@ -47,6 +46,15 @@ class MapPage extends Component {
       tglView: this.tglView,
       goUserCenter: this.goUserCenter,
       tglFilter: this.tglFilter,
+    }
+
+    this.handleFilter = {
+      handleInit: this.handleInit,
+      handleMine: this.handleMine,
+      handleTerm: this.handleTerm,
+      handleSTime: this.handleSTime,
+      handleETime: this.handleETime,
+      handleApply: this.handleApply
     }
   }
 
@@ -74,7 +82,7 @@ class MapPage extends Component {
       userCenter: _center,
       level: this.context.curMapLevel ? this.context.curMapLevel : this.state.level,
     })
-  }
+  };
 
   changeMapCenter = async (_mapCenter) => {
     await this.setStateAsync({ mapCenter: _mapCenter })
@@ -106,8 +114,11 @@ class MapPage extends Component {
     });
   };
 
-  tglView = async () => {
-    await this.setStateAsync({ roadView: !this.state.roadView })
+  // tglView = async () => {
+  //   await this.setStateAsync({ roadView: !this.state.roadView })
+  // };
+  tglView = () => {
+    this.setState({ roadView: !this.state.roadView })
   };
   goUserCenter = () => {
     this.setState({ mapCenter: this.state.userCenter });
@@ -115,9 +126,55 @@ class MapPage extends Component {
   tglFilter = () => {
     this.setState({ filter: !this.state.filter })
   };
-  handleFilter = (e) => {
-    console.log(e.currentTarget.id)
-    console.log(e.currentTarget.id.value)
+
+
+  initSTime = () => {
+    const _today = new Date()
+    const _sTime = new Date()
+    _sTime.setHours(_today.getHours() - 24)
+    return _sTime
+  }
+  handleInit = () => {
+    this.setState(prevState => ({
+      filterVal: {...prevState.filterVal,
+        term: 24,
+        sTime: this.initSTime(),
+        eTime: new Date(),
+      }
+    }))
+  }
+  handleMine = () => {
+    this.setState(prevState => ({
+      filterVal: {...prevState.filterVal,
+        mine: !this.state.filterVal.mine
+      }
+    }))
+  }
+  handleSTime = (_sTime) => {
+    this.setState(prevState => ({
+      filterVal: {...prevState.filterVal,
+        sTime: _sTime,
+      }
+    }))
+  }
+  handleETime = (_eTime) => {
+    this.setState(prevState => ({
+      filterVal: {...prevState.filterVal,
+        eTime: _eTime,
+      }
+    }))
+  }
+  handleTerm = (_term) => {
+    this.setState(prevState => ({
+      filterVal: {...prevState.filterVal,
+        term: _term,
+      }
+    }))
+  }
+  handleApply = async () => {
+    const _sT = this.state.filterVal.sTime.getTime()
+    const _eT = this.state.filterVal.eTime.getTime()
+    console.log(_sT, _eT)
   }
 
   // showMarker = () => {
@@ -180,7 +237,7 @@ class MapPage extends Component {
             on={this.state.filter} 
             toggle={this.actions.tglFilter}
             isLogin={this.context.isLogin}
-            mapCenter={this.state.mapCenter}
+            filterVal={this.state.filterVal}
             handleFilter={this.handleFilter}
           />
           
@@ -193,7 +250,7 @@ class MapPage extends Component {
               w3w={this.state.w3w}
               changeMapCenter={this.changeMapCenter}
               items={this.state.items}
-              hide={!this.state.roadView}
+              on={!this.state.roadView}
               tglView={this.tglView}
             />
             :
@@ -256,13 +313,4 @@ const StViewCont = styled.div`
   width: 100%;
   height: 100%;
   background: gray;
-`;
-
-const ButtonWrapper = styled.div`
-  position: absolute;
-  z-index: 10;
-  bottom: 72px;
-
-  display: flex;
-  padding: 0 16px 0 16px;
 `;

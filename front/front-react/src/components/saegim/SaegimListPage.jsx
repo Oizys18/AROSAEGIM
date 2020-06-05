@@ -124,7 +124,7 @@ class SaegimListPage extends Component {
     return (
       <StCont>
         <StSelect
-          autowidth
+          autoWidth
           value={this.state.selectedOption}
           onChange={this.selectChange}
         >
