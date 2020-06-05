@@ -1,6 +1,7 @@
 /* global kakao */
 import React, { Component } from "react";
 import styled from "styled-components";
+import { Storage } from  '../../../storage/Storage';
 import MapItem from "./MapItem";
 import * as MM from "./MapMethod";
 import MapListItem from "./MapListItem";
@@ -39,16 +40,27 @@ class MapView extends Component {
   }
   
   componentDidUpdate(prevProps, prevState) {
-    // this.overlayMarkers();
     if(prevProps.items !== this.props.items) {
       // console.log('re-rendering markers')
       this.overlayMarkers();
     }
+
+    // 현위치로 가기 눌렀을 때
     if(prevProps.mapCenter !== this.props.mapCenter && this.props.mapCenter === this.props.userCenter){
       this.state.mv.panTo(this.props.mapCenter);
       // console.log('map is in user center')
       (this.state.userMarker && this.state.userMarker.setPosition(this.props.userCenter));
     }
+
+    // 페이지 전환시 지도 중심, 레벨 유지
+    if(prevProps.mapCenter !== this.props.mapCenter && 
+      this.context.curMapCenter === this.props.mapCenter && 
+      this.props.mapCenter !== this.props.userCenter){
+      this.state.mv.panTo(this.props.mapCenter);
+      this.state.mv.setLevel(this.props.mapLevel);
+    }
+
+
     // (!!this.props.userCenter && this.props.usingUserCenter && !this.state.userMarker && this.showUserCenter())
     // if (prevProps.usingUserCenter !== this.props.usingUserCenter){console.log(prevProps, this.props, this.state)}
     // if (prevProps.usingUserCenter !== this.props.usingUserCenter && this.props.usingUserCenter && !!this.state.userMarker) {
@@ -60,8 +72,9 @@ class MapView extends Component {
   }
 
   componentWillUnmount(){
-    kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLvCt)
-    kakao.maps.event.removeListener(this.state.mv, "center_changed", this.changeLvCt)
+    // kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLvCt)
+    // kakao.maps.event.removeListener(this.state.mv, "center_changed", this.changeLvCt)
+    kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLv)
     kakao.maps.event.removeListener(this.state.mv, "dragstart", this.handleDragStart)
     kakao.maps.event.removeListener(this.state.mv, "dragend", this.handleDragEnd)
   }
@@ -71,11 +84,12 @@ class MapView extends Component {
     const _cont = document.getElementById('mapView');
     const _options = {
       center: this.props.mapCenter,
-      level: 3,
+      level: this.props.mapLevel,
     }
     const _mapView = new kakao.maps.Map(_cont, _options)
-    kakao.maps.event.addListener(_mapView, "zoom_changed", this.changeLvCt)
-    kakao.maps.event.addListener(_mapView, "center_changed", this.changeLvCt)
+    // kakao.maps.event.addListener(_mapView, "zoom_changed", this.changeLvCt)
+    // kakao.maps.event.addListener(_mapView, "center_changed", this.changeLvCt)
+    kakao.maps.event.addListener(_mapView, "zoom_changed", this.changeLv)
     kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
     kakao.maps.event.addListener(_mapView, "dragend", this.handleDragEnd)
 
@@ -97,12 +111,8 @@ class MapView extends Component {
     })
   }
 
-  changeLvCt = () => {
-    // this.props.changeMapCenter(this.state.mv.getCenter())
-    // this.setState({
-    //   mapCenter: this.state.mv.getCenter(),
-    //   level: this.state.mv.getLevel(),
-    // })
+  changeLv = () => {
+    this.props.changeMapLevel(this.state.mv.getLevel())
   }
 
   fetchItem = () => {
@@ -265,6 +275,7 @@ class MapView extends Component {
   }
 }
 export default MapView;
+MapView.contextType = Storage;
 
 const StView = styled.div`
   width: 100%;

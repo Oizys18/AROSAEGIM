@@ -1,18 +1,34 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Collapse, } from '@material-ui/core';
+import * as SA from  '../../../apis/SaegimAPI';
 
 class FilterMenuBtn extends Component {
   constructor(props){
     super(props);
     this.state = {
       collapseIn: false,
+      startTime: new Date(),
+      endTime: new Date(),
     }
   }
   clickMenu = () => {
     this.setState({
       collapseIn: !this.state.collapseIn
     })
+  }
+
+  async componentDidMount(){
+    this.setState({
+      startTime: this.state.startTime.setDate(this.state.startTime.getDate() - 1)
+    })
+    console.log(this.state.startTime)
+    sessionStorage.getItem('ARSG userId')
+    // const resData = await SA.getSaegimByFilter()
+  }
+
+  hendleTime = (e) => {
+    
   }
 
   render(){
@@ -28,11 +44,12 @@ class FilterMenuBtn extends Component {
         <StSettingCont>
           {filterId === 'simple' &&
             <>
-            {this.props.txt}
-            {this.props.txt}
-            {this.props.txt}
-            {this.props.txt}
-            {this.props.txt}
+            <button type='number' onChange={this.handleTime} value={7}>일주일전</button>
+            <button type='number'>1일전</button>
+            <button type='number'>24</button>
+            <button type='number'>12</button>
+            <button type='number'>6</button>
+            <button type='number'>3</button>
             </>
           }
           {filterId === 'detail' &&

@@ -22,7 +22,7 @@ class MapPage extends Component {
     this.state = {
       items: [],
 
-      mv: null,
+      // mv: null,
 
       mapCenter: new kakao.maps.LatLng(37.5012767241426, 127.039600248343), //멀티캠퍼스로 초기화
       level: 4,
@@ -53,28 +53,35 @@ class MapPage extends Component {
   setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
 
   async componentDidMount() {
-    let _options = {
-      center: this.state.mapCenter,
-      level: this.state.level,
-    }
+    await this.initMapPage()
+    this.getAddrW3W()
+  }
+  componentWillUnmount() {
+    this.context.handleCurMap(this.state.mapCenter, this.state.level)
+  }
+
+  initMapPage = async () => {
+    let _center = this.state.mapCenter;
 
     const _lat = sessionStorage.getItem('ARSG latitude');
     const _lng = sessionStorage.getItem('ARSG longitude');
     if(_lat && _lng){
-      _options.center = new kakao.maps.LatLng(Number(_lat), Number(_lng))
+      _center = new kakao.maps.LatLng(Number(_lat), Number(_lng))
     }
 
     await this.setStateAsync({ 
-      mapCenter: _options.center,
-      userCenter: _options.center,
+      mapCenter: this.context.curMapCenter ? this.context.curMapCenter : _center,
+      userCenter: _center,
+      level: this.context.curMapLevel ? this.context.curMapLevel : this.state.level,
     })
-
-    this.getAddrW3W()
   }
 
   changeMapCenter = async (_mapCenter) => {
     await this.setStateAsync({ mapCenter: _mapCenter })
     this.getAddrW3W()
+  };
+  changeMapLevel = (_level) => {
+    this.setState({ level: _level })
   };
 
   //행정 주소, w3w
@@ -113,11 +120,11 @@ class MapPage extends Component {
     console.log(e.currentTarget.id.value)
   }
 
-  showMarker = () => {
-    this.state.userMarker.setMap(null);
-    this.state.userMarker.setMap(this.state.mv);
-    kakao.maps.event.addListener(this.state.userMarker, "click", () => console.log('hello'))
-  }
+  // showMarker = () => {
+  //   this.state.userMarker.setMap(null);
+  //   this.state.userMarker.setMap(this.state.mv);
+  //   kakao.maps.event.addListener(this.state.userMarker, "click", () => console.log('hello'))
+  // }
 
   fetchItem = async (bounds, center) => {
     const meter = SA.boundsToMeter({
@@ -169,10 +176,11 @@ class MapPage extends Component {
             isUserCenter={this.state.mapCenter===this.state.userCenter}
           />
 
-          <SideMenu filter 
+          <SideMenu filter
             on={this.state.filter} 
             toggle={this.actions.tglFilter}
             isLogin={this.context.isLogin}
+            mapCenter={this.state.mapCenter}
             handleFilter={this.handleFilter}
           />
           
@@ -192,10 +200,12 @@ class MapPage extends Component {
             <MapView
               status="list"
               mapCenter={this.state.mapCenter}
+              mapLevel={this.state.level}
               items={this.state.items}
               hide={this.state.roadView}
               userCenter={this.state.userCenter}
               changeMapCenter={this.changeMapCenter}
+              changeMapLevel={this.changeMapLevel}
               fetchItem={this.fetchItem}
             />
           }

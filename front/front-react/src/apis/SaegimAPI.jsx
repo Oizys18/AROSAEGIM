@@ -74,3 +74,31 @@ export const delSaegim = async (id) => {
   })
   return _res.data.data;
 }
+
+
+export const getSaegimByFilter = async (latlng, meter, mine, stime, etime) => {
+  const [ lat, lng ] = latlng
+  const _meter = meter
+  let _userid = 0;
+  const _starttime = stime;
+  const _endtime = etime;
+
+  if(mine){
+    _userid = mine
+  }
+
+  const _res = await axios({
+    method: 'get',
+    url: `${BASE_URL}/saegims/latlngtime`,
+    params: {
+      lat: lat,
+      lng: lng,
+      meter: _meter,
+      userid: _userid,
+      starttime: _starttime,
+      endtime: _endtime,
+    }
+  })
+
+  console.log(_res.data)
+}

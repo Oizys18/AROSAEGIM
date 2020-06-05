@@ -35,7 +35,9 @@ class App extends Component {
 
       curPage: '/list',
       curSaegimIdx: 0,
-      curMap: [],
+      curMapCenter: null,
+      curMapLevel: null,
+      handleCurMap: this.handleCurMap,
 
       isLogin: false,
       userInfo: {},
@@ -178,6 +180,13 @@ class App extends Component {
   setDelComment = (target) => {
     this.setState({
       delComment: target
+    })
+  }
+
+  handleCurMap = (kakaoMapCenter, kakaoMapLevel) => {
+    this.setState({ 
+      curMapCenter: kakaoMapCenter,
+      curMapLevel: kakaoMapLevel,
     })
   }
 
