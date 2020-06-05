@@ -5,8 +5,8 @@ import { delComment } from "../../apis/CommentAPI";
 import CloseIcon from "@material-ui/icons/Close"
 
 class CommentItem extends Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       userid: this.context.userInfo.id
     }
