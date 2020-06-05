@@ -91,7 +91,6 @@ class WriteSaegim extends Component {
   writePost = () => {
     let data = {
       contents: this.state.text,
-      // imageSources: this.state.imgBase64,
       latitude: this.state.location[0],
       longitude: this.state.location[1],
       secret: this.state.locked,
@@ -100,7 +99,7 @@ class WriteSaegim extends Component {
       userName: this.state.userInfo.name,
       w3w: this.state.w3w,
     };
-    if (this.state.imageSources) {
+    if (this.state.imgBase64) {
       data["imageSources"] = this.state.imgBase64;
     }
     console.log(data);
