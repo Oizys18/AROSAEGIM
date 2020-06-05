@@ -76,7 +76,7 @@ class SaegimDetail extends Component {
       <Zoom in={true}>
         <Wrapper>
           <Contents>
-            <BackGround bgImage={this.state.data.image ? this.state.data.image : bgImage}/>
+            <BackGround bgImage={this.state.data.image > 0 ? this.state.data.image : bgImage}/>
             <Location>{this.state.data.w3w}</Location>
             <Registered>
               <StAccessTimeIcon />
