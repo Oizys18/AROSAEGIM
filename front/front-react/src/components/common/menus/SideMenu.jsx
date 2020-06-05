@@ -10,6 +10,7 @@ import UserInfo from './UserInfo';
 import SideMenuBtn from './SideMenuBtn';
 import FilterMenuBtn from './FilterMenuBtn';
 
+import HelpIcon from '@material-ui/icons/Help'; 
 class SideMenu extends Component {
   constructor(props){
     super(props)
@@ -97,6 +98,8 @@ class SideMenu extends Component {
             <Divider />
           </>
         }
+        hello
+        <SideMenuBtn link="help" txt={"도움말"} icon={<HelpIcon />} />
         <SideMenuBtn link="contact" txt={"개발자와 연락"} icon={<Build />} />
         </StListCont>
       </Slide>

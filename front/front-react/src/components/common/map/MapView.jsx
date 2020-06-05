@@ -24,7 +24,7 @@ class MapView extends Component {
       },
       selected: {
         status: false,
-        item: null,
+        item: {id:-1},
       },
     };
     this.markers = []
@@ -35,6 +35,7 @@ class MapView extends Component {
   async componentDidMount() {
     await this.initMapView();
     await this.fetchItem();
+    (this.props.userCenter && this.showUserCenter())
     this.overlayMarkers();
   }
   
@@ -47,7 +48,8 @@ class MapView extends Component {
     // 현위치로 가기 눌렀을 때
     if(prevProps.mapCenter !== this.props.mapCenter && this.props.mapCenter === this.props.userCenter){
       this.state.mv.panTo(this.props.mapCenter);
-      // this.state.userMarker.setPosition(this.props.userCenter)
+      // console.log('map is in user center')
+      (this.state.userMarker && this.state.userMarker.setPosition(this.props.userCenter));
     }
 
     // 페이지 전환시 지도 중심, 레벨 유지
@@ -135,7 +137,7 @@ class MapView extends Component {
     // (this.state.selected.status && this.closeItem());
     (this.props.usingUserCenter && this.props.unsetUsingUserCenter());
     (this.state.selectedList.status && this.unsetSelectedList());
-    (this.props.unsetAll())
+    this.closeItem();
   };
 
   handleDragEnd = () => {
@@ -156,17 +158,10 @@ class MapView extends Component {
     }
     this.setState({selectedList: selectedList})
 
-    // set panTo offset : show cluseter on slightly left of screen
-    const CENTER_OFFSET_RATIO = 0.2; // percentage
-    const width = window.innerWidth;
-    const center_offset = Math.floor(width * CENTER_OFFSET_RATIO);
+    const cluster_lat = cluster.getCenter().getLat();
+    const cluster_lng = cluster.getCenter().getLng();
 
-    const cluster_point = this.state.mapProjection.pointFromCoords(cluster.getCenter())
-    const target_point = new kakao.maps.Point(cluster_point.x + center_offset, cluster_point.y);
-
-    const target_coords = this.state.mapProjection.coordsFromPoint(target_point);
-
-    this.state.mv.panTo(target_coords);
+    MM.panToWithOffset(this.state.mv, this.state.mapProjection, cluster_lat, cluster_lng)
   }
 
   overlayMarkers = async () => {
@@ -177,7 +172,8 @@ class MapView extends Component {
       marker.itemId = el.id
       kakao.maps.event.addListener(marker, "click", () => {
         console.log(marker.itemId,'marker clicked');
-        this.selectItem(marker.itemId)
+        // this.selectItem(marker.itemId)
+        this.selectListwithID([marker.itemId])
       })
       return marker
     })
@@ -186,28 +182,6 @@ class MapView extends Component {
     this.state.clusterer.addMarkers(markers);
   }
 
-  
-  overlayItems = () => {
-    const itemRefs = [];
-    const items = this.props.items.map((el, index) => {
-      const itemRef = React.createRef();
-      const item = (
-        <MapItem
-          ref={itemRef}
-          map={this.props.map}
-          item={el}
-          key={el.id}
-          selectItem={this.selectItem}
-        />
-      );
-      itemRefs.push(itemRef);
-      return item;
-    });
-    this.itemRefs = itemRefs;
-    this.items = items;
-    return items
-  };
-
   selectItem = (itemId) => {
     // this.props.selectItem(item);
     const item = this.props.items.find(el => itemId === el.id)
@@ -215,12 +189,10 @@ class MapView extends Component {
       return;
     }
     this.setState({selected: { status: true, item: item }})
-    this.props.unsetUsingUserCenter();
-    MM.panTo(this.state.mv, item.latitude, item.longitude)
   };
 
   closeItem = () => {
-    this.setState({selected: { status: false, item: null }})
+    this.setState({selected: { status: false, item: {id:-1} }})
   }
 
   prevItem = () => {
@@ -237,9 +209,27 @@ class MapView extends Component {
     this.selectItem(this.state.selectedList.items[nextIndex].id);
   };
 
+  selectListwithID = (itemIdList) => {
+    // this.props.selectItem(item);
+    const items = itemIdList.map(itemId => this.props.items.find(el=>el.id === itemId))
+    if (items === undefined) {
+      return;
+    }
+
+    // get average position of selected items
+    const centerPos = items.reduce((acc, current) => {
+      return {
+        latitude: acc.latitude + current.latitude / items.length,
+        longitude: acc.longitude + current.longitude / items.length,
+      }
+    })
+
+    this.setState({selectedList: { status: true, items: items }})
+    MM.panToWithOffset(this.state.mv, this.state.mapProjection, centerPos.latitude, centerPos.longitude)
+  };
 
   overlaySelectedList = () => {
-    return this.state.selectedList.items.map(el=> <MapItem key={el.id} item={el} selectItem={this.selectItem} />)
+    return this.state.selectedList.items.map(el=> <MapItem key={el.id} item={el} selectItem={this.selectItem} closeItem={this.closeItem} selected={el.id === this.state.selected.item.id}/>)
   }
 
   unsetSelectedList = () => {
@@ -266,7 +256,7 @@ class MapView extends Component {
             </StList>
           </StListCont>
         }
-        {this.state.selected.status && 
+        {/* {this.state.selected.status && 
           <>
             {this.state.selectedList.status &&
               <ButtonWrapper>
@@ -279,7 +269,7 @@ class MapView extends Component {
               closeItem={this.closeItem}
             />
           </>
-        }
+        } */}
       </>
     );
   }
@@ -297,7 +287,7 @@ const StListCont = styled.div`
   width: auto;
   height: auto;
   overflow-y: auto;
-  max-height: 50%;
+  max-height: 65%;
   max-width: 60%;
   z-index: 15;
   top: 50%;
@@ -305,14 +295,14 @@ const StListCont = styled.div`
   padding-right: 8px;
   padding-top: 16px;
   padding-bottom: 16px;
-  transform: translateY(-50%);
+  transform: translateY(-40%);
   /* background: linear-gradient(0.25turn, rgba(255,255,255,0) 80%, #838e83 ); */
 `
 
 const StList = styled.div`
   display: flex;
   flex-direction: column-reverse;
-  align-items: flex-start;
+  align-items: flex-end;
 `
 
 const ButtonWrapper = styled.div`

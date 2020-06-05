@@ -7,6 +7,10 @@ import imgRight from "../../../assets/balloon/balloon-right-filled@2x.png";
 import { Slide, Chip } from "@material-ui/core";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { getTimeDeltaString } from "../time/TimeFunctinon";
+import { Link } from "react-router-dom";
+import DefaultButton from "../buttons/DefaultButton";
+import locationPin from "../../../assets/point/point-filled@2x.png";
+import timeIcon from "../../../assets/time/time@2x.png";
 
 class MapItem extends Component {
   constructor(props) {
@@ -68,72 +72,174 @@ class MapItem extends Component {
     this.customOverlay.setMap(null);
   };
 
+  detailItem = () => {
+    return <StDetailCont>
+      <StFlexContainer>
+        <StLocationIcon />
+        <StText>{this.props.item ? ' ' + this.props.item.w3w : " "}</StText>
+      </StFlexContainer>
+      <StFlexContainer>
+        <StTimeIcon />
+        <StText>{this.props.item ? ' ' + getTimeDeltaString(this.props.item.regDate) : " "}</StText>
+      </StFlexContainer>
+      <StText>
+        <Link to={`list/${this.props.item.id}`}>{"더 보기 →"}</Link>
+      </StText>
+      <StClose onClick={this.props.closeItem}>
+        {"닫기"}
+      </StClose>
+    </StDetailCont>
+  }
+
+  slicedContent = (contents, length) => {
+    const sliced = contents.slice(0,length);
+    const extra = contents.length > length ? '...' : ''
+    return sliced + extra
+  }
+
   render() {
     return (
-      <ItemContainer onClick={this.clickEvent}>
-        <Chip color="primary" size="small" icon={<AccessTimeIcon />} label={this.props.item ? ' ' + getTimeDeltaString(this.props.item.regDate) : " "}/>
-        <ItemLeft />
-        <ItemMiddle>
-          <TextMiddle>{this.props.item.contents.slice(0,5)}{this.props.item.contents.length > 5 ? '...' : ''}</TextMiddle>
-        </ItemMiddle>
-        <ItemRight />
-      </ItemContainer>
+      <StItemCont>
+        <StItem onClick={this.clickEvent}>
+          <Chip color="primary" size="small" icon={<AccessTimeIcon />} label={this.props.item ? ' ' + getTimeDeltaString(this.props.item.regDate) : " "}/>
+          <StItemLeft />
+          <StItemMiddle>
+            <StItemMiddleBg />
+            <StTextMiddle>
+              {this.props.selected ? this.slicedContent(this.props.item.contents, 50):this.slicedContent(this.props.item.contents, 5)}
+            </StTextMiddle>
+          </StItemMiddle>
+          <StItemRight />
+        </StItem>
+        {this.props.selected ? 
+        <StDetailLink>
+          <DefaultButton text={this.detailItem()} />
+        </StDetailLink>:<></>}
+      </StItemCont>
     );
   }
 }
 
 export default MapItem;
 
-const ItemContainer = styled.div`
-  height: 30px;
+const StItemCont = styled.div`
   display: flex;
-  margin-top: 15px;
+  flex-direction: column;
+  align-items: flex-end;
+  height: auto;
+  margin-bottom: -16px;
+`
+
+const StItem = styled.div`
+  height: auto;
+  display: flex;
+
+  margin-top: 16px;
+
   animation-duration: 1s;
   animation-name: slidein;
   @keyframes slidein {
     from {
-      margin-left: 100%;
+      margin-right: 100%;
       width: 300%
     }
     to {
-      margin-left: 0%;
+      margin-right: 0%;
       width: 100%;
     }
   }
 `;
 
-const ItemLeft = styled.div`
+const StItemLeft = styled.div`
   height: 20px;
   width: 7px;
   background-image: url(${imgLeft});
   background-size: contain;
 `;
 
-const ItemMiddle = styled.div`
+const StItemMiddle = styled.div`
+  height: auto;
+  width: auto;
+  margin-right: -4px;
+`;
+
+const StItemMiddleBg = styled.div`
   height: 20px;
   width: auto;
   background-image: url(${imgMiddle});
   background-size: contain;
-  padding-left: 4px;
-  margin-right: -2px;
 `;
 
-const ItemRight = styled.div`
+const StItemRight = styled.div`
   height: 20px;
   width: 13px;
   background-image: url(${imgRight});
   background-size: contain;
 `;
 
-const TextMiddle = styled.div`
+const StTextMiddle = styled.div`
   position: relative;
-  bottom: 16px;
+  top: -32px;
   border: solid #20ad77 1px;
   border-radius: 2px;
   padding: 2px;
   color: #20ad77;
   background: rgba(255, 255, 255, 0.9);
+  box-shadow: 4px 4px 8px #c4c4c4, -4px -4px 8px #ffffff;
+
+  overflow-wrap: anywhere;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
 `;
+
+const StDetailLink = styled.div`
+  box-shadow: 4px 4px 8px #c4c4c4, -4px -4px 8px #ffffff;
+  margin-top: -16px;
+  margin-bottom: 24px;
+  /* animation-duration: 1s;
+  animation-name: slidein;
+  @keyframes slidein {
+    from {
+      width: 0%;
+      margin-right: 100%;
+    }
+    to {
+      width: 100%;
+      margin-right: 0%;
+    } */
+  }
+`
+
+const StDetailCont = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`
+
+const StFlexContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const StLocationIcon = styled.div`
+  margin: 2px;
+  width: 15px;
+  height: 20px;
+  background-image: url(${locationPin});
+  background-size: cover;
+`;
+
+const StTimeIcon = styled.div`
+  margin: 2px;
+  width: 18px;
+  height: 18px;
+  background-image: url(${timeIcon});
+  background-size: cover;
+`;
+
+const StText = styled.div``;
+
+const StClose = styled.span``;
