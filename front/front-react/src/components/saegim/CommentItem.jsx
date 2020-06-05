@@ -17,12 +17,6 @@ class CommentItem extends Component {
     this.context.setDelComment([this.props.saegimid, this.props.id])
   }
 
-  componentDidMount() {
-    console.log(this.props.contents)
-    console.log(this.props.userid)
-    console.log(this.state.userid)
-  }
-
   render() {
     return (
       <Wrapper>
