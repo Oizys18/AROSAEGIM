@@ -75,7 +75,6 @@ class MapView extends Component {
     kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLv)
     kakao.maps.event.removeListener(this.state.mv, "dragstart", this.handleDragStart)
     kakao.maps.event.removeListener(this.state.mv, "dragend", this.handleDragEnd)
-    this.props.changeMapLevel(this.state.mv.getLevel())
   }
 
   // 지도 초기화
