@@ -11,6 +11,7 @@ import MyPageMenu from "./MyPageMenu";
 import { getCommentedSaegim, getLikedSaegim, getCreatedSaegim } from "../../apis/UserAPI"
 import { getUserByEmail } from "../../apis/AccountAPI";
 import {getSaegimDetailById} from "../../apis/SaegimAPI";
+import { Storage } from "../../storage/Storage";
 
 class MyPage extends Component {
   listItem;
@@ -50,7 +51,7 @@ class MyPage extends Component {
   };
 
   async getData() {
-    const _userId = this.state.userInfo.id
+    const _userId = this.context.userInfo.id
     this.setState({
       createdData: await getCreatedSaegim(_userId)
     })
@@ -69,10 +70,10 @@ class MyPage extends Component {
   }
 
   async componentDidMount() {
-    const _email = localStorage.getItem('ARSG email')
-    this.setState({
-        userInfo: (await getUserByEmail(_email)).data
-      })
+    // const _email = localStorage.getItem('ARSG email')
+    // this.setState({
+    //     userInfo: (await getUserByEmail(_email)).data
+    //   })
     await this.getData()
   }
 
@@ -90,10 +91,10 @@ class MyPage extends Component {
           <UserInfo>
             <User>
               <UserName>
-                {this.state.userInfo.name}
+                {this.context.userInfo.name}
               </UserName>
               <UserEmail>
-                {this.state.userInfo.email}
+                {this.context.userInfo.email}
               </UserEmail>
             </User>
             <UserSaegim>
@@ -151,6 +152,7 @@ class MyPage extends Component {
 }
 
 export default MyPage;
+MyPage.contextType = Storage;
 
 const Wrapper = styled.div`
   display: flex;
