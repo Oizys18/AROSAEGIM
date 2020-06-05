@@ -108,8 +108,9 @@ class MapPage extends Component {
   tglFilter = () => {
     this.setState({ filter: !this.state.filter })
   };
-  handleFilter = (filterValues) => {
-
+  handleFilter = (e) => {
+    console.log(e.currentTarget.id)
+    console.log(e.currentTarget.id.value)
   }
 
   unsetUsingUserCenter = () => {
@@ -176,6 +177,7 @@ class MapPage extends Component {
         <StViewCont>
           
           <MapBtnSet 
+            isUC={this.state.mapCenter === this.state.userCenter}
             roadView={this.state.roadView} 
             actions={this.actions}
           />

@@ -11,7 +11,7 @@ class FilterMenuBtn extends Component {
   }
   clickMenu = () => {
     this.setState({
-      collapseIn: !this.state.on
+      collapseIn: !this.state.collapseIn
     })
   }
 
