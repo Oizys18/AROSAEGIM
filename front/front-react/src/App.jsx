@@ -52,7 +52,9 @@ class App extends Component {
       idxUpdate: this.idxUpdate,
 
       updateFlagByComment: false,
-      commentUpdate: this.commentUpdate
+      commentUpdate: this.commentUpdate,
+      delComment: [],
+      setDelComment: this.setDelComment
     };
   }
 
@@ -103,7 +105,7 @@ class App extends Component {
       modalMode: mode,
     })
   }
-  handleModal = (e) => {
+  handleModal = async (e) => {
     const _ans = e.currentTarget.id
     if(this.state.modalMode === 'confirm' && _ans === 'yes'){
       if(this.state.modalSitu === 'need login'){
@@ -117,8 +119,8 @@ class App extends Component {
         window.location.href = '/'
       }
       else if (this.state.modalSitu === 'delComment'){
-        // const _res = delComment(this.props.saegimid, this.props.id)
-        // console.log(_res)
+        const [ saegimId, commentId ] = this.state.delComment
+        await delComment(saegimId, commentId)
         this.commentUpdate(true)
       }
     }
@@ -169,6 +171,11 @@ class App extends Component {
   commentUpdate = (flag) => {
     this.setState({
       updateFlagByComment: flag
+    })
+  }
+  setDelComment = (target) => {
+    this.setState({
+      delComment: target
     })
   }
 

@@ -14,6 +14,13 @@ class CommentItem extends Component {
 
   handleClick = () => {
     this.context.popModal('댓글을 삭제하시겠습니까?', 'delComment', 'confirm')
+    this.context.setDelComment([this.props.saegimid, this.props.id])
+  }
+
+  componentDidMount() {
+    console.log(this.props.contents)
+    console.log(this.props.userid)
+    console.log(this.state.userid)
   }
 
   render() {

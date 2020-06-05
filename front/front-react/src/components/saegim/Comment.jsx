@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Storage } from "../../storage/Storage"
-import {getCommentBySaegim, writeComment} from "../../apis/CommentAPI";
+import {getCommentBySaegim, writeComment, delComment} from "../../apis/CommentAPI";
 import SmallButton from "../common/buttons/SmallButton";
 import CommentInput from "./CommentInput";
 import CommentItem from "./CommentItem";
@@ -82,7 +82,7 @@ class Comment extends Component{
           user={comment.userName}
           contents={comment.contents}
           saegimid={this.props.id}
-          userid={comment.userid}
+          userid={comment.userId}
           id={comment.id}
           key={i}
           handleDelete={this.handleDelete}
