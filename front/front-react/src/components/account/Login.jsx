@@ -101,7 +101,7 @@ class Login extends Component {
           sessionStorage.setItem('ARSG email', this.state.email)
           sessionStorage.setItem('ARSG userId', _resData.data.id)
         }
-        // window.location.href = '/'
+        window.location.href = '/'
       }
       else {
         this.context.popModal(`비밀번호를\n확인해주세요!`, 'login', 'alert')
