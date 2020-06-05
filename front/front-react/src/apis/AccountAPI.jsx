@@ -3,53 +3,22 @@ import axios from 'axios'
 export const login = async (state) => {
 
   const {email, pw} = state
-  // let _res = null;
-    const _res = await axios({
-      method: 'post',
-      url: `${process.env.REACT_APP_BASE_URL}/users/login`,
-      data: {
-        email: email,
-        password: pw,
-      },
-      header: {
-        "content-type": "application/x-www-form-urlencoded"
-      }
-    })
-    
-    console.log(_res)
-    // if(_res.data.data === 'login fail'){
-    //   return false;
-    // }
-    // else{
-    //   console.log(_res.headers)
-    //   // sessionStorage.setItem('ARSG JWT', _res.headers.Authorization)
-    //   debugger
-    //   return true;
-    // }
-  // try{
-  //   await axios({
-  //     method: 'post',
-  //     url: `${process.env.REACT_APP_BASE_URL}/users/login`,
-  //     data: {
-  //       email: email,
-  //       password: pw,
-  //     }
-  //   })
-  //   .then((_res) => {
-  //     console.log(_res)
-  //     if(_res.data.data === 'login fail'){
-  //       return false;
-  //     }
-  //     else{
-  //       console.log(_res.headers)
-  //       // sessionStorage.setItem('ARSG JWT', _res.headers.Authorization)
-  //       debugger
-  //       return true;
-  //     }
-  //   })
+  const _res = await axios({
+    method: 'post',
+    url: `${process.env.REACT_APP_BASE_URL}/users/login`,
+    data: {
+      email: email,
+      password: pw,
+    },
+  })
+  console.log(_res)
+  console.log(_res.data)
+  return _res.data
+  
+  // if(_res.data.data === 'success'){
+  //   return true;
   // }
-  // catch(err){
-  //   console.log(err)
+  // else{
   //   return false;
   // }
 }
@@ -109,4 +78,23 @@ export const getUserByNickname = async (nick) => {
     return false;
   }
 }
+
+export const getUserByID = async (id) => {
+  const _res = await axios({
+    method: 'get',
+    url: `${process.env.REACT_APP_BASE_URL}/users/id`,
+    params: {
+      name: id
+    }
+    // url: `${process.env.REACT_APP_BASE_URL}/users/name?name=${nick}`
+  })
+
+  if(_res.data.state === 'success'){
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
 

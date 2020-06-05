@@ -90,14 +90,16 @@ class Login extends Component {
     if(AM.checkAllValid('login', this.state)){
       const _resData = await AA.login(this.state)
       // console.log(_resData)
-      if(_resData){
+      if(_resData.state === 'success'){
         localStorage.setItem('ARSG autoLogin', this.state.autoLogin)
         if(this.state.autoLogin){
           localStorage.setItem('ARSG email', this.state.email)
+          localStorage.setItem('ARSG userId', _resData.data.id)
         }
         else {
           localStorage.removeItem('ARSG email')
           sessionStorage.setItem('ARSG email', this.state.email)
+          sessionStorage.setItem('ARSG userId', _resData.data.id)
         }
         // window.location.href = '/'
       }

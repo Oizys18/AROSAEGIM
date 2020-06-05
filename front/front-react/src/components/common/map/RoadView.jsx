@@ -157,7 +157,8 @@ class RoadView extends Component {
     return(
       <>
         <RoadViewTopBar 
-          on={!this.props.hide} 
+          on={!this.props.hide}
+          tglView={this.props.tglView}
           addr={this.props.addr} 
           w3w={this.props.w3w}
         />
@@ -190,7 +191,7 @@ const StView = styled.div`
 const StBtn = styled(FlexRow)`
   position: absolute;
   bottom: 16px;
-  right: 16px;
+  right: 8px;
 
   padding: 4px;
   border: 1px solid gray;
@@ -200,14 +201,14 @@ const StBtn = styled(FlexRow)`
 
 const StOpenMMBtn = styled(StBtn)`
   z-index: 10;
-  height: 28px;
+  height: 20px;
 `;
 
 const StCloseMMBtn = styled(StBtn)`
   z-index: 11;
   svg{
-    width: 28px;
-    height: 28px; 
+    width: 20px;
+    height: 20px; 
   }
 `;
 

@@ -227,6 +227,7 @@ class MapPage extends Component {
         <StViewCont>
           
           <MapBtnSet 
+            isUC={this.state.mapCenter === this.state.userCenter}
             roadView={this.state.roadView} 
             actions={this.actions}
           />

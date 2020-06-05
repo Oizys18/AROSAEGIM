@@ -50,6 +50,7 @@ class SideMenu extends Component {
           내 새김만 보기
           <Switch
             id='mine'
+            color='primary'
             checked={this.state.mine}
             onChange={this.handleMine}
           />
@@ -119,19 +120,21 @@ class SideMenu extends Component {
 
       {
         this.props.filter && 
-        <Collapse in={this.props.on} direction='up' mountOnEnter unmountOnExit>
+        <>
+        {/* <Collapse in={this.props.on} direction='up' mountOnEnter unmountOnExit> */}
         {/* <StFilterBtnSet hidden={!this.props.on}> */}
-          <Zoom in={this.props.on} timeout={600} mountOnEnter unmountOnExit>
-            <StBtnCont><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtnCont>
-          </Zoom>
           <Zoom in={this.props.on} timeout={400} mountOnEnter unmountOnExit>
-            <StBtnCont><IconButton onClick={this.handleInit}><Refresh/></IconButton></StBtnCont>
+            <StBtnCont className="btnClose"><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtnCont>
+          </Zoom>
+          <Zoom in={this.props.on} timeout={300} mountOnEnter unmountOnExit>
+            <StBtnCont className="btnRefresh"><IconButton onClick={this.handleInit}><Refresh/></IconButton></StBtnCont>
           </Zoom>
           <Zoom in={this.props.on} timeout={200} mountOnEnter unmountOnExit>
-            <StBtnCont><IconButton onClick={this.handSubmit}><Check/></IconButton></StBtnCont>
+            <StBtnCont className="btnCheck"><IconButton onClick={this.handSubmit}><Check/></IconButton></StBtnCont>
           </Zoom>
         {/* </StFilterBtnSet> */}
-        </Collapse>
+        {/* </Collapse> */}
+        </>
       }
 
       <Slide in={this.props.on} direction='right'>
@@ -234,15 +237,30 @@ const StMineCont = styled.div`
   color: gray;
 `;
 
-const StFilterBtnSet = styled(FlexColumn)`
-  position: fixed;
-  z-index: 120;
-  bottom: 24px;
-  right: 24px; 
-`;
+// const StFilterBtnSet = styled(FlexColumn)`
+//   position: fixed;
+//   z-index: 120;
+//   bottom: 24px;
+//   right: 24px; 
+// `;
 
 const StBtnCont = styled(FlexRow)`
-  margin-top: 8px;
+  position: fixed;
+  z-index: 120;
+  &.btnClose{
+    right: 24px;
+    bottom: 132px;
+  }
+  &.btnRefresh{
+    right: 24px;
+    bottom: 78px;
+  }
+  &.btnCheck{
+    right: 24px;
+    bottom: 24px;
+  }
+
+  /* margin-top: 8px; */
 
   border: 2px solid gray;
   border-radius: 50%;
