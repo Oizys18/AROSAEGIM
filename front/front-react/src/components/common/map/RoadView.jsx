@@ -157,13 +157,13 @@ class RoadView extends Component {
     return(
       <>
         <RoadViewTopBar 
-          on={!this.props.hide}
+          on={!this.props.on}
           tglView={this.props.tglView}
           addr={this.props.addr} 
           w3w={this.props.w3w}
         />
       
-        <Grow in={!this.props.hide} mountOnEnter unmountOnExit>
+        <Grow in={!this.props.on} mountOnEnter unmountOnExit>
           <StView id="roadView" mmOn={this.state.mmOn}/>
         </Grow>
 
