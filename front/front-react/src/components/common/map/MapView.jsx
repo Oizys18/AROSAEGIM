@@ -126,7 +126,7 @@ class MapView extends Component {
       latitude: this.props.userCenter.getLat(),
       longitude: this.props.userCenter.getLng()
     }
-    MM.panTo(this.state.mv, userCenterPos.latitude, userCenterPos.longitude)
+    // MM.panTo(this.state.mv, userCenterPos.latitude, userCenterPos.longitude)
     const markerConfig = MM.MarkerConfig(userCenterPos, "user")
     const userMarker = new kakao.maps.Marker(markerConfig);
     userMarker.setMap(this.state.mv)
