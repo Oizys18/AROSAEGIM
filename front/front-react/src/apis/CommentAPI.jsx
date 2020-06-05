@@ -37,3 +37,16 @@ export const writeComment = async (data, id, userInfo) => {
   return _res.data.data;
 }
 
+export const delComment = async (saegimId, commentId) => {
+  const _params = {
+    commentid: commentId,
+    saegimid: saegimId
+  }
+  const _res = await axios({
+    method: 'delete',
+    url: `${BASE_URL}/saegims/${saegimId}/comments/${commentId}`,
+    _params: _params
+  })
+  console.log(_res)
+  return _res.data.data;
+}

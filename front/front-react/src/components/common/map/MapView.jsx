@@ -39,6 +39,7 @@ class MapView extends Component {
   }
   
   componentDidUpdate(prevProps, prevState) {
+    // this.overlayMarkers();
     if(prevProps.items !== this.props.items) {
       // console.log('re-rendering markers')
       this.overlayMarkers();

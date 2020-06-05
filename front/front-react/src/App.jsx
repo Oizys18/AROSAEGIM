@@ -20,7 +20,9 @@ import SaegimListPage from "./components/saegim/SaegimListPage";
 import SaegimDetail from "./components/saegim/SaegimDetail";
 import MyPage from "./components/mypage/MyPage";
 import Contact from "./components/contact/Contact";
+import Help from "./components/contact/Help";
 import { getUserByEmail } from "./apis/AccountAPI";
+import { delComment } from "./apis/CommentAPI";
 
 class App extends Component {
   constructor(props) {
@@ -49,7 +51,12 @@ class App extends Component {
       curData: [],
       setCurData: this.setCurData,
       idxUpdateFlag: false,
-      idxUpdate: this.idxUpdate
+      idxUpdate: this.idxUpdate,
+
+      updateFlagByComment: false,
+      commentUpdate: this.commentUpdate,
+      delComment: [],
+      setDelComment: this.setDelComment
     };
   }
 
@@ -100,7 +107,7 @@ class App extends Component {
       modalMode: mode,
     })
   }
-  handleModal = (e) => {
+  handleModal = async (e) => {
     const _ans = e.currentTarget.id
     if(this.state.modalMode === 'confirm' && _ans === 'yes'){
       if(this.state.modalSitu === 'need login'){
@@ -112,6 +119,11 @@ class App extends Component {
         localStorage.removeItem('ARSG email')
         sessionStorage.clear()
         window.location.href = '/'
+      }
+      else if (this.state.modalSitu === 'delComment'){
+        const [ saegimId, commentId ] = this.state.delComment
+        await delComment(saegimId, commentId)
+        this.commentUpdate(true)
       }
     }
     this.setState({ modal: false })
@@ -158,6 +170,17 @@ class App extends Component {
     })
   }
 
+  commentUpdate = (flag) => {
+    this.setState({
+      updateFlagByComment: flag
+    })
+  }
+  setDelComment = (target) => {
+    this.setState({
+      delComment: target
+    })
+  }
+
   render() {
     return (
       <Storage.Provider value={this.state}>
@@ -196,6 +219,7 @@ class App extends Component {
           <Route path="/list" component={SaegimListPage} />
         </Switch>
         <Route path="/map" component={MapPage} />
+        <Route path="/help" component={Help} />
         <Route path="/contact" component={Contact} />
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />

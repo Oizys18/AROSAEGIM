@@ -22,7 +22,8 @@ class CardItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentId: 0
+      currentId: 0,
+      colors: ['#FBF2EE', '#f4c6ba', '#f3b3a6', '#d69f94', '#B98B82', '#A76E62' ]
     }
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
@@ -150,7 +151,7 @@ class CardItem extends Component {
     const length = this.props.length
     return (
       <div className="Wrapper" ref={div => (this.wrapper = div)}>
-        <StackedCard idx={idx} length={length}>
+        <StackedCard idx={idx} length={length} >
             <div
               onClick={this.onClicked}
               ref={div => (this.listElement = div)}
@@ -158,7 +159,9 @@ class CardItem extends Component {
               onTouchStart={this.onDragStartTouch}
               className="ListItem"
             >
-              <Card>
+              <Card
+                color={this.state.colors[idx]}
+              >
                 <StCard>
                   <Location>{saegim.w3w}</Location>
                   <Registered>
@@ -170,7 +173,7 @@ class CardItem extends Component {
                   {/*{ saegim.images.length > 0 &&*/}
                     <Image>
                       <StPhotoIcon/>
-                      <div>{saegim.images.length}</div>
+                      <div>{saegim.images}</div>
                     </Image>
                   {/*}*/}
 
@@ -286,4 +289,3 @@ const StTime = styled.div`
 const StAccessTimeIcon = styled(AccessTimeIcon)`
   margin-right: 4px;
 `;
-

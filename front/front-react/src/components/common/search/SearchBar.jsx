@@ -15,19 +15,21 @@ class SearchBar extends Component {
       selectOpen: false,
 
       value: '',
+      intervalId: null,
     }
   }
 
   componentDidMount(){
     document.addEventListener('keypress', this.pressEnter)
-    this.tgleMsg()
+    const _intervalId = setInterval(() => {this.setState({ msg: !this.state.msg })}, 3000)
+    this.setState({ intervalId: _intervalId })
   }
   componentWillUnmount(){
     document.removeEventListener('keypress', this.pressEnter)
-    clearInterval(this.tgleMsg)
+    clearInterval(this.state.intervalId)
   }
 
-  tgleMsg = () => setInterval(() => {this.setState({ msg: !this.state.msg })}, 3000)
+  // tgleMsg = () => setInterval(() => {this.setState({ msg: !this.state.msg })}, 3000)
   Msg = () => { return this.state.msg ? this.props.addr : this.props.w3w }
 
   openSelect = () => {
@@ -118,12 +120,13 @@ const StSearch = styled.div`
 
   border: 2px solid gray;
   border-radius: 5px;
-
   box-sizing: border-box;
+
+  position: relative;
 `;
 
 const StSelectCont = styled.div`
-  position: relative;
+  /* position: relative; */
 `
 
 const StSelectBtn = styled(Button)`
@@ -133,8 +136,9 @@ const StSelectList = styled(FlexColumn)`
   position: absolute;
   background: white;
   top: 99%;
+  left: 0;
 
 
-  border: 3px solid gray;
-  border-radius: 3px;
+  border: 2px solid gray;
+  border-radius: 4px;
 `;
