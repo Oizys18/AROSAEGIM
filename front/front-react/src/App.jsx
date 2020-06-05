@@ -19,6 +19,7 @@ import Signup from "./components/account/Signup";
 import SaegimListPage from "./components/saegim/SaegimListPage";
 import SaegimDetail from "./components/saegim/SaegimDetail";
 import MyPage from "./components/mypage/MyPage";
+import Contact from "./components/contact/Contact";
 import { getUserByEmail } from "./apis/AccountAPI";
 import { delComment } from "./apis/CommentAPI";
 
@@ -217,6 +218,7 @@ class App extends Component {
           <Route path="/list" component={SaegimListPage} />
         </Switch>
         <Route path="/map" component={MapPage} />
+        <Route path="/contact" component={Contact} />
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 
 import styled from 'styled-components';
-import { Slide, Switch, IconButton, Divider } from '@material-ui/core';
-import { Close, VpnKey, AssignmentInd, Face, ExitToApp, Timelapse, Today } from '@material-ui/icons';
+import { Slide, Collapse, Zoom, Switch, IconButton, Divider } from '@material-ui/core';
+import { Close, Refresh, Check, VpnKey, AssignmentInd, Face, ExitToApp, Timelapse, Today, Build } from '@material-ui/icons';
+import { FlexRow, FlexColumn } from '../../../styles/DispFlex'
 import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
 
 import UserInfo from './UserInfo';
 import SideMenuBtn from './SideMenuBtn';
-import FilterMenuBtn from './FilterMenuBtn'
+import FilterMenuBtn from './FilterMenuBtn';
 
 class SideMenu extends Component {
   constructor(props){
@@ -19,31 +20,47 @@ class SideMenu extends Component {
     }
   }
 
+  handleInit = () => {
+    this.setState({
+      startTime: '',
+      endTime: '',
+    })
+  }
+  handleMine = () => {
+    this.setState({
+      mine: !this.state.mine
+    })
+  }
+  handleTime = () => {
+
+  }
 
   renderFilter = () => {
     return(
       <>
       <StTopCont>
-        <div>새김 필터 설정</div>
-        <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
-        <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
-        <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
+        <StTopMsg>새김 필터 설정</StTopMsg>
       </StTopCont>
+      
+      <StListCont>
       {
         this.props.isLogin && 
-        <StMineCont id='my' txt='내 새김만 보기'>
+        <>
+        <StMineCont>
           내 새김만 보기
           <Switch
+            id='mine'
+            color='primary'
             checked={this.state.mine}
-            onChange={this.handle}
+            onChange={this.handleMine}
           />
         </StMineCont>
+        <Divider />
+        </>
       }
-      <StListCont>
+        <FilterMenuBtn id='simple' txt='간편 시간 설정' icon={<Timelapse/>} handleTime={this.handleTime}/>
         <Divider />
-        <FilterMenuBtn id='simple' txt='간편 시간 설정' icon={<Timelapse/>} handleFilter={this.props.handleFilter}/>
-        <Divider />
-        <FilterMenuBtn id='detail' txt='상세 시간 설정' icon={<Today/>} handleFilter={this.props.handleFilter}/>
+        <FilterMenuBtn id='detail' txt='상세 시간 설정' icon={<Today/>} handleTime={this.handleTime}/>
         <Divider />
       </StListCont>
       </>
@@ -59,7 +76,8 @@ class SideMenu extends Component {
         <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
       </StTopCont>
       
-      {this.props.isLogin && 
+      {
+        this.props.isLogin && 
         <UserInfo on={this.props.on}/>
       }
       <Slide in={this.props.on} direction='right' timeout={700}>
@@ -79,6 +97,7 @@ class SideMenu extends Component {
             <Divider />
           </>
         }
+        <SideMenuBtn link="contact" txt={"개발자와 연락"} icon={<Build />} />
         </StListCont>
       </Slide>
       </>
@@ -90,49 +109,47 @@ class SideMenu extends Component {
       <>
       { 
         this.props.on && 
-        <StOpacityBack onClick={this.props.toggle}/>
+        <>
+        {
+          this.props.filter ?
+          <StOpacityBack/>
+          :
+          <StOpacityBack onClick={this.props.toggle}/>
+        }
+        </>
+      }
+
+      {
+        this.props.filter && 
+        <>
+        {/* <Collapse in={this.props.on} direction='up' mountOnEnter unmountOnExit> */}
+        {/* <StFilterBtnSet hidden={!this.props.on}> */}
+          <Zoom in={this.props.on} timeout={400} mountOnEnter unmountOnExit>
+            <StBtnCont className="btnClose"><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtnCont>
+          </Zoom>
+          <Zoom in={this.props.on} timeout={300} mountOnEnter unmountOnExit>
+            <StBtnCont className="btnRefresh"><IconButton onClick={this.handleInit}><Refresh/></IconButton></StBtnCont>
+          </Zoom>
+          <Zoom in={this.props.on} timeout={200} mountOnEnter unmountOnExit>
+            <StBtnCont className="btnCheck"><IconButton onClick={this.handSubmit}><Check/></IconButton></StBtnCont>
+          </Zoom>
+        {/* </StFilterBtnSet> */}
+        {/* </Collapse> */}
+        </>
       }
 
       <Slide in={this.props.on} direction='right'>
         <StMenuCont>
-          {
-            this.props.filter ? 
-            <>
-              { this.renderFilter() }
-            </>
-            :
-            <>
-              { this.renderStandard() }
-            </>
-          }
-          {/* <StTopCont>
-            <StLogo/>
-            <StCloseBtn size="small" onClick={this.props.toggle}><Close/></StCloseBtn>
-          </StTopCont>
-          
-          {this.props.isLogin && 
-            <UserInfo on={this.props.on}/>
-          }
-          <Slide in={this.props.on} direction='right' timeout={700}>
-            <StListCont>
-            {
-              this.props.isLogin ? 
-              <>
-                <Divider />
-                <SideMenuBtn link='mypage' txt={'마이페이지'} icon={<Face/>}/>
-                <SideMenuBtn link='logout' txt={'로그아웃'} icon={<ExitToApp/>}/>
-                <Divider />
-              </>
-              :
-              <>
-                <SideMenuBtn link='login' txt={'로그인'} icon={<VpnKey/>}/>
-                <SideMenuBtn link='signup' txt={'회원가입'} icon={<AssignmentInd/>}/>
-                <Divider />
-              </>
-            }
-            </StListCont>
-          </Slide> */}
-
+        {
+          this.props.filter ? 
+          <>
+            { this.renderFilter() }
+          </>
+          :
+          <>
+            { this.renderStandard() }
+          </>
+        }
         </StMenuCont>
       </Slide>
       </>
@@ -174,16 +191,13 @@ const StTopCont = styled.div`
 
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   border: 3px solid darkred;
   box-sizing: border-box;
 `;
 
-const StLogo = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
+const StLogo = styled(FlexRow)`
   width: 168px;
   height: 100%;
   
@@ -205,13 +219,61 @@ const StListCont = styled.div`
   flex-direction: column;
   height: 100%;
   padding: 8px;
-  /* padding: 8px 0 8px 0; */
-
-  /* border: 3px solid darkgreen;
-  box-sizing: border-box; */
 `;
 
+const StTopMsg = styled(FlexRow)`
+  width: 100%;
+  font-weight: bold;
+  /* font-size: 110%; */
+  color: gray;
+`;
 
 const StMineCont = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
+  margin: 12px;
+
+  color: gray;
+`;
+
+// const StFilterBtnSet = styled(FlexColumn)`
+//   position: fixed;
+//   z-index: 120;
+//   bottom: 24px;
+//   right: 24px; 
+// `;
+
+const StBtnCont = styled(FlexRow)`
+  position: fixed;
+  z-index: 120;
+  &.btnClose{
+    right: 24px;
+    bottom: 132px;
+  }
+  &.btnRefresh{
+    right: 24px;
+    bottom: 78px;
+  }
+  &.btnCheck{
+    right: 24px;
+    bottom: 24px;
+  }
+
+  /* margin-top: 8px; */
+
+  border: 2px solid gray;
+  border-radius: 50%;
+  background: #e6e6e6;
+
+  .MuiButtonBase-root{
+    padding: 6px;
+  }
+
+  svg{
+    color: black;
+    width: 30px;
+    height: 30px;
+  }
 `

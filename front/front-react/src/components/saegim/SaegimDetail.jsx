@@ -10,17 +10,19 @@ import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 import Chip from "../common/chip/Chip"
 import { Zoom } from "@material-ui/core";
 import SaegimDetailButton from "./SaegimDetailButton";
-import {getUserByEmail} from "../../apis/AccountAPI";
+import PhotoIcon from "@material-ui/icons/Photo";
 import Comment from "./Comment";
 import Like from "./Like";
 import {Storage} from "../../storage/Storage";
+import Background from "../common/background/Background";
 
 class SaegimDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: {
-        tags: []
+        tags: [],
+        images: []
       },
       regDate: "",
       userId: "",
@@ -42,6 +44,7 @@ class SaegimDetail extends Component {
     this.setState({
       regDate: _regDate
     })
+    console.log(this.state.data)
   }
 
   async componentDidMount() {
@@ -52,6 +55,7 @@ class SaegimDetail extends Component {
       })
     }
     await this.getSaegimDetail();
+    console.log(this.state.data.images.length)
   }
 
   setUpdateLike(flag) {
@@ -72,11 +76,21 @@ class SaegimDetail extends Component {
         <Chip text={tag.name} key={tag.id}/>
       )
     })
+
     return (
       <Zoom in={true}>
         <Wrapper>
           <Contents>
-            <BackGround bgImage={this.state.data.image > 0 ? this.state.data.image : bgImage}/>
+            {this.state.data.images.length > 0
+              ? <>
+                  <BackGround bgImage={this.state.data.images[0]}/>
+                  <Image>
+                    <StPhotoIcon/>
+                    <div>{this.state.data.images.length}</div>
+                  </Image>
+                </>
+              : <BackGround />
+            }
             <Location>{this.state.data.w3w}</Location>
             <Registered>
               <StAccessTimeIcon />
@@ -84,7 +98,7 @@ class SaegimDetail extends Component {
             </Registered>
             <CardWrapper>
               <Card>
-                <div>{this.state.data.contents}</div>
+                <StCard>{this.state.data.contents}</StCard>
               </Card>
             </CardWrapper>
             <Tags>
@@ -93,6 +107,9 @@ class SaegimDetail extends Component {
             <LockIcon>
               {this.state.data.secret ? <Lock/> : <LockOpen/>}
             </LockIcon>
+            <BackButton onClick={this.goBack}>
+              <ArrowBack/>
+            </BackButton>
           </Contents>
           <Communication>
             <Likes>
@@ -108,9 +125,6 @@ class SaegimDetail extends Component {
               <Comment id={this.props.match.params.id} />
             </Comments>
           </Communication>
-          <BackButton onClick={this.goBack}>
-            <ArrowBack/>
-          </BackButton>
           {this.state.userId === this.state.data.userId &&
           <StButton>
             <SaegimDetailButton id={this.props.match.params.id}/>
@@ -143,15 +157,15 @@ const Contents = styled.div `
   
   display: grid;
   grid-template-rows: repeat(5, 20%);
-  grid-template-columns: repeat(5, 20%);
+  grid-template-columns: 14% 24% 24% 24% 14%;
   grid-template-areas:
-    "location location location date date"
-    ". contents contents contents ."
+    "goBack location location date date"
+    ". contents contents contents image"
     ". contents contents contents ."
     ". contents contents contents ."
     "tags tags tags . isLocked";
   align-items: center;
-`
+`;
 
 const BackGround = styled.div `
   position: absolute;
@@ -177,8 +191,9 @@ const Tags = styled.div `
   grid-area: tags;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   color: white;
+  margin-left: 24px;
 `
 
 const Location = styled.div `
@@ -224,7 +239,28 @@ const StButton = styled.div`
 `;
 
 const BackButton= styled.div`
-  position: absolute;
-  bottom: 10%;
-  left: 5%;
+  grid-area: goBack;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+`;
+
+const Image = styled.div`
+  grid-area: image;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StPhotoIcon = styled(PhotoIcon)`
+  margin-right: 4px;
+`;
+
+const StCard = styled.div`
+  min-height: 15vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  word-break: break-all;
 `;
