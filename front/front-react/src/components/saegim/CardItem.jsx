@@ -173,7 +173,7 @@ class CardItem extends Component {
                   {/*{ saegim.images.length > 0 &&*/}
                     <Image>
                       <StPhotoIcon/>
-                      <div>{saegim.images.length}</div>
+                      <div>{saegim.images}</div>
                     </Image>
                   {/*}*/}
 
