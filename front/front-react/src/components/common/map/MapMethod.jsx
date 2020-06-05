@@ -12,6 +12,20 @@ export const panTo = (kakaoMapObj, lat, lng) => {
   kakaoMapObj.panTo(targetCenter);
 };
 
+export const panToWithOffset = (kakaoMapObj, kakaoMapProj, lat, lng) => {
+  // set panTo offset : show cluseter on slightly left of screen
+  const CENTER_OFFSET_RATIO = 0.2; // percentage
+  const width = window.innerWidth;
+  const center_offset = Math.floor(width * CENTER_OFFSET_RATIO);
+
+  const cluster_point = kakaoMapProj.pointFromCoords(new kakao.maps.LatLng(lat,lng))
+  const target_point = new kakao.maps.Point(cluster_point.x + center_offset, cluster_point.y);
+
+  const target_coords = kakaoMapProj.coordsFromPoint(target_point);
+
+  kakaoMapObj.panTo(target_coords);
+}
+
 const MarkerImage = (itemType) => {
   const IMAGE_CONST = (itemType === 'user' ? 25 : 15)
   const imageSrc = (itemType === 'user' ? myLocationImg : balloon);
@@ -30,7 +44,7 @@ const MarkerImage = (itemType) => {
 export const MarkerConfig = (item, itemType) => {
   return {
     position: new kakao.maps.LatLng(item.latitude, item.longitude),
-    image: MarkerImage(itemType)
+    image: MarkerImage(itemType),
   }
 }
 

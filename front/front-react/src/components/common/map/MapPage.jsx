@@ -113,20 +113,6 @@ class MapPage extends Component {
     console.log(e.currentTarget.id.value)
   }
 
-  unsetUsingUserCenter = () => {
-    this.setState({ usingUserCenter: false });
-  }
-
-  unsetAll = () => {
-    this.setState({
-      usingUserCenter: false,
-      selected: {
-        status: false,
-        item: null,
-      },
-    })
-  }
-
   showMarker = () => {
     this.state.userMarker.setMap(null);
     this.state.userMarker.setMap(this.state.mv);
@@ -180,6 +166,7 @@ class MapPage extends Component {
             isUC={this.state.mapCenter === this.state.userCenter}
             roadView={this.state.roadView} 
             actions={this.actions}
+            isUserCenter={this.state.mapCenter===this.state.userCenter}
           />
 
           <SideMenu filter 
@@ -207,11 +194,8 @@ class MapPage extends Component {
               mapCenter={this.state.mapCenter}
               items={this.state.items}
               hide={this.state.roadView}
-              usingUserCenter={this.state.usingUserCenter}
               userCenter={this.state.userCenter}
               changeMapCenter={this.changeMapCenter}
-              unsetUsingUserCenter={this.unsetUsingUserCenter}
-              unsetAll={this.unsetAll}
               fetchItem={this.fetchItem}
             />
           }
