@@ -3,9 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import Card from "../common/cards/Card";
 import "./CardItem.css";
-import { Lock } from "@material-ui/icons";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import PhotoIcon from "@material-ui/icons/Photo";
+import { Lock, Photo, AccessTime } from "@material-ui/icons";
 import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 
 class CardItem extends Component {
@@ -161,6 +159,7 @@ class CardItem extends Component {
             >
               <Card
                 color={this.state.colors[idx]}
+                subcolor={this.state.colors[idx+1]}
               >
                 <StCard>
                   <Location>{saegim.w3w}</Location>
@@ -170,12 +169,12 @@ class CardItem extends Component {
                       <div>{getTimeDeltaString(saegim.regDate)}</div>
                     </StTime>
                   </Registered>
-                  {/*{ saegim.images.length > 0 &&*/}
+                  { saegim.imagesCount > 0 &&
                     <Image>
                       <StPhotoIcon/>
                       <div>{saegim.images}</div>
                     </Image>
-                  {/*}*/}
+                  }
 
                   {saegim.secret
                     ? <ContentsL>
@@ -185,9 +184,9 @@ class CardItem extends Component {
                     : <Contents>{saegim.contents}</Contents>
                   }
                   <StLinkDiv>
-                  <StLink to={`list/${saegim.id}`}>
-                    더보기
-                  </StLink>
+                    <StLink to={`list/${saegim.id}`}>
+                      더보기
+                    </StLink>
                 </StLinkDiv>
                 <Comments>
                   <div>{saegim.userName}</div>
@@ -215,20 +214,32 @@ const StLink = styled(Link)`
 const StLinkDiv = styled.div`
   grid-area: link;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  z-index: 1;
 `
 
 const StCard = styled.div`
   display: grid;
-  grid-template-rows: repeat(5, minmax(8vh, auto));
-  grid-template-columns: repeat(5, minmax(16vw, auto)) ;
+  grid-template-rows: repeat(5, 8vh);
+  grid-template-columns: repeat(5, 16vw) ;
   grid-template-areas:
     "location location location date date"
     ". contents contents contents image"
     ". contents contents contents ."
     ". contents contents contents ."
-    "link . . comments comments";
+    "link link . comments comments";
   align-items: center;
+  
+  &:after {
+    position: absolute;
+    top: 3%;
+    right: 7%;
+    bottom: 3%;
+    left: 7%;
+    border: 1.5px solid white;
+    border-radius: 8px;
+    content: "";
+  }
 `
 
 const Image = styled.div`
@@ -238,12 +249,13 @@ const Image = styled.div`
   justify-content: center;
 `;
 
-const StPhotoIcon = styled(PhotoIcon)`
+const StPhotoIcon = styled(Photo)`
   margin-right: 4px;
 `;
 
 const Contents = styled.div`
   grid-area: contents;
+  word-break: break-all;
 `
 
 const ContentsL = styled.div`
@@ -282,10 +294,10 @@ const StackedCard = styled.div `
 
 const StTime = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
 `;
 
-const StAccessTimeIcon = styled(AccessTimeIcon)`
+const StAccessTimeIcon = styled(AccessTime)`
   margin-right: 4px;
 `;

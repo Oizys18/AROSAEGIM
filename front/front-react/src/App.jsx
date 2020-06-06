@@ -203,7 +203,7 @@ class App extends Component {
         ( this.props.location.pathname === "/map" ||
           this.props.location.pathname === "/write" ||
           this.props.location.pathname === "/mypage" ||
-          this.props.location.pathname.includes("/list")
+          this.props.location.pathname === "/list"
         ) && (
           <>
             <Slide in={this.props.location.pathname !== "/map"} direction="down" unmountOnExit mountOnEnter>
