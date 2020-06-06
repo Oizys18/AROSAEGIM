@@ -24,7 +24,7 @@ class SaegimListPage extends Component {
       selectedOption: 0,
       distance: 100,
       data: [],
-      printLocation: ""
+      printLocation: "",
     }
     this.selectChange = this.selectChange.bind(this);
   }
@@ -141,8 +141,12 @@ class SaegimListPage extends Component {
         this.getSaegimList()
       }
     } else if (this.state.printLocation !== prevState.printLocation) {
-      setTimeout(this.switchLocation, 5000)
+      this.timer = setTimeout(this.switchLocation, 5000)
     }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timer)
   }
 
   render() {

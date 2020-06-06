@@ -119,8 +119,12 @@ class SaegimDetail extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.curImage !== prevState.curImage) {
-      setTimeout(this.switchImage, 5000)
+      this.timer = setTimeout(this.switchImage, 5000)
     }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timer)
   }
 
   render() {
