@@ -3,9 +3,8 @@ import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import Card from "../common/cards/Card";
 import "./CardItem.css";
-import { Lock } from "@material-ui/icons";
+import { Lock, Photo } from "@material-ui/icons";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import PhotoIcon from "@material-ui/icons/Photo";
 import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 
 class CardItem extends Component {
@@ -251,7 +250,7 @@ const Image = styled.div`
   justify-content: center;
 `;
 
-const StPhotoIcon = styled(PhotoIcon)`
+const StPhotoIcon = styled(Photo)`
   margin-right: 4px;
 `;
 

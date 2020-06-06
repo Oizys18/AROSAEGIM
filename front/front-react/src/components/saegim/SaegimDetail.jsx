@@ -1,14 +1,12 @@
 import React, {Component} from "react";
 import Card from "../common/cards/Card";
 import styled from "styled-components";
-import { ArrowBack, Lock, AccessTime, ArrowBackIos, ArrowForwardIos  } from "@material-ui/icons";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import { ArrowBack, Lock, AccessTime, ArrowBackIos, ArrowForwardIos, Photo, Close  } from "@material-ui/icons";
 import * as SA from "../../apis/SaegimAPI"
 import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 import Chip from "../common/chip/Chip"
 import { Zoom, Avatar, Modal, MobileStepper, Button } from "@material-ui/core";
 import SaegimDetailButton from "./SaegimDetailButton";
-import { Photo, Close } from "@material-ui/icons";
 import Comment from "./Comment";
 import Like from "./Like";
 import {Storage} from "../../storage/Storage";
@@ -150,6 +148,7 @@ class SaegimDetail extends Component {
             <Modal
               open={this.state.open}
               >
+              <>
               <ImageWrapper>
                 <StClose onClick={this.handleClose}>
                   <Close />
@@ -181,6 +180,7 @@ class SaegimDetail extends Component {
                   }
                 />
               </ImageWrapper>
+            </>
             </Modal>
           }
           <TopBar>
