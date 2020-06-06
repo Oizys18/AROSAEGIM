@@ -6,6 +6,9 @@ import imgMiddle from "../../../assets/balloon/balloon-middle-filled@2x.png";
 import imgRight from "../../../assets/balloon/balloon-right-filled@2x.png";
 import { Slide, Chip } from "@material-ui/core";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import CancelIcon from '@material-ui/icons/Cancel';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { getTimeDeltaString } from "../time/TimeFunctinon";
 import { Link } from "react-router-dom";
 import DefaultButton from "../buttons/DefaultButton";
@@ -91,10 +94,31 @@ class MapItem extends Component {
     </StDetailCont>
   }
 
+  detailItem2 = () => {
+    return <StDetailCont>
+      <StFlexContainer>
+        <Chip color="primary" size="small" icon={ <LocationOnIcon />} label={this.props.item ? ' ' + this.props.item.w3w : " "} />
+      </StFlexContainer>
+      <StFlexContainer>
+        <Link to={`list/${this.props.item.id}`}>
+        <Chip color="primary" size="small" icon={ <ArrowForwardIcon />} label={"더 보기 →"} /></Link>
+      </StFlexContainer>
+      <StFlexContainer onClick={this.props.closeItem}>
+        <Chip color="primary" size="small" icon={ <CancelIcon />} label={"닫기"}/>
+      </StFlexContainer>
+    </StDetailCont>
+  }
+
   slicedContent = (contents, length) => {
     const sliced = contents.slice(0,length);
     const extra = contents.length > length ? '...' : ''
-    return sliced + extra
+    return this.newLineContent(sliced + extra)
+  }
+
+  newLineContent = (contents) => {
+    return contents.split('\n').map(el=>{
+      return <span>{el}<br/></span>
+    })
   }
 
   render() {
@@ -106,15 +130,17 @@ class MapItem extends Component {
           <StItemMiddle>
             <StItemMiddleBg />
             <StTextMiddle>
-              {this.props.selected ? this.slicedContent(this.props.item.contents, 50):this.slicedContent(this.props.item.contents, 5)}
+              {this.slicedContent(this.props.item.contents, 50)}
             </StTextMiddle>
           </StItemMiddle>
           <StItemRight />
         </StItem>
-        {this.props.selected ? 
+        {/* {this.props.selected ? 
         <StDetailLink>
           <DefaultButton text={this.detailItem()} />
-        </StDetailLink>:<></>}
+        </StDetailLink>:<></>} */}
+        {this.props.selected ? 
+        <StDetailLink>{this.detailItem2()}</StDetailLink>:<></>}
       </StItemCont>
     );
   }
@@ -194,7 +220,7 @@ const StTextMiddle = styled.div`
 `;
 
 const StDetailLink = styled.div`
-  box-shadow: 4px 4px 8px #c4c4c4, -4px -4px 8px #ffffff;
+  /* box-shadow: 4px 4px 8px #c4c4c4, -4px -4px 8px #ffffff; */
   margin-top: -16px;
   margin-bottom: 24px;
   /* animation-duration: 1s;
@@ -222,6 +248,7 @@ const StFlexContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin: 2px 0px;
 `;
 
 const StLocationIcon = styled.div`

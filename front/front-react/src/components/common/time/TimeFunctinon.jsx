@@ -4,7 +4,8 @@ const SECONDS_PER_HOUR = 3600;
 const SECONDS_PER_DAY = 3600 * 24;
 const SECONDS_PER_MONTH = 3600 * 24 * 30;
 
-export const getTimeDeltaString = (regTime) => {
+export const getTimeDeltaString = (regDate) => {
+  const regTime = new Date(regDate.slice(0,-2) + ':00');
   const timeDeltaSeconds = Math.floor((Date.now() - regTime) / 1000);
 
   switch (true) {
