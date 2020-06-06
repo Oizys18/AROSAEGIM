@@ -50,7 +50,11 @@ class App extends Component {
       popModal: this.popModal,
       handleModal: this.handleModal,
 
-      curData: [],
+      curData: {
+        listData: [],
+        distance: 100,
+        selectedOption: 0
+      },
       setCurData: this.setCurData,
       idxUpdateFlag: false,
       idxUpdate: this.idxUpdate,
