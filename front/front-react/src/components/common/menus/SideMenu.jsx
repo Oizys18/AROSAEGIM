@@ -110,15 +110,16 @@ class SideMenu extends Component {
         <IconButton onClick={this.props.toggle}><Close/></IconButton>
       </StTopCont>
       
-      {
+      {/* {
         this.props.isLogin && 
         <UserInfo on={this.props.on}/>
-      }
+      } */}
       <Slide in={this.props.on} direction='right' timeout={700}>
         <StListCont>
         {
           this.props.isLogin ? 
           <>
+            <UserInfo on={this.props.on}/>
             <Divider />
             <SideMenuBtn link='mypage' txt={'마이페이지'} icon={<Face/>}/>
             <SideMenuBtn link='logout' txt={'로그아웃'} icon={<ExitToApp/>}/>
@@ -222,8 +223,6 @@ const StMenuCont = styled.div`
 `;
 
 const StTopCont = styled.div`
-  height: 64px;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -232,23 +231,24 @@ const StTopCont = styled.div`
 
   border: 3px solid white;
   box-sizing: border-box;
+  height: 64px;
 
   svg{
     color: white;
   }
 `;
 
-const StLogo = styled(FlexRow)`
-  width: 168px;
-  height: 100%;
+// const StLogo = styled(FlexRow)`
+//   width: 168px;
+//   height: 100%;
   
-  /* background: #f2f2f2; */
-  background-image: url(${inlineLogo});
-  background-size: 50%;
-  background-position: center center;
-  background-repeat: no-repeat;
-  box-sizing: border-box;
-`;
+//   /* background: #f2f2f2; */
+//   background-image: url(${inlineLogo});
+//   background-size: 50%;
+//   background-position: center center;
+//   background-repeat: no-repeat;
+//   box-sizing: border-box;
+// `;
 
 const StTopMsg = styled(FlexRow)`
   margin-left: 16px;
