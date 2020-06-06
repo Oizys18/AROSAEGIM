@@ -66,7 +66,12 @@ class Filters extends Component {
                   <MenuItem value={3}>3시간</MenuItem>
                 </Select>
               </ThemeProvider>
-              전 부터 보기
+              {
+                this.props.filterVal.term === 0 ?
+                <>보기</>
+                :
+                <>전 부터 보기</>
+              }
             </StSimpleCont>
           }
           {filterId === 'detail' &&

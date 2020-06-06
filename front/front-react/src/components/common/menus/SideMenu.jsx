@@ -5,7 +5,7 @@ import { Slide, Zoom, IconButton, Divider } from '@material-ui/core';
 import { Close, Refresh, Check, VpnKey, AssignmentInd, Face, ExitToApp, Timelapse, Today, Build } from '@material-ui/icons';
 import { CustomSwitch } from '../../../styles/MuiStyles';
 import { FlexRow, } from '../../../styles/DispFlex';
-import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
+// import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
 
 import UserInfo from './UserInfo';
 import SideMenuBtn from './SideMenuBtn';
@@ -85,14 +85,15 @@ class SideMenu extends Component {
         />
         <Divider />
         <StBtnCont>
-          <Zoom in={this.props.on} timeout={600} mountOnEnter unmountOnExit>
+          {/* <Zoom in={this.props.on} timeout={600} mountOnEnter unmountOnExit>
             <StBtn2><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtn2>
-          </Zoom>
-          <Zoom in={this.props.on} timeout={500} mountOnEnter unmountOnExit>
+          </Zoom> */}
+          <Zoom in={this.props.on} timeout={600} mountOnEnter unmountOnExit>
             <StBtn2><IconButton onClick={this.props.handleFilter.handleInit}><Refresh/></IconButton></StBtn2>
           </Zoom>
           <Zoom in={this.props.on} timeout={400} mountOnEnter unmountOnExit>
-            <StBtn2><IconButton onClick={this.props.handleFilter.handleApply}><Check/></IconButton></StBtn2>
+            <StBtn2><IconButton onClick={this.props.toggle}><Check/></IconButton></StBtn2>
+            {/* <StBtn2><IconButton onClick={this.props.handleFilter.handleApply}><Check/></IconButton></StBtn2> */}
           </Zoom>
         </StBtnCont>
       </StListCont>
@@ -145,32 +146,9 @@ class SideMenu extends Component {
       <>
       { 
         this.props.on && 
-        <>
-        {/* {
-          this.props.filter ?
-          <StOpacityBack/>
-          :
-          <StOpacityBack onClick={this.props.toggle}/>
-        } */}
         <StOpacityBack onClick={this.props.toggle}/>
-        </>
       }
         
-      {/* {
-        this.props.filter && 
-        <>
-        <Zoom in={this.props.on} timeout={400} mountOnEnter unmountOnExit>
-          <StBtn className="btnCheck"><IconButton onClick={this.props.handleFilter.handleApply}><Check/></IconButton></StBtn>
-        </Zoom>
-        <Zoom in={this.props.on} timeout={300} mountOnEnter unmountOnExit>
-          <StBtn className="btnRefresh"><IconButton onClick={this.props.handleFilter.handleInit}><Refresh/></IconButton></StBtn>
-        </Zoom>
-        <Zoom in={this.props.on} timeout={200} mountOnEnter unmountOnExit>
-          <StBtn className="btnClose"><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtn>
-        </Zoom>
-        </>
-      } */}
-
       <Slide in={this.props.on} direction='right'>
         <StMenuCont>
         {
@@ -308,35 +286,35 @@ const StBtn2 = styled(FlexRow)`
 `
 
 
-const StBtn = styled(FlexRow)`
-  position: fixed;
-  z-index: 120;
-  &.btnCheck{
-    right: 24px;
-    bottom: 132px;
-  }
-  &.btnRefresh{
-    right: 24px;
-    bottom: 78px;
-  }
-  &.btnClose{
-    right: 24px;
-    bottom: 24px;
-  }
+// const StBtn = styled(FlexRow)`
+//   position: fixed;
+//   z-index: 120;
+//   &.btnCheck{
+//     right: 24px;
+//     bottom: 132px;
+//   }
+//   &.btnRefresh{
+//     right: 24px;
+//     bottom: 78px;
+//   }
+//   &.btnClose{
+//     right: 24px;
+//     bottom: 24px;
+//   }
 
-  /* margin-top: 8px; */
+//   /* margin-top: 8px; */
 
-  border: 3px solid #F8DCD4;
-  border-radius: 50%;
-  background: white;
+//   border: 3px solid #F8DCD4;
+//   border-radius: 50%;
+//   background: white;
 
-  .MuiButtonBase-root{
-    padding: 6px;
-  }
+//   .MuiButtonBase-root{
+//     padding: 6px;
+//   }
 
-  svg{
-    color: gray;
-    width: 30px;
-    height: 30px;
-  }
-`
+//   svg{
+//     color: gray;
+//     width: 30px;
+//     height: 30px;
+//   }
+// `

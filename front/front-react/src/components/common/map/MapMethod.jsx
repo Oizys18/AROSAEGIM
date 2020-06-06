@@ -65,3 +65,6 @@ export const calcPanoRadius = (level) => {
       return 50 
   }
 }
+
+export const customOverlay = (item) => {
+}
