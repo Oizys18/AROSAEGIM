@@ -14,7 +14,6 @@ class Comment extends Component{
       contents: "",
       updateFlag: false,
       userInfo: {},
-      ovfl: false
     }
     this.handleInput = this.handleInput.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -51,7 +50,6 @@ class Comment extends Component{
 
   handleClick() {
     this.setState({
-      ovfl: true,
       updateFlag: true
     })
   }
@@ -91,16 +89,12 @@ class Comment extends Component{
     })
     return (
       <div>
-        <StCommentList ovfl={this.state.ovfl}>
+        <StCommentList>
           {PrintComment}
+          { this.state.comments.length < 1
+            && <StDescription>첫 되새김을 남겨주세요.</StDescription>
+          }
         </StCommentList>
-          { !this.state.ovfl &&
-            this.state.comments.length > 3 &&
-            <MoreView onClick={this.handleClick}>더보기</MoreView>
-          }
-          { this.state.comments.length < 1 &&
-            <StDescription>첫 되새김을 남겨주세요.</StDescription>
-          }
         <StCommentInput>
           <CommentInput value={this.state.contents} onChange={this.handleInput} />
           <SmallButton text='등록' onClick={this.handleSubmit}/>
@@ -114,12 +108,21 @@ export default Comment;
 Comment.contextType = Storage;
 
 const StCommentList = styled.div`
-  padding: 0 16px 0 16px;
-  height: ${props => props.ovfl === false ? '12vh' : '15vh'};
-  overflow: ${props => props.ovfl === false ? 'hidden' : 'auto'};
+  padding: 0 16px 0px 16px;
+  overflow: scroll;
+  min-height: 15vh;
+  @media (min-height: 800px) {
+    min-height: 22vh;
+  }
+  @media (max-height: 650px) {
+    min-height: 13vh;
+  }
 `;
 
 const StCommentInput = styled.div`
+  position: fixed;
+  bottom: 5%;
+
   margin-top: 16px;
   padding: 0 16px 0 16px;
 `;
@@ -134,4 +137,5 @@ const StDescription = styled.div`
   font-size: 0.9rem;
   color: #818181;
   margin-left: 16px;
+  height: 19px;
 `;
