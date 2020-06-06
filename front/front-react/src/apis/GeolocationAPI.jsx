@@ -40,7 +40,7 @@ export const getPositionFail = (err) => {
   var msg = null;
   switch(err.code) {
     case err.PERMISSION_DENIED:
-        msg = `위치 정보 수집을\n거부하셨습니다.\n\n현재위치를 기반으로\n아로새김을 이용할려면\n크롬에서 위치 정보 수집을 동의하고, GPS를 켜주세요!`;
+        msg = `위치 정보 수집이\n거부되었습니다.\n\n현재위치를 기반으로\n아로새김을 이용하시려면\n위치 정보 수집을 동의하고, GPS를 켜주세요!`;
         break;
     case err.POSITION_UNAVAILABLE:
         msg = "위치 정보 수집이 불가한 장소입니다.";

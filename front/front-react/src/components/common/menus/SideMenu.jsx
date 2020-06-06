@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
 import styled from 'styled-components';
-import { Slide, Collapse, Zoom, Switch, IconButton, Divider } from '@material-ui/core';
+import { Slide, Zoom, IconButton, Divider } from '@material-ui/core';
 import { Close, Refresh, Check, VpnKey, AssignmentInd, Face, ExitToApp, Timelapse, Today, Build } from '@material-ui/icons';
 import { CustomSwitch } from '../../../styles/MuiStyles';
-import { FlexRow, FlexColumn } from '../../../styles/DispFlex';
+import { FlexRow, } from '../../../styles/DispFlex';
 import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
 
 import UserInfo from './UserInfo';
@@ -105,7 +105,8 @@ class SideMenu extends Component {
     return (
       <>
       <StTopCont>
-        <StLogo/>
+        {/* <StLogo/> */}
+        <StTopMsg>아로새김</StTopMsg>
         <IconButton onClick={this.props.toggle}><Close/></IconButton>
       </StTopCont>
       
@@ -231,6 +232,10 @@ const StTopCont = styled.div`
 
   border: 3px solid white;
   box-sizing: border-box;
+
+  svg{
+    color: white;
+  }
 `;
 
 const StLogo = styled(FlexRow)`
@@ -245,6 +250,15 @@ const StLogo = styled(FlexRow)`
   box-sizing: border-box;
 `;
 
+const StTopMsg = styled(FlexRow)`
+  margin-left: 16px;
+  padding-top: 3px;
+  font-family: 'BMEULJIRO';
+  font-size: 24px;
+  color: white;
+  text-shadow: 0 0 3px gray;
+`;
+
 
 const StListCont = styled.div`
   display: flex;
@@ -253,13 +267,13 @@ const StListCont = styled.div`
   padding: 8px;
 `;
 
-const StTopMsg = styled(FlexRow)`
-  width: 100%;
-  font-weight: bold;
-  /* font-size: 110%; */
-  color: white;
-  text-shadow: 0 0 5px gray;
-`;
+// const StTopMsg = styled(FlexRow)`
+//   width: 100%;
+//   font-weight: bold;
+//   /* font-size: 110%; */
+//   color: white;
+//   text-shadow: 0 0 5px gray;
+// `;
 
 const StMineCont = styled.div`
   display: flex;

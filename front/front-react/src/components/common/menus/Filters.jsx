@@ -58,10 +58,12 @@ class Filters extends Component {
                   value={this.props.filterVal.term}
                   onChange={this.handleSimpleTime}
                 >
+                  <MenuItem value={0}>전체</MenuItem>
                   <MenuItem value={168}>일주일</MenuItem>
-                  <MenuItem value={24}>24시간</MenuItem>
+                  <MenuItem value={24}>하루</MenuItem>
                   <MenuItem value={12}>12시간</MenuItem>
                   <MenuItem value={6}>6시간</MenuItem>
+                  <MenuItem value={3}>3시간</MenuItem>
                 </Select>
               </ThemeProvider>
               전 부터 보기

@@ -58,15 +58,14 @@ const StBtnCont = styled(FlexRow)`
 
   /* border: 3px solid #F8DCD4; */
   border-radius: 50%;
-  background: linear-gradient(to bottom right, #FBF2EE 0%, #F4BDB0 100%);
+  background: #F4BDB0;
+  /* background: linear-gradient(to bottom right, #FBF2EE 0%, #F4BDB0 100%); */
 
   .MuiButtonBase-root{
-    padding: 4px;
+    padding: 6px;
   }
-/* 
+
   svg{
-    color: gray;
-    width: 30px;
-    height: 30px;
-  } */
+    color: white;
+  }
 `
