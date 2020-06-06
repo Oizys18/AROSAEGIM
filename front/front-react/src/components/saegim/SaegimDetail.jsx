@@ -1,14 +1,14 @@
 import React, {Component} from "react";
 import Card from "../common/cards/Card";
 import styled from "styled-components";
-import { ArrowBack, Lock, AccessTime  } from "@material-ui/icons";
+import { ArrowBack, Lock, AccessTime, ArrowBackIos, ArrowForwardIos  } from "@material-ui/icons";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import * as SA from "../../apis/SaegimAPI"
 import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 import Chip from "../common/chip/Chip"
-import { Zoom, Avatar } from "@material-ui/core";
+import { Zoom, Avatar, Modal, MobileStepper, Button } from "@material-ui/core";
 import SaegimDetailButton from "./SaegimDetailButton";
-import PhotoIcon from "@material-ui/icons/Photo";
+import { Photo, Close } from "@material-ui/icons";
 import Comment from "./Comment";
 import Like from "./Like";
 import {Storage} from "../../storage/Storage";
@@ -25,15 +25,48 @@ class SaegimDetail extends Component {
       regDate: "",
       userId: "",
       updateFlagByLike: false,
-      curImage: -1
+      curImage: -1,
+      open: false,
+      activeStep: 0,
+      maxSteps: 0
     };
     this.goBack = this.goBack.bind(this);
     this.setUpdateLike = this.setUpdateLike.bind(this);
+    this.setOpen = this.setOpen.bind(this);
+    this.setActiveStep = this.setActiveStep.bind(this);
   }
 
   goBack() {
     this.props.history.goBack();
     this.context.idxUpdate(true);
+  }
+
+  setOpen(status) {
+    this.setState({
+      open: status
+    })
+  }
+
+  handleOpen = () => {
+    this.setOpen(true)
+  }
+
+  handleClose = () => {
+    this.setOpen(false)
+  }
+
+  setActiveStep(step) {
+    this.setState({
+      activeStep: step
+    })
+  }
+
+  handleNext = () => {
+    this.setActiveStep(this.state.activeStep + 1)
+  }
+
+  handleBack = () => {
+    this.setActiveStep(this.state.activeStep - 1)
   }
 
   getSaegimDetail = async () => {
@@ -70,6 +103,9 @@ class SaegimDetail extends Component {
       })
     }
     await this.getSaegimDetail();
+    this.setState({
+      maxSteps: this.state.data.images.length
+    })
     console.log(this.state.data.images.length)
   }
 
@@ -98,10 +134,55 @@ class SaegimDetail extends Component {
         <Chip text={tag.name} key={tag.id}/>
       )
     })
+    //
+    // const PrintImage = this.state.data.images.map((image) => {
+    //   return (
+    //     <ImageModal>
+    //       <StImg src={image.source} alt={image}/>
+    //     </ImageModal>
+    //   )
+    // })
 
     return (
       <Zoom in={true}>
         <Wrapper>
+          {this.state.data.images.length > 0 &&
+            <Modal
+              open={this.state.open}
+              >
+              <ImageWrapper>
+                <StClose onClick={this.handleClose}>
+                  <Close />
+                </StClose>
+                <StImg
+                  src={this.state.data.images[this.state.activeStep].source}
+                  alt={this.state.data.images[this.state.activeStep]}
+                />
+                <StMobileStepper
+                  steps={this.state.maxSteps}
+                  position="static"
+                  variant="dots"
+                  activeStep={this.state.activeStep}
+                  nextButton={
+                    <Button
+                      onClick={this.handleNext}
+                      disabled={this.state.activeStep === this.state.maxSteps - 1}
+                    >
+                      <ArrowForwardIos />
+                    </Button>
+                  }
+                  backButton={
+                    <Button
+                      onClick={this.handleBack}
+                      disabled={this.state.activeStep === 0}
+                    >
+                      <ArrowBackIos />
+                    </Button>
+                  }
+                />
+              </ImageWrapper>
+            </Modal>
+          }
           <TopBar>
             <BackButton onClick={this.goBack}>
               <ArrowBack/>
@@ -133,7 +214,7 @@ class SaegimDetail extends Component {
               {this.state.data.images.length > 0
                 ?
                   <Image>
-                    <StPhotoIcon/>
+                    <StPhotoIcon onClick={this.handleOpen}/>
                     <div>{this.state.data.images.length}</div>
                   </Image>
                 : <Image style={{ display: 'none'}}>
@@ -231,7 +312,7 @@ const StNick = styled.div`
 `;
 
 const W3WChip = styled.div`
-  margin: -2vh 4vh 4vh 4vh;
+  margin: 0 4vh 4vh 4vh;
   justify-content: space-between;
   align-items: center;
   display: flex;
@@ -336,7 +417,7 @@ const Image = styled.div`
   align-items: center;
 `;
 
-const StPhotoIcon = styled(PhotoIcon)`
+const StPhotoIcon = styled(Photo)`
   margin-right: 4px;
 `;
 
@@ -348,3 +429,36 @@ const StCard = styled.div`
   word-break: break-all;
 `;
 
+const StImg = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+
+const ImageModal = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  width: 100%;
+  height: 100%;
+`;
+
+const StMobileStepper = styled(MobileStepper)`
+  border-radius: 0 0 15px 15px;
+`;
+
+const ImageWrapper = styled.div`
+  padding: 24px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
+const StClose = styled.div`
+  padding: 8px;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 15px 15px 0 0;
+`;
