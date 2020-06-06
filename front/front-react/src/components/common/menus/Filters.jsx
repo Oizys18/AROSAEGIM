@@ -74,7 +74,7 @@ class Filters extends Component {
                   margin="dense"
                   id="sTime"
                   label="시작"
-                  format="yyyy/MM/dd a hh:mm"
+                  format="yyyy/MM/dd  a hh:mm"
                   inputVariant="outlined"
                   disableFuture
                   showTodayButton
@@ -87,7 +87,7 @@ class Filters extends Component {
                   margin="dense"
                   id="eTime"
                   label="끝"
-                  format="yyyy/MM/dd a hh:mm"
+                  format="yyyy/MM/dd  a hh:mm"
                   inputVariant="outlined"
                   disableFuture
                   showTodayButton

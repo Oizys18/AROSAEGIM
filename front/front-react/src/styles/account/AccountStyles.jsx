@@ -31,11 +31,18 @@ export const StBtnCont = styled(FlexRow)`
 `;
 
 export const StBtn = styled(DefaultButton)`
-
 `;
 
 export const StLinkCont = styled(FlexColumn)`
+  align-self: flex-end;
 
+  a{
+    font-weight: bold;
+    text-decoration: none;
+    &:visited, &:link{
+      color: #0066cc;
+    }
+  }
 `;
 
 export const StMsg = styled.div`
