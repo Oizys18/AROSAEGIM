@@ -144,15 +144,16 @@ class SideMenu extends Component {
       { 
         this.props.on && 
         <>
-        {
+        {/* {
           this.props.filter ?
           <StOpacityBack/>
           :
           <StOpacityBack onClick={this.props.toggle}/>
-        }
+        } */}
+        <StOpacityBack onClick={this.props.toggle}/>
         </>
       }
-
+        
       {/* {
         this.props.filter && 
         <>
