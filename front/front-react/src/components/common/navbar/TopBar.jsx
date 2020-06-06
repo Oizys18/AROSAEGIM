@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import Hamburger from '../buttons/Hamburger'
 import styled from 'styled-components';
 import inlineLogo from "../../../assets/logo/inline-logo-white@2x.png";
+import TopBarAnimation from "../animation/TopBarAnimation";
 
 class TopBar extends Component {
   render(){
     return(
       <StTopCont>
         <Hamburger on={this.props.on} toggle={this.props.toggle}/>
-        <StLogo src={inlineLogo}/>
+        {/* <StLogo src={inlineLogo}/> */}
+        <TopBarAnimation/>
       </StTopCont>
     )
   }

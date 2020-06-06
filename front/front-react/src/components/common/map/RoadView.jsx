@@ -20,6 +20,8 @@ class RoadView extends Component {
       rvc: null,
       mmOn: false,
       mm: null,
+
+      userMarker: null,
     };
   }
 
@@ -45,6 +47,7 @@ class RoadView extends Component {
       if(this.state.mmOn) {
         const _position = this.state.rv.getPosition()
         this.state.mm.panTo(_position);
+        (this.state.userMarker && this.state.userMarker.setPosition(this.props.userCenter));
       }
     }
   }
@@ -114,6 +117,14 @@ class RoadView extends Component {
       level: 4,
     }
     const _miniMap = new kakao.maps.Map(_cont, _option)
+
+    await this.setStateAsync({
+      mm: _miniMap
+    })
+    .then(() => {
+      ( !sessionStorage.getItem('ARSG no GPS') && this.showUserCenter() ) //현재 위치 표시
+    })
+
     const _mapWalker = new MapWalker(this.state.rv.getPosition()) //맵워커 생성
     _mapWalker.setMap(_miniMap); // 맵워커를 지도에 설정한다.
 
@@ -121,7 +132,6 @@ class RoadView extends Component {
     _mapWalker.setAngle(_viewpoint.pan);
 
     await this.setStateAsync({
-      mm: _miniMap,
       mw: _mapWalker
     })
 
@@ -129,6 +139,17 @@ class RoadView extends Component {
     kakao.maps.event.addListener(_miniMap, "zoom_changed", this.changeLvCt)
     kakao.maps.event.addListener(_miniMap, "dragend", this.changeLvCt)
     kakao.maps.event.addListener(_miniMap, "center_changed", this.changeMWCt)
+  }
+
+  showUserCenter = () => {
+    const userCenterPos = {
+      latitude: this.props.userCenter.getLat(),
+      longitude: this.props.userCenter.getLng()
+    }
+    const markerConfig = MM.MarkerConfig(userCenterPos, "user")
+    const userMarker = new kakao.maps.Marker(markerConfig);
+    userMarker.setMap(this.state.mm)
+    this.setState({ userMarker: userMarker })
   }
 
   //레벨 변경

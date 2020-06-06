@@ -6,7 +6,8 @@ import Switch from '@material-ui/core/Switch';
 
 export const setPrimaryColor = createMuiTheme({
   palette: {
-    primary: { main: '#F3B3A6' }
+    primary: { main: '#F3B3A6' },
+    secondary: { main: '#A76E62' }
   }
 });
 

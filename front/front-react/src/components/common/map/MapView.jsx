@@ -35,7 +35,8 @@ class MapView extends Component {
   async componentDidMount() {
     await this.initMapView();
     await this.fetchItem();
-    (this.props.userCenter && this.showUserCenter())
+    // (this.props.userCenter && this.showUserCenter())
+    ( !sessionStorage.getItem('ARSG no GPS') && this.showUserCenter() )
     this.overlayMarkers();
   }
   
@@ -126,7 +127,7 @@ class MapView extends Component {
       latitude: this.props.userCenter.getLat(),
       longitude: this.props.userCenter.getLng()
     }
-    MM.panTo(this.state.mv, userCenterPos.latitude, userCenterPos.longitude)
+    // MM.panTo(this.state.mv, userCenterPos.latitude, userCenterPos.longitude)
     const markerConfig = MM.MarkerConfig(userCenterPos, "user")
     const userMarker = new kakao.maps.Marker(markerConfig);
     userMarker.setMap(this.state.mv)

@@ -3,7 +3,8 @@ import {Storage} from '../../storage/Storage'
 import SaegimList from "./SaegimList";
 import CardItem from "./CardItem";
 import styled from "styled-components";
-import * as SA from "../../apis/SaegimAPI"
+import * as SA from "../../apis/SaegimAPI";
+import * as GA from "../../apis/GeolocationAPI";
 import { Zoom, Slide, Select, MenuItem } from "@material-ui/core";
 // import Select from "@material-ui/core/Select";
 
@@ -97,7 +98,7 @@ class SaegimListPage extends Component {
 
   render() {
     let _dir = 'right'
-    if(this.context.curPage === '/list'){
+    if(this.context.curPage === '/'){
       _dir = 'left'
     }
     const data = this.state.data;

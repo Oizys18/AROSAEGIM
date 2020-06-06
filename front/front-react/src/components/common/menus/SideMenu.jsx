@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
 import styled from 'styled-components';
-import { Slide, Collapse, Zoom, Switch, IconButton, Divider } from '@material-ui/core';
+import { Slide, Zoom, IconButton, Divider } from '@material-ui/core';
 import { Close, Refresh, Check, VpnKey, AssignmentInd, Face, ExitToApp, Timelapse, Today, Build } from '@material-ui/icons';
 import { CustomSwitch } from '../../../styles/MuiStyles';
-import { FlexRow, FlexColumn } from '../../../styles/DispFlex';
+import { FlexRow, } from '../../../styles/DispFlex';
 import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
 
 import UserInfo from './UserInfo';
@@ -84,6 +84,17 @@ class SideMenu extends Component {
           handleFilter={_handleFilter}
         />
         <Divider />
+        <StBtnCont>
+          <Zoom in={this.props.on} timeout={600} mountOnEnter unmountOnExit>
+            <StBtn2><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtn2>
+          </Zoom>
+          <Zoom in={this.props.on} timeout={500} mountOnEnter unmountOnExit>
+            <StBtn2><IconButton onClick={this.props.handleFilter.handleInit}><Refresh/></IconButton></StBtn2>
+          </Zoom>
+          <Zoom in={this.props.on} timeout={400} mountOnEnter unmountOnExit>
+            <StBtn2><IconButton onClick={this.props.handleFilter.handleApply}><Check/></IconButton></StBtn2>
+          </Zoom>
+        </StBtnCont>
       </StListCont>
       </>
     )
@@ -94,7 +105,8 @@ class SideMenu extends Component {
     return (
       <>
       <StTopCont>
-        <StLogo/>
+        {/* <StLogo/> */}
+        <StTopMsg>아로새김</StTopMsg>
         <IconButton onClick={this.props.toggle}><Close/></IconButton>
       </StTopCont>
       
@@ -133,29 +145,30 @@ class SideMenu extends Component {
       { 
         this.props.on && 
         <>
-        {
+        {/* {
           this.props.filter ?
           <StOpacityBack/>
           :
           <StOpacityBack onClick={this.props.toggle}/>
-        }
+        } */}
+        <StOpacityBack onClick={this.props.toggle}/>
         </>
       }
-
-      {
+        
+      {/* {
         this.props.filter && 
         <>
         <Zoom in={this.props.on} timeout={400} mountOnEnter unmountOnExit>
-          <StBtnCont className="btnClose"><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtnCont>
+          <StBtn className="btnCheck"><IconButton onClick={this.props.handleFilter.handleApply}><Check/></IconButton></StBtn>
         </Zoom>
         <Zoom in={this.props.on} timeout={300} mountOnEnter unmountOnExit>
-          <StBtnCont className="btnRefresh"><IconButton onClick={this.props.handleFilter.handleInit}><Refresh/></IconButton></StBtnCont>
+          <StBtn className="btnRefresh"><IconButton onClick={this.props.handleFilter.handleInit}><Refresh/></IconButton></StBtn>
         </Zoom>
         <Zoom in={this.props.on} timeout={200} mountOnEnter unmountOnExit>
-          <StBtnCont className="btnCheck"><IconButton onClick={this.props.handleFilter.handleApply}><Check/></IconButton></StBtnCont>
+          <StBtn className="btnClose"><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtn>
         </Zoom>
         </>
-      }
+      } */}
 
       <Slide in={this.props.on} direction='right'>
         <StMenuCont>
@@ -209,7 +222,7 @@ const StMenuCont = styled.div`
 `;
 
 const StTopCont = styled.div`
-  height: 48px;
+  height: 64px;
 
   display: flex;
   justify-content: space-between;
@@ -219,6 +232,10 @@ const StTopCont = styled.div`
 
   border: 3px solid white;
   box-sizing: border-box;
+
+  svg{
+    color: white;
+  }
 `;
 
 const StLogo = styled(FlexRow)`
@@ -233,6 +250,15 @@ const StLogo = styled(FlexRow)`
   box-sizing: border-box;
 `;
 
+const StTopMsg = styled(FlexRow)`
+  margin-left: 16px;
+  padding-top: 3px;
+  font-family: 'BMEULJIRO';
+  font-size: 24px;
+  color: white;
+  text-shadow: 0 0 3px gray;
+`;
+
 
 const StListCont = styled.div`
   display: flex;
@@ -241,13 +267,13 @@ const StListCont = styled.div`
   padding: 8px;
 `;
 
-const StTopMsg = styled(FlexRow)`
-  width: 100%;
-  font-weight: bold;
-  /* font-size: 110%; */
-  color: white;
-  text-shadow: 0 0 5px gray;
-`;
+// const StTopMsg = styled(FlexRow)`
+//   width: 100%;
+//   font-weight: bold;
+//   /* font-size: 110%; */
+//   color: white;
+//   text-shadow: 0 0 5px gray;
+// `;
 
 const StMineCont = styled.div`
   display: flex;
@@ -259,17 +285,33 @@ const StMineCont = styled.div`
   color: gray;
 `;
 
-// const StFilterBtnSet = styled(FlexColumn)`
-//   position: fixed;
-//   z-index: 120;
-//   bottom: 24px;
-//   right: 24px; 
-// `;
-
 const StBtnCont = styled(FlexRow)`
+  margin: 16px;
+  margin-top: 32px;
+  justify-content: space-around;
+`;
+
+const StBtn2 = styled(FlexRow)`
+  border: 3px solid #F8DCD4;
+  border-radius: 50%;
+  background: white;
+
+  .MuiButtonBase-root{
+    padding: 6px;
+  }
+
+  svg{
+    color: gray;
+    width: 30px;
+    height: 30px;
+  }
+`
+
+
+const StBtn = styled(FlexRow)`
   position: fixed;
   z-index: 120;
-  &.btnClose{
+  &.btnCheck{
     right: 24px;
     bottom: 132px;
   }
@@ -277,7 +319,7 @@ const StBtnCont = styled(FlexRow)`
     right: 24px;
     bottom: 78px;
   }
-  &.btnCheck{
+  &.btnClose{
     right: 24px;
     bottom: 24px;
   }
