@@ -22,12 +22,12 @@ class CommentItem extends Component {
       <Wrapper>
         <StComment>
           <StUser>{this.props.user}</StUser>
-          <StContents>{this.props.contents}</StContents>
+          <div>{this.props.contents}</div>
         </StComment>
         {this.state.userid === this.props.userid &&
-          <StIcon onClick={this.handleClick}>
-            <StCloseIcon/>
-          </StIcon>
+          <div onClick={this.handleClick}>
+            <CloseIcon/>
+          </div>
         }
       </Wrapper>
     )
@@ -51,15 +51,4 @@ const StComment = styled.div`
 const StUser = styled.div`
   margin-right: 8px;
   font-weight: bold;
-`;
-
-const StContents = styled.div`
-  
-`;
-
-const StCloseIcon = styled(CloseIcon)`
-  
-`;
-
-const StIcon = styled.div`
 `;

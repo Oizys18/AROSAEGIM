@@ -74,7 +74,6 @@ class SaegimDetail extends Component {
     this.setState({
       regDate: _regDate
     })
-    console.log(this.state.data)
   }
 
    switchImage = () => {
@@ -104,7 +103,6 @@ class SaegimDetail extends Component {
     this.setState({
       maxSteps: this.state.data.images.length
     })
-    console.log(this.state.data.images.length)
   }
 
   setUpdateLike(flag) {
@@ -121,8 +119,7 @@ class SaegimDetail extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.curImage !== prevState.curImage) {
-      setTimeout(this.switchImage, 3000)
-      console.log('image!')
+      setTimeout(this.switchImage, 5000)
     }
   }
 
@@ -132,14 +129,6 @@ class SaegimDetail extends Component {
         <Chip text={tag.name} key={tag.id}/>
       )
     })
-    //
-    // const PrintImage = this.state.data.images.map((image) => {
-    //   return (
-    //     <ImageModal>
-    //       <StImg src={image.source} alt={image}/>
-    //     </ImageModal>
-    //   )
-    // })
 
     return (
       <Zoom in={true}>
@@ -276,13 +265,10 @@ const TopBar = styled.div`
     top: 0;
     left: 0;
     z-index: -1;
-  
     width: 100%;
     height: 48px;
-  
     background: black;
     opacity: 0.6;
-    
     content: '';
   }
   
@@ -430,15 +416,6 @@ const StCard = styled.div`
 `;
 
 const StImg = styled.img`
-  width: 100%;
-  height: 100%;
-`;
-
-const ImageModal = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
   width: 100%;
   height: 100%;
 `;

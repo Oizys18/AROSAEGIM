@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Storage } from "../../storage/Storage"
-import {getCommentBySaegim, writeComment, delComment} from "../../apis/CommentAPI";
+import {getCommentBySaegim, writeComment} from "../../apis/CommentAPI";
 import SmallButton from "../common/buttons/SmallButton";
 import CommentInput from "./CommentInput";
 import CommentItem from "./CommentItem";
@@ -125,12 +125,6 @@ const StCommentInput = styled.div`
 
   margin-top: 16px;
   padding: 0 16px 0 16px;
-`;
-
-const MoreView = styled.div`
-  margin: 8px 0 0 16px;
-  font-size: 0.9rem;
-  color: #818181;
 `;
 
 const StDescription = styled.div`
