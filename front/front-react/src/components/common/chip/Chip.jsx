@@ -11,6 +11,7 @@ class Chip extends Component {
         onClick={this.props.onClick}
         color={this.props.color}
         variant={this.props.variant}
+        avatar={this.props.avatar}
       />
     );
   }
@@ -18,4 +19,5 @@ class Chip extends Component {
 export default Chip;
 
 const StChip = styled(ChipComponent)`
+
 `;
