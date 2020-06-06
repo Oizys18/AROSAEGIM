@@ -132,9 +132,7 @@ class SaegimListPage extends Component {
         <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
           <Wrapper height={this.context.appHeight}>
             <StList>
-              <SaegimList>
-                {PrintCard}
-              </SaegimList>
+              {PrintCard}
             </StList>
           </Wrapper>
         </Slide>
