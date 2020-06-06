@@ -26,7 +26,8 @@ class SaegimDetail extends Component {
       curImage: -1,
       open: false,
       activeStep: 0,
-      maxSteps: 0
+      maxSteps: 0,
+      detailColor: "linear-gradient(#FBF2EE,#ffffff38),linear-gradient(-45deg,#f3b3a6,#ffffff00),linear-gradient(45deg,#ff6b6b,#ffffff40)"
     };
     this.goBack = this.goBack.bind(this);
     this.setUpdateLike = this.setUpdateLike.bind(this);
@@ -182,7 +183,7 @@ class SaegimDetail extends Component {
             </BackButton>
             <StCont>
                 <StNick>{this.context.userInfo.name}</StNick>
-                <StAvatar src={this.context.userInfo.profileImage}/>
+                <Avatar src={this.context.userInfo.profileImage}/>
               </StCont>
           </TopBar>
           <Contents>
@@ -196,7 +197,7 @@ class SaegimDetail extends Component {
               />
             </W3WChip>
             <CardWrapper>
-              <Card color={'#ffffff'}>
+              <Card color={this.state.detailColor}>
                 <StCard>{this.state.data.contents}</StCard>
               </Card>
             </CardWrapper>
@@ -292,10 +293,6 @@ const StCont = styled(FlexRow)`
   }
 `;
 
-const StAvatar = styled(Avatar)`
-  
-`;
-
 const StNick = styled.div`
   word-break: break-all;
   margin: 0 16px 0 16px;
@@ -306,6 +303,10 @@ const W3WChip = styled.div`
   justify-content: space-between;
   align-items: center;
   display: flex;
+  
+  .MuiChip-root{
+    background-color: #fafafa;
+  }
 `;
 
 const Contents = styled.div `
@@ -357,7 +358,7 @@ const Tags = styled.div `
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  color: white;
+  color: #fafafa;
   margin: 0 8px 8px 24px;
 `
 
@@ -380,7 +381,7 @@ const ContentsBot = styled.div`
 `;
 
 const LockIcon = styled.div `
-  color: white;
+  color: #fafafa;
   margin-left: 32px;
 `
 
@@ -400,7 +401,7 @@ const StButton = styled.div`
 `;
 
 const Image = styled.div`
-  color: white;
+  color: #fafafa;
   margin-right: 32px;
   display: flex;
   justify-content: center;
