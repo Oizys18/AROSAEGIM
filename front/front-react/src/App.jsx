@@ -4,7 +4,7 @@ import { Route, withRouter, Switch } from "react-router-dom";
 import { Slide } from '@material-ui/core'
 
 import { Storage } from "./storage/Storage";
-import { getPosition } from './apis/GeolocationAPI';
+import * as GA from './apis/GeolocationAPI';
 import Loading from "./components/common/background/Loading";
 import Background from "./components/common/background/Background";
 import TopBar from "./components/common/navbar/TopBar";
@@ -65,7 +65,9 @@ class App extends Component {
   setStateAsync(state) { return new Promise((resolve) => { this.setState(state, resolve) }) }
 
   async componentDidMount(){
-    getPosition()
+    GA.getPositionAsync()
+    .then((position) => { GA.getPositionSuccess(position) })
+    .catch((err) => { this.popModal(GA.getPositionFail(err), 'geolocation error', 'alert') });
 
     const _autoLogin = localStorage.getItem('ARSG autoLogin')
     if(_autoLogin === 'true'){
@@ -126,6 +128,10 @@ class App extends Component {
         const [ saegimId, commentId ] = this.state.delComment
         await delComment(saegimId, commentId)
         this.commentUpdate(true)
+      }
+      else if(this.state.modalSitu === 'user refresh'){
+        this.setState({ sideMenu: false })
+        window.location.href = '/'
       }
     }
     this.setState({ modal: false })

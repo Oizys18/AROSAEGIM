@@ -15,6 +15,7 @@ import RoadView from './RoadView';
 import MapBtnSet from './MapBtnSet';
 import CtoW from '../../../apis/w3w';
 import * as SA from '../../../apis/SaegimAPI';
+import * as GA from '../../../apis/GeolocationAPI';
 
 class MapPage extends Component {
   constructor(props){
@@ -71,11 +72,13 @@ class MapPage extends Component {
   initMapPage = async () => {
     let _center = this.state.mapCenter;
 
-    const _lat = sessionStorage.getItem('ARSG latitude');
-    const _lng = sessionStorage.getItem('ARSG longitude');
-    if(_lat && _lng){
-      _center = new kakao.maps.LatLng(Number(_lat), Number(_lng))
-    }
+    // const _lat = sessionStorage.getItem('ARSG latitude');
+    // const _lng = sessionStorage.getItem('ARSG longitude');
+    // if(_lat && _lng){
+    //   _center = new kakao.maps.LatLng(Number(_lat), Number(_lng))
+    // }
+    const _latlng = GA.getPositionFromSession()
+    _center = new kakao.maps.LatLng(_latlng[0], _latlng[1])
 
     await this.setStateAsync({ 
       mapCenter: this.context.curMapCenter ? this.context.curMapCenter : _center,
@@ -121,7 +124,22 @@ class MapPage extends Component {
     this.setState({ roadView: !this.state.roadView })
   };
   goUserCenter = () => {
-    this.setState({ mapCenter: this.state.userCenter });
+    GA.getPositionAsync()
+    .then((position) => { 
+      GA.getPositionSuccess(position) 
+    })
+    .then(() => {
+      const _latlng = GA.getPositionFromSession()
+      const _center = new kakao.maps.LatLng(_latlng[0], _latlng[1])
+
+      this.setState({ 
+        mapCenter: _center,
+        userCenter: _center
+      });
+    })
+    .catch((err) => { 
+      this.context.popModal(GA.getPositionFail(err), 'geolocation error', 'alert') 
+    });
   };
   tglFilter = () => {
     this.setState({ filter: !this.state.filter })

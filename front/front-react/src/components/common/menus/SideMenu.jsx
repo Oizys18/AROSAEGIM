@@ -84,6 +84,17 @@ class SideMenu extends Component {
           handleFilter={_handleFilter}
         />
         <Divider />
+        <StBtnCont>
+          <Zoom in={this.props.on} timeout={600} mountOnEnter unmountOnExit>
+            <StBtn2><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtn2>
+          </Zoom>
+          <Zoom in={this.props.on} timeout={500} mountOnEnter unmountOnExit>
+            <StBtn2><IconButton onClick={this.props.handleFilter.handleInit}><Refresh/></IconButton></StBtn2>
+          </Zoom>
+          <Zoom in={this.props.on} timeout={400} mountOnEnter unmountOnExit>
+            <StBtn2><IconButton onClick={this.props.handleFilter.handleApply}><Check/></IconButton></StBtn2>
+          </Zoom>
+        </StBtnCont>
       </StListCont>
       </>
     )
@@ -142,20 +153,20 @@ class SideMenu extends Component {
         </>
       }
 
-      {
+      {/* {
         this.props.filter && 
         <>
         <Zoom in={this.props.on} timeout={400} mountOnEnter unmountOnExit>
-          <StBtnCont className="btnClose"><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtnCont>
+          <StBtn className="btnCheck"><IconButton onClick={this.props.handleFilter.handleApply}><Check/></IconButton></StBtn>
         </Zoom>
         <Zoom in={this.props.on} timeout={300} mountOnEnter unmountOnExit>
-          <StBtnCont className="btnRefresh"><IconButton onClick={this.props.handleFilter.handleInit}><Refresh/></IconButton></StBtnCont>
+          <StBtn className="btnRefresh"><IconButton onClick={this.props.handleFilter.handleInit}><Refresh/></IconButton></StBtn>
         </Zoom>
         <Zoom in={this.props.on} timeout={200} mountOnEnter unmountOnExit>
-          <StBtnCont className="btnCheck"><IconButton onClick={this.props.handleFilter.handleApply}><Check/></IconButton></StBtnCont>
+          <StBtn className="btnClose"><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtn>
         </Zoom>
         </>
-      }
+      } */}
 
       <Slide in={this.props.on} direction='right'>
         <StMenuCont>
@@ -209,7 +220,7 @@ const StMenuCont = styled.div`
 `;
 
 const StTopCont = styled.div`
-  height: 48px;
+  height: 64px;
 
   display: flex;
   justify-content: space-between;
@@ -259,17 +270,33 @@ const StMineCont = styled.div`
   color: gray;
 `;
 
-// const StFilterBtnSet = styled(FlexColumn)`
-//   position: fixed;
-//   z-index: 120;
-//   bottom: 24px;
-//   right: 24px; 
-// `;
-
 const StBtnCont = styled(FlexRow)`
+  margin: 16px;
+  margin-top: 32px;
+  justify-content: space-around;
+`;
+
+const StBtn2 = styled(FlexRow)`
+  border: 3px solid #F8DCD4;
+  border-radius: 50%;
+  background: white;
+
+  .MuiButtonBase-root{
+    padding: 6px;
+  }
+
+  svg{
+    color: gray;
+    width: 30px;
+    height: 30px;
+  }
+`
+
+
+const StBtn = styled(FlexRow)`
   position: fixed;
   z-index: 120;
-  &.btnClose{
+  &.btnCheck{
     right: 24px;
     bottom: 132px;
   }
@@ -277,7 +304,7 @@ const StBtnCont = styled(FlexRow)`
     right: 24px;
     bottom: 78px;
   }
-  &.btnCheck{
+  &.btnClose{
     right: 24px;
     bottom: 24px;
   }
