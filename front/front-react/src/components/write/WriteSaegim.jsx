@@ -12,6 +12,7 @@ import PhotoIcon from "@material-ui/icons/AddPhotoAlternate";
 // import { getUserByEmail } from "../../apis/AccountAPI";
 import { Storage } from "../../storage/Storage";
 import SimplePopover from "./Writetag";
+import { isThisSecond } from "date-fns/esm";
 
 class WriteSaegim extends Component {
   constructor(props) {
@@ -34,15 +35,20 @@ class WriteSaegim extends Component {
   fileUploadAction = () => this.inputReference.current.click();
   fileUploadInputChange = async (e) => {
     e.preventDefault();
-    for (let i = 0; i < e.target.files.length; i++) {
-      let _reader = new FileReader();
-      let _imgFile = e.target.files[i];
-      _reader.readAsDataURL(_imgFile);
-      _reader.onloadend = () => {
-        this.setState({
-          imgBase64: this.state.imgBase64.concat(_reader.result),
-        });
-      };
+    if (e.target.files.length + this.state.imgBase64.length > 5) {
+      this.setState({ error: 2 });
+    } else {
+      this.setState({ error: 0 });
+      for (let i = 0; i < e.target.files.length; i++) {
+        let _reader = new FileReader();
+        let _imgFile = e.target.files[i];
+        _reader.readAsDataURL(_imgFile);
+        _reader.onloadend = () => {
+          this.setState({
+            imgBase64: this.state.imgBase64.concat(_reader.result),
+          });
+        };
+      }
     }
   };
 
@@ -102,7 +108,6 @@ class WriteSaegim extends Component {
     if (this.state.imgBase64) {
       data["imageSources"] = this.state.imgBase64;
     }
-    console.log(data);
     if (this.state.text) {
       axios
         .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
@@ -129,23 +134,20 @@ class WriteSaegim extends Component {
     }
   };
   getUserInfo = async () => {
-    // const _email = localStorage.getItem('ARSG email')
-    // this.setState({
-    //     userInfo: (await getUserByEmail(_email)).data
-    //   })
     this.setState({
       userInfo: this.context.userInfo,
     });
   };
-  // Tag 작성 및 Tag popover
   createTag = (newTag) => {
     this.setState({ tags: this.state.tags.concat(newTag) });
   };
 
   render() {
     const ErrorMsg = () => {
-      if (this.state.error) {
+      if (this.state.error === 1) {
         return <Error>텍스트를 입력해주세요!</Error>;
+      } else if (this.state.error === 2) {
+        return <Error>이미지는 최대 5장까지 입니다!</Error>;
       } else {
         return <Error>　</Error>;
       }
@@ -164,7 +166,7 @@ class WriteSaegim extends Component {
             placeholder="당신의 추억을 새겨주세요"
             onTextChange={this.handleTextChange}
           />
-          <ErrorMsg />
+
           <Bottom>
             <Switch
               locked={this.state.locked}
@@ -173,10 +175,15 @@ class WriteSaegim extends Component {
               labelText={this.state.locked ? "비공개" : "공개"}
               labelPlacement="start"
             />
+            <ErrorMsg />
           </Bottom>
           <Tag>
             {this.state.tags.map((tag, i) => {
-              return <Chip margin="0.1em" size="small" text={tag} key={i} />;
+              return (
+                <div style={{ margin: "1px" }}>
+                  <Chip size="small" text={tag} key={i} />
+                </div>
+              );
             })}
           </Tag>
         </Container>
@@ -211,6 +218,7 @@ class WriteSaegim extends Component {
 }
 export default WriteSaegim;
 WriteSaegim.contextType = Storage;
+
 const ImgBalloon = styled.img`
   width: 50px;
   height: 50px;
@@ -228,13 +236,13 @@ const ImageWrapper = styled.div`
 `;
 const Error = styled.div`
   color: red;
-  font-size: 10px;
+  font-size: 12px;
   position: relative;
 `;
 
 const Wrapper = styled.div`
   position: absolute;
-  top: 8vh;
+  top: 6vh;
   width: 100vw;
   justify-content: center;
   align-items: center;
@@ -243,7 +251,7 @@ const Wrapper = styled.div`
 `;
 const Container = styled.div`
   width: 80vw;
-  padding: 8px;
+  padding: 12px;
   background-color: ghostwhite;
   display: flex;
   justify-content: space-between;
@@ -251,7 +259,7 @@ const Container = styled.div`
   border-radius: 16px;
 `;
 const Top = styled.div`
-  margin: 4vh;
+  margin: 3vh;
   justify-content: space-between;
   align-items: center;
   display: flex;

@@ -19,16 +19,18 @@ class Help extends Component {
   render() {
     return (
       <Wrapper>
+        <BackButton onClick={this.goBack}>
+          <ArrowBack />
+        </BackButton>
         <Container>
-          <BackButton onClick={this.goBack}>
-            <ArrowBack />
-          </BackButton>
           <Header>
             <Title>도움말</Title>
+          </Header>
+          <Body>
             <Content>커뮤니티 가이드라인</Content>
             <Content>튜토리얼 다시보기</Content>
             <Content>개발자에게 연락하기</Content>
-          </Header>
+          </Body>
         </Container>
       </Wrapper>
     );
@@ -46,18 +48,19 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
+  position: absolute;
+  top: 10%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 80vw;
-  height: 80vh;
-  background: white;
+  height: 90vh;
   flex-direction: column;
 `;
 const BackButton = styled.div`
   position: absolute;
   top: 5%;
-  left: 5%;
+  left: 10%;
   background: white;
   width: 24px;
   height: 24px;
@@ -66,13 +69,30 @@ const BackButton = styled.div`
 
 const Header = styled.div`
   background: white;
-  border-radius: 32px;
-  margin: 1em;
-  padding: 1em;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   display: flex;
+  margin: 1em;
+  padding: 0.5em;
+  border-radius: 16px;
 `;
-const Title = styled.div``;
-const Content = styled.a``;
+
+const Body = styled.div`
+  background: white;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 70vh;
+  border-radius: 16px;
+`;
+const Title = styled.div`
+  font-size: 1.5em;
+`;
+const Content = styled.div`
+  padding: 0.1em;
+  height: 1.5em;
+  width: 90%;
+  border: 1px solid grey;
+`;

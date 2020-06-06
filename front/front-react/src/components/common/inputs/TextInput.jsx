@@ -18,8 +18,8 @@ class TextInput extends Component {
         placeholder={this.props.placeholder}
         multiline
         fullWidth
-        rows={7}
-        rowsMax={7}
+        rows={9}
+        rowsMax={9}
         margin="dense"
         variant="outlined"
         value={value}
