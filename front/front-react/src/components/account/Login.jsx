@@ -7,7 +7,7 @@ import { Email, Lock, CheckCircle, Warning, } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
 import BackBtn from  '../common/buttons/BackBtn';
-import LogoAnimation from '../common/logo/LogoAnimation';
+import LogoAnimation from '../common/animation/LogoAnimation';
 import UserInput from '../common/inputs/UserInput';
 import * as AM from './AccountMethod';
 import * as AS from '../../styles/account/AccountStyles';

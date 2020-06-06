@@ -88,6 +88,7 @@ const MemberCard = styled.div`
   margin: 0.25em;
   padding: 0.5em;
   padding-right: 1em;
+  font-weight:lighter;
 `;
 
 const ProfileImg = styled.img`
