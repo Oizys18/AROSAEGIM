@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import TutorialItem from "./TutorialItem";
+import HomeIcon from "@material-ui/icons/Home";
 class Tutorial extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +15,9 @@ class Tutorial extends Component {
       min: 0,
     };
   }
+  goHome = () => {
+    this.props.history.push(`/list`);
+  };
   goBack = () => {
     this.props.history.goBack();
   };
@@ -36,6 +40,9 @@ class Tutorial extends Component {
         <BackButton onClick={this.goBack}>
           <ArrowBack />
         </BackButton>
+        <HomeButton onClick={this.goBack}>
+          <HomeIcon />
+        </HomeButton>
         <Header>튜토리얼</Header>
         <Container>
           <Navigator>
@@ -78,6 +85,16 @@ const BackButton = styled.div`
   position: absolute;
   top: 3%;
   left: 5%;
+  background: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 16px;
+  z-index: 5;
+`;
+const HomeButton = styled.div`
+  position: absolute;
+  top: 3%;
+  left: 15%;
   background: white;
   width: 24px;
   height: 24px;

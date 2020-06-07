@@ -27,37 +27,37 @@ class Contact extends Component {
           <Title>개발자에게 메일보내기</Title>
           <Content href="mailto:hello@saegim.me">hello@saegim.me</Content>
         </Header>
-        <MemberCard>
+        <MemberCard href="https://github.com/Oizys18">
           <ProfileImg src="https://avatars3.githubusercontent.com/u/37648340?s=120&v=4" />
-          <Message href="https://github.com/Oizys18">
+          <Message>
             <Name>양찬우 @Oizys18</Name>
             <Role>Frontend Developer</Role>
           </Message>
         </MemberCard>
-        <MemberCard>
+        <MemberCard href="https://github.com/soulgchoi">
           <ProfileImg src="https://avatars0.githubusercontent.com/u/52682603?s=120&v=4" />
-          <Message href="https://github.com/soulgchoi">
+          <Message>
             <Name>최솔지 @soulgchoi</Name>
             <Role>Frontend Developer</Role>
           </Message>
         </MemberCard>
-        <MemberCard>
+        <MemberCard href="https://github.com/EXTC27">
           <ProfileImg src="https://avatars1.githubusercontent.com/u/40153405?s=120&v=4" />
-          <Message href="https://github.com/EXTC27">
+          <Message>
             <Name>김신재 @EXTC27</Name>
             <Role>Frontend Developer</Role>
           </Message>
         </MemberCard>
-        <MemberCard>
+        <MemberCard href="https://github.com/kingjky">
           <ProfileImg src="https://avatars3.githubusercontent.com/u/51773494?s=120&v=4" />
-          <Message href="https://github.com/kingjky">
+          <Message>
             <Name>전경윤 @kingjky</Name>
             <Role>Backend Developer</Role>
           </Message>
         </MemberCard>
-        <MemberCard>
+        <MemberCard href="https://github.com/ghleokim">
           <ProfileImg src="https://avatars3.githubusercontent.com/u/52501513?s=120&v=4" />
-          <Message href="https://github.com/ghleokim">
+          <Message>
             <Name>김건호 @ghleokim</Name>
             <Role>Frontend Developer</Role>
           </Message>
@@ -77,7 +77,7 @@ const Wrapper = styled.div`
   height: 100vh;
 `;
 
-const MemberCard = styled.div`
+const MemberCard = styled.a`
   width: 60vw;
   justify-content: space-between;
   align-items: center;
@@ -89,6 +89,10 @@ const MemberCard = styled.div`
   padding: 0.5em;
   padding-right: 1em;
   font-weight: lighter;
+  text-decoration: none;
+  &:visited {
+    color: black;
+  }
 `;
 
 const ProfileImg = styled.img`
@@ -96,21 +100,17 @@ const ProfileImg = styled.img`
   height: 50px;
   width: 50px;
 `;
-const Message = styled.a`
+const Message = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
   flex-direction: column;
-  text-decoration: none;
-  &:visited {
-    color: black;
-  }
 `;
 const Name = styled.div`
   justify-content: flex-start;
   display: flex;
   font-weight: bolder;
-  font-size:16px;
+  font-size: 16px;
 `;
 const Role = styled.div`
   justify-content: flex-start;
