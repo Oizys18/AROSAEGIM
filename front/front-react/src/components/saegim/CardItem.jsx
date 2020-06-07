@@ -162,7 +162,7 @@ class CardItem extends Component {
                 subcolor={this.state.colors[idx+1]}
               >
                 <StCard>
-                  <Location>{saegim.w3w}</Location>
+                  <Location>{'/// ' + saegim.w3w}</Location>
                   <Registered>
                     <StTime>
                       <StAccessTimeIcon />
