@@ -65,7 +65,6 @@ class SaegimDetail extends Component {
 
   handleNext = () => {
     this.setActiveStep(this.state.activeStep + 1)
-    console.log(this.state.activeStep)
   }
 
   handleBack = () => {
