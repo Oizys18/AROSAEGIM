@@ -29,7 +29,7 @@ class SaegimDetailButton extends Component {
 
   delSaegim = () => {
     this.context.popModal('새김을 삭제하시겠습니까?', 'delSaegim', 'confirm')
-    this.context.setDelComment(this.props.id)
+    this.context.setDelSaegim(this.props.id)
   }
 
   render() {

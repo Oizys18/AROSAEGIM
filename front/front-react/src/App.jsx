@@ -142,8 +142,8 @@ class App extends Component {
         this.setState({ sideMenu: false })
         window.location.href = '/'
       } else if (this.state.modalSitu === 'delSaegim'){
-        console.log(this.state.delSaegim)
         await delSaegim(this.state.delSaegim)
+        window.location.href = '/list'
         this.setUpdateFlag(true)
       }
     }
