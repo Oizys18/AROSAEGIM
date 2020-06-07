@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { ArrowBack } from "@material-ui/icons";
-import { withRouter } from 'react-router-dom'
+import { withRouter } from "react-router-dom";
 class GuideLine extends Component {
   constructor(props) {
     super(props);
@@ -11,9 +11,9 @@ class GuideLine extends Component {
     // this.goBack = this.goBack.bind(this);
   }
   goBack = () => {
-    console.log(this.props)
+    console.log(this.props);
     this.props.history.goBack();
-  }
+  };
 
   componentDidMount() {}
 
@@ -23,45 +23,49 @@ class GuideLine extends Component {
         <BackButton onClick={this.goBack}>
           <ArrowBack />
         </BackButton>
-        <Header>
-          <Title>개발자에게 메일보내기</Title>
-          <Content>hello@saegim.me</Content>
-        </Header>
-        <MemberCard>
-          <ProfileImg src="https://avatars3.githubusercontent.com/u/37648340?s=120&v=4" />
-          <Message>
-            <Name>양찬우 @Oizys18</Name>
-            <Role>Frontend Developer</Role>
-          </Message>
-        </MemberCard>
-        <MemberCard>
-          <ProfileImg src="https://avatars0.githubusercontent.com/u/52682603?s=120&v=4" />
-          <Message>
-            <Name>최솔지 @soulgchoi</Name>
-            <Role>Frontend Developer</Role>
-          </Message>
-        </MemberCard>
-        <MemberCard>
-          <ProfileImg src="https://avatars1.githubusercontent.com/u/40153405?s=120&v=4" />
-          <Message>
-            <Name>김신재 @EXTC27</Name>
-            <Role>Frontend Developer</Role>
-          </Message>
-        </MemberCard>
-        <MemberCard>
-          <ProfileImg src="https://avatars3.githubusercontent.com/u/51773494?s=120&v=4" />
-          <Message>
-            <Name>전경윤 @kingjky</Name>
-            <Role>Backend Developer</Role>
-          </Message>
-        </MemberCard>
-        <MemberCard>
-          <ProfileImg src="https://avatars3.githubusercontent.com/u/52501513?s=120&v=4" />
-          <Message>
-            <Name>김건호 @ghleokim</Name>
-            <Role>Frontend Developer</Role>
-          </Message>
-        </MemberCard>
+        <Header>커뮤니티 가이드라인</Header>
+        <Container>
+          <TextWrapper>
+            <Title>커뮤니티 가이드라인이란?</Title>
+            <Content>
+              커뮤니티 가이드라인이란 커뮤니티 환경을 더욱 잘 가꾸고 편하게
+              이용하기 위한 규정입니다. 이를 지키지 않을시 사용자 제재, 법적
+              대응 및 신고가 이루어질 수 있습니다.
+            </Content>
+          </TextWrapper>
+          <TextWrapper>
+            <Title>과도한 노출 및 성적인 내용</Title>
+            <Content>
+              포르노나 음란물을 허용하지 않습니다. 아동 학대, 성 착취 등
+              불법적인 내용의 경우 사용자 정보를 법 집행기관과 협조하여
+              신고합니다.
+            </Content>
+          </TextWrapper>
+          <TextWrapper>
+            <Title>증오성 내용</Title>
+            <Content>
+              새김은 자유로운 표현을 위한 플랫폼입니다. 하지만 인종이나 민족,
+              종교, 장애, 성별, 연령, 국적, 계급, 성적 취향, 성 정체성에 따라
+              폭력을 선동하거나 용납하는 내용 또는 이를 기준으로 증오를 조장하는
+              내용은 허용하지 않습니다.
+            </Content>
+          </TextWrapper>
+          <TextWrapper>
+            <Title>괴롭힘/사이버 괴롭힘</Title>
+            <Content>
+              악성 컨텐츠를 게시해서는 안 됩니다. 괴롭히는 행위가 도를 넘어
+              악의적이라고 판단되면 신고되어 삭제될 수 있습니다.
+            </Content>
+          </TextWrapper>
+          <TextWrapper>
+            <Title>위협 </Title>
+            <Content>
+              새김은 타인의 이익을 침해하는 행위, 스토킹, 협박, 괴롭힘, 위협,
+              사생활 침해, 타인의 개인정보 누설 등의 행위는 금지합니다. 이러한
+              행위가 적발될 경우 영구적으로 차단될 수 있습니다.
+            </Content>
+          </TextWrapper>
+        </Container>
       </Wrapper>
     );
   }
@@ -77,37 +81,35 @@ const Wrapper = styled.div`
   height: 100vh;
 `;
 
-const MemberCard = styled.div`
-  width: 60vw;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid black;
-  border-radius: 32px;
+const Container = styled.div`
+  width: 80vw;
   background: white;
-  display: flex;
-  margin: 0.25em;
-  padding: 0.5em;
-  padding-right: 1em;
-`;
-
-const ProfileImg = styled.img`
-  border-radius: 25px;
-  height: 50px;
-  width: 50px;
-`;
-const Message = styled.div`
+  border-radius: 16px;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   display: flex;
+  padding: 1em;
+`;
+
+const TextWrapper = styled.div`
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+  padding: 0.2em;
+  margin: 0.3em;
+  width: 100%;
   flex-direction: column;
 `;
-const Name = styled.div`
-  justify-content: flex-start;
-  display: flex;
+const Title = styled.div`
+  width: 100%;
+  font-weight: bolder;
+  font-size: 14px;
 `;
-const Role = styled.div`
-  justify-content: flex-start;
-  display: flex;
+const Content = styled.div`
+  width: 100%;
+  font-size: 12px;
+  font-weight: lighter;
 `;
 
 const BackButton = styled.div`
@@ -115,8 +117,8 @@ const BackButton = styled.div`
   top: 5%;
   left: 5%;
   background: white;
-  width:24px;
-  height:24px;
+  width: 24px;
+  height: 24px;
   border-radius: 16px;
 `;
 
@@ -124,11 +126,10 @@ const Header = styled.div`
   background: white;
   border-radius: 32px;
   margin: 1em;
-  padding: 1em;
+  padding: 0.5em;
+  font-weight:bolder;
   justify-content: center;
   align-items: center;
-  flex-direction:column;
-  display:flex;
+  flex-direction: column;
+  display: flex;
 `;
-const Title = styled.div``;
-const Content = styled.a``;

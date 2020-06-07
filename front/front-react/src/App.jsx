@@ -14,6 +14,8 @@ import BotNav from "./components/common/navbar/BotNav";
 import Modal from "./components/common/modal/Modal"
 import MapPage from "./components/common/map/MapPage";
 import Write from "./components/write/Write";
+import Tutorial from "./components/tutorial/Tutorial";
+import GuideLine from "./components/contact/GuideLine";
 import Login from "./components/account/Login";
 import Signup from "./components/account/Signup";
 import SaegimListPage from "./components/saegim/SaegimListPage";
@@ -238,7 +240,8 @@ class App extends Component {
           <Route path="/list" component={SaegimListPage} />
         </Switch>
         <Route path="/map" component={MapPage} />
-        <Route path="/help" component={Help} />
+        <Route path="/guideline" component={GuideLine} />
+        <Route path="/tutorial" component={Tutorial} />
         <Route path="/contact" component={Contact} />
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />
