@@ -3,6 +3,7 @@ import Card from "../common/cards/Card";
 import styled from "styled-components";
 import { ArrowBack, Lock, AccessTime, ArrowBackIos, ArrowForwardIos, Photo, Close  } from "@material-ui/icons";
 import * as SA from "../../apis/SaegimAPI"
+import { getUserByID } from "../../apis/UserAPI"
 import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 import Chip from "../common/chip/Chip"
 import { Zoom, Avatar, Modal, MobileStepper, Button } from "@material-ui/core";
@@ -27,7 +28,8 @@ class SaegimDetail extends Component {
       open: false,
       activeStep: 0,
       maxSteps: 0,
-      detailColor: "linear-gradient(#FBF2EE,#ffffff38),linear-gradient(-45deg,#f3b3a6,#ffffff00),linear-gradient(45deg,#ff6b6b,#ffffff40)"
+      detailColor: "linear-gradient(#FBF2EE,#ffffff38),linear-gradient(-45deg,#f3b3a6,#ffffff00),linear-gradient(45deg,#ff6b6b,#ffffff40)",
+      user: {}
     };
     this.goBack = this.goBack.bind(this);
     this.setUpdateLike = this.setUpdateLike.bind(this);
@@ -71,10 +73,12 @@ class SaegimDetail extends Component {
   getSaegimDetail = async () => {
     const _data = await SA.getSaegimDetailById(this.props.match.params.id)
     await this.setStateAsync({ data: _data })
+
+    const _user = await getUserByID(this.state.data.userId)
+    await this.setStateAsync({ user: _user })
+
     const _regDate = getTimeDeltaString(this.state.data.regDate)
-    this.setState({
-      regDate: _regDate
-    })
+    this.setState({ regDate: _regDate })
   }
 
    switchImage = () => {
@@ -90,7 +94,7 @@ class SaegimDetail extends Component {
     return this.state.curImage;
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     setTimeout(this.setState({
       curImage: this.state.curImage + 1
     }), 5000)
@@ -100,7 +104,7 @@ class SaegimDetail extends Component {
         userId: _userInfo.id
       })
     }
-    await this.getSaegimDetail();
+    this.getSaegimDetail();
     this.setState({
       maxSteps: this.state.data.images.length
     })
@@ -182,8 +186,8 @@ class SaegimDetail extends Component {
               <ArrowBack/>
             </BackButton>
             <StCont>
-                <StNick>{this.context.userInfo.name}</StNick>
-                <Avatar src={this.context.userInfo.profileImage}/>
+                <StNick>{this.state.user.name}</StNick>
+                <Avatar src={this.state.user.profileImage}/>
               </StCont>
           </TopBar>
           <Contents>
@@ -221,7 +225,7 @@ class SaegimDetail extends Component {
             <BotWrapper>
               <Registered>
                 <StAccessTime />
-                {this.state.data && getTimeDeltaString(this.state.data.regDate)}
+                {this.state.regDate}
               </Registered>
               <Likes>
                 <div>
