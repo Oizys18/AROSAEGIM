@@ -6,13 +6,8 @@ class Chip extends Component {
   render() {
     return (
       <StChip
-        size={this.props.size}
+        {...this.props}
         label={this.props.text}
-        onClick={this.props.onClick}
-        color={this.props.color}
-        variant={this.props.variant}
-        avatar={this.props.avatar}
-        icon={this.props.icon}
       />
     );
   }

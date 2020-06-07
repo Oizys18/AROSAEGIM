@@ -4,11 +4,11 @@ import styled from "styled-components";
 import { Storage } from  '../../../storage/Storage';
 import * as MM from "./MapMethod";
 import DoneIcon from '@material-ui/icons/Done';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import { Chip } from "@material-ui/core";
+import Chip from "../chip/Chip";
 import pointImg from "../../../assets/point/point@2x.png";
 import pointFloatImg from "../../../assets/point/point-float@2x.png";
 import CtoW from "../../../apis/w3w";
+import PinIcon from "../../../assets/PinIcon";
 
 // import MapMarker, {MarkerConfig} from "./MapItemTest";
 
@@ -160,13 +160,14 @@ class MapView extends Component {
         </StView>
         {this.props.status === "write" && !!this.state.w3w &&
           <StTextWrapper>
-            <Chip color="primary" size="medium" label={this.state.w3w} icon={<LocationOnIcon />}/>
+            <Chip color="primary" size="medium" text={this.state.w3w} icon={<PinIcon />}/>
           </StTextWrapper>
         }
         {this.props.status === "write" && 
           <StButtonWrapper>
-            <Chip color="primary" size="medium" label={"위치 확정하기"} onClick={this.fixLocation} clickable icon={<DoneIcon />}/>
-            <Chip size="medium" label={"닫기"} onClick={this.props.cancelMap} onDelete={this.props.cancelMap} clickable deletable />
+            <Chip color="primary" size="medium" text={"위치 확정하기"} onClick={this.fixLocation} clickable icon={<DoneIcon />}/>
+            <StBlank />
+            <Chip size="medium" text={"닫기"} onClick={this.props.cancelMap} onDelete={this.props.cancelMap} clickable deletable />
           </StButtonWrapper>
         }
       </>
@@ -203,4 +204,8 @@ const StTextWrapper = styled.div`
   width: 100%;
   justify-content:center;
   align-items: center;
+`
+
+const StBlank = styled.div`
+  width: 10px;
 `

@@ -4,13 +4,12 @@ import styled from "styled-components";
 import imgLeft from "../../../assets/balloon/balloon-left-filled@2x.png";
 import imgMiddle from "../../../assets/balloon/balloon-middle-filled@2x.png";
 import imgRight from "../../../assets/balloon/balloon-right-filled@2x.png";
-import { Chip } from "@material-ui/core";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import CancelIcon from '@material-ui/icons/Cancel';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { getTimeDeltaString } from "../time/TimeFunctinon";
 import { Link } from "react-router-dom";
+import Chip from "../chip/Chip";
+import PinIcon from "../../../assets/PinIcon"
 import locationPin from "../../../assets/point/point-filled@2x.png";
 import timeIcon from "../../../assets/time/time@2x.png";
 
@@ -96,16 +95,23 @@ class MapItem extends Component {
   detailItem2 = () => {
     return <StDetailCont>
       <StFlexContainer>
-        <Chip color="primary" size="small" icon={ <LocationOnIcon />} label={this.props.item ? ' ' + this.props.item.w3w : " "} />
+        <Chip color="primary" size="small" icon={ <PinIcon />} text={this.props.item ? ' ' + this.props.item.w3w : " "} />
       </StFlexContainer>
-      <StFlexContainer>
-        <Link to={`list/${this.props.item.id}`}>
-        <Chip color="primary" size="small" icon={ <ArrowForwardIcon />} label={"더 보기 →"} /></Link>
-      </StFlexContainer>
-      <StFlexContainer onClick={this.props.closeItem}>
-        <Chip color="primary" size="small" icon={ <CancelIcon />} label={"닫기"}/>
-      </StFlexContainer>
+      <StButtonContainer>
+        <StFlexContainer>
+          <StLink to={`list/${this.props.item.id}`}>
+            <Chip color="primary" size="small" icon={ <ArrowForwardIcon />} text={"더 보기"} onClick={this.showDetail} clickable/>
+          </StLink>
+        </StFlexContainer>
+        <StFlexContainer onClick={this.props.closeItem}>
+          <Chip size="small" onDelete={this.props.closeItem} text={"닫기"} clickable deletable />
+        </StFlexContainer>
+      </StButtonContainer>
     </StDetailCont>
+  }
+
+  showDetail = () => {
+    console.log('link to', this.props.item.id)
   }
 
   slicedContent = (contents, length) => {
@@ -116,7 +122,7 @@ class MapItem extends Component {
 
   newLineContent = (contents) => {
     return contents.split('\n').map((el, index)=>{
-      return <span key={index}>{el}<br/></span>
+      return <span key={index}>{' ' + el}<br/></span>
     })
   }
 
@@ -124,7 +130,7 @@ class MapItem extends Component {
     return (
       <StItemCont>
         <StItem onClick={this.clickEvent}>
-          <Chip color="primary" size="small" icon={<AccessTimeIcon />} label={this.props.item ? ' ' + getTimeDeltaString(this.props.item.regDate) : " "}/>
+          <Chip color="primary" size="small" icon={<AccessTimeIcon />} text={this.props.item ? ' ' + getTimeDeltaString(this.props.item.regDate) : " "}/>
           <StItemLeft />
           <StItemMiddle>
             <StItemMiddleBg />
@@ -212,7 +218,7 @@ const StTextMiddle = styled.div`
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 4px 4px 8px #c4c4c4, -4px -4px 8px #ffffff;
 
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
@@ -247,7 +253,7 @@ const StFlexContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 2px 0px;
+  margin: 2px 0px 0px 4px;
 `;
 
 const StLocationIcon = styled.div`
@@ -269,3 +275,15 @@ const StTimeIcon = styled.div`
 const StText = styled.div``;
 
 const StClose = styled.span``;
+
+const StLink = styled(Link)`
+  text-decoration: none;
+  &:focus, &:hover, &:visited, &:link, &:active {
+    text-decoration: none;
+  }
+`;
+
+const StButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
