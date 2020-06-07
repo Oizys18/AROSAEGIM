@@ -146,8 +146,10 @@ class CardItem extends Component {
   }
 
   getRegDate = () => {
-    const _regDate = getTimeDeltaString(this.props.saegim.regDate)
-    this.setState({ regDate: _regDate })
+    if (this.props.saegim.regDate !== undefined) {
+      const _regDate = getTimeDeltaString(this.props.saegim.regDate)
+      this.setState({regDate: _regDate})
+    }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
