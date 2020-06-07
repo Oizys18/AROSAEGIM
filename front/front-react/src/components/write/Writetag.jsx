@@ -43,10 +43,6 @@ export default function SimplePopover(props) {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-  // const ErrorStyle = styled.div`
-  //   font-size: 8px;
-  //   color: red;
-  // `;
   const ErrorTxt = () => {
     if (error) {
       return (
