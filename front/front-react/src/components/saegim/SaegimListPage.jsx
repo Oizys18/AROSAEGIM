@@ -120,8 +120,13 @@ class SaegimListPage extends Component {
     await this.getSaegimList()
   }
 
-  refresh = () => {
-    window.location.reload();
+  refresh = async () => {
+    this.setState({ isLoading: true })
+    
+    await this.getCurrentLocation()
+    await this.getAddrW3W()
+
+    this.setState({ isLoading: false})
   }
 
   async componentDidMount() {
