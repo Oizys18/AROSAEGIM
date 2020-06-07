@@ -269,7 +269,7 @@ class WriteSaegim extends Component {
           <CreateTag onClick={this.openPop}>
             <SimplePopover createTag={this.createTag} />
           </CreateTag>
-          <CreatePost onClick={this.writePost}>
+          <CreatePost onClick={!this.state.mapView.status && this.writePost}>
             <CreateIcon />
           </CreatePost>
         </CreateWrapper>
