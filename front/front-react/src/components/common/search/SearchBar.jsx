@@ -48,12 +48,14 @@ class SearchBar extends Component {
     this.setState({ value: e.currentTarget.value })
   }
 
-  handleSearch = (e) => {
+  handleSearch = () => {
     this.closeSelect()
+    this.props.handleSearch(this.state.select, this.state.value)
+    this.setState({ value: '' })
   }
   pressEnter = (e) => {
     if(e.keyCode === 13){
-
+      this.handleSearch()
     }
   }
 
@@ -64,13 +66,14 @@ class SearchBar extends Component {
           <StSearch>
 
             <StSelectCont>
-              <StSelectBtn onClick={this.openSelect}>{this.state.select}</StSelectBtn>
+              <StSelectBtn>{this.state.select}</StSelectBtn>
+              {/* <StSelectBtn onClick={this.openSelect}>{this.state.select}</StSelectBtn>
               <Grow in={this.state.selectOpen} mountOnEnter unmountOnExit>
                 <StSelectList>
                   <StSelectBtn id='장소' onClick={this.handleSelect}>장소</StSelectBtn>
                   <StSelectBtn id='새김' onClick={this.handleSelect}>새김</StSelectBtn>
                 </StSelectList>
-              </Grow>
+              </Grow> */}
             </StSelectCont>
 
             <Divider orientation="vertical" />
@@ -80,6 +83,7 @@ class SearchBar extends Component {
               placeholder={this.state.select === '장소' ? `${this.Msg()}` : '지도 내에서 새김 검색'}
               onFocus={this.closeSelect}
               onChange={this.handleInput}
+              value={this.state.value}
             />
             
             <Divider orientation="vertical"/>

@@ -46,12 +46,20 @@ class MapView extends Component {
       this.overlayMarkers();
     }
 
-    // 현위치로 가기 눌렀을 때
-    if(prevProps.mapCenter !== this.props.mapCenter && this.props.mapCenter === this.props.userCenter){
-      this.state.mv.panTo(this.props.mapCenter);
-      // console.log('map is in user center')
-      (this.state.userMarker && this.state.userMarker.setPosition(this.props.userCenter));
+    
+    if(prevProps.mapCenter !== this.props.mapCenter){
+      // 현위치로 가기 눌렀을 때
+      if(this.props.mapCenter === this.props.userCenter){
+        this.state.mv.panTo(this.props.mapCenter);
+        // console.log('map is in user center')
+        (this.state.userMarker && this.state.userMarker.setPosition(this.props.userCenter));
+      }
+      // 검색한 장소 클릭시
+      else if(this.props.searchOn){
+        this.state.mv.panTo(this.props.mapCenter);
+      }
     }
+    
 
     // 페이지 전환시 지도 중심, 레벨 유지
     if(prevProps.mapCenter !== this.props.mapCenter && 

@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Slide} from '@material-ui/core';
 import {FlexColumn} from '../../../styles/DispFlex';
-import DefaultButton from "../buttons/DefaultButton";
 
 // import { getPosition } from '../../../apis/GeolocationAPI';
 import {Storage} from '../../../storage/Storage';
 import SearchBar from "../search/SearchBar";
+import MapSearchList from './MapSearchList';
 import SideMenu from "../menus/SideMenu";
 import MapView from './MapView';
 import MapListItem from "./MapListItem";
@@ -24,15 +24,17 @@ class MapPage extends Component {
     super(props)
     this.state = {
       items: [],
-      loadedItems: [],
 
       mapCenter: new kakao.maps.LatLng(37.5012767241426, 127.039600248343), //멀티캠퍼스로 초기화
       level: 4,
       userCenter: new kakao.maps.LatLng(37.5012767241426, 127.039600248343), //멀티캠퍼스로 초기화
 
-      geocoder: new kakao.maps.services.Geocoder(),
+      geocoder: new kakao.maps.services.Geocoder(), //카카오 주소-좌표 변환 객체
       addr: '',
       w3w: '',
+      place: new kakao.maps.services.Places(), //카카오 장소 검색 객체
+      searchResult: [],
+      handleSearch: this.handleSearch,
 
       bounds: null,
 
@@ -61,8 +63,6 @@ class MapPage extends Component {
       handleETime: this.handleETime,
       handleApply: this.handleApply
     }
-
-    this.loadedItems = []
   }
 
   setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
@@ -184,6 +184,31 @@ class MapPage extends Component {
   handleApply = async () => {
     this.tglFilter()
   }
+  handleSearch = (select, value) => {
+    if(select === '장소'){
+      this.state.place.keywordSearch(value, (data, status, pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          // console.log(data)
+          // console.log(status)
+          // console.log(pagination)
+          this.setState({
+            searchResult: data
+          })
+        } 
+        else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+          this.context.popModal(`검색 결과가\n존재하지 않습니다.`, 'no place', 'alert')
+        } 
+        else if (status === kakao.maps.services.Status.ERROR) {
+          this.context.popModal(`검색 중\n오류가 발생했습니다`, 'no place', 'alert')
+        }
+      })
+    }
+  }
+  initSearch = () => {
+    this.setState({
+      searchResult: []
+    })
+  }
 
   fetchItem = async (bounds, center) => {
     const meter = SA.boundsToMeter({
@@ -250,7 +275,19 @@ class MapPage extends Component {
     return(
       <StMapCont height={this.context.appHeight}>
 
-        <SearchBar on={!this.state.roadView} addr={this.state.addr} w3w={this.state.w3w}/>
+        <SearchBar 
+          on={!this.state.roadView} 
+          addr={this.state.addr} 
+          w3w={this.state.w3w} 
+          handleSearch={this.handleSearch}
+        />
+        <MapSearchList 
+          on={this.state.searchResult.length > 0} 
+          searchResult={this.state.searchResult} 
+          initSearch={this.initSearch}
+          changeMapCenter={this.changeMapCenter}
+        />
+        
 
         <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
         <StViewCont>
@@ -296,33 +333,10 @@ class MapPage extends Component {
               changeMapLevel={this.changeMapLevel}
               fetchItem={this.fetchItem}
               filterVal={this.state.filterVal}
+
+              searchOn={this.state.searchResult.length > 0}
             />
           }
-
-          {/* <MapView
-            status="list"
-            mapCenter={this.state.mapCenter}
-            items={this.state.items}
-            hide={this.state.roadView}
-            usingUserCenter={this.state.usingUserCenter}
-            userCenter={this.state.userCenter}
-            changeMapCenter={this.changeMapCenter}
-            unsetUsingUserCenter={this.unsetUsingUserCenter}
-            unsetAll={this.unsetAll}
-            fetchItem={this.fetchItem}
-          />
-
-          {
-            this.state.roadView &&
-            <RoadView 
-              mapCenter={this.state.mapCenter}
-              userCenter={this.state.userCenter}
-              changeMapCenter={this.changeMapCenter}
-              items={this.state.items}
-              hide={!this.state.roadView}
-              tglView={this.tglView}
-            />
-          } */}
 
         </StViewCont>
         </Slide>
