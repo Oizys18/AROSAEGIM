@@ -153,7 +153,7 @@ class SaegimDetail extends Component {
     if (this.state.curImage !== prevState.curImage) {
       this.timer = setTimeout(this.switchImage, 5000)
     }
-    this.regTimer = setTimeout(this.getRegDate, 1000)
+    this.regTimer = setTimeout(this.getRegDate, 60000)
     if (this.context.updateFlag === true) {
       this.props.history.push('list')
       this.context.setUpdateFlag(false)
@@ -164,6 +164,12 @@ class SaegimDetail extends Component {
     clearTimeout(this.startTimer)
     clearTimeout(this.timer)
     clearTimeout(this.regTimer)
+  }
+
+  newLineContent = (contents) => {
+    return contents.split('\n').map((el, index)=>{
+      return <span key={index}>{el}<br/></span>
+    })
   }
 
   render() {
@@ -240,8 +246,8 @@ class SaegimDetail extends Component {
                 <Card color={this.state.detailColor}>
                   <StCard>
                     {this.state.isUser !== 1
-                      ? this.state.data.contents
-                      : '비밀글입니다.<br>작성자만 볼 수 있습니다.'}
+                      ? this.newLineContent(this.state.data.contents)
+                      : '비밀글입니다.<br/>작성자만 볼 수 있습니다.'}
                   </StCard>
                 </Card>
               </CardWrapper>
@@ -377,8 +383,9 @@ const BackGround = styled.div `
   width: 100%;
   
   background-image: url(${props => props.bgImage});
-  background-size: 100% 100%;
-  opacity: 0.6;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
 `
 
 const CardWrapper = styled.div `
@@ -462,11 +469,17 @@ const StPhotoIcon = styled(Photo)`
 `;
 
 const StCard = styled.div`
-  min-height: 15vh;
+  height: 25vh;
+  width: 70vw;
+  padding: 16px;
+  
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+
   word-break: break-all;
+  overflow: scroll;
 `;
 
 const StImg = styled.img`
