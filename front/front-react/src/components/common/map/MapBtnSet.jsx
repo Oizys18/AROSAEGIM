@@ -68,9 +68,10 @@ const StBtn = styled(FlexRow)`
   padding: 8px;
   border: 1px solid gray;
   border-radius: 50%;
-  background: #e6e6e6;
+  background: #FBF2EE;
 
   svg{
+    color: #404040;
     width: 20px;
     height: 20px;
   }
@@ -88,14 +89,14 @@ const StBtnCont = styled(FlexRow)`
   margin-bottom: 8px;
   border: 1px solid gray;
   border-radius: 50%;
-  background: #e6e6e6;
+  background: #FBF2EE;
 
   .MuiButtonBase-root{
     padding: 8px;
   }
 
   svg{
-    color: ${props => props.isUC ? "#6699ff" : "black"};
+    color: ${props => props.isUC ? "#6699ff" : "#404040"};
     width: 20px;
     height: 20px;
   }

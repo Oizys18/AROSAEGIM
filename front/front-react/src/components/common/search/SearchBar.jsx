@@ -75,7 +75,7 @@ class SearchBar extends Component {
 
             <Divider orientation="vertical" />
 
-            <InputBase 
+            <StInputBase 
               type='search'
               placeholder={this.state.select === '장소' ? `${this.Msg()}` : '지도 내에서 새김 검색'}
               onFocus={this.closeSelect}
@@ -116,7 +116,7 @@ const StSearch = styled.div`
 
   width: 100%;
   height: 100%;
-  background: white;
+  background: #FBF2EE;
 
   border: 2px solid gray;
   border-radius: 5px;
@@ -141,4 +141,10 @@ const StSelectList = styled(FlexColumn)`
 
   border: 2px solid gray;
   border-radius: 4px;
+`;
+
+const StInputBase = styled(InputBase)`
+  .MuiInputBase-input{
+    padding: 3px;
+  }
 `;

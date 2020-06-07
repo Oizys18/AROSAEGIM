@@ -48,7 +48,7 @@ const StTopCont = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(251, 242, 238, 0.85);
   
   width: 100%;
   height: 48px;
