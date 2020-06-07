@@ -42,9 +42,7 @@ class MapView extends Component {
       this.state.centerMarker.setImage(newMarkerImage)
 
       if (!this.state.write.moving) {
-        const center = this.state.mv.getCenter()
-        const w3w = await CtoW(center.getLat(), center.getLng())
-        this.setState({w3w: w3w.data.words})
+        this.updateW3W();
       }
     }
   }
@@ -64,6 +62,7 @@ class MapView extends Component {
     }
     const _mapView = new kakao.maps.Map(_cont, _options)
     kakao.maps.event.addListener(_mapView, "center_changed", this.handleCenterChange)
+    kakao.maps.event.addListener(_mapView, "bounds_changed", this.handleBoundsChange)
     kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
     kakao.maps.event.addListener(_mapView, "dragend", this.handleDragEnd)
 
@@ -93,6 +92,12 @@ class MapView extends Component {
     this.state.centerMarker.setPosition(center);
   }
 
+  handleBoundsChange = () => {
+    if (!this.state.write.moving) {
+      this.updateW3W();
+    }
+  }
+
   handleDragStart = () => {
     this.setState({write: {moving: true}})
   };
@@ -101,6 +106,12 @@ class MapView extends Component {
     this.setState({write: {moving: false}})
     this.props.changeMapCenter(this.state.mv.getCenter())
   };
+
+  updateW3W = async () => {
+    const center = this.state.mv.getCenter()
+    const w3w = await CtoW(center.getLat(), center.getLng())
+    this.setState({w3w: w3w.data.words})
+  }
 
   overlayCurPosition = () => {
     const markerImage = this.getMarkerImage()
@@ -184,7 +195,7 @@ const StButtonWrapper = styled.div`
 
 const StTextWrapper = styled.div`
   position: absolute;
-  bottom: 56px;
+  top: 16px;
   z-index: 15;
   
   display: flex;
