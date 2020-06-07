@@ -155,9 +155,9 @@ class SaegimDetail extends Component {
       this.timer = setTimeout(this.switchImage, 5000)
     }
     this.regTimer = setTimeout(this.getRegDate, 60000)
-    if (this.context.updateFlag === true) {
+    if (this.context.updateFlag === 1) {
       this.props.history.push('list')
-      this.context.setUpdateFlag(false)
+      this.context.setUpdateFlag(0)
     }
   }
 

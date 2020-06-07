@@ -67,9 +67,9 @@ class Comment extends Component{
       this.setState({
         updateFlag: false
       })
-    } else if (this.context.updateFlag === true) {
+    } else if (this.context.updateFlag === 2) {
       this.getComments()
-      this.context.setUpdateFlag(false)
+      this.context.setUpdateFlag(0)
     }
   }
 
@@ -83,7 +83,6 @@ class Comment extends Component{
           userid={comment.userId}
           id={comment.id}
           key={i}
-          handleDelete={this.handleDelete}
         />
       )
     })
@@ -97,7 +96,7 @@ class Comment extends Component{
         </StCommentList>
         <StCommentInput>
           <CommentInput value={this.state.contents} onChange={this.handleInput} />
-          <SmallButton text='등록' onClick={this.handleSubmit}/>
+          <SmallButton text='등록' onClick={this.handleSubmit} />
         </StCommentInput>
       </div>
     );
