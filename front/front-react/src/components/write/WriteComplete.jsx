@@ -8,10 +8,10 @@ class WriteComplete extends Component {
       <Container>
         <h1>작성완료!</h1>
         <ButtonWrapper>
-          <StLink to={{ pathname: `/list//` }}>
+          <StLink to={{ pathname: `/list` }}>
             <DefaultButton text="목록보기" />
           </StLink>
-          <StLink to={{ pathname: `/list/${this.props.id}/` }}>
+          <StLink to={{ pathname: `/list/${this.props.id}` }}>
             <DefaultButton text="작성 글 보기" />
           </StLink>
         </ButtonWrapper>
