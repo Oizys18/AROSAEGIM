@@ -29,7 +29,8 @@ class SaegimDetail extends Component {
       activeStep: 0,
       maxSteps: 0,
       detailColor: "linear-gradient(#FBF2EE,#ffffff38),linear-gradient(-45deg,#f3b3a6,#ffffff00),linear-gradient(45deg,#ff6b6b,#ffffff40)",
-      user: {}
+      user: {},
+      isUser: 0
     };
     this.goBack = this.goBack.bind(this);
     this.setUpdateLike = this.setUpdateLike.bind(this);
@@ -77,9 +78,25 @@ class SaegimDetail extends Component {
 
     const _user = await getUserByID(this.state.data.userId)
     await this.setStateAsync({ user: _user })
+  }
 
+  getRegDate = () => {
     const _regDate = getTimeDeltaString(this.state.data.regDate)
     this.setState({ regDate: _regDate })
+  }
+
+  setIsUser = () => {
+    if (this.state.data.secret) {
+      if (this.state.userId === this.state.data.userId) {
+        this.setStateAsync({
+          isUser: 2
+        })
+      } else {
+        this.setState({
+          isUser: 1
+        })
+      }
+    }
   }
 
    switchImage = () => {
@@ -105,10 +122,12 @@ class SaegimDetail extends Component {
         userId: _userInfo.id
       })
     }
-    await this.getSaegimDetail();
+    await this.getSaegimDetail()
+    this.getRegDate()
     this.setStateAsync({
       maxSteps: this.state.data.images.length
     })
+    this.setIsUser()
   }
 
   setUpdateLike(flag) {
@@ -127,6 +146,7 @@ class SaegimDetail extends Component {
     if (this.state.curImage !== prevState.curImage) {
       this.timer = setTimeout(this.switchImage, 5000)
     }
+    this.timer = setTimeout(this.getRegDate, 1000)
   }
 
   componentWillUnmount() {
@@ -192,7 +212,7 @@ class SaegimDetail extends Component {
               </StCont>
           </TopBar>
           <Contents>
-            {this.state.data.images.length > 0
+            {(this.state.data.images.length > 0 && this.state.isUser !== 1)
               && <BackGround bgImage={this.state.data.images[this.state.curImage].source}/>
             }
             <W3WChip>
@@ -203,7 +223,11 @@ class SaegimDetail extends Component {
             </W3WChip>
             <CardWrapper>
               <Card color={this.state.detailColor}>
-                <StCard>{this.state.data.contents}</StCard>
+                <StCard>
+                  {this.state.isUser !== 1
+                    ? this.state.data.contents
+                    : '비밀글입니다.<br>작성자만 볼 수 있습니다.'}
+                </StCard>
               </Card>
             </CardWrapper>
             <ContentsBot>
@@ -304,10 +328,14 @@ const StNick = styled.div`
 `;
 
 const W3WChip = styled.div`
-  margin: 0 4vh 4vh 4vh;
   justify-content: space-between;
   align-items: center;
   display: flex;
+  
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
   
   .MuiChip-root{
     background-color: #fafafa;
@@ -334,11 +362,11 @@ const BackGround = styled.div `
   
   background-image: url(${props => props.bgImage});
   background-size: 100% 100%;
-  opacity: 0.9;
+  opacity: 0.6;
 `
 
 const CardWrapper = styled.div `
-  max-width: 80%;
+  min-width: 80%;
 `
 
 const BotWrapper = styled.div`
@@ -432,6 +460,10 @@ const StImg = styled.img`
 
 const StMobileStepper = styled(MobileStepper)`
   border-radius: 0 0 15px 15px;
+  
+  &.MuiMobileStepper-dotActive{
+    color: #ff6262;
+  }
 `;
 
 const ImageWrapper = styled.div`
