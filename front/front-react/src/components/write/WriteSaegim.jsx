@@ -175,13 +175,13 @@ class WriteSaegim extends Component {
               labelText={this.state.locked ? "비공개" : "공개"}
               labelPlacement="start"
             />
-            <ErrorMsg />
+            <ErrorMsg></ErrorMsg>
           </Bottom>
           <Tag>
             {this.state.tags.map((tag, i) => {
               return (
-                <div style={{ margin: "1px" }}>
-                  <Chip size="small" text={tag} key={i} />
+                <div style={{ margin: "1px" }} key={i}>
+                  <Chip size="small" text={tag} />
                 </div>
               );
             })}
