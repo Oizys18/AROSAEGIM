@@ -9,69 +9,95 @@ class TabPanel extends Component {
     super(props);
     this.state = {
       emptyVal: ['작성한', '덧새긴', '되새긴'],
+      isProps: false
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      isProps: true
+    })
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (this.props.isLoading === false) {
+      this.setState({
+        isProps: true
+      })
     }
   }
 
   render() {
-    const PrintList = this.props.data.map((saegim, i) => {
-      if (this.props.value === 0) {
-      return (
-        <SaegimItem key={i}>
-          <StLink to={`list/${saegim.id}`}>
-            <StW3W>
-              {saegim.w3w}
-              <StTime>
-                <StAccessTimeIcon />
-                <div>{getTimeDeltaString(saegim.regDate)}</div>
-              </StTime>
-            </StW3W>
-            <StContents>{saegim.contents}</StContents>
-          </StLink>
-        </SaegimItem>
-      )} else if (this.props.value === 1) {
-        return (
-          <SaegimItem key={i}>
-            <StLink to={`list/${saegim.id}`}>
-              <StW3W>
-              {saegim.w3w}
-              <StTime>
-                <StAccessTimeIcon />
-                <div>{getTimeDeltaString(saegim.regDate)}</div>
-              </StTime>
-              </StW3W>
-            <StContents>{saegim.contents}</StContents>
-            </StLink>
-          </SaegimItem>
-        )
-      } else if (this.props.value === 2) {
-        return (
-          <SaegimItem key={i}>
-            <StLink to={`list/${saegim.saegimId}`}>
-              <StW3W>
-              <StContents>{saegim.contents}</StContents>
-              <StTime>
-                <StAccessTimeIcon />
-                <div>{getTimeDeltaString(saegim.regDate)}</div>
-              </StTime>
-              </StW3W>
-            </StLink>
-          </SaegimItem>
-        )
-      }
-    });
+    if (this.state.isProps === false) {
+      return <div/>
+    } else {
+      const PrintList = this.props.data.map((saegim, i) => {
+        if (this.props.value === 0) {
+          return (
+            <SaegimItem key={i}>
+              <StLink to={`list/${saegim.id}`}>
+                <StW3W>
+                  {saegim.w3w}
+                  <StTime>
+                    <StAccessTimeIcon/>
+                    {saegim.regDate !== undefined &&
+                    <div>{getTimeDeltaString(saegim.regDate)}</div>
+                    }
+                  </StTime>
+                </StW3W>
+                <StContents>{saegim.contents}</StContents>
+              </StLink>
+            </SaegimItem>
+          )
+        } else if (this.props.value === 1) {
+          return (
+            <SaegimItem key={i}>
+              <StLink to={`list/${saegim.id}`}>
+                <StW3W>
+                  {saegim.w3w}
+                  <StTime>
+                    <StAccessTimeIcon/>
+                    {saegim.regDate !== undefined &&
+                    <div>{getTimeDeltaString(saegim.regDate)}</div>
+                    }
+                  </StTime>
+                </StW3W>
+                <StContents>{saegim.contents}</StContents>
+              </StLink>
+            </SaegimItem>
+          )
+        } else if (this.props.value === 2) {
+          return (
+            <SaegimItem key={i}>
+              <StLink to={`list/${saegim.saegimId}`}>
+                <StW3W>
+                  <StContents>{saegim.contents}</StContents>
+                  <StTime>
+                    <StAccessTimeIcon/>
+                    {saegim.regDate !== undefined &&
+                    <div>{getTimeDeltaString(saegim.regDate)}</div>
+                    }
+                  </StTime>
+                </StW3W>
+              </StLink>
+            </SaegimItem>
+          )
+        }
+      });
 
-    const EmptyList =
+      const EmptyList =
         <SaegimItem>
-            <div>{this.state.emptyVal[this.props.value]} 글이 없습니다.</div>
+          <div>{this.state.emptyVal[this.props.value]} 글이 없습니다.</div>
         </SaegimItem>
 
-    return (
-      <div
-        hidden={this.props.value !== this.props.index}
-      >
-        {this.props.data.length > 0 ? PrintList : EmptyList}
-      </div>
-    )
+      return (
+        <div
+          hidden={this.props.value !== this.props.index}
+        >
+          {this.props.data.length > 0 ? PrintList : EmptyList}
+        </div>
+      )
+    }
   }
 }
 

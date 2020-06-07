@@ -9,13 +9,21 @@ import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
 import TabPanel from "./TabPanel";
 import MyPageMenu from "./MyPageMenu";
 import { getCommentedSaegim, getLikedSaegim, getCreatedSaegim } from "../../apis/UserAPI"
+import { getSaegimById } from "../../apis/SaegimAPI";
 import { getUserByEmail } from "../../apis/AccountAPI";
-import {getSaegimDetailById} from "../../apis/SaegimAPI";
 import { Storage } from "../../storage/Storage";
+import Loading from "../common/background/Loading";
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {main: '#B98B82'},
+    secondary: {main: '#ffffff00'}
+  },
+});
 
 class MyPage extends Component {
   listItem;
-
   constructor(props) {
     super(props);
     this.state = {
@@ -33,7 +41,8 @@ class MyPage extends Component {
       likedData: [],
       commentedData: [],
       temp: [],
-      userInfo: {}
+      userInfo: {},
+      isLoading: true
     }
   };
 
@@ -50,104 +59,137 @@ class MyPage extends Component {
     })
   };
 
-  async getData() {
-    const _userId = this.context.userInfo.id
+  getSaegim = async () => {
+    const _userId = this.state.userId
+    const _data = await getCreatedSaegim(_userId)
     this.setState({
-      createdData: await getCreatedSaegim(_userId)
+      createdData: _data
     })
+  }
+
+  getLike = async () => {
+    const _userId = this.state.userId
     const _data = await getLikedSaegim(_userId)
+    console.log(_data)
     const _temp = []
     _data.map( async (d) => {
-      const _res = await getSaegimDetailById(d.saegimId)
+      const _res = await getSaegimById(d.saegimId)
       _temp.push(_res)
     })
     this.setState({
       likedData: _temp
     })
+  }
+
+  getComment = async () => {
+    const _userId = this.context.userInfo.id
+    const _data = await getCommentedSaegim(_userId)
     this.setState({
-      commentedData: await getCommentedSaegim(_userId)
+      commentedData: _data
+    })
+  }
+
+  getData = async () => {
+    await this.getSaegim()
+    await this.getLike()
+    await this.getComment()
+  }
+
+  getUserId = async () => {
+   const _email = localStorage.getItem('ARSG email')
+    this.setState({
+      userId: (await getUserByEmail(_email)).data.id
     })
   }
 
   async componentDidMount() {
-    // const _email = localStorage.getItem('ARSG email')
-    // this.setState({
-    //     userInfo: (await getUserByEmail(_email)).data
-    //   })
+    await this.getUserId()
     await this.getData()
+
+    this.setState({
+      isLoading: false
+    })
   }
 
   render() {
-    const PrintOptions = this.state.options.map((option) => {
-        return (
-          <option value={option.value} key={option.text}>{option.text}</option>
-        )
-      }
-    );
-
-    return (
-      <div>
-        <Wrapper>
-          <UserInfo>
-            <User>
-              <UserName>
-                {this.context.userInfo.name}
-              </UserName>
-              <UserEmail>
-                {this.context.userInfo.email}
-              </UserEmail>
-            </User>
-            <UserSaegim>
-              <Tabs
-                value={this.state.currentTab}
-                textColor="primary"
-                indicatorColor="none"
-                onChange={this.tabChange}
+    if (this.state.isLoading === true) {
+      return <Loading/>
+    } else {
+      const PrintOptions = this.state.options.map((option) => {
+          return (
+            <option value={option.value} key={option.text}>{option.text}</option>
+          )
+        }
+      );
+      return (
+        <MuiThemeProvider theme={theme}>
+        <div>
+          <Wrapper>
+            <UserInfo>
+              <User>
+                <UserName>
+                  {this.context.userInfo.name}
+                </UserName>
+                <UserEmail>
+                  {this.context.userInfo.email}
+                </UserEmail>
+              </User>
+              <UserSaegim>
+                <Tabs
+                  value={this.state.currentTab}
+                  textColor="primary"
+                  indicatorColor="secondary"
+                  onChange={this.tabChange}
+                >
+                  <Tab icon={<CreateOutlinedIcon/>} value={0}/>
+                  <Tab icon={<FavoriteBorderOutlinedIcon/>} value={1}/>
+                  <Tab icon={<MessageOutlinedIcon/>} value={2}/>
+                </Tabs>
+              </UserSaegim>
+            </UserInfo>
+            <SaegimInfo value={this.state.currentTab}>
+              <ListInfo>
+                <ListTitle>{MyPageMenu[this.state.currentTab].title}</ListTitle>
+                <StSelect
+                  autowidth
+                  value={this.state[MyPageMenu[this.state.currentTab].value]}
+                  onChange={this.selectChange}
+                  inputProps={{
+                    name: MyPageMenu[this.state.currentTab].value,
+                    id: MyPageMenu[this.state.currentTab].value,
+                  }}
+                >
+                  {PrintOptions}
+                </StSelect>
+              </ListInfo>
+              <SaegimShortList
+                ref={div => (this.listItem = div)}
               >
-                <Tab icon={<CreateOutlinedIcon/>} value={0} />
-                <Tab icon={<FavoriteBorderOutlinedIcon/>} value={1} />
-                <Tab icon={<MessageOutlinedIcon/>} value={2} />
-              </Tabs>
-            </UserSaegim>
-          </UserInfo>
-          <SaegimInfo value={this.state.currentTab}>
-            <ListInfo>
-            <ListTitle>{MyPageMenu[this.state.currentTab].title}</ListTitle>
-              <StSelect
-                autowidth
-                value={this.state[MyPageMenu[this.state.currentTab].value]}
-                onChange={this.selectChange}
-                inputProps={{
-                  name: MyPageMenu[this.state.currentTab].value,
-                  id: MyPageMenu[this.state.currentTab].value,
-                }}
-              >
-                {PrintOptions}
-              </StSelect>
-            </ListInfo>
-            <SaegimShortList
-              ref={div => (this.listItem = div)}
-            >
-              <TabPanel
-                value={this.state.currentTab}
-                index={0}
-                data={this.state.createdData}
-              />
-              <TabPanel
-                value={this.state.currentTab}
-                index={1}
-                data={this.state.likedData}
-              />
-              <TabPanel
-                value={this.state.currentTab}
-                index={2}
-                data={this.state.commentedData}
-              />
-            </SaegimShortList>
-          </SaegimInfo>
-        </Wrapper>
-      </div>
-    );
+                <TabPanel
+                  isLoading={this.state.isLoading}
+                  value={this.state.currentTab}
+                  index={0}
+                  data={this.state.createdData}
+                />
+                <TabPanel
+                  isLoading={this.state.isLoading}
+                  value={this.state.currentTab}
+                  index={1}
+                  data={this.state.likedData}
+                />
+                <TabPanel
+                  isLoading={this.state.isLoading}
+                  value={this.state.currentTab}
+                  index={2}
+                  data={this.state.commentedData}
+                />
+              </SaegimShortList>
+            </SaegimInfo>
+          </Wrapper>
+        </div>
+        </MuiThemeProvider>
+      );
+    }
   }
 }
 
@@ -165,7 +207,7 @@ const Wrapper = styled.div`
 const UserInfo = styled.div`
   position: relative;
   top: 8%;
-  padding: 16px 16px 0px 16px;
+  padding: 16px;
   background-color: #f1f1f1;
   width: 80%;
   height: 10%;
@@ -203,8 +245,9 @@ const SaegimInfo = styled.div`
   
   margin-top: 8px;
   padding: 16px;
+  
+  background: linear-gradient(to right bottom, #FBF2EE 10%, #f4c6ba 150%); 
 
-  background-color: #f1f1f1;
   border-radius: .4em;
 
   display: flex;
@@ -218,7 +261,7 @@ const SaegimInfo = styled.div`
     height: 0;
     left: ${props => ([20, 43, 65][props.value])}%;
     border: 24px solid transparent;
-    border-bottom-color: #f1f1f1;
+    border-bottom-color: #FBF2EE;
     border-top: 0;
     margin-top: -32px;
     transition: all ease .7s;
