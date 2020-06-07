@@ -63,7 +63,6 @@ const StProfileCont = styled(FlexColumn)`
 
   .label {
     margin-top: 0.4rem;
-    font-family: 'Jua', sans-serif;
     font-size: 110%;
     /* color: white; */
     /* text-shadow: 0 0 10px gray; */

@@ -14,8 +14,7 @@ export const StFormCont = styled(FlexColumn)`
   /* position: relative; */
   /* height: 100vh; */
   height: ${props => props.height}px;
-  background: rgba(255, 255, 255, 0.9);
-  /* background: linear-gradient(to bottom right, #ffcc66 0%, #ff9999 100%); */
+  background: rgba(251, 242, 238, 1);
   
   /* background: rgba(0, 0, 0, 0.7); */
   padding: 16px;
@@ -28,9 +27,15 @@ export const StBtnCont = styled(FlexRow)`
   align-items: center;
 
   margin: 16px;
+
+  .MuiButtonBase-root{
+    background: linear-gradient(to top right,#F8DCD4 0%,#FAE7E1 100%);
+    color: #404040;
+  }
 `;
 
 export const StBtn = styled(DefaultButton)`
+  
 `;
 
 export const StLinkCont = styled(FlexColumn)`
@@ -38,9 +43,10 @@ export const StLinkCont = styled(FlexColumn)`
 
   a{
     font-weight: bold;
+    font-size: 110%;
     text-decoration: none;
     &:visited, &:link{
-      color: #0066cc;
+      color: #B98B82;
     }
   }
 `;

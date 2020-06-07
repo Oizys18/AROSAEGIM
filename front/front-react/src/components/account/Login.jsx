@@ -170,6 +170,9 @@ Login.contextType = Storage;
 
 const StCheckBox = styled(FormControlLabel)`
   & .Mui-checked{
-    color: green;
+    color: #F3B3A6;
+  }
+  .MuiTypography-root{
+    color: gray;
   }
 `;

@@ -15,6 +15,7 @@ class LogoAnimation extends Component {
           <div className="word">여기에</div>
           <div className="word">있었다</div>
           <div className="word">아로새김</div>
+          <div className="word"></div>
         </div>
       </StAnima>
       </Zoom>
@@ -74,7 +75,7 @@ const StAnima = styled.div`
 
   .words{
     color: white;
-    text-shadow: 0 0 10px gray;
+    text-shadow: 0 0 5px gray;
     /* text-align:center; */
     display: flex;
     width: 80%;
@@ -84,11 +85,11 @@ const StAnima = styled.div`
     margin-top: 10px;
 
     .word{
-      /* font-family: 'Baloo Bhaina 2', cursive;
-      font-weight: 600; */
       opacity: 0;
       position: absolute;
-      font-size: 150%;
+      padding-top: 3px;
+      font-family: 'BMEULJIRO';
+      font-size: 28px;
       display: flex;
       align-items: center;
     }
