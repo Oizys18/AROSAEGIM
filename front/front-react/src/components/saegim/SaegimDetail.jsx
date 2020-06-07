@@ -221,7 +221,7 @@ class SaegimDetail extends Component {
             <BotWrapper>
               <Registered>
                 <StAccessTime />
-                {getTimeDeltaString(this.state.data.regDate)}
+                {this.state.data && getTimeDeltaString(this.state.data.regDate)}
               </Registered>
               <Likes>
                 <div>
