@@ -4,14 +4,13 @@ import styled from "styled-components";
 import imgLeft from "../../../assets/balloon/balloon-left-filled@2x.png";
 import imgMiddle from "../../../assets/balloon/balloon-middle-filled@2x.png";
 import imgRight from "../../../assets/balloon/balloon-right-filled@2x.png";
-import { Slide, Chip } from "@material-ui/core";
+import { Chip } from "@material-ui/core";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import CancelIcon from '@material-ui/icons/Cancel';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { getTimeDeltaString } from "../time/TimeFunctinon";
 import { Link } from "react-router-dom";
-import DefaultButton from "../buttons/DefaultButton";
 import locationPin from "../../../assets/point/point-filled@2x.png";
 import timeIcon from "../../../assets/time/time@2x.png";
 
