@@ -116,8 +116,8 @@ class MapItem extends Component {
   }
 
   newLineContent = (contents) => {
-    return contents.split('\n').map(el=>{
-      return <span>{el}<br/></span>
+    return contents.split('\n').map((el, index)=>{
+      return <span key={index}>{el}<br/></span>
     })
   }
 
