@@ -249,7 +249,6 @@ const StSelect = styled(Select)`
   }
   
   .MuiSelect-select {
-    background-color: #FBF2EE;
     border-radius: 5px;
     padding: 8px 24px 8px 8px; 
   }
@@ -269,14 +268,13 @@ const StMenu = styled.div`
   justify-content: space-between;
   align-items: center;
   
-  background-color: #FBF2EE;
+  background: linear-gradient(45deg, #ffffff, #F4BDB0);
   padding: 8px 16px 8px 16px;
   border-radius: 50px;
   
 `;
 
 const StButton = styled.div`
-  background-color: #FBF2EE;
   width: 30px;
   height: 30px;
   margin-left: 8px;
@@ -286,7 +284,7 @@ const StButton = styled.div`
   align-items: center;
   
   svg{
-    color: #515151;
+    color: white;
     width: 25px;
     height: 35px;
   }
