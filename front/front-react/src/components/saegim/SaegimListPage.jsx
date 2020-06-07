@@ -216,12 +216,6 @@ class SaegimListPage extends Component {
               </StList>
             </Wrapper>
           </Slide>
-
-          {/*<StMenu>*/}
-
-
-
-          {/*</StMenu>*/}
         </StCont>
       );
     }
@@ -242,18 +236,6 @@ const Wrapper = styled.div `
   flex-direction: column;
   height: ${props => props.height}px;
 `
-
-// const StMenu = styled.div`
-//   position: absolute;
-//   bottom: 12%;
-//   left: 50%;
-//   transform: translateX(-50%);
-//   width: 80vw;
-//   display: flex;
-//   justify-content: flex-start;
-//   align-items: center;
-//
-// `;
 
 const StList = styled.div `
   margin-top: 48px;
