@@ -130,7 +130,7 @@ class MyPage extends Component {
     } else {
       const PrintOptions = this.state.options.map((option) => {
           return (
-            <MenuItem value={option.value} key={option.text}>{option.text}</MenuItem>
+            <StMenuItem value={option.value} key={option.text}>{option.text}</StMenuItem>
           )
         }
       );
@@ -221,11 +221,13 @@ const UserInfo = styled.div`
   position: relative;
   top: 8%;
   padding: 16px;
-  background-color: #f1f1f1;
+ 
   width: 80%;
   height: 10%;
   margin-bottom: 24px;
   border-radius: 0.4em;
+  
+  background: linear-gradient(to bottom, #f1f1f1, #FBF2EE);
 `;
 
 const UserEmail = styled.span`
@@ -234,15 +236,11 @@ const UserEmail = styled.span`
 const UserName = styled.span`
 `;
 
-const SaegimCount = styled.div`
-  font-size: 0.8rem;
-`;
-
 const UserSaegim = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  margin-top: 8px;
+  margin-top: 16px;
 `;
 
 const User = styled.div`
@@ -259,8 +257,8 @@ const SaegimInfo = styled.div`
   margin-top: 8px;
   padding: 16px;
   
-  background: linear-gradient(to right bottom, #FBF2EE 10%, #f4c6ba 150%); 
-
+  background: linear-gradient(to bottom, #fbf2ee 20%, #f4c6ba 200%); 
+ 
   border-radius: .4em;
 
   display: flex;
@@ -290,7 +288,6 @@ const SaegimShortList = styled.div`
   overflow: auto;
 `;
 
-
 const ListInfo = styled.div`
   display: flex;
   justify-content: space-between;
@@ -299,5 +296,11 @@ const ListInfo = styled.div`
   padding: 8px;
 `;
 
-const ListTitle = styled.div``;
+const ListTitle = styled.div`
+  margin-left: 8px;
+`;
 
+const StMenuItem = styled(MenuItem)`
+  font-size: 0.9rem;
+  font-family: 'Noto Serif KR', serif
+`;

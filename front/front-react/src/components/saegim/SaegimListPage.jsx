@@ -185,7 +185,7 @@ class SaegimListPage extends Component {
 
       const PrintOptions = this.state.options.map((option) => {
           return (
-            <MenuItem value={option.idx} key={option.idx}>{option.text}</MenuItem>
+            <StMenuItem value={option.idx} key={option.idx}>{option.text}</StMenuItem>
           )
         }
       );
@@ -252,6 +252,10 @@ const StSelect = styled(Select)`
     border-radius: 5px;
     padding: 8px 24px 8px 8px; 
   }
+  
+  &.MuiInput-underline:after{
+    border-bottom: none;
+  }
 `;
 
 const StMenu = styled.div`
@@ -298,4 +302,8 @@ const StLocation = styled.div`
   max-width: 40vw;
   overflow: hidden;
   white-space: nowrap;
+`;
+
+const StMenuItem = styled(MenuItem)`
+  font-size: 0.9rem;
 `;

@@ -135,6 +135,8 @@ const StW3W = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
+  
+  color: gray;
 `;
 
 const StContents = styled.div`
