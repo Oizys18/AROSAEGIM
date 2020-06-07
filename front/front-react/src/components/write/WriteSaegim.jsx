@@ -143,15 +143,15 @@ class WriteSaegim extends Component {
   };
 
   render() {
-    // const ErrorMsg = () => {
-    //   if (this.state.error === 1) {
-    //     return <Error>텍스트를 입력해주세요!</Error>;
-    //   } else if (this.state.error === 2) {
-    //     return <Error>이미지는 최대 5장까지 입니다!</Error>;
-    //   } else {
-    //     return <Error>　</Error>;
-    //   }
-    // };
+    const ErrorMsg = () => {
+      if (this.state.error === 1) {
+        return <Error>텍스트를 입력해주세요!</Error>;
+      } else if (this.state.error === 2) {
+        return <Error>이미지는 최대 5장까지 입니다!</Error>;
+      } else {
+        return <Error>　</Error>;
+      }
+    };
     return (
       <Wrapper>
         <Top>
@@ -175,7 +175,7 @@ class WriteSaegim extends Component {
               labelText={this.state.locked ? "비공개" : "공개"}
               labelPlacement="start"
             />
-            <Error>{this.state.error ? "텍스트를 입력해주세요" : ""}</Error>
+            <ErrorMsg></ErrorMsg>
           </Bottom>
           <Tag>
             {this.state.tags.map((tag, i) => {
