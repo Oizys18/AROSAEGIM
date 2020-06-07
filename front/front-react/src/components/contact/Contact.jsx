@@ -25,41 +25,39 @@ class Contact extends Component {
         </BackButton>
         <Header>
           <Title>개발자에게 메일보내기</Title>
-          <Content>
-            <a href="mailto:hello@saegim.me">hello@saegim.me</a>
-          </Content>
+          <Content href="mailto:hello@saegim.me">hello@saegim.me</Content>
         </Header>
         <MemberCard>
           <ProfileImg src="https://avatars3.githubusercontent.com/u/37648340?s=120&v=4" />
-          <Message>
+          <Message href="https://github.com/Oizys18">
             <Name>양찬우 @Oizys18</Name>
             <Role>Frontend Developer</Role>
           </Message>
         </MemberCard>
         <MemberCard>
           <ProfileImg src="https://avatars0.githubusercontent.com/u/52682603?s=120&v=4" />
-          <Message>
+          <Message href="https://github.com/soulgchoi">
             <Name>최솔지 @soulgchoi</Name>
             <Role>Frontend Developer</Role>
           </Message>
         </MemberCard>
         <MemberCard>
           <ProfileImg src="https://avatars1.githubusercontent.com/u/40153405?s=120&v=4" />
-          <Message>
+          <Message href="https://github.com/EXTC27">
             <Name>김신재 @EXTC27</Name>
             <Role>Frontend Developer</Role>
           </Message>
         </MemberCard>
         <MemberCard>
           <ProfileImg src="https://avatars3.githubusercontent.com/u/51773494?s=120&v=4" />
-          <Message>
+          <Message href="https://github.com/kingjky">
             <Name>전경윤 @kingjky</Name>
             <Role>Backend Developer</Role>
           </Message>
         </MemberCard>
         <MemberCard>
           <ProfileImg src="https://avatars3.githubusercontent.com/u/52501513?s=120&v=4" />
-          <Message>
+          <Message href="https://github.com/ghleokim">
             <Name>김건호 @ghleokim</Name>
             <Role>Frontend Developer</Role>
           </Message>
@@ -98,15 +96,21 @@ const ProfileImg = styled.img`
   height: 50px;
   width: 50px;
 `;
-const Message = styled.div`
+const Message = styled.a`
   justify-content: center;
   align-items: center;
   display: flex;
   flex-direction: column;
+  text-decoration: none;
+  &:visited {
+    color: black;
+  }
 `;
 const Name = styled.div`
   justify-content: flex-start;
   display: flex;
+  font-weight: bolder;
+  font-size:16px;
 `;
 const Role = styled.div`
   justify-content: flex-start;
@@ -134,4 +138,10 @@ const Header = styled.div`
   display: flex;
 `;
 const Title = styled.div``;
-const Content = styled.a``;
+const Content = styled.a`
+  color: black;
+  text-decoration: none;
+  &:visited {
+    color: black;
+  }
+`;
