@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {Link} from "react-router-dom";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import { getTimeDeltaString } from "../common/time/TimeFunctinon"
+import PinIcon from "../../assets/PinIcon";
 
 class TabPanel extends Component {
   constructor(props) {
@@ -37,7 +38,10 @@ class TabPanel extends Component {
             <SaegimItem key={i}>
               <StLink to={`list/${saegim.id}`}>
                 <StW3W>
+                  <W3W>
+                  <PinIcon />
                   {saegim.w3w}
+                  </W3W>
                   <StTime>
                     <StAccessTimeIcon/>
                     {saegim.regDate !== undefined &&
@@ -54,7 +58,10 @@ class TabPanel extends Component {
             <SaegimItem key={i}>
               <StLink to={`list/${saegim.id}`}>
                 <StW3W>
+                  <W3W>
+                  <PinIcon />
                   {saegim.w3w}
+                  </W3W>
                   <StTime>
                     <StAccessTimeIcon/>
                     {saegim.regDate !== undefined &&
@@ -139,4 +146,9 @@ const StContents = styled.div`
 
 const StAccessTimeIcon = styled(AccessTimeIcon)`
   margin-right: 4px;
+`;
+
+const W3W = styled.div`
+  display: flex;
+  justify-content: center;
 `;

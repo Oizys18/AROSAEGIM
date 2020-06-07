@@ -283,6 +283,7 @@ const SaegimInfo = styled.div`
 
 const StSelect = styled(Select)`
   font-size: 0.9rem;
+  font-family: 'Noto Serif KR', serif
 `;
 
 const SaegimShortList = styled.div`
