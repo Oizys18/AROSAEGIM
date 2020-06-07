@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import Select from "@material-ui/core/Select";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import { Select, Tabs, Tab, MenuItem } from "@material-ui/core"
 import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
 import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
 import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
@@ -29,13 +27,12 @@ class MyPage extends Component {
     this.state = {
       userId: 1,
       currentTab: 0,
-      mySaegim: 'time',
-      like: 'time',
-      commented: 'time',
+      mySaegim: 'old',
+      like: 'old',
+      commented: 'old',
       options: [
-        { value: 'time', text: '시간 순으로 보기'},
-        { value: 'location', text: '장소 별로 보기'},
-        { value: 'tag', text: '태그 별로 보기'}
+        { value: 'old', text: '등록순'},
+        { value: 'new', text: '최신순'},
       ],
       createdData: [],
       likedData: [],
@@ -46,11 +43,27 @@ class MyPage extends Component {
     }
   };
 
-  selectChange(e) {
+  selectChange = (e) => {
     const _name = e.target.name;
     this.setState({
       [_name]: e.target.value
     })
+
+    if (e.target.value !== this.state[_name].value) {
+      if (_name === 'mySaegim') {
+        this.setState({
+          createdData: this.state.createdData.reverse()
+        })
+      } else if (_name === 'like') {
+        this.setState({
+          likedData: this.state.likedData.reverse()
+        })
+      } else if (_name === 'commented') {
+        this.setState({
+          commentedData: this.state.commentedData.reverse()
+        })
+      }
+    }
   };
 
   tabChange = async (e, val) => {
@@ -117,7 +130,7 @@ class MyPage extends Component {
     } else {
       const PrintOptions = this.state.options.map((option) => {
           return (
-            <option value={option.value} key={option.text}>{option.text}</option>
+            <MenuItem value={option.value} key={option.text}>{option.text}</MenuItem>
           )
         }
       );
