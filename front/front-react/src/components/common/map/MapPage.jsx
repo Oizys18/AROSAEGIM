@@ -60,6 +60,8 @@ class MapPage extends Component {
       handleETime: this.handleETime,
       handleApply: this.handleApply
     }
+
+    this.loadedItems = []
   }
 
   setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
@@ -179,19 +181,6 @@ class MapPage extends Component {
     }))
   }
   handleApply = async () => {
-    // console.log(this.state.filterVal.sTime === this.state.filterVal.eTime)
-    // if(!this.state.filterVal.mine && 
-    //     this.state.filterVal.term === 0 &&
-    //     this.state.filterVal.eTime.getTime() === this.state.filterVal.sTime.getTime()){
-    //   this.setState({
-    //     applyFilter: false
-    //   })
-    // }
-    // else{
-    //   this.setState({
-    //     applyFilter: true
-    //   })
-    // }
     this.tglFilter()
   }
 
@@ -236,7 +225,7 @@ class MapPage extends Component {
       items: items
     })
 
-    // // api로 불러온 객체에 새로운 item이 나왔을 때만 state 변경
+    // api로 불러온 객체에 새로운 item이 나왔을 때만 state 변경
     // const itemsDiff = items.filter(el => {
     //   const itemIndex = this.state.items.findIndex(stateItem => el.id === stateItem.id)
     //   return itemIndex === -1 ? true : false;

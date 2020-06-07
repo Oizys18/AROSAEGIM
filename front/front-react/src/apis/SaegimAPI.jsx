@@ -78,7 +78,6 @@ export const delSaegim = async (id) => {
 
 export const getSaegimByFilter = async (data) => {
   const { lat, lng, meter, sTime, eTime, userid } = data;
-
   const _res = await axios({
     method: 'get',
     url: `${BASE_URL}/saegims/latlngtime`,
@@ -91,6 +90,8 @@ export const getSaegimByFilter = async (data) => {
       endtime: eTime,
     }
   })
+
+  // console.log(_res.data)
 
   if (_res.data.state === "success") {
     return _res.data.data;
