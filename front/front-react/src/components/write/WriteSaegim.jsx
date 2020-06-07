@@ -13,6 +13,7 @@ import { Storage } from "../../storage/Storage";
 import SimplePopover from "./Writetag";
 import MapView from "../common/map/MapViewClone";
 import { kakaoLatLng } from "../common/map/MapMethod";
+import PinIcon from "../../assets/PinIcon";
 
 class WriteSaegim extends Component {
   constructor(props) {
@@ -218,10 +219,11 @@ class WriteSaegim extends Component {
               size="medium"
               text={
                 this.state.w3w
-                  ? "/// " + this.state.w3w
-                  : "위치를 가져오는 중입니다"
+                  ? this.state.w3w
+                  : "위치를 가져오는 중입니다 ..."
               }
               onClick={this.getLocation}
+              icon={<PinIcon />}
             />
           )}
         </Top>
