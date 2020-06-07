@@ -61,6 +61,9 @@ class MapView extends Component {
       this.state.mv.setLevel(this.props.mapLevel);
     }
 
+    if(prevProps.filterVal !== this.props.filterVal){
+      this.fetchItem()
+    }
 
     // (!!this.props.userCenter && this.props.usingUserCenter && !this.state.userMarker && this.showUserCenter())
     // if (prevProps.usingUserCenter !== this.props.usingUserCenter){console.log(prevProps, this.props, this.state)}
