@@ -4,6 +4,9 @@ import Popover from "@material-ui/core/Popover";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import Typography from "@material-ui/core/Typography";
 import SmallButton from "../common/buttons/SmallButton";
+import Input from "@material-ui/core/Input";
+import styled from "styled-components";
+
 const useStyles = makeStyles((theme) => ({
   typography: {
     padding: theme.spacing(2),
@@ -76,7 +79,14 @@ export default function SimplePopover(props) {
         }}
       >
         <Typography className={classes.typography}>
-          <input type="text" placeholder="태그작성" onChange={handleTag} />
+          <StInput
+            type="text"
+            placeholder="태그작성"
+            onChange={handleTag}
+            autoFocus="true"
+            disableUnderline="true"
+            margin="dense"
+          />
           <SmallButton text="작성" onClick={createTag} />
           <ErrorTxt />
         </Typography>
@@ -84,3 +94,8 @@ export default function SimplePopover(props) {
     </>
   );
 }
+const StInput = styled(Input)`
+  border: 1px solid ghostwhite;
+  border-radius: 16px;
+  width: 60vw;
+`;
