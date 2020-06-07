@@ -102,3 +102,15 @@ export const getSaegimByFilter = async (latlng, meter, mine, stime, etime) => {
 
   console.log(_res.data)
 }
+
+export const getSaegimById = async (id) => {
+  console.log(id)
+  const _res = await axios ({
+    method: 'get',
+    url: `${BASE_URL}/saegims/${id}/detail`,
+    params: {
+      saegimid: id
+    }
+  })
+  return _res.data.data;
+}

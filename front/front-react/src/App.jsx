@@ -23,6 +23,7 @@ import Contact from "./components/contact/Contact";
 import Help from "./components/contact/Help";
 import { getUserByEmail } from "./apis/AccountAPI";
 import { delComment } from "./apis/CommentAPI";
+import { delSaegim } from "./apis/SaegimAPI";
 
 class App extends Component {
   constructor(props) {
@@ -59,10 +60,12 @@ class App extends Component {
       idxUpdateFlag: false,
       idxUpdate: this.idxUpdate,
 
-      updateFlagByComment: false,
-      commentUpdate: this.commentUpdate,
+      updateFlag: false,
+      setUpdateFlag: this.setUpdateFlag,
       delComment: [],
-      setDelComment: this.setDelComment
+      delSaegim: "",
+      setDelComment: this.setDelComment,
+      setDelSaegim: this.setDelSaegim
     };
   }
 
@@ -131,11 +134,15 @@ class App extends Component {
       else if (this.state.modalSitu === 'delComment'){
         const [ saegimId, commentId ] = this.state.delComment
         await delComment(saegimId, commentId)
-        this.commentUpdate(true)
+        this.setUpdateFlag(true)
       }
       else if(this.state.modalSitu === 'user refresh'){
         this.setState({ sideMenu: false })
         window.location.href = '/'
+      } else if (this.state.modalSitu === 'delSaegim'){
+        console.log(this.state.delSaegim)
+        await delSaegim(this.state.delSaegim)
+        this.setUpdateFlag(true)
       }
     }
     this.setState({ modal: false })
@@ -182,14 +189,20 @@ class App extends Component {
     })
   }
 
-  commentUpdate = (flag) => {
+  setUpdateFlag = (flag) => {
     this.setState({
-      updateFlagByComment: flag
+      setUpdateFlag: flag
     })
   }
   setDelComment = (target) => {
     this.setState({
       delComment: target
+    })
+  }
+
+  setDelSaegim = (target) => {
+    this.setState({
+      delSaegim: target
     })
   }
 

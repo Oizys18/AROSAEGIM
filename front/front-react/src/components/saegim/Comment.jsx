@@ -67,9 +67,9 @@ class Comment extends Component{
       this.setState({
         updateFlag: false
       })
-    } else if (this.context.updateFlagByComment === true) {
+    } else if (this.context.updateFlag === true) {
       this.getComments()
-      this.context.commentUpdate(false)
+      this.context.setUpdateFlag(false)
     }
   }
 
