@@ -8,7 +8,7 @@ import { Zoom, Slide, Select, MenuItem } from "@material-ui/core";
 import { Refresh } from "@material-ui/icons";
 import CtoW from "../../apis/w3w";
 import Loading from "../common/background/Loading";
-import PinIcon from "../../assets/PinIcon";
+import PinIcon from '../../assets/PinIcon';
 
 class SaegimListPage extends Component {
   constructor(props) {

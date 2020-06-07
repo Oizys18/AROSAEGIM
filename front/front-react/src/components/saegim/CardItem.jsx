@@ -294,7 +294,7 @@ const Location = styled.div`
   grid-area: location;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-self: center;
 `
 
 const Registered = styled.div`
