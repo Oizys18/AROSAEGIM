@@ -193,7 +193,8 @@ class SaegimListPage extends Component {
       return (
         <StCont>
           <StLocation>
-            <PinIcon />
+            {this.state.printLocation === this.state.w3w
+             && <PinIcon />}
             {this.state.printLocation}
           </StLocation>
           <StMenu>
