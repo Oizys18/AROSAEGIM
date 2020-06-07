@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-import { IconButton } from "@material-ui/core";
+import { IconButton, Fade } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
 import CreateIcon from "@material-ui/icons/Create";
@@ -12,7 +12,8 @@ import PhotoIcon from "@material-ui/icons/AddPhotoAlternate";
 // import { getUserByEmail } from "../../apis/AccountAPI";
 import { Storage } from "../../storage/Storage";
 import SimplePopover from "./Writetag";
-import { isThisSecond } from "date-fns/esm";
+import MapView from "../common/map/MapViewClone";
+import { kakaoLatLng } from "../common/map/MapMethod";
 
 class WriteSaegim extends Component {
   constructor(props) {
@@ -28,6 +29,11 @@ class WriteSaegim extends Component {
       error: 0,
       userInfo: {},
       imgBase64: [],
+
+      mapView: {
+        status: false,
+        center: null,
+      },
     };
     this.inputReference = React.createRef();
   }
@@ -62,9 +68,40 @@ class WriteSaegim extends Component {
       w3w: www.data.words,
     });
   };
+
   getLocation = () => {
     //지도 컴포넌트 열어서 위치 정확하게 수정하기
+    if (this.state.location === null) {
+      return;
+    }
+    this.setState({
+      mapView: {
+        status: true,
+        center: kakaoLatLng(this.state.location[0], this.state.location[1]),
+      },
+    });
   };
+
+  changeMapCenter = (location) => {
+    // 지도상의 위치를 현재 위치로 설정
+    this.setState({ location: [location.getLat(), location.getLng()] });
+  };
+
+  fixLocation = (location, w3w) => {
+    this.setState({
+      location: location,
+      w3w: w3w,
+      mapView: {
+        status: false,
+        center: null,
+      },
+    });
+  };
+
+  cancelMap = () => {
+    this.setState({ mapView: { status: false, center: null } });
+  };
+
   componentDidMount() {
     if (navigator.geolocation) {
       // GPS를 지원
@@ -154,12 +191,40 @@ class WriteSaegim extends Component {
     };
     return (
       <Wrapper>
+        {this.state.mapView.status && (
+          <StMapCont height={300}>
+            <StViewCont>
+              <MapView
+                status="write"
+                mapCenter={this.state.mapView.center}
+                mapLevel={3}
+                changeMapCenter={this.changeMapCenter}
+                cancelMap={this.cancelMap}
+                fixLocation={this.fixLocation}
+                w3w={this.state.w3w}
+              />
+            </StViewCont>
+          </StMapCont>
+        )}
+
         <Top>
-          <Chip
-            size="medium"
-            text={"/// " + this.state.w3w}
-            onClick={this.getLocation}
-          />
+          {this.state.mapView.status ? (
+            <Chip
+              size="medium"
+              text={"위치를 확정해주세요."}
+              onClick={this.getLocation}
+            />
+          ) : (
+            <Chip
+              size="medium"
+              text={
+                this.state.w3w
+                  ? "/// " + this.state.w3w
+                  : "위치를 가져오는 중입니다"
+              }
+              onClick={this.getLocation}
+            />
+          )}
         </Top>
         <Container>
           <TextInput
@@ -321,4 +386,20 @@ const Tag = styled.div`
   font-size: 16px;
   margin-left: 16px;
   flex-wrap: wrap;
+`;
+
+const StMapCont = styled.div`
+  overflow: hidden;
+  height: ${(props) => props.height}px;
+  width: 100%;
+  z-index: 5;
+  /* height: 100vh; */
+`;
+
+const StViewCont = styled.div`
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+  background: gray;
 `;
