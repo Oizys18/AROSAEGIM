@@ -16,12 +16,15 @@ import MapBtnSet from './MapBtnSet';
 import CtoW from '../../../apis/w3w';
 import * as SA from '../../../apis/SaegimAPI';
 import * as GA from '../../../apis/GeolocationAPI';
+import * as UA from '../../../apis/UserAPI';
 
 class MapPage extends Component {
   constructor(props){
+    const _today = new Date()
     super(props)
     this.state = {
       items: [],
+      loadedItems: [],
 
       mapCenter: new kakao.maps.LatLng(37.5012767241426, 127.039600248343), //멀티캠퍼스로 초기화
       level: 4,
@@ -37,10 +40,11 @@ class MapPage extends Component {
       filter: false,
       filterVal:{
         mine: false,
-        term: 24,
-        sTime: this.initSTime(),
-        eTime: new Date(),
-      }
+        term: 0,
+        sTime: _today,
+        eTime: _today,
+      },
+      applyFilter: false,
     }
 
     this.actions = {
@@ -57,6 +61,8 @@ class MapPage extends Component {
       handleETime: this.handleETime,
       handleApply: this.handleApply
     }
+
+    this.loadedItems = []
   }
 
   setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
@@ -71,12 +77,6 @@ class MapPage extends Component {
 
   initMapPage = async () => {
     let _center = this.state.mapCenter;
-
-    // const _lat = sessionStorage.getItem('ARSG latitude');
-    // const _lng = sessionStorage.getItem('ARSG longitude');
-    // if(_lat && _lng){
-    //   _center = new kakao.maps.LatLng(Number(_lat), Number(_lng))
-    // }
     const _latlng = GA.getPositionFromSession()
     _center = new kakao.maps.LatLng(_latlng[0], _latlng[1])
 
@@ -117,9 +117,6 @@ class MapPage extends Component {
     });
   };
 
-  // tglView = async () => {
-  //   await this.setStateAsync({ roadView: !this.state.roadView })
-  // };
   tglView = () => {
     this.setState({ roadView: !this.state.roadView })
   };
@@ -145,20 +142,15 @@ class MapPage extends Component {
     this.setState({ filter: !this.state.filter })
   };
 
-
-  initSTime = () => {
-    const _today = new Date()
-    const _sTime = new Date()
-    _sTime.setHours(_today.getHours() - 24)
-    return _sTime
-  }
   handleInit = () => {
+    const _today = new Date()
     this.setState(prevState => ({
       filterVal: {...prevState.filterVal,
-        term: 24,
-        sTime: this.initSTime(),
-        eTime: new Date(),
-      }
+        mine: false,
+        term: 0,
+        sTime: _today,
+        eTime: _today,
+      },
     }))
   }
   handleMine = () => {
@@ -190,16 +182,8 @@ class MapPage extends Component {
     }))
   }
   handleApply = async () => {
-    const _sT = this.state.filterVal.sTime.getTime()
-    const _eT = this.state.filterVal.eTime.getTime()
-    console.log(_sT, _eT)
+    this.tglFilter()
   }
-
-  // showMarker = () => {
-  //   this.state.userMarker.setMap(null);
-  //   this.state.userMarker.setMap(this.state.mv);
-  //   kakao.maps.event.addListener(this.state.userMarker, "click", () => console.log('hello'))
-  // }
 
   fetchItem = async (bounds, center) => {
     const meter = SA.boundsToMeter({
@@ -209,23 +193,50 @@ class MapPage extends Component {
       lon2: bounds.getNorthEast().getLng(),
     })
 
-    let items = await SA.getSaegimNearMe({
-      lat: center.getLat(),
-      lng: center.getLng(),
-      meter: meter
+    // let items = await SA.getSaegimNearMe({
+    //   lat: center.getLat(),
+    //   lng: center.getLng(),
+    //   meter: meter
+    // })
+
+    let items = null;
+    let _userid = 0
+    if(this.state.filterVal.mine) _userid = this.context.userInfo.id
+    if(this.state.filterVal.sTime.getTime() !== this.state.filterVal.eTime.getTime()){
+      items = await SA.getSaegimByFilter({
+        lat: center.getLat(),
+        lng: center.getLng(),
+        meter: meter,
+        sTime: this.state.filterVal.sTime.getTime(),
+        eTime: this.state.filterVal.eTime.getTime(),
+        userid: _userid
+      })
+    }
+    else{
+      items = await SA.getSaegimByFilter({
+        lat: center.getLat(),
+        lng: center.getLng(),
+        meter: meter,
+        sTime: 0,
+        eTime: 0,
+        userid: _userid
+      })
+    }
+    this.setState({
+      items: items
     })
 
     // api로 불러온 객체에 새로운 item이 나왔을 때만 state 변경
-    const itemsDiff = items.filter(el => {
-      const itemIndex = this.state.items.findIndex(stateItem => el.id === stateItem.id)
-      return itemIndex === -1 ? true : false;
-    });
+    // const itemsDiff = items.filter(el => {
+    //   const itemIndex = this.state.items.findIndex(stateItem => el.id === stateItem.id)
+    //   return itemIndex === -1 ? true : false;
+    // });
 
-    if (itemsDiff.length > 0) {
-      this.setState({
-        items: this.state.items.concat(itemsDiff)
-      })
-    }
+    // if (itemsDiff.length > 0) {
+    //   this.setState({
+    //     items: this.state.items.concat(itemsDiff)
+    //   })
+    // }
   }
 
   render(){
@@ -270,6 +281,8 @@ class MapPage extends Component {
               items={this.state.items}
               on={!this.state.roadView}
               tglView={this.tglView}
+              fetchItem={this.fetchItem}
+              filterVal={this.state.filterVal}
             />
             :
             <MapView
@@ -282,6 +295,7 @@ class MapPage extends Component {
               changeMapCenter={this.changeMapCenter}
               changeMapLevel={this.changeMapLevel}
               fetchItem={this.fetchItem}
+              filterVal={this.state.filterVal}
             />
           }
 

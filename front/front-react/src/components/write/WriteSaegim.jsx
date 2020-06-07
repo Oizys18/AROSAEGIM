@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-
 import { IconButton } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";

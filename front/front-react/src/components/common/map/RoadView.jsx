@@ -1,5 +1,6 @@
 /*global kakao*/
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './MapWalker.css';
 import MapWalker from './MapWalker';
 import styled from 'styled-components';
@@ -7,37 +8,46 @@ import { Zoom, Grow, Slide, } from '@material-ui/core';
 import { ArrowDownward, } from '@material-ui/icons';
 import { FlexRow } from '../../../styles/DispFlex';
 import RoadViewTopBar from "./RoadViewTopBar";
+import RoadViewOverlay from "./RoadViewOverlay";
 import * as MM from './MapMethod';
 
 class RoadView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      addr: '',
-      w3w: '',
-
       rv: null,
       rvc: null,
-      mmOn: false,
+      mmOn: true,
       mm: null,
+      mpj: null,
+      cls: null,
 
       userMarker: null,
+      itemIds: [],
+      newItems: [],
+      olComps: [],
+      olObjs: [],
     };
+    this.markers = [];
   }
+  
+  //미니맵 토글
+  toggleMiniMap = async () => { await this.setStateAsync({ mmOn: !this.state.mmOn }) }
 
   setStateAsync(state) {
     return new Promise(resolve => { this.setState(state, resolve) })
   }
 
-  componentDidMount() { 
-    this.initRV()
+  async componentDidMount() { 
+    this.initRV();
+    this.initOLMK();
+    this.renderOLMK();
   }
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     if(prevState.mmOn !== this.state.mmOn){
       this.state.rv.relayout(); //로드뷰 크기 변경 시 새고로침
       if(this.state.mmOn){ this.initMM() }
     }
-
     if(prevProps.mapCenter !== this.props.mapCenter && this.props.mapCenter === this.props.userCenter){
       this.state.rvc.getNearestPanoId(this.props.mapCenter, 100, (panoId) => {
         if(panoId){
@@ -49,6 +59,18 @@ class RoadView extends Component {
         this.state.mm.panTo(_position);
         (this.state.userMarker && this.state.userMarker.setPosition(this.props.userCenter));
       }
+    }
+
+    if(prevProps.mapCenter !== this.props.mapCenter){
+      this.fetchItem()
+    }
+    if(prevProps.filterVal !== this.props.filterVal){
+      this.fetchItem()
+    }
+
+    if(prevProps.items !== this.props.items) {
+      this.initOLMK()
+      this.renderOLMK()
     }
   }
   componentWillUnmount(){
@@ -62,7 +84,7 @@ class RoadView extends Component {
   }
 
   //로드뷰 초기화
-  initRV = () => {
+  initRV = async () => {
     const _cont = document.getElementById('roadView');
     const _roadView = new kakao.maps.Roadview(_cont); //로드뷰 객체
     const _roadViewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
@@ -79,21 +101,20 @@ class RoadView extends Component {
       }
     });
 
-    this.setState({
+    this.setStateAsync({
       rv: _roadView,
       rvc: _roadViewClient,
     })
-
-    // this.changeAddr(this.props.mapCenter)
+    .then(() => {
+      this.initMM()
+    })
 
     kakao.maps.event.addListener(_roadView, 'position_changed', this.changeRVPos);
     kakao.maps.event.addListener(_roadView, 'viewpoint_changed', this.changeRVVP);
   }
-
   //로드뷰 이동
   changeRVPos = () => { 
     const _position = this.state.rv.getPosition()
-    // this.changeAddr(_position)
     if(this.state.mm){
       this.state.mm.panTo(_position) //미니맵 이동
       this.state.mw.setPosition(_position) // 이벤트가 발생할 때마다 로드뷰의 position값을 읽어, map walker에 반영 
@@ -107,6 +128,59 @@ class RoadView extends Component {
       var _viewpoint = this.state.rv.getViewpoint();
       this.state.mw.setAngle(_viewpoint.pan);
     }
+  }
+
+  //커스텀 오버레이
+  initOLMK = () => {
+    const _newItems = this.props.items.filter((el) => {
+      return !this.state.itemIds.includes(el.id)
+    })
+    this.setStateAsync({
+      newItems: _newItems,
+      itemIds: this.state.itemIds.concat(_newItems.map((el) => el.id)),
+      olComps: this.state.olComps.concat(
+        _newItems.map((el) => <RoadViewOverlay key={`${el.id}`} id={`${el.id}`} item={el}/>)
+      )
+    })
+  }
+  renderOLMK = async () => {
+    if(this.state.newItems.length > 0)
+    {
+      await this.setStateAsync({
+        olObjs: this.state.olObjs.concat(
+          this.state.newItems.map((el) => {
+            const _co = new kakao.maps.CustomOverlay({
+              position: new kakao.maps.LatLng(el.latitude, el.longitude),
+              content: document.getElementById(`${el.id}`),
+              xAnchor: Math.random(0, 1), 
+              yAnchor: Math.random(0, 1), 
+            })
+            const _mk = new kakao.maps.Marker(MM.MarkerConfig(el))
+            return { id:el.id, co:_co, mk:_mk }
+          })
+        )
+      })
+    }
+
+    this.state.olObjs.forEach((el) => {
+      const _flag = this.props.items.findIndex(item => item.id === el.id)
+      if(_flag !== -1){
+        // console.log('render', el)
+        el.co.setMap(this.state.rv)
+        el.co.setRange(100)
+        el.mk.setMap(this.state.mm)
+      }
+      else{
+        // console.log('norenderr', el)
+        el.co.setMap(null)
+        el.mk.setMap(null)
+      }
+    })
+  }
+  fetchItem = () => {
+    const _bounds = this.state.mm.getBounds();
+    const _center = this.state.mm.getCenter();
+    this.props.fetchItem(_bounds, _center);
   }
 
   //미니맵 초기화
@@ -123,6 +197,18 @@ class RoadView extends Component {
     })
     .then(() => {
       ( !sessionStorage.getItem('ARSG no GPS') && this.showUserCenter() ) //현재 위치 표시
+    })
+
+    const _mpj = _miniMap.getProjection()
+    const _cls = new kakao.maps.MarkerClusterer({
+      map: _miniMap, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+      averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+      minLevel: 1, // 클러스터 할 최소 지도 레벨 
+      disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+    });
+    this.setState({
+      mpj: _mpj,
+      cls: _cls,
     })
 
     const _mapWalker = new MapWalker(this.state.rv.getPosition()) //맵워커 생성
@@ -152,8 +238,7 @@ class RoadView extends Component {
     this.setState({ userMarker: userMarker })
   }
 
-  //레벨 변경
-  //중심 이동
+  //중심 이동, 레벨 변경
   changeLvCt = () => {
     const _center = this.state.mm.getCenter()
     const _level = this.state.mm.getLevel()
@@ -171,9 +256,6 @@ class RoadView extends Component {
     this.state.mw.setPosition(_center)
   }
 
-  //미니맵 토글
-  toggleMiniMap = async () => { await this.setStateAsync({ mmOn: !this.state.mmOn }) }
-
   render(){
     return(
       <>
@@ -188,7 +270,8 @@ class RoadView extends Component {
           <StView id="roadView" mmOn={this.state.mmOn}/>
         </Grow>
 
-        <Slide in={this.state.mmOn} direction="up" mountOnEnter unmountOnExit>
+        {/* <Slide in={this.state.mmOn} direction="up" mountOnEnter unmountOnExit> */}
+        <Slide in={this.state.mmOn} direction="up">
           <StMap id="miniMap"/>
         </Slide>
         
@@ -198,6 +281,12 @@ class RoadView extends Component {
         <Zoom in={!this.state.mmOn} mountOnEnter unmountOnExit>
           <StOpenMMBtn onClick={this.toggleMiniMap}>미니맵</StOpenMMBtn>
         </Zoom>
+
+        <div>
+        {
+          this.state.olComps
+        }
+        </div>
       </>
     )
   }
@@ -240,3 +329,18 @@ const StMap = styled.div`
   border-top: 1px solid white;
   box-sizing: border-box;
 `
+
+// const emptyItem = {
+//   contents: "emptyItem",
+//   id: 0,
+//   image: null,
+//   latitude: 37.50083104531534,
+//   longitude: 127.03694678811341,
+//   record: null,
+//   regDate: 1590650953712,
+//   secret: 0,
+//   tags: [],
+//   userId: 0,
+//   userName: "empty",
+//   w3w: "empty"
+// }

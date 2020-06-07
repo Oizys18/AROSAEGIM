@@ -5,6 +5,7 @@ import Card from "../common/cards/Card";
 import "./CardItem.css";
 import { Lock, Photo, AccessTime } from "@material-ui/icons";
 import { getTimeDeltaString } from "../common/time/TimeFunctinon";
+import PinIcon from "../../assets/PinIcon";
 
 class CardItem extends Component {
   listElement;
@@ -177,7 +178,7 @@ class CardItem extends Component {
                 subcolor={this.state.colors[idx+1]}
               >
                 <StCard>
-                  <Location>{'/// ' + saegim.w3w}</Location>
+                  <Location><PinIcon />{saegim.w3w}</Location>
                   <Registered>
                     <StTime>
                       <StAccessTimeIcon />
@@ -291,6 +292,9 @@ const Comments = styled.div`
 
 const Location = styled.div`
   grid-area: location;
+  display: flex;
+  align-items: center;
+  justify-self: center;
 `
 
 const Registered = styled.div`

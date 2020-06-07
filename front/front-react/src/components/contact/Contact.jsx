@@ -31,35 +31,35 @@ class Contact extends Component {
           <ProfileImg src="https://avatars3.githubusercontent.com/u/37648340?s=120&v=4" />
           <Message>
             <Name>양찬우 @Oizys18</Name>
-            <Role>Frontend Developer</Role>
+            <Role>Frontend</Role>
           </Message>
         </MemberCard>
         <MemberCard href="https://github.com/soulgchoi">
           <ProfileImg src="https://avatars0.githubusercontent.com/u/52682603?s=120&v=4" />
           <Message>
             <Name>최솔지 @soulgchoi</Name>
-            <Role>Frontend Developer</Role>
+            <Role>Frontend</Role>
           </Message>
         </MemberCard>
         <MemberCard href="https://github.com/EXTC27">
           <ProfileImg src="https://avatars1.githubusercontent.com/u/40153405?s=120&v=4" />
           <Message>
             <Name>김신재 @EXTC27</Name>
-            <Role>Frontend Developer</Role>
+            <Role>Frontend</Role>
           </Message>
         </MemberCard>
         <MemberCard href="https://github.com/kingjky">
           <ProfileImg src="https://avatars3.githubusercontent.com/u/51773494?s=120&v=4" />
           <Message>
             <Name>전경윤 @kingjky</Name>
-            <Role>Backend Developer</Role>
+            <Role>Backend</Role>
           </Message>
         </MemberCard>
         <MemberCard href="https://github.com/ghleokim">
           <ProfileImg src="https://avatars3.githubusercontent.com/u/52501513?s=120&v=4" />
           <Message>
             <Name>김건호 @ghleokim</Name>
-            <Role>Frontend Developer</Role>
+            <Role>Frontend</Role>
           </Message>
         </MemberCard>
       </Wrapper>
@@ -104,17 +104,18 @@ const Message = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
-  flex-direction: column;
 `;
 const Name = styled.div`
-  justify-content: flex-start;
-  display: flex;
+  margin-left:10px;
   font-weight: bolder;
   font-size: 16px;
 `;
 const Role = styled.div`
-  justify-content: flex-start;
-  display: flex;
+  /* justify-content: flex-start; */
+  /* display: flex; */
+  font-weight:lighter;
+  opacity:0.7;
+  font-size:14px;
 `;
 
 const BackButton = styled.div`

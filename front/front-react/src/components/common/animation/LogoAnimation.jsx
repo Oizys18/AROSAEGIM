@@ -8,7 +8,7 @@ class LogoAnimation extends Component {
       <Zoom in={true}>
       <StAnima>
         <div className="logo">
-          <img src="/ARSG logo.png" alt="" style={{width : '140px'}}/>
+          <img src="/ARSG logo.png" alt="" style={{width : '140px', height: '140px'}}/>
         </div> 
         <div className="words">
           <div className="word">우리는</div>

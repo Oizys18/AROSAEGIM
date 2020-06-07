@@ -31,9 +31,11 @@ UserInfo.contextType = Storage;
 
 const StCont = styled(FlexRow)`
   justify-content: space-between;
-  margin: 8px;
+  /* margin: 8px; */
+  padding: 8px;
+  margin-bottom: 8px;
   /* margin: 8px 8px 0 8px; */
-  padding: 8px 8px 0 8px;
+  /* padding: 8px 8px 0 8px; */
 `;
 
 const StAvatar = styled(Avatar)`

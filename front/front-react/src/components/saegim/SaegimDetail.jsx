@@ -13,6 +13,7 @@ import Like from "./Like";
 import {Storage} from "../../storage/Storage";
 import {FlexRow} from "../../styles/DispFlex";
 import Loading from "../common/background/Loading";
+import PinIcon from "../../assets/PinIcon";
 
 class SaegimDetail extends Component {
   isLoading = true;
@@ -239,7 +240,8 @@ class SaegimDetail extends Component {
               <W3WChip>
                 <Chip
                   size="medium"
-                  text={"/// " + this.state.data.w3w}
+                  text={this.state.data.w3w}
+                  icon={<PinIcon />}
                 />
               </W3WChip>
               <CardWrapper>

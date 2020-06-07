@@ -44,6 +44,7 @@ class App extends Component {
 
       isLogin: false,
       userInfo: {},
+      handleLogin: this.handleLogin,
       handleLogout: this.handleLogout,
 
       modal: false,
@@ -78,28 +79,29 @@ class App extends Component {
     .then((position) => { GA.getPositionSuccess(position) })
     .catch((err) => { this.popModal(GA.getPositionFail(err), 'geolocation error', 'alert') });
 
-    const _autoLogin = localStorage.getItem('ARSG autoLogin')
-    if(_autoLogin === 'true'){
-      const _email = localStorage.getItem('ARSG email')
-      this.setState({ 
-        isLogin: true,
-        userInfo: (await getUserByEmail(_email)).data
-      })
-      this.goFirstPage('/list')
-    }
-    else {
-      const _email = sessionStorage.getItem('ARSG email')
-      if(_email === null){
-        this.goFirstPage('/list')
-      }
-      else{
-        this.setState({ 
-          isLogin: true,
-          userInfo: (await getUserByEmail(_email)).data
-        })
-        this.goFirstPage('/list')
-      }
-    }
+    this.handleLogin()
+    // const _autoLogin = localStorage.getItem('ARSG autoLogin')
+    // if(_autoLogin === 'true'){
+    //   const _email = localStorage.getItem('ARSG email')
+    //   this.setState({ 
+    //     isLogin: true,
+    //     userInfo: (await getUserByEmail(_email)).data
+    //   })
+    //   this.goFirstPage('/list')
+    // }
+    // else {
+    //   const _email = sessionStorage.getItem('ARSG email')
+    //   if(_email === null){
+    //     this.goFirstPage('/list')
+    //   }
+    //   else{
+    //     this.setState({ 
+    //       isLogin: true,
+    //       userInfo: (await getUserByEmail(_email)).data
+    //     })
+    //     this.goFirstPage('/list')
+    //   }
+    // }
   }
   componentDidUpdate(prevProps, prevState){
     if(this.state.appHeight !== window.innerHeight){
@@ -130,8 +132,9 @@ class App extends Component {
         this.setState({ sideMenu: false })
         localStorage.setItem('ARSG autoLogin', false)
         localStorage.removeItem('ARSG email')
+        localStorage.removeItem('ARSG id')
         sessionStorage.clear()
-        window.location.href = '/'
+        window.location.replace('/')
       }
       else if (this.state.modalSitu === 'delComment'){
         const [ saegimId, commentId ] = this.state.delComment
@@ -140,7 +143,7 @@ class App extends Component {
       }
       else if(this.state.modalSitu === 'user refresh'){
         this.setState({ sideMenu: false })
-        window.location.href = '/'
+        window.location.replace('/')
       } else if (this.state.modalSitu === 'delSaegim'){
         await delSaegim(this.state.delSaegim)
         window.location.href = '/list'
@@ -149,7 +152,30 @@ class App extends Component {
     }
     this.setState({ modal: false })
   }
-
+  handleLogin = async () => {
+    const _autoLogin = localStorage.getItem('ARSG autoLogin')
+    if(_autoLogin === 'true'){
+      const _email = localStorage.getItem('ARSG email')
+      this.setState({ 
+        isLogin: true,
+        userInfo: (await getUserByEmail(_email)).data
+      })
+      this.goFirstPage('/list')
+    }
+    else {
+      const _email = sessionStorage.getItem('ARSG email')
+      if(_email === null){
+        this.goFirstPage('/list')
+      }
+      else{
+        this.setState({ 
+          isLogin: true,
+          userInfo: (await getUserByEmail(_email)).data
+        })
+        this.goFirstPage('/list')
+      }
+    }
+  }
   handleLogout = () => {
     this.popModal('로그아웃 하시겠습니까?', 'logout', 'confirm')
   }
