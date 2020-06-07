@@ -271,11 +271,10 @@ const StPhotoIcon = styled(Photo)`
 
 const Contents = styled.div`
   grid-area: contents;  
-  text-overflow: ellipsis;
-  word-wrap: break-word;
   overflow: hidden;
-  white-space: pre-wrap;
-  max-height: 20vh;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;  
 `
 
 const ContentsL = styled.div`

@@ -192,15 +192,7 @@ class SaegimListPage extends Component {
 
       return (
         <StCont>
-          <StLocation>
-            {this.state.printLocation === this.state.w3w
-             && <PinIcon />}
-            {this.state.printLocation}
-          </StLocation>
           <StMenu>
-            <StButton onClick={this.refresh}>
-              <Refresh/>
-            </StButton>
             <StSelect
               autoWidth
               value={this.state.selectedOption}
@@ -208,6 +200,14 @@ class SaegimListPage extends Component {
             >
               {PrintOptions}
             </StSelect>
+            <StLocation>
+            {this.state.printLocation === this.state.w3w
+             && <PinIcon />}
+            {this.state.printLocation}
+            </StLocation>
+            <StButton onClick={this.refresh}>
+              <Refresh/>
+            </StButton>
           </StMenu>
           <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
             <Wrapper height={this.context.appHeight}>
@@ -234,21 +234,8 @@ const Wrapper = styled.div `
   justify-content: center;
   text-align: center;
   flex-direction: column;
-  /* height: 100vh; */
   height: ${props => props.height}px;
 `
-
-const StMenu = styled.div`
-  position: absolute;
-  top: 12%;
-  left: 50%;
-  transform: translateX(-50%);
-  min-width: 60vw;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-`;
 
 const StList = styled.div `
   margin-top: 48px;
@@ -257,48 +244,60 @@ const StList = styled.div `
 const StSelect = styled(Select)`
   font-size: 0.9rem;
     
-  &:after {
+  &:before {
     border-bottom: none; 
   }
   
   .MuiSelect-select {
-    background-color: white;
+    background-color: #FBF2EE;
     border-radius: 5px;
     padding: 8px 24px 8px 8px; 
   }
 `;
 
-const StLocation = styled.div`
+const StMenu = styled.div`
   position: absolute;
-  top: 18%;
+  top: 12%;
   left: 50%;
   transform: translateX(-50%);
-  min-width: 60vw;
+  width: 70vw;
+  height: 3vh;
   
   font-size: 0.9rem;
   
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   
   background-color: #FBF2EE;
   padding: 8px 16px 8px 16px;
-  border-radius: 8px;
+  border-radius: 50px;
+  
 `;
 
 const StButton = styled.div`
-  border-radius: 50%;
-  background-color: white;
-  width: 35px;
-  height: 35px;
+  background-color: #FBF2EE;
+  width: 30px;
+  height: 30px;
+  margin-left: 8px;
   
   display: flex;
   justify-content: center;
   align-items: center;
   
   svg{
-    color: gray;
+    color: #515151;
     width: 25px;
     height: 35px;
   }
+`;
+
+const StLocation = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  max-width: 40vw;
+  overflow: hidden;
+  white-space: nowrap;
 `;
