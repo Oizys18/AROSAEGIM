@@ -84,7 +84,7 @@ class CardItem extends Component {
   onDragEnd() {
     if (this.dragged) {
       this.dragged = false;
-      if (Math.abs(this.left) > (this.listElement.offsetWidth / 4)*3) {
+      if (Math.abs(this.left) > this.listElement.offsetWidth / 2) {
         this.left = -this.listElement.offsetWidth * 2;
         this.wrapper.style.maxHeight = 0;
         this.listElement.style.transform = `translateX(${this.left}px)`;
