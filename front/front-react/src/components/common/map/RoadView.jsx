@@ -20,14 +20,19 @@ class RoadView extends Component {
       mmOn: true,
       mm: null,
       mpj: null,
+      cls: null,
 
       userMarker: null,
-      clusterer: null,
-      overlayComps: [],
       itemIds: [],
+      newItems: [],
+      olComps: [],
+      olObjs: [],
     };
     this.markers = [];
   }
+  
+  //미니맵 토글
+  toggleMiniMap = async () => { await this.setStateAsync({ mmOn: !this.state.mmOn }) }
 
   setStateAsync(state) {
     return new Promise(resolve => { this.setState(state, resolve) })
@@ -35,8 +40,8 @@ class RoadView extends Component {
 
   async componentDidMount() { 
     this.initRV();
-    this.renderOverlay();
-    // this.overlayMarkers();
+    this.initOLMK();
+    this.renderOLMK();
   }
   async componentDidUpdate(prevProps, prevState) {
     if(prevState.mmOn !== this.state.mmOn){
@@ -64,20 +69,17 @@ class RoadView extends Component {
     }
 
     if(prevProps.items !== this.props.items) {
-      // this.renderOverlay()
-      this.overlayMarkers()
+      this.initOLMK()
+      this.renderOLMK()
     }
   }
   componentWillUnmount(){
     kakao.maps.event.removeListener(this.state.rv, 'position_changed', this.changeRVPos);
     kakao.maps.event.removeListener(this.state.rv, 'viewpoint_changed', this.changeRVVP);
-    // kakao.maps.event.removeListener(this.state.rv, 'init', this.initMM)
-    // kakao.maps.event.removeListener(this.state.rv, 'init', this.renderOverlay)
     if(this.state.mm){
       kakao.maps.event.removeListener(this.state.mm, "zoom_changed", this.changeLvCt)
       kakao.maps.event.removeListener(this.state.mm, "dragend", this.changeLvCt)
       kakao.maps.event.removeListener(this.state.mm, "center_changed", this.changeMWCt)
-      // kakao.maps.event.removeListener(this.state.mm, 'tilesloaded', this.fetchItem);
     }
   }
 
@@ -110,7 +112,6 @@ class RoadView extends Component {
     kakao.maps.event.addListener(_roadView, 'position_changed', this.changeRVPos);
     kakao.maps.event.addListener(_roadView, 'viewpoint_changed', this.changeRVVP);
   }
-
   //로드뷰 이동
   changeRVPos = () => { 
     const _position = this.state.rv.getPosition()
@@ -130,36 +131,50 @@ class RoadView extends Component {
   }
 
   //커스텀 오버레이
-  renderOverlay = () => {
+  initOLMK = () => {
     const _newItems = this.props.items.filter((el) => {
       return !this.state.itemIds.includes(el.id)
     })
     this.setStateAsync({
+      newItems: _newItems,
       itemIds: this.state.itemIds.concat(_newItems.map((el) => el.id)),
-      overlayComps: this.state.overlayComps.concat(
+      olComps: this.state.olComps.concat(
         _newItems.map((el) => <RoadViewOverlay key={`${el.id}`} id={`${el.id}`} item={el}/>)
       )
     })
   }
-  overlayMarkers = () => {
-    const _items = this.props.items.filter((el) => {
-      return !this.state.itemIds.includes(el.id)
-    })
+  renderOLMK = async () => {
+    if(this.state.newItems.length > 0)
+    {
+      await this.setStateAsync({
+        olObjs: this.state.olObjs.concat(
+          this.state.newItems.map((el) => {
+            const _co = new kakao.maps.CustomOverlay({
+              position: new kakao.maps.LatLng(el.latitude, el.longitude),
+              content: document.getElementById(`${el.id}`),
+              xAnchor: Math.random(0, 1), 
+              yAnchor: Math.random(0, 1), 
+            })
+            const _mk = new kakao.maps.Marker(MM.MarkerConfig(el))
+            return { id:el.id, co:_co, mk:_mk }
+          })
+        )
+      })
+    }
 
-    this.props.items.forEach((el) => {
-      console.log(el)
-      const rvCustomOverlay = new kakao.maps.CustomOverlay({
-        position: new kakao.maps.LatLng(el.latitude, el.longitude),
-        content: document.getElementById(`${el.id}`),
-        xAnchor: 0.5, 
-        yAnchor: 0.5, 
-      });
-      rvCustomOverlay.setMap(this.state.rv);
-      rvCustomOverlay.setRange(100);
-  
-      const marker = new kakao.maps.Marker(MM.MarkerConfig(el));// new MapMarker(el);
-      marker.setMap(this.state.mm)
-      marker.itemId = el.id
+    this.state.olObjs.forEach((el) => {
+      const _flag = this.props.items.findIndex(item => item.id === el.id)
+      if(_flag !== -1){
+        // console.log('render', el)
+        el.co.setMap(this.state.rv)
+        el.co.setRange(100)
+        el.mk.setMap(this.state.mm)
+      }
+      else{
+        // console.log('norenderr', el)
+        el.co.setMap(null)
+        el.mk.setMap(null)
+      }
     })
   }
   fetchItem = () => {
@@ -182,6 +197,18 @@ class RoadView extends Component {
     })
     .then(() => {
       ( !sessionStorage.getItem('ARSG no GPS') && this.showUserCenter() ) //현재 위치 표시
+    })
+
+    const _mpj = _miniMap.getProjection()
+    const _cls = new kakao.maps.MarkerClusterer({
+      map: _miniMap, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+      averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+      minLevel: 1, // 클러스터 할 최소 지도 레벨 
+      disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+    });
+    this.setState({
+      mpj: _mpj,
+      cls: _cls,
     })
 
     const _mapWalker = new MapWalker(this.state.rv.getPosition()) //맵워커 생성
@@ -211,10 +238,7 @@ class RoadView extends Component {
     this.setState({ userMarker: userMarker })
   }
 
-  
-
-  //레벨 변경
-  //중심 이동
+  //중심 이동, 레벨 변경
   changeLvCt = () => {
     const _center = this.state.mm.getCenter()
     const _level = this.state.mm.getLevel()
@@ -231,9 +255,6 @@ class RoadView extends Component {
     const _center = this.state.mm.getCenter()
     this.state.mw.setPosition(_center)
   }
-
-  //미니맵 토글
-  toggleMiniMap = async () => { await this.setStateAsync({ mmOn: !this.state.mmOn }) }
 
   render(){
     return(
@@ -263,7 +284,7 @@ class RoadView extends Component {
 
         <div>
         {
-          this.state.overlayComps
+          this.state.olComps
         }
         </div>
       </>

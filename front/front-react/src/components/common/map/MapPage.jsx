@@ -24,6 +24,7 @@ class MapPage extends Component {
     super(props)
     this.state = {
       items: [],
+      loadedItems: [],
 
       mapCenter: new kakao.maps.LatLng(37.5012767241426, 127.039600248343), //멀티캠퍼스로 초기화
       level: 4,
