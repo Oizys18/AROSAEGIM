@@ -63,7 +63,7 @@ class App extends Component {
       idxUpdateFlag: false,
       idxUpdate: this.idxUpdate,
 
-      updateFlag: false,
+      updateFlag: 0,
       setUpdateFlag: this.setUpdateFlag,
       delComment: [],
       delSaegim: "",
@@ -139,7 +139,7 @@ class App extends Component {
       else if (this.state.modalSitu === 'delComment'){
         const [ saegimId, commentId ] = this.state.delComment
         await delComment(saegimId, commentId)
-        this.setUpdateFlag(true)
+        this.setUpdateFlag(2)
       }
       else if(this.state.modalSitu === 'user refresh'){
         this.setState({ sideMenu: false })
@@ -147,7 +147,7 @@ class App extends Component {
       } else if (this.state.modalSitu === 'delSaegim'){
         await delSaegim(this.state.delSaegim)
         window.location.href = '/list'
-        this.setUpdateFlag(true)
+        this.setUpdateFlag(1)
       }
     }
     this.setState({ modal: false })
@@ -219,7 +219,7 @@ class App extends Component {
 
   setUpdateFlag = (flag) => {
     this.setState({
-      setUpdateFlag: flag
+      updateFlag: flag
     })
   }
   setDelComment = (target) => {
