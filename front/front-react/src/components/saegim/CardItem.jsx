@@ -153,13 +153,9 @@ class CardItem extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.idx === 0) {
-      this.timer = setTimeout(this.getRegDate, 30000)
+    if (prevProps.saegim !== this.props.saegim) {
+      this.getRegDate()
     }
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timer)
   }
 
   render() {
