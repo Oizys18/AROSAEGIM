@@ -12,7 +12,7 @@ class Background extends Component{
 
   randomImg = () => {
     // return ``
-    return `https://source.unsplash.com/random/${window.innerWidth}x${window.innerHeight}`
+    return `https://source.unsplash.com/collection/10626623/${window.innerWidth}x${window.innerHeight}`
   }
 
   render(){
