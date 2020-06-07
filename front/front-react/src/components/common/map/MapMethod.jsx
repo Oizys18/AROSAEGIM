@@ -66,8 +66,6 @@ export const calcPanoRadius = (level) => {
   }
 }
 
-export const mapInitialCenter = new kakao.maps.LatLng(37.5012767241426, 127.039600248343)
-export const userInitialCenter = new kakao.maps.LatLng(37.5012767241426, 127.039600248343)
 export const kakaoLatLng = (lat, lng) => {
   const kakaoLatLng = new kakao.maps.LatLng(lat, lng);
   return kakaoLatLng
