@@ -134,6 +134,7 @@ const StContents = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 60%;
 `;
 
 const StAccessTimeIcon = styled(AccessTimeIcon)`
