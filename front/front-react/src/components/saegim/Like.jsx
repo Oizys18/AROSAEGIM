@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Storage } from "../../storage/Storage";
 import styled from "styled-components";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import { Favorite, FavoriteBorder } from "@material-ui/icons";
 import { addLike, delLike, getLike } from "../../apis/LikeAPI"
 
 class Like extends Component{
@@ -47,7 +46,6 @@ class Like extends Component{
     await this.setState({
       likes: userList
     })
-    // console.log(this.state.likes)
   }
 
   async userInLikes() {
@@ -71,7 +69,6 @@ class Like extends Component{
     await this.setState({
       userInfo: this.context.userInfo
     })
-    // console.log(this.state.userInfo)
     await this.initState()
   }
 
@@ -87,8 +84,8 @@ class Like extends Component{
         <div>덧새김</div>
         <StIcon>
         {this.state.isLike === true
-          ? <FavoriteIcon onClick={this.handleClick} />
-          : <FavoriteBorderIcon onClick={this.handleClick} />
+          ? <Favorite onClick={this.handleClick} />
+          : <FavoriteBorder onClick={this.handleClick} />
         }
         </StIcon>
         <div style={{ fontWeight: 'bold'}}>{this.state.likes.length}</div>

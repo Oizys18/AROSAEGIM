@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Popover from "@material-ui/core/Popover";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import Typography from "@material-ui/core/Typography";
-import styled from "styled-components";
 import SmallButton from "../common/buttons/SmallButton";
 const useStyles = makeStyles((theme) => ({
   typography: {
@@ -44,15 +43,19 @@ export default function SimplePopover(props) {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
-  const ErrorStyle = styled.div`
-    font-size: 8px;
-    color: red;
-  `;
   const ErrorTxt = () => {
     if (error) {
-      return <ErrorStyle>태그를 입력해주세요</ErrorStyle>;
+      return (
+        <span style={{ color: "red", fontSize: "8px" }}>
+          <br></br>태그를 입력해주세요
+        </span>
+      );
     } else {
-      return <ErrorStyle>　</ErrorStyle>;
+      return (
+        <span>
+          <br></br>　
+        </span>
+      );
     }
   };
   return (

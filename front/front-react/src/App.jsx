@@ -14,6 +14,8 @@ import BotNav from "./components/common/navbar/BotNav";
 import Modal from "./components/common/modal/Modal"
 import MapPage from "./components/common/map/MapPage";
 import Write from "./components/write/Write";
+import Tutorial from "./components/tutorial/Tutorial";
+import GuideLine from "./components/contact/GuideLine";
 import Login from "./components/account/Login";
 import Signup from "./components/account/Signup";
 import SaegimListPage from "./components/saegim/SaegimListPage";
@@ -23,6 +25,7 @@ import Contact from "./components/contact/Contact";
 import Help from "./components/contact/Help";
 import { getUserByEmail } from "./apis/AccountAPI";
 import { delComment } from "./apis/CommentAPI";
+import { delSaegim } from "./apis/SaegimAPI";
 
 class App extends Component {
   constructor(props) {
@@ -51,15 +54,21 @@ class App extends Component {
       popModal: this.popModal,
       handleModal: this.handleModal,
 
-      curData: [],
+      curData: {
+        listData: [],
+        distance: 100,
+        selectedOption: 0
+      },
       setCurData: this.setCurData,
       idxUpdateFlag: false,
       idxUpdate: this.idxUpdate,
 
-      updateFlagByComment: false,
-      commentUpdate: this.commentUpdate,
+      updateFlag: false,
+      setUpdateFlag: this.setUpdateFlag,
       delComment: [],
-      setDelComment: this.setDelComment
+      delSaegim: "",
+      setDelComment: this.setDelComment,
+      setDelSaegim: this.setDelSaegim
     };
   }
 
@@ -130,11 +139,15 @@ class App extends Component {
       else if (this.state.modalSitu === 'delComment'){
         const [ saegimId, commentId ] = this.state.delComment
         await delComment(saegimId, commentId)
-        this.commentUpdate(true)
+        this.setUpdateFlag(true)
       }
       else if(this.state.modalSitu === 'user refresh'){
         this.setState({ sideMenu: false })
         window.location.replace('/')
+      } else if (this.state.modalSitu === 'delSaegim'){
+        await delSaegim(this.state.delSaegim)
+        window.location.href = '/list'
+        this.setUpdateFlag(true)
       }
     }
     this.setState({ modal: false })
@@ -204,14 +217,20 @@ class App extends Component {
     })
   }
 
-  commentUpdate = (flag) => {
+  setUpdateFlag = (flag) => {
     this.setState({
-      updateFlagByComment: flag
+      setUpdateFlag: flag
     })
   }
   setDelComment = (target) => {
     this.setState({
       delComment: target
+    })
+  }
+
+  setDelSaegim = (target) => {
+    this.setState({
+      delSaegim: target
     })
   }
 
@@ -229,7 +248,7 @@ class App extends Component {
         ( this.props.location.pathname === "/map" ||
           this.props.location.pathname === "/write" ||
           this.props.location.pathname === "/mypage" ||
-          this.props.location.pathname.includes("/list")
+          this.props.location.pathname === "/list"
         ) && (
           <>
             <Slide in={this.props.location.pathname !== "/map"} direction="down" unmountOnExit mountOnEnter>
@@ -260,7 +279,8 @@ class App extends Component {
           <Route path="/list" component={SaegimListPage} />
         </Switch>
         <Route path="/map" component={MapPage} />
-        <Route path="/help" component={Help} />
+        <Route path="/guideline" component={GuideLine} />
+        <Route path="/tutorial" component={Tutorial} />
         <Route path="/contact" component={Contact} />
         <Route path="/write" component={Write} />
         <Route path="/login" component={Login} />

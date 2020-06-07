@@ -4,8 +4,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Fab from "@material-ui/core/Fab";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { delSaegim } from "../../apis/SaegimAPI"
 import { withRouter } from "react-router-dom";
+import { Storage } from "../../storage/Storage";
 
 class SaegimDetailButton extends Component {
   constructor(props) {
@@ -27,10 +27,9 @@ class SaegimDetailButton extends Component {
     })
   }
 
-  delSaegim = async (e) => {
-    const _res = await delSaegim(this.props.id)
-    console.log(_res)
-    this.props.history.goBack()
+  delSaegim = () => {
+    this.context.popModal('새김을 삭제하시겠습니까?', 'delSaegim', 'confirm')
+    this.context.setDelSaegim(this.props.id)
   }
 
   render() {
@@ -47,7 +46,7 @@ class SaegimDetailButton extends Component {
           open={Boolean(this.state.vertOpen)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.handleClose}>
+          <MenuItem onClick={this.handleClose} disabled>
             수정
           </MenuItem>
           <MenuItem onClick={this.delSaegim}>
@@ -60,6 +59,7 @@ class SaegimDetailButton extends Component {
 }
 
 export default withRouter(SaegimDetailButton);
+SaegimDetailButton.contextType = Storage;
 
 const StFab = styled(Fab)`
   background-color: white;

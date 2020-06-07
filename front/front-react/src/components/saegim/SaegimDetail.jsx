@@ -1,22 +1,22 @@
 import React, {Component} from "react";
 import Card from "../common/cards/Card";
-// import DefaultButton from "../common/buttons/DefaultButton";
 import styled from "styled-components";
-import bgImage from "../../assets/images/sample_img.jpg"
-import { ArrowBack, Lock, LockOpen } from "@material-ui/icons";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import { ArrowBack, Lock, AccessTime, ArrowBackIos, ArrowForwardIos, Photo, Close  } from "@material-ui/icons";
 import * as SA from "../../apis/SaegimAPI"
+import { getUserByID } from "../../apis/UserAPI"
 import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 import Chip from "../common/chip/Chip"
-import { Zoom } from "@material-ui/core";
+import { Zoom, Avatar, Modal, MobileStepper, Button } from "@material-ui/core";
 import SaegimDetailButton from "./SaegimDetailButton";
-import PhotoIcon from "@material-ui/icons/Photo";
 import Comment from "./Comment";
 import Like from "./Like";
 import {Storage} from "../../storage/Storage";
-import Background from "../common/background/Background";
+import {FlexRow} from "../../styles/DispFlex";
+import Loading from "../common/background/Loading";
 
 class SaegimDetail extends Component {
+  isLoading = true;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -26,10 +26,20 @@ class SaegimDetail extends Component {
       },
       regDate: "",
       userId: "",
-      updateFlagByLike: false
+      updateFlagByLike: false,
+      curImage: -1,
+      open: false,
+      activeStep: 0,
+      maxSteps: 0,
+      detailColor: "linear-gradient(#FBF2EE,#ffffff38),linear-gradient(-45deg,#f3b3a6,#ffffff00),linear-gradient(45deg,#ff6b6b,#ffffff40)",
+      user: {},
+      isUser: 0,
+      isLoading: true
     };
     this.goBack = this.goBack.bind(this);
     this.setUpdateLike = this.setUpdateLike.bind(this);
+    this.setOpen = this.setOpen.bind(this);
+    this.setActiveStep = this.setActiveStep.bind(this);
   }
 
   goBack() {
@@ -37,25 +47,94 @@ class SaegimDetail extends Component {
     this.context.idxUpdate(true);
   }
 
+  setOpen(status) {
+    this.setState({
+      open: status
+    })
+  }
+
+  handleOpen = () => {
+    this.setOpen(true)
+  }
+
+  handleClose = () => {
+    this.setOpen(false)
+  }
+
+  setActiveStep(step) {
+    this.setState({
+      activeStep: step
+    })
+  }
+
+  handleNext = () => {
+    this.setActiveStep(this.state.activeStep + 1)
+  }
+
+  handleBack = () => {
+    this.setActiveStep(this.state.activeStep - 1)
+  }
+
   getSaegimDetail = async () => {
     const _data = await SA.getSaegimDetailById(this.props.match.params.id)
     await this.setStateAsync({ data: _data })
-    const _regDate = getTimeDeltaString(this.state.data.regDate)
-    this.setState({
-      regDate: _regDate
-    })
-    console.log(this.state.data)
+
+    const _user = await getUserByID(this.state.data.userId)
+    await this.setStateAsync({ user: _user })
+  }
+
+  getRegDate = () => {
+    if (this.state.data.regDate !== undefined) {
+      const _regDate = getTimeDeltaString(this.state.data.regDate)
+      this.setState({regDate: _regDate})
+    }
+  }
+
+  setIsUser = () => {
+    if (this.state.data.secret) {
+      if (this.state.userId === this.state.data.userId) {
+        this.setStateAsync({
+          isUser: 2
+        })
+      } else {
+        this.setState({
+          isUser: 1
+        })
+      }
+    }
+  }
+
+   switchImage = () => {
+    if (this.state.curImage < this.state.data.images.length - 1) {
+      this.setState({
+        curImage: this.state.curImage + 1
+      });
+    } else {
+      this.setState({
+        curImage: 0
+      });
+    }
+    return this.state.curImage;
   }
 
   async componentDidMount() {
+    this.startTimer = setTimeout(this.setState({
+      curImage: this.state.curImage + 1
+    }), 5000)
     const _userInfo = this.context.userInfo
     if (_userInfo !== {}) {
       this.setState({
         userId: _userInfo.id
       })
     }
-    await this.getSaegimDetail();
-    console.log(this.state.data.images.length)
+    await this.getSaegimDetail()
+    this.setStateAsync({
+      maxSteps: this.state.data.images.length
+    })
+    await this.setIsUser()
+    await this.getRegDate()
+
+    this.isLoading = false
   }
 
   setUpdateLike(flag) {
@@ -70,69 +149,149 @@ class SaegimDetail extends Component {
     });
   }
 
-  render() {
-    const PrintChip = this.state.data.tags.map((tag) => {
-      return (
-        <Chip text={tag.name} key={tag.id}/>
-      )
-    })
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.curImage !== prevState.curImage) {
+      this.timer = setTimeout(this.switchImage, 5000)
+    }
+    this.regTimer = setTimeout(this.getRegDate, 1000)
+    if (this.context.updateFlag === true) {
+      this.props.history.push('list')
+      this.context.setUpdateFlag(false)
+    }
+  }
 
-    return (
-      <Zoom in={true}>
-        <Wrapper>
-          <Contents>
-            {this.state.data.images.length > 0
-              ? <>
-                  <BackGround bgImage={this.state.data.images[0]}/>
+  componentWillUnmount() {
+    clearTimeout(this.startTimer)
+    clearTimeout(this.timer)
+    clearTimeout(this.regTimer)
+  }
+
+  render() {
+    if (this.isLoading === true) {
+      return <Loading/>
+    } else {
+      const PrintChip = this.state.data.tags.map((tag) => {
+        return (
+          <Chip text={tag.name} key={tag.id}/>
+        )
+      })
+      return (
+        <Zoom in={true}>
+          <Wrapper>
+            {this.state.data.images.length > 0 &&
+            <Modal
+              open={this.state.open}
+            >
+              <>
+                <ImageWrapper>
+                  <StClose onClick={this.handleClose}>
+                    <Close/>
+                  </StClose>
+                  <StImg
+                    src={this.state.data.images[this.state.activeStep].source}
+                    alt={this.state.data.images[this.state.activeStep]}
+                  />
+                  <StMobileStepper
+                    steps={this.state.maxSteps}
+                    position="static"
+                    variant="dots"
+                    activeStep={this.state.activeStep}
+                    nextButton={
+                      <Button
+                        onClick={this.handleNext}
+                        disabled={this.state.activeStep === this.state.maxSteps - 1}
+                      >
+                        <ArrowForwardIos/>
+                      </Button>
+                    }
+                    backButton={
+                      <Button
+                        onClick={this.handleBack}
+                        disabled={this.state.activeStep === 0}
+                      >
+                        <ArrowBackIos/>
+                      </Button>
+                    }
+                  />
+                </ImageWrapper>
+              </>
+            </Modal>
+            }
+            <TopBar>
+              <BackButton onClick={this.goBack}>
+                <ArrowBack/>
+              </BackButton>
+              <StCont>
+                <StNick>{this.state.user.name}</StNick>
+                <Avatar src={this.state.user.profileImage}/>
+              </StCont>
+            </TopBar>
+            <Contents>
+              {(this.state.data.images.length > 0 && this.state.isUser !== 1)
+              && <BackGround bgImage={this.state.data.images[this.state.curImage].source}/>
+              }
+              <W3WChip>
+                <Chip
+                  size="medium"
+                  text={"/// " + this.state.data.w3w}
+                />
+              </W3WChip>
+              <CardWrapper>
+                <Card color={this.state.detailColor}>
+                  <StCard>
+                    {this.state.isUser !== 1
+                      ? this.state.data.contents
+                      : '비밀글입니다.<br>작성자만 볼 수 있습니다.'}
+                  </StCard>
+                </Card>
+              </CardWrapper>
+              <ContentsBot>
+                <LockIcon>
+                  {this.state.data.secret ? <Lock/> : <Lock style={{display: 'none'}}/>}
+                </LockIcon>
+                {this.state.data.images.length > 0
+                  ?
                   <Image>
-                    <StPhotoIcon/>
+                    <StPhotoIcon onClick={this.handleOpen}/>
                     <div>{this.state.data.images.length}</div>
                   </Image>
-                </>
-              : <BackGround />
+                  : <Image style={{display: 'none'}}>
+                    <StPhotoIcon/>
+                  </Image>
+                }
+              </ContentsBot>
+            </Contents>
+            <Communication>
+              <BotWrapper>
+                <Registered>
+                  <StAccessTime/>
+                  {this.state.regDate}
+                </Registered>
+                <Likes>
+                  <div>
+                    <Like
+                      setUpdateLike={this.setUpdateLike}
+                      id={this.props.match.params.id}
+                      likes={this.state.data.likes}/>
+                  </div>
+                </Likes>
+              </BotWrapper>
+              <Tags>
+                {PrintChip}
+              </Tags>
+              <Comments>
+                <Comment id={this.props.match.params.id}/>
+              </Comments>
+            </Communication>
+            {this.state.userId === this.state.data.userId &&
+            <StButton>
+              <SaegimDetailButton id={this.props.match.params.id}/>
+            </StButton>
             }
-            <Location>{this.state.data.w3w}</Location>
-            <Registered>
-              <StAccessTimeIcon />
-              <div>{this.state.regDate}</div>
-            </Registered>
-            <CardWrapper>
-              <Card>
-                <StCard>{this.state.data.contents}</StCard>
-              </Card>
-            </CardWrapper>
-            <Tags>
-              {PrintChip}
-            </Tags>
-            <LockIcon>
-              {this.state.data.secret ? <Lock/> : <LockOpen/>}
-            </LockIcon>
-            <BackButton onClick={this.goBack}>
-              <ArrowBack/>
-            </BackButton>
-          </Contents>
-          <Communication>
-            <Likes>
-              <div>{this.state.data.userName}</div>
-              <div>
-                <Like
-                  setUpdateLike={this.setUpdateLike}
-                  id={this.props.match.params.id}
-                  likes={this.state.data.likes}/>
-              </div>
-            </Likes>
-            <Comments>
-              <Comment id={this.props.match.params.id} />
-            </Comments>
-          </Communication>
-          {this.state.userId === this.state.data.userId &&
-          <StButton>
-            <SaegimDetailButton id={this.props.match.params.id}/>
-          </StButton>
-          }
-        </Wrapper>
-      </Zoom>
-    )
+          </Wrapper>
+        </Zoom>
+      )
+    }
   }
 }
 
@@ -144,116 +303,161 @@ const Wrapper = styled.div`
   flex-direction: column;
   height: 100vh;
 `
-const CardWrapper = styled.div `
-  grid-area: contents
-`
+
+const TopBar = styled.div`
+  display: flex;
+  padding: 8px 24px 8px 24px;
+  justify-content: space-between;
+  align-items: center;
+  
+  &:before{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 48px;
+    background: black;
+    opacity: 0.6;
+    content: '';
+  }
+  
+  color: white;
+`;
+
+const BackButton= styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StCont = styled(FlexRow)`
+  .MuiAvatar-root{
+    max-width: 30px;
+    max-height: 30px;
+  }
+`;
+
+const StNick = styled.div`
+  word-break: break-all;
+  margin: 0 16px 0 16px;
+`;
+
+const W3WChip = styled.div`
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  .MuiChip-root{
+    background-color: #fafafa;
+  }
+`;
 
 const Contents = styled.div `
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   position: relative;
   z-index: 1;
-  
-  margin-top: 48px;
+
   height: 50%;
-  
-  display: grid;
-  grid-template-rows: repeat(5, 20%);
-  grid-template-columns: 14% 24% 24% 24% 14%;
-  grid-template-areas:
-    "goBack location location date date"
-    ". contents contents contents image"
-    ". contents contents contents ."
-    ". contents contents contents ."
-    "tags tags tags . isLocked";
-  align-items: center;
 `;
 
 const BackGround = styled.div `
   position: absolute;
   z-index: -1;
-  
+
   height: 100%;
   width: 100%;
   
   background-image: url(${props => props.bgImage});
   background-size: 100% 100%;
-  opacity: 0.7;
+  opacity: 0.6;
 `
 
-const LockIcon = styled.div `
-  grid-area: isLocked;
+const CardWrapper = styled.div `
+  min-width: 80%;
+`
+
+const BotWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: white;
+  justify-content: space-between;
+`;
+
+const Registered = styled.div `
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 16px 8px 8px 24px;
 `
+
+const StAccessTime = styled(AccessTime)`
+  margin-right: 8px;
+`;
 
 const Tags = styled.div `
   grid-area: tags;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  color: white;
-  margin-left: 24px;
-`
-
-const Location = styled.div `
-  grid-area: location;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-`
-
-const Registered = styled.div `
-  grid-area: date;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-`
-
-const StAccessTimeIcon = styled(AccessTimeIcon)`
-  margin-right: 4px;
-`;
-
-const Communication = styled.div`
-  height: 50%;
-  background-color: white;
+  color: #fafafa;
+  margin: 0 8px 8px 24px;
 `
 
 const Likes = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 16px 0 16px 0;
+  padding: 16px 16px 8px 24px;
+  margin-right: 24px;
+`
+
+const ContentsBot = styled.div`
+  position: absolute;
+  bottom: 5%;
+  width: 100%;
+  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const LockIcon = styled.div `
+  color: #fafafa;
+  margin-left: 32px;
+`
+
+const Communication = styled.div`
+  height: 50%;
+  background-color: white;
 `
 
 const Comments = styled.div`
-  padding: 16px
+  padding: 16px;
 `
 
 const StButton = styled.div`
-  position: absolute;
-  bottom: 10%;
-  right: 5%;
-`;
-
-const BackButton= styled.div`
-  grid-area: goBack;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
+  position: fixed;
+  bottom: 5%;
+  right: 16px;
 `;
 
 const Image = styled.div`
-  grid-area: image;
+  color: #fafafa;
+  margin-right: 32px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 `;
 
-const StPhotoIcon = styled(PhotoIcon)`
+const StPhotoIcon = styled(Photo)`
   margin-right: 4px;
 `;
 
@@ -263,4 +467,33 @@ const StCard = styled.div`
   justify-content: center;
   align-items: center;
   word-break: break-all;
+`;
+
+const StImg = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+
+const StMobileStepper = styled(MobileStepper)`
+  border-radius: 0 0 15px 15px;
+  
+  &.MuiMobileStepper-dotActive{
+    color: #ff6262;
+  }
+`;
+
+const ImageWrapper = styled.div`
+  padding: 24px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
+const StClose = styled.div`
+  padding: 8px;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 15px 15px 0 0;
 `;

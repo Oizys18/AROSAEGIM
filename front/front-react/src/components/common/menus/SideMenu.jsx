@@ -6,7 +6,7 @@ import { Close, Refresh, Check, VpnKey, AssignmentInd, Face, ExitToApp, Timelaps
 import { CustomSwitch } from '../../../styles/MuiStyles';
 import { FlexRow, } from '../../../styles/DispFlex';
 // import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
-
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 import UserInfo from './UserInfo';
 import SideMenuBtn from './SideMenuBtn';
 import Filters from './Filters';
@@ -133,7 +133,8 @@ class SideMenu extends Component {
             <Divider />
           </>
         }
-        <SideMenuBtn link="help" txt={"도움말"} icon={<HelpIcon />} />
+        <SideMenuBtn link="guideline" txt={"커뮤니티 가이드라인"} icon={<MenuBookIcon />} />
+        <SideMenuBtn link="tutorial" txt={"튜토리얼 다시보기"} icon={<HelpIcon />} />
         <SideMenuBtn link="contact" txt={"개발자와 연락"} icon={<Build />} />
         </StListCont>
       </Slide>

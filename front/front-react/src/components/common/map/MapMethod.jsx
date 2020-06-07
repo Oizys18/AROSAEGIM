@@ -66,5 +66,7 @@ export const calcPanoRadius = (level) => {
   }
 }
 
-export const customOverlay = (item) => {
+export const kakaoLatLng = (lat, lng) => {
+  const kakaoLatLng = new kakao.maps.LatLng(lat, lng);
+  return kakaoLatLng
 }

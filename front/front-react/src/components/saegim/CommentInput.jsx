@@ -21,6 +21,8 @@ class CommentInput extends Component{
 export default CommentInput;
 
 const StInput = styled(TextField)`
+  max-width: 50vw;
+
   .MuiInput-underline:after {
     border-bottom: 1.5px solid #616161; 
   }

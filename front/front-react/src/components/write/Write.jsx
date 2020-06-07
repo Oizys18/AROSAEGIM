@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Slide } from "@material-ui/core";
-import {Storage} from '../../storage/Storage'
+import { Storage } from "../../storage/Storage";
 import WriteSaegim from "./WriteSaegim";
 import WriteComplete from "./WriteComplete";
 
@@ -16,22 +16,24 @@ class Write extends Component {
   changeWrite = (data) => {
     this.setState({ write: true });
     this.setState({ id: data.data.id });
-    // console.log(data.data.id)
   };
   render() {
-    const Written = () => {
-      if (this.state.write) {
-        return <WriteComplete id={this.state.id} />;
-      } else {
-        return <WriteSaegim changeWrite={this.changeWrite} />;
-      }
-    };
     return (
       <StCont>
-        <Slide in={true} direction="left" timeout={300} mountOnEnter unmountOnExit>
+        <Slide
+          in={true}
+          direction="left"
+          timeout={300}
+          mountOnEnter
+          unmountOnExit
+        >
           <Wrapper height={this.context.appHeight}>
             <Container>
-              <Written />
+              {this.state.write ? (
+                <WriteComplete id={this.state.id} />
+              ) : (
+                <WriteSaegim changeWrite={this.changeWrite} />
+              )}
             </Container>
           </Wrapper>
         </Slide>
@@ -47,7 +49,7 @@ const StCont = styled.div`
 `;
 
 const Wrapper = styled.div`
-  height: ${props => props.height}px;
+  height: ${(props) => props.height}px;
   display: flex;
   justify-content: center;
   align-items: center;
