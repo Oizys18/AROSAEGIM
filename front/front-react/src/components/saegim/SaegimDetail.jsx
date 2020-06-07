@@ -64,6 +64,7 @@ class SaegimDetail extends Component {
 
   handleNext = () => {
     this.setActiveStep(this.state.activeStep + 1)
+    console.log(this.state.activeStep)
   }
 
   handleBack = () => {
@@ -94,7 +95,7 @@ class SaegimDetail extends Component {
     return this.state.curImage;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     setTimeout(this.setState({
       curImage: this.state.curImage + 1
     }), 5000)
@@ -104,8 +105,8 @@ class SaegimDetail extends Component {
         userId: _userInfo.id
       })
     }
-    this.getSaegimDetail();
-    this.setState({
+    await this.getSaegimDetail();
+    this.setStateAsync({
       maxSteps: this.state.data.images.length
     })
   }
