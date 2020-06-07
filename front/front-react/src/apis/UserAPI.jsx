@@ -37,3 +37,20 @@ export const getLikedSaegim = async (id) => {
   console.log(_res)
   return _res.data.data;
 }
+
+export const getUserByID = async (id) => {
+  const _res = await axios({
+    method: 'get',
+    url: `${BASE_URL}/users/${id}`,
+    params: {
+      name: id
+    }
+  })
+
+  if(_res.data.state === 'success'){
+    return _res.data.data;
+  }
+  else {
+    return false;
+  }
+}
