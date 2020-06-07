@@ -153,7 +153,9 @@ class CardItem extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    this.timer = setTimeout(this.getRegDate, 1000)
+    if (this.props.idx === 0) {
+      this.timer = setTimeout(this.getRegDate, 30000)
+    }
   }
 
   componentWillUnmount() {
@@ -271,8 +273,12 @@ const StPhotoIcon = styled(Photo)`
 `;
 
 const Contents = styled.div`
-  grid-area: contents;
-  word-break: break-all;
+  grid-area: contents;  
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  white-space: pre-wrap;
+  max-height: 20vh;
 `
 
 const ContentsL = styled.div`

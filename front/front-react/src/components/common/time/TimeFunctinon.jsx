@@ -17,10 +17,8 @@ export const getTimeDeltaString = (regDate) => {
       return `${Math.floor(-1 * timeDeltaSeconds/SECONDS_PER_MINUTE)}분 후`
     case timeDeltaSeconds < 0:
       return `${timeDeltaSeconds}초 후`
-    case timeDeltaSeconds === 0:
-      return `방금 전`
     case timeDeltaSeconds < SECONDS_PER_MINUTE:
-      return `${timeDeltaSeconds}초 전`
+      return `방금 전`
     case timeDeltaSeconds < SECONDS_PER_HOUR:
       return `${Math.floor(timeDeltaSeconds/SECONDS_PER_MINUTE)}분 전` 
     case timeDeltaSeconds < SECONDS_PER_DAY:
