@@ -12,12 +12,11 @@ class Chip extends Component {
         color={this.props.color}
         variant={this.props.variant}
         avatar={this.props.avatar}
+        icon={this.props.icon}
       />
     );
   }
 }
 export default Chip;
 
-const StChip = styled(ChipComponent)`
-
-`;
+const StChip = styled(ChipComponent)``;

@@ -47,11 +47,15 @@ export default function SimplePopover(props) {
     if (error) {
       return (
         <span style={{ color: "red", fontSize: "8px" }}>
-          태그를 입력해주세요
+          <br></br>태그를 입력해주세요
         </span>
       );
     } else {
-      return <span>　</span>;
+      return (
+        <span>
+          <br></br>　
+        </span>
+      );
     }
   };
   return (
