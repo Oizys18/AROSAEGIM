@@ -21,7 +21,8 @@ class CardItem extends Component {
     super(props);
     this.state = {
       currentId: 0,
-      colors: ['#FBF2EE', '#f4c6ba', '#f3b3a6', '#d69f94', '#B98B82', '#A76E62' ]
+      colors: ['#FBF2EE', '#f4c6ba', '#f3b3a6', '#d69f94', '#B98B82', '#A76E62' ],
+      regDate: ""
     }
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
@@ -45,6 +46,7 @@ class CardItem extends Component {
     window.addEventListener("mouseup", this.onDragEndMouse);
     window.addEventListener("touchend", this.onDragEndTouch);
     this.changeOrder()
+    this.getRegDate()
   }
 
   onDragStartMouse(e) {
@@ -143,10 +145,25 @@ class CardItem extends Component {
     this.props.onChangeData()
   }
 
+  getRegDate = () => {
+    if (this.props.saegim.regDate !== undefined) {
+      const _regDate = getTimeDeltaString(this.props.saegim.regDate)
+      this.setState({regDate: _regDate})
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    this.timer = setTimeout(this.getRegDate, 1000)
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timer)
+  }
+
   render() {
     const saegim = this.props.saegim;
     const idx = this.props.idx;
-    const length = this.props.length
+    const length = this.props.length;
     return (
       <div className="Wrapper" ref={div => (this.wrapper = div)}>
         <StackedCard idx={idx} length={length} >
@@ -166,7 +183,7 @@ class CardItem extends Component {
                   <Registered>
                     <StTime>
                       <StAccessTimeIcon />
-                      <div>{getTimeDeltaString(saegim.regDate)}</div>
+                      <div>{this.state.regDate}</div>
                     </StTime>
                   </Registered>
                   { saegim.imagesCount > 0 &&

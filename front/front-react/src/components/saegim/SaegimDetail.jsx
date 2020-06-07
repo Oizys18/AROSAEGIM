@@ -12,8 +12,11 @@ import Comment from "./Comment";
 import Like from "./Like";
 import {Storage} from "../../storage/Storage";
 import {FlexRow} from "../../styles/DispFlex";
+import Loading from "../common/background/Loading";
 
 class SaegimDetail extends Component {
+  isLoading = true;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -29,7 +32,9 @@ class SaegimDetail extends Component {
       activeStep: 0,
       maxSteps: 0,
       detailColor: "linear-gradient(#FBF2EE,#ffffff38),linear-gradient(-45deg,#f3b3a6,#ffffff00),linear-gradient(45deg,#ff6b6b,#ffffff40)",
-      user: {}
+      user: {},
+      isUser: 0,
+      isLoading: true
     };
     this.goBack = this.goBack.bind(this);
     this.setUpdateLike = this.setUpdateLike.bind(this);
@@ -76,9 +81,27 @@ class SaegimDetail extends Component {
 
     const _user = await getUserByID(this.state.data.userId)
     await this.setStateAsync({ user: _user })
+  }
 
-    const _regDate = getTimeDeltaString(this.state.data.regDate)
-    this.setState({ regDate: _regDate })
+  getRegDate = () => {
+    if (this.state.data.regDate !== undefined) {
+      const _regDate = getTimeDeltaString(this.state.data.regDate)
+      this.setState({regDate: _regDate})
+    }
+  }
+
+  setIsUser = () => {
+    if (this.state.data.secret) {
+      if (this.state.userId === this.state.data.userId) {
+        this.setStateAsync({
+          isUser: 2
+        })
+      } else {
+        this.setState({
+          isUser: 1
+        })
+      }
+    }
   }
 
    switchImage = () => {
@@ -94,8 +117,8 @@ class SaegimDetail extends Component {
     return this.state.curImage;
   }
 
-  componentDidMount() {
-    setTimeout(this.setState({
+  async componentDidMount() {
+    this.startTimer = setTimeout(this.setState({
       curImage: this.state.curImage + 1
     }), 5000)
     const _userInfo = this.context.userInfo
@@ -104,10 +127,14 @@ class SaegimDetail extends Component {
         userId: _userInfo.id
       })
     }
-    this.getSaegimDetail();
-    this.setState({
+    await this.getSaegimDetail()
+    this.setStateAsync({
       maxSteps: this.state.data.images.length
     })
+    await this.setIsUser()
+    await this.getRegDate()
+
+    this.isLoading = false
   }
 
   setUpdateLike(flag) {
@@ -126,131 +153,145 @@ class SaegimDetail extends Component {
     if (this.state.curImage !== prevState.curImage) {
       this.timer = setTimeout(this.switchImage, 5000)
     }
+    this.regTimer = setTimeout(this.getRegDate, 1000)
+    if (this.context.updateFlag === true) {
+      this.props.history.push('list')
+      this.context.setUpdateFlag(false)
+    }
   }
 
   componentWillUnmount() {
+    clearTimeout(this.startTimer)
     clearTimeout(this.timer)
+    clearTimeout(this.regTimer)
   }
 
   render() {
-    const PrintChip = this.state.data.tags.map((tag) => {
+    if (this.isLoading === true) {
+      return <Loading/>
+    } else {
+      const PrintChip = this.state.data.tags.map((tag) => {
+        return (
+          <Chip text={tag.name} key={tag.id}/>
+        )
+      })
       return (
-        <Chip text={tag.name} key={tag.id}/>
-      )
-    })
-
-    return (
-      <Zoom in={true}>
-        <Wrapper>
-          {this.state.data.images.length > 0 &&
+        <Zoom in={true}>
+          <Wrapper>
+            {this.state.data.images.length > 0 &&
             <Modal
               open={this.state.open}
-              >
+            >
               <>
-              <ImageWrapper>
-                <StClose onClick={this.handleClose}>
-                  <Close />
-                </StClose>
-                <StImg
-                  src={this.state.data.images[this.state.activeStep].source}
-                  alt={this.state.data.images[this.state.activeStep]}
-                />
-                <StMobileStepper
-                  steps={this.state.maxSteps}
-                  position="static"
-                  variant="dots"
-                  activeStep={this.state.activeStep}
-                  nextButton={
-                    <Button
-                      onClick={this.handleNext}
-                      disabled={this.state.activeStep === this.state.maxSteps - 1}
-                    >
-                      <ArrowForwardIos />
-                    </Button>
-                  }
-                  backButton={
-                    <Button
-                      onClick={this.handleBack}
-                      disabled={this.state.activeStep === 0}
-                    >
-                      <ArrowBackIos />
-                    </Button>
-                  }
-                />
-              </ImageWrapper>
-            </>
+                <ImageWrapper>
+                  <StClose onClick={this.handleClose}>
+                    <Close/>
+                  </StClose>
+                  <StImg
+                    src={this.state.data.images[this.state.activeStep].source}
+                    alt={this.state.data.images[this.state.activeStep]}
+                  />
+                  <StMobileStepper
+                    steps={this.state.maxSteps}
+                    position="static"
+                    variant="dots"
+                    activeStep={this.state.activeStep}
+                    nextButton={
+                      <Button
+                        onClick={this.handleNext}
+                        disabled={this.state.activeStep === this.state.maxSteps - 1}
+                      >
+                        <ArrowForwardIos/>
+                      </Button>
+                    }
+                    backButton={
+                      <Button
+                        onClick={this.handleBack}
+                        disabled={this.state.activeStep === 0}
+                      >
+                        <ArrowBackIos/>
+                      </Button>
+                    }
+                  />
+                </ImageWrapper>
+              </>
             </Modal>
-          }
-          <TopBar>
-            <BackButton onClick={this.goBack}>
-              <ArrowBack/>
-            </BackButton>
-            <StCont>
+            }
+            <TopBar>
+              <BackButton onClick={this.goBack}>
+                <ArrowBack/>
+              </BackButton>
+              <StCont>
                 <StNick>{this.state.user.name}</StNick>
                 <Avatar src={this.state.user.profileImage}/>
               </StCont>
-          </TopBar>
-          <Contents>
-            {this.state.data.images.length > 0
+            </TopBar>
+            <Contents>
+              {(this.state.data.images.length > 0 && this.state.isUser !== 1)
               && <BackGround bgImage={this.state.data.images[this.state.curImage].source}/>
-            }
-            <W3WChip>
-              <Chip
-                size="medium"
-                text={"/// " + this.state.data.w3w}
-              />
-            </W3WChip>
-            <CardWrapper>
-              <Card color={this.state.detailColor}>
-                <StCard>{this.state.data.contents}</StCard>
-              </Card>
-            </CardWrapper>
-            <ContentsBot>
-              <LockIcon>
-                {this.state.data.secret ? <Lock /> : <Lock style={{ display: 'none'}}/>}
-              </LockIcon>
-              {this.state.data.images.length > 0
-                ?
+              }
+              <W3WChip>
+                <Chip
+                  size="medium"
+                  text={"/// " + this.state.data.w3w}
+                />
+              </W3WChip>
+              <CardWrapper>
+                <Card color={this.state.detailColor}>
+                  <StCard>
+                    {this.state.isUser !== 1
+                      ? this.state.data.contents
+                      : '비밀글입니다.<br>작성자만 볼 수 있습니다.'}
+                  </StCard>
+                </Card>
+              </CardWrapper>
+              <ContentsBot>
+                <LockIcon>
+                  {this.state.data.secret ? <Lock/> : <Lock style={{display: 'none'}}/>}
+                </LockIcon>
+                {this.state.data.images.length > 0
+                  ?
                   <Image>
                     <StPhotoIcon onClick={this.handleOpen}/>
                     <div>{this.state.data.images.length}</div>
                   </Image>
-                : <Image style={{ display: 'none'}}>
+                  : <Image style={{display: 'none'}}>
                     <StPhotoIcon/>
                   </Image>
-              }
-            </ContentsBot>
-          </Contents>
-          <Communication>
-            <BotWrapper>
-              <Registered>
-                <StAccessTime />
-                {this.state.regDate}
-              </Registered>
-              <Likes>
-                <div>
-                <Like
-                  setUpdateLike={this.setUpdateLike}
-                  id={this.props.match.params.id}
-                  likes={this.state.data.likes}/>
-                </div>
-              </Likes>
-            </BotWrapper>
-            <Tags>
-              {PrintChip}
-            </Tags>
-            <Comments>
-              <Comment id={this.props.match.params.id} />
-            </Comments>
-          </Communication>
-          {this.state.userId === this.state.data.userId &&
-          <StButton>
-            <SaegimDetailButton id={this.props.match.params.id}/>
-          </StButton>
-          }
-        </Wrapper>
-      </Zoom>
-    )
+                }
+              </ContentsBot>
+            </Contents>
+            <Communication>
+              <BotWrapper>
+                <Registered>
+                  <StAccessTime/>
+                  {this.state.regDate}
+                </Registered>
+                <Likes>
+                  <div>
+                    <Like
+                      setUpdateLike={this.setUpdateLike}
+                      id={this.props.match.params.id}
+                      likes={this.state.data.likes}/>
+                  </div>
+                </Likes>
+              </BotWrapper>
+              <Tags>
+                {PrintChip}
+              </Tags>
+              <Comments>
+                <Comment id={this.props.match.params.id}/>
+              </Comments>
+            </Communication>
+            {this.state.userId === this.state.data.userId &&
+            <StButton>
+              <SaegimDetailButton id={this.props.match.params.id}/>
+            </StButton>
+            }
+          </Wrapper>
+        </Zoom>
+      )
+    }
   }
 }
 
@@ -303,10 +344,14 @@ const StNick = styled.div`
 `;
 
 const W3WChip = styled.div`
-  margin: 0 4vh 4vh 4vh;
   justify-content: space-between;
   align-items: center;
   display: flex;
+  
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
   
   .MuiChip-root{
     background-color: #fafafa;
@@ -333,11 +378,11 @@ const BackGround = styled.div `
   
   background-image: url(${props => props.bgImage});
   background-size: 100% 100%;
-  opacity: 0.9;
+  opacity: 0.6;
 `
 
 const CardWrapper = styled.div `
-  max-width: 80%;
+  min-width: 80%;
 `
 
 const BotWrapper = styled.div`
@@ -431,6 +476,10 @@ const StImg = styled.img`
 
 const StMobileStepper = styled(MobileStepper)`
   border-radius: 0 0 15px 15px;
+  
+  &.MuiMobileStepper-dotActive{
+    color: #ff6262;
+  }
 `;
 
 const ImageWrapper = styled.div`

@@ -7,6 +7,7 @@ import * as SA from "../../apis/SaegimAPI";
 import { Zoom, Slide, Select, MenuItem } from "@material-ui/core";
 import { Refresh } from "@material-ui/icons";
 import CtoW from "../../apis/w3w";
+import Loading from "../common/background/Loading";
 
 class SaegimListPage extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class SaegimListPage extends Component {
       distance: 100,
       data: [],
       printLocation: "",
+      isLoading: true
     }
     this.selectChange = this.selectChange.bind(this);
   }
@@ -63,13 +65,14 @@ class SaegimListPage extends Component {
 
   getSaegimList = async () => {
     const _data = await SA.getSaegimListByLocation(this.state.location, this.state.distance)
+    const _reversedData = _data.reverse()
     const _curData = {
-      listData: _data,
+      listData: _reversedData,
       distance: this.state.distance,
       selectedOption: this.state.selectedOption
     }
     this.setState({
-      data: _data
+      data: _reversedData
     })
     this.context.setCurData(_curData)
   }
@@ -133,6 +136,10 @@ class SaegimListPage extends Component {
       await this.getCurrentLocation()
     }
     await this.getAddrW3W()
+
+    this.setState({
+      isLoading: false
+    })
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -150,56 +157,60 @@ class SaegimListPage extends Component {
   }
 
   render() {
-    let _dir = 'right'
-    if(this.context.curPage === '/'){
-      _dir = 'left'
-    }
-    const PrintCard = this.state.data.map((saegim, idx) => {
-      return (
-        <Zoom in={true} timeout={300} key={idx}>
-          <CardItem
-            saegim={saegim}
-            idx={idx}
-            length={this.state.data.length}
-            onChangeData={this.changeData}
-          />
-        </Zoom>
-      )
-    });
-
-    const PrintOptions = this.state.options.map((option) => {
-        return (
-          <MenuItem value={option.idx} key={option.idx}>{option.text}</MenuItem>
-        )
+    if (this.state.isLoading === true) {
+      return <Loading/>
+    } else {
+      let _dir = 'right'
+      if (this.context.curPage === '/') {
+        _dir = 'left'
       }
-    );
+      const PrintCard = this.state.data.map((saegim, idx) => {
+        return (
+          <Zoom in={true} timeout={300} key={idx}>
+            <CardItem
+              saegim={saegim}
+              idx={idx}
+              length={this.state.data.length}
+              onChangeData={this.changeData}
+            />
+          </Zoom>
+        )
+      });
 
-    return (
-      <StCont>
-        <StLocation>
-          {this.state.printLocation}
-        </StLocation>
-        <StMenu>
-          <StButton onClick={this.refresh}>
-            <Refresh />
-          </StButton>
-          <StSelect
-            autoWidth
-            value={this.state.selectedOption}
-            onChange={this.selectChange}
-          >
-            {PrintOptions}
-          </StSelect>
-        </StMenu>
-        <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
-          <Wrapper height={this.context.appHeight}>
-            <StList>
-              {PrintCard}
-            </StList>
-          </Wrapper>
-        </Slide>
-      </StCont>
-    );
+      const PrintOptions = this.state.options.map((option) => {
+          return (
+            <MenuItem value={option.idx} key={option.idx}>{option.text}</MenuItem>
+          )
+        }
+      );
+
+      return (
+        <StCont>
+          <StLocation>
+            {this.state.printLocation}
+          </StLocation>
+          <StMenu>
+            <StButton onClick={this.refresh}>
+              <Refresh/>
+            </StButton>
+            <StSelect
+              autoWidth
+              value={this.state.selectedOption}
+              onChange={this.selectChange}
+            >
+              {PrintOptions}
+            </StSelect>
+          </StMenu>
+          <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
+            <Wrapper height={this.context.appHeight}>
+              <StList>
+                {PrintCard}
+              </StList>
+            </Wrapper>
+          </Slide>
+        </StCont>
+      );
+    }
   }
 }
 
