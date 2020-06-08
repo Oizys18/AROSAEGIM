@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { IconButton } from "@material-ui/core";
+import { IconButton, } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
 import CreateIcon from "@material-ui/icons/Create";
@@ -13,6 +13,8 @@ import SimplePopover from "./Writetag";
 import MapView from "../common/map/MapViewClone";
 import { kakaoLatLng } from "../common/map/MapMethod";
 import PinIcon from "../../assets/PinIcon";
+import { ThemeProvider } from '@material-ui/styles'
+import { setPrimaryColor2 } from '../../styles/MuiStyles';
 
 class WriteSaegim extends Component {
   constructor(props) {
@@ -226,11 +228,13 @@ class WriteSaegim extends Component {
             />
           )}
         </Top>
-        <Container>
-          <TextInput
-            placeholder="당신의 추억을 새겨주세요"
-            onTextChange={this.handleTextChange}
-          />
+        <Container> 
+          <ThemeProvider theme={setPrimaryColor2}>
+            <TextInput
+              placeholder="당신의 추억을 새겨주세요"
+              onTextChange={this.handleTextChange}
+            />
+          </ThemeProvider>
 
           <Bottom>
             <Switch
@@ -262,15 +266,21 @@ class WriteSaegim extends Component {
             ref={this.inputReference}
             onChange={this.fileUploadInputChange}
           />
-          <CreateImg onClick={this.fileUploadAction}>
-            <PhotoIcon />
-          </CreateImg>
-          <CreateTag onClick={this.openPop}>
-            <SimplePopover createTag={this.createTag} />
-          </CreateTag>
-          <CreatePost onClick={!this.state.mapView.status && this.writePost}>
-            <CreateIcon />
-          </CreatePost>
+          <StBtnCont>
+            <CreateImg onClick={this.fileUploadAction}>
+              <PhotoIcon />
+            </CreateImg>
+          </StBtnCont>
+          <StBtnCont>
+            <CreateTag onClick={this.openPop}>
+              <SimplePopover createTag={this.createTag} />
+            </CreateTag>
+          </StBtnCont>
+          <StBtnCont>
+            <CreatePost onClick={!this.state.mapView.status && this.writePost}>
+              <CreateIcon />
+            </CreatePost>
+          </StBtnCont>
         </CreateWrapper>
         <ImageWrapper>
           {this.state.imgBase64.map((img, i) => {
@@ -317,7 +327,8 @@ const Wrapper = styled.div`
 const Container = styled.div`
   width: 80vw;
   padding: 12px;
-  background-color: ghostwhite;
+  /* background-color: ghostwhite; */
+  background: #FBF2EE;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -328,6 +339,9 @@ const Top = styled.div`
   justify-content: space-between;
   align-items: center;
   display: flex;
+  .MuiButtonBase-root{
+    background: linear-gradient(45deg,#ffffff,#F4BDB0);
+  }
 `;
 
 const Bottom = styled.div`
@@ -346,32 +360,32 @@ const CreateWrapper = styled.div`
   border-radius: 16px;
 `;
 const CreateTag = styled(IconButton)`
-  background: white;
+  /* background: white; */
   padding: 0.25em;
-  margin-right: 10px;
-  &:focus {
+  /* margin-right: 10px; */
+  /* &:focus {
     background: lightgrey;
-  }
+  } */
 `;
 
 const CreatePost = styled(IconButton)`
-  background: white;
+  /* background: white; */
   padding: 0.25em;
-  &:focus {
+  /* &:focus {
     background: lightgrey;
-  }
+  } */
 `;
 
 const CreateImg = styled(IconButton)`
-  background: white;
+  /* background: white; */
   padding: 0.25em;
-  margin-right: 10px;
-  &:focus {
+  /* margin-right: 10px; */
+  /* &:focus {
     background: lightgrey;
   }
   &:active {
     background: lightgrey;
-  }
+  } */
 `;
 
 const Tag = styled.div`
@@ -402,4 +416,11 @@ const StViewCont = styled.div`
   width: 100%;
   height: 100%;
   background: gray;
+`;
+
+const StBtnCont = styled.div`
+  border: 1px solid gray;
+  border-radius: 50%;
+  background: #FBF2EE;
+  margin-left: 10px;
 `;

@@ -190,9 +190,6 @@ class MapPage extends Component {
     if(select === '장소'){
       this.state.place.keywordSearch(value, (data, status, pagination) => {
         if (status === kakao.maps.services.Status.OK) {
-          // console.log(data)
-          // console.log(status)
-          // console.log(pagination)
           this.setState({
             searchResult: data
           })

@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 import { Route, withRouter, Switch } from "react-router-dom";
-
 import { Slide } from '@material-ui/core'
-
 import { Storage } from "./storage/Storage";
 import * as GA from './apis/GeolocationAPI';
 import Loading from "./components/common/background/Loading";
 import Background from "./components/common/background/Background";
 import TopBar from "./components/common/navbar/TopBar";
-// import SearchBar from "./components/common/search/SearchBar";
 import SideMenu from "./components/common/menus/SideMenu";
 import BotNav from "./components/common/navbar/BotNav";
 import Modal from "./components/common/modal/Modal"

@@ -18,7 +18,6 @@ class RoadView extends Component {
       rvc: null,
       mmOn: true,
       mm: null,
-      mpj: null,
       cls: null,
 
       userMarker: null,
@@ -148,7 +147,7 @@ class RoadView extends Component {
       newItems: _newItems,
       itemIds: this.state.itemIds.concat(_newItems.map((el) => el.id)),
       olComps: this.state.olComps.concat(
-        _newItems.map((el) => <RoadViewOverlay key={`${el.id}`} id={`${el.id}`} item={el}/>)
+        _newItems.map((el) => <RoadViewOverlay key={`${el.id}`} id={`${el.id}`} item={el} mapCenter={this.props.mapCenter}/>)
       )
     })
   }
