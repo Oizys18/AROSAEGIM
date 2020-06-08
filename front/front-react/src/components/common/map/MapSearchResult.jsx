@@ -6,8 +6,8 @@ import { FlexRow, FlexColumn } from '../../../styles/DispFlex';
 import { IconButton } from '@material-ui/core';
 
 class MapSearchResult extends Component {
-  changeMapCenter = () => {
-    this.props.changeMapCenter( new kakao.maps.LatLng(Number(this.props.item.y), Number(this.props.item.x)))
+  searchCenter = () => {
+    this.props.searchCenter( new kakao.maps.LatLng(Number(this.props.item.y), Number(this.props.item.x)))
   }
   clickLink = () => {
     window.open(this.props.item.place_url, '_blank')
@@ -18,11 +18,11 @@ class MapSearchResult extends Component {
     return(
       <StResult>
         <StMapSvg>
-          <IconButton onClick={this.changeMapCenter}>
+          <IconButton onClick={this.searchCenter}>
             <Room/>
           </IconButton>
         </StMapSvg>
-        <StTxtCont>
+        <StTxtCont onClick={this.searchCenter}>
           <div className='pn'>{_item.place_name}</div>
           <div className='an'>{_item.address_name}</div>
           <div className='ph'>{_item.phone}</div>

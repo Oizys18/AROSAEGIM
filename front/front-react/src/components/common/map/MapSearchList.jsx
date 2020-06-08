@@ -18,7 +18,7 @@ class MapSearchList extends Component {
         <StResultCont>
         {
           this.props.searchResult.map((el, idx) => {
-            return <MapSearchResult key={idx} item={el} changeMapCenter={this.props.changeMapCenter}/>
+            return <MapSearchResult key={idx} item={el} searchCenter={this.props.searchCenter}/>
           })
         }
         </StResultCont>

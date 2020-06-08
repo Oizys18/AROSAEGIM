@@ -27,7 +27,14 @@ class MapView extends Component {
         status: false,
         item: {id:-1},
       },
-      searchMarker: null,
+
+      searchMarker: new kakao.maps.Marker({
+        image:new kakao.maps.MarkerImage(
+              pointImg,
+              new kakao.maps.Size(21, 28),
+              { offset: new kakao.maps.Point(11, 28) }
+        )
+      }),
     };
     this.markers = []
   }
@@ -46,7 +53,6 @@ class MapView extends Component {
       // console.log('re-rendering markers')
       this.overlayMarkers();
     }
-
     
     if(prevProps.mapCenter !== this.props.mapCenter){
       // 현위치로 가기 눌렀을 때
@@ -54,27 +60,18 @@ class MapView extends Component {
         this.state.mv.panTo(this.props.mapCenter);
         (this.state.userMarker && this.state.userMarker.setPosition(this.props.userCenter));
       }
+    }
 
-      // 검색한 장소 클릭시
-      else if(this.props.searchOn){
-        if(this.state.searchMarker){
-          this.state.searchMarker.setMap(null)
-        }
-
-        const _mki = new kakao.maps.MarkerImage(
-          pointImg,
-          new kakao.maps.Size(21, 28),
-          { offset: new kakao.maps.Point(11, 28) }
-        );
-        const _mk = new kakao.maps.Marker({
-          position: this.props.mapCenter,
-          image: _mki
-        });
-        _mk.setMap(this.state.mv);
-        this.setState({
-          searchMarker: _mk
-        })
-        this.state.mv.panTo(this.props.mapCenter);
+    // 검색한 장소 클릭시
+    if(prevProps.searchCenter !== this.props.searchCenter){
+      if(this.props.searchCenter){
+        this.state.searchMarker.setMap(null)
+        this.state.searchMarker.setPosition(this.props.searchCenter)
+        this.state.searchMarker.setMap(this.state.mv)
+        this.state.mv.panTo(this.props.searchCenter);
+      }
+      else{
+        this.state.searchMarker.setMap(null)
       }
     }
 
@@ -142,7 +139,6 @@ class MapView extends Component {
 
   handleDragEnd = () => {
     this.props.changeMapCenter(this.state.mv.getCenter())
-    this.state.searchMarker.setMap(null)
     this.fetchItem();
   };
 
