@@ -83,7 +83,7 @@ export default function SimplePopover(props) {
             type="text"
             placeholder="태그작성"
             onChange={handleTag}
-            autoFocus="true"
+            autoFocus={true}
             disableUnderline="true"
             margin="dense"
           />
