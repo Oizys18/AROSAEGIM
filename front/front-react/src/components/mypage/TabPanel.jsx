@@ -78,7 +78,7 @@ class TabPanel extends Component {
             <SaegimItem key={i}>
               <StLink to={`list/${saegim.saegimId}`}>
                 <StW3W>
-                  <StContents>{saegim.contents}</StContents>
+                  <StComment>{saegim.contents}</StComment>
                   <StTime>
                     <StAccessTimeIcon/>
                     {saegim.regDate !== undefined &&
@@ -139,6 +139,15 @@ const StW3W = styled.div`
   margin-bottom: 8px;
   
   color: gray;
+`;
+
+const StComment = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+  
+  color: rgba(0, 0, 0, 0.87);
 `;
 
 const StContents = styled.div`
