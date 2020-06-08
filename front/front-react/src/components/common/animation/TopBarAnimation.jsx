@@ -5,12 +5,12 @@ class TopBarAnimation extends Component {
   render() {
     return (
       <StAnima>
-        <div className="words">
-          <div className="word">우리는</div>
-          <div className="word">여기에</div>
-          <div className="word">있었다</div>
-          <div className="word">아로새김</div>
-          <div className="word"></div>
+        <div className="top_ani_words">
+          <div className="top_ani_word">우리는</div>
+          <div className="top_ani_word">여기에</div>
+          <div className="top_ani_word">있었다</div>
+          <div className="top_ani_word">아로새김</div>
+          <div className="top_ani_word"></div>
         </div>
       </StAnima>
     )
@@ -29,7 +29,7 @@ const StAnima = styled.div`
   border-radius: 15px;
   animation: 6s 4.5s infinite;
   
-  .words{
+  .top_ani_words{
     color: white;
     text-shadow: 0 0 10px gray;
     display: flex;
@@ -39,7 +39,7 @@ const StAnima = styled.div`
     align-items: center;
 
     
-    .word{
+    .top_ani_word{
       opacity: 0;
       position: absolute;
       padding-top: 3px;
@@ -48,24 +48,24 @@ const StAnima = styled.div`
       display: flex;
       align-items: center;
     }
-    .word:nth-child(1) {
-      animation: motion 10s 0s infinite;
+    .top_ani_word:nth-child(1) {
+      animation: motion2 10s 0s infinite;
     }
-    .word:nth-child(2) {
-      animation: motion 10s 2s infinite;
+    .top_ani_word:nth-child(2) {
+      animation: motion2 10s 2s infinite;
     }
-    .word:nth-child(3) {
-      animation: motion 10s 4s infinite;
+    .top_ani_word:nth-child(3) {
+      animation: motion2 10s 4s infinite;
     }
-    .word:nth-child(4) {
-      animation: motion 10s 6.5s infinite;
+    .top_ani_word:nth-child(4) {
+      animation: motion2 10s 6.5s infinite;
     }
-    .word:nth-child(5) {
-      animation: motion 10s 9s infinite;
+    .top_ani_word:nth-child(5) {
+      animation: motion2 10s 9s infinite;
     }
   }
 
-  @keyframes motion {
+  @keyframes motion2 {
     0% {
       opacity: 0;
       transform: translateY(0);
