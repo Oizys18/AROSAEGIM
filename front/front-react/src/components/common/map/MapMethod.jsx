@@ -48,7 +48,6 @@ export const MarkerConfig = (item, itemType) => {
   }
 }
 
-
 export const calcPanoRadius = (level) => {
   switch(level){
     case 1:
@@ -69,4 +68,13 @@ export const calcPanoRadius = (level) => {
 export const kakaoLatLng = (lat, lng) => {
   const kakaoLatLng = new kakao.maps.LatLng(lat, lng);
   return kakaoLatLng
+}
+
+export const randomInt = (min, max) => {
+  const _randVal = Math.floor(Math.random()*(max-min+1)) + min;
+    return _randVal;
+}
+
+export const calcRVDist = (center, saegim) => {
+  
 }

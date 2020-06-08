@@ -147,7 +147,13 @@ class RoadView extends Component {
       newItems: _newItems,
       itemIds: this.state.itemIds.concat(_newItems.map((el) => el.id)),
       olComps: this.state.olComps.concat(
-        _newItems.map((el) => <RoadViewOverlay key={`${el.id}`} id={`${el.id}`} item={el} mapCenter={this.props.mapCenter}/>)
+        _newItems.map((el) => 
+          <RoadViewOverlay key={`${el.id}`} 
+            id={`${el.id}`} 
+            item={el} 
+            mapCenter={this.props.mapCenter}
+          />
+        )
       )
     })
   }
@@ -160,8 +166,8 @@ class RoadView extends Component {
             const _co = new kakao.maps.CustomOverlay({
               position: new kakao.maps.LatLng(el.latitude, el.longitude),
               content: document.getElementById(`${el.id}`),
-              xAnchor: Math.random(0, 1), 
-              yAnchor: Math.random(0, 1), 
+              xAnchor: Math.random(), 
+              yAnchor: Math.random(), 
             })
             const _mk = new kakao.maps.Marker(MM.MarkerConfig(el))
             return { id:el.id, co:_co, mk:_mk }
@@ -173,8 +179,9 @@ class RoadView extends Component {
     this.state.olObjs.forEach((el) => {
       const _flag = this.props.items.findIndex(item => item.id === el.id)
       if(_flag !== -1){
+        el.co.setAltitude(MM.randomInt(0, 25))
+        el.co.setRange(50)
         el.co.setMap(this.state.rv)
-        el.co.setRange(100)
         // el.mk.setMap(this.state.mm)
         this.state.cls.addMarker(el.mk)
       }
