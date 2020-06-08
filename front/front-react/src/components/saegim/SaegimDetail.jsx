@@ -247,6 +247,7 @@ class SaegimDetail extends Component {
                   size="medium"
                   text={this.state.data.w3w}
                   icon={<PinIcon />}
+                  style={{ boxShadow: '0 1px 2px gray' }}
                 />
               </W3WChip>
               <CardWrapper>
