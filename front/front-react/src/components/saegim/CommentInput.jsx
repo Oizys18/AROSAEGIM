@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import TextField from "@material-ui/core/TextField";
+import { TextField } from "@material-ui/core";
 
 class CommentInput extends Component{
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
         <StInput

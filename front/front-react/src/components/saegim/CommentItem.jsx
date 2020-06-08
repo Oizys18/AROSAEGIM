@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Storage } from "../../storage/Storage"
 import styled from "styled-components";
-import { delComment } from "../../apis/CommentAPI";
-import CloseIcon from "@material-ui/icons/Close"
+import { Close } from "@material-ui/icons"
 
 class CommentItem extends Component {
   constructor(props, context) {
@@ -26,7 +25,7 @@ class CommentItem extends Component {
         </StComment>
         {this.state.userid === this.props.userid &&
           <div onClick={this.handleClick}>
-            <CloseIcon/>
+            <Close/>
           </div>
         }
       </Wrapper>

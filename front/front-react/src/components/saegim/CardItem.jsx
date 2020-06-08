@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
-import Card from "../common/cards/Card";
 import "./CardItem.css";
 import { Lock, Photo, AccessTime } from "@material-ui/icons";
-import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 import PinIcon from "../../assets/PinIcon";
+import Card from "../common/cards/Card";
+import { getTimeDeltaString } from "../common/time/TimeFunctinon";
+import { FlexRow } from "../../styles/DispFlex";
 
 class CardItem extends Component {
   listElement;
@@ -258,11 +259,8 @@ const StCard = styled.div`
   }
 `
 
-const Image = styled.div`
+const Image = styled(FlexRow)`
   grid-area: image;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 const StPhotoIcon = styled(Photo)`
@@ -277,23 +275,17 @@ const Contents = styled.div`
   -webkit-box-orient: vertical;  
 `
 
-const ContentsL = styled.div`
+const ContentsL = styled(FlexRow)`
   grid-area: contents;
   color: #616161;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 const Comments = styled.div`
   grid-area: comments;
 `
 
-const Location = styled.div`
+const Location = styled(FlexRow)`
   grid-area: location;
-  display: flex;
-  align-items: center;
-  justify-self: center;
 `
 
 const Registered = styled.div`
@@ -314,11 +306,7 @@ const StackedCard = styled.div `
   display: ${props => props.idx > 4 && 'none'};
 `
 
-const StTime = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+const StTime = styled(FlexRow)``;
 
 const StAccessTimeIcon = styled(AccessTime)`
   margin-right: 4px;
