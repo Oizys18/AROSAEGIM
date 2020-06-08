@@ -6,7 +6,7 @@ class RoadViewOverlay extends Component {
 
   render(){
     return(
-      <StCont id={this.props.id} onClick={()=>{console.log(this.props.id)}}>
+      <StCont id={this.props.id}>
         <StContent>
           {this.props.item.contents}
         </StContent>

@@ -118,7 +118,10 @@ class MapPage extends Component {
   };
 
   tglView = () => {
-    this.setState({ roadView: !this.state.roadView })
+    this.setState({ 
+      roadView: !this.state.roadView,
+      searchResult: []
+    })
   };
   goUserCenter = () => {
     GA.getPositionAsync()
@@ -184,6 +187,7 @@ class MapPage extends Component {
   handleApply = async () => {
     this.tglFilter()
   }
+
   handleSearch = (select, value) => {
     if(select === '장소'){
       this.state.place.keywordSearch(value, (data, status, pagination) => {
@@ -282,7 +286,7 @@ class MapPage extends Component {
           handleSearch={this.handleSearch}
         />
         <MapSearchList 
-          on={this.state.searchResult.length > 0} 
+          on={this.state.searchResult.length > 0 && !this.state.roadView} 
           searchResult={this.state.searchResult} 
           initSearch={this.initSearch}
           changeMapCenter={this.changeMapCenter}

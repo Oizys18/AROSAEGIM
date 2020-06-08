@@ -18,7 +18,8 @@ function MapWalker (position) {
   var walker = new kakao.maps.CustomOverlay({
       position: position,
       content: content,
-      yAnchor: 1
+      yAnchor: 1,
+      zIndex: 100,
   });
 
   this.walker = walker;
