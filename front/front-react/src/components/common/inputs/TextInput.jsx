@@ -20,8 +20,6 @@ class TextInput extends Component {
         fullWidth
         rows={9}
         rowsMax={9}
-        margin="dense"
-        variant="outlined"
         value={value}
         onChange={this.handleChange}
       />
@@ -31,7 +29,27 @@ class TextInput extends Component {
 export default TextInput;
 
 const CustomInput = styled(TextField)`
-  width: 100%;
+  width: 90%;
+  border-radius: 20px;
+  padding: 16px;
+  margin: 12px 0;
+  
   text-align: center;
-  background-color: transparent;
+  background-color: #ffffff;
+  
+  .MuiInputBase-root-78 {
+    font-family: 'Noto Serif KR', serif;
+  }
+  
+  .MuiInput-underline-69:before {
+    border-bottom: none;
+  }
+  
+  .MuiInput-underline-69:after {
+    border-bottom: none;
+  }
+  
+  .MuiInput-underline-69:hover:not(.Mui-disabled):before {
+    border-bottom: none;
+  }
 `;

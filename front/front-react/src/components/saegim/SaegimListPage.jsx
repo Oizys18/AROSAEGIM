@@ -140,7 +140,8 @@ class SaegimListPage extends Component {
     const date = new Date()
     const strMonth = date.getMonth() + 1
     const strDay = date.getDate()
-    return `${strMonth}월 ${strDay}일의 새김`
+    const strYear = date.getFullYear() - 1
+    return `${strYear}년 ${strMonth}월 ${strDay}일의 새김`
   }
 
   getTime = () => {
@@ -394,7 +395,7 @@ const Glow = keyframes`
 
 const StHourglassFull = styled(HourglassFull)`
   position: fixed;
-  bottom: 10%;
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   color: #0fc4c4;
@@ -419,7 +420,7 @@ const GlowText = keyframes`
 
 const StTCMessage = styled.div`
   position: fixed;
-  bottom: 10%;
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   color: #ffffff;

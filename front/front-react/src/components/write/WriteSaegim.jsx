@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { IconButton, } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
-import CreateIcon from "@material-ui/icons/Create";
+import { Create, Photo } from "@material-ui/icons"
 import CtoW from "../../apis/w3w";
 import Switch from "../common/switch/Switch";
 import axios from "axios";
-import PhotoIcon from "@material-ui/icons/AddPhotoAlternate";
 import { Storage } from "../../storage/Storage";
 import SimplePopover from "./Writetag";
 import MapView from "../common/map/MapViewClone";
@@ -35,6 +34,7 @@ class WriteSaegim extends Component {
         status: false,
         center: null,
       },
+      delFlag: false
     };
     this.inputReference = React.createRef();
   }
@@ -179,6 +179,20 @@ class WriteSaegim extends Component {
   createTag = (newTag) => {
     this.setState({ tags: this.state.tags.concat(newTag) });
   };
+  deleteTag = (e) => {
+    const _target = e.target.firstChild.nodeValue
+    const _idx = this.state.tags.indexOf(_target)
+    if (_idx > -1) {
+      this.state.tags.splice(_idx, 1);
+    }
+    this.setState({ delFlag: true })
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.delFlag !== prevProps.delFlag && this.state.delFlag === true) {
+      this.setState({ delFlag: false })
+    }
+  }
 
   render() {
     const ErrorMsg = () => {
@@ -240,7 +254,6 @@ class WriteSaegim extends Component {
             <Switch
               locked={this.state.locked}
               changeSwitch={this.changeSwitch}
-              color="primary"
               labelText={this.state.locked ? "비공개" : "공개"}
               labelPlacement="start"
             />
@@ -249,8 +262,8 @@ class WriteSaegim extends Component {
           <Tag>
             {this.state.tags.map((tag, i) => {
               return (
-                <div style={{ margin: "1px" }} key={i}>
-                  <Chip size="small" text={tag} />
+                <div onClick={this.deleteTag} style={{ margin: "1px" }} key={i}>
+                  <StChip size="small"text={tag} />
                 </div>
               );
             })}
@@ -268,7 +281,7 @@ class WriteSaegim extends Component {
           />
           <StBtnCont>
             <CreateImg onClick={this.fileUploadAction}>
-              <PhotoIcon />
+              <Photo />
             </CreateImg>
           </StBtnCont>
           <StBtnCont>
@@ -278,7 +291,7 @@ class WriteSaegim extends Component {
           </StBtnCont>
           <StBtnCont>
             <CreatePost onClick={!this.state.mapView.status && this.writePost}>
-              <CreateIcon />
+              <Create />
             </CreatePost>
           </StBtnCont>
         </CreateWrapper>
@@ -326,7 +339,7 @@ const Wrapper = styled.div`
 `;
 const Container = styled.div`
   width: 80vw;
-  padding: 12px;
+  padding: 16px;
   /* background-color: ghostwhite; */
   background: #FBF2EE;
   display: flex;
@@ -421,6 +434,13 @@ const StViewCont = styled.div`
 const StBtnCont = styled.div`
   border: 1px solid gray;
   border-radius: 50%;
-  background: #FBF2EE;
+  box-shadow: 0 0 2px #f3b3a6;
+  
+  background: #ffffff;
   margin-left: 10px;
+`;
+
+const StChip = styled(Chip)`
+  background-color: #f4c6ba;
+  margin-right: 4px;
 `;
