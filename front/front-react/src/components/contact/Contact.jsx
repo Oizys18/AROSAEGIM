@@ -1,17 +1,23 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { ArrowBack } from "@material-ui/icons";
+import { Slide } from '@material-ui/core';
+// import { ArrowBack } from "@material-ui/icons";
 import { withRouter } from "react-router-dom";
+import BackBtn from '../common/buttons/BackBtn';
+
 class Contact extends Component {
   constructor(props) {
     super(props);
     this.state = {
       location: null,
+      slideIn: true,
     };
     // this.goBack = this.goBack.bind(this);
   }
-  goBack = () => {
-    console.log(this.props);
+  setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
+  goBack = async () => {
+    // console.log(this.props);
+    await this.setStateAsync({ slideIn: false })
     this.props.history.goBack();
   };
 
@@ -19,54 +25,83 @@ class Contact extends Component {
 
   render() {
     return (
-      <Wrapper>
-        <BackButton onClick={this.goBack}>
-          <ArrowBack />
-        </BackButton>
-        <Header>
-          <Title>개발자에게 메일보내기</Title>
-          <Content href="mailto:hello@saegim.me">hello@saegim.me</Content>
-        </Header>
-        <MemberCard href="https://github.com/Oizys18">
-          <ProfileImg src="https://avatars3.githubusercontent.com/u/37648340?s=120&v=4" />
-          <Message>
-            <Name>양찬우 @Oizys18</Name>
-            <Role>Frontend</Role>
-          </Message>
-        </MemberCard>
-        <MemberCard href="https://github.com/soulgchoi">
-          <ProfileImg src="https://avatars0.githubusercontent.com/u/52682603?s=120&v=4" />
-          <Message>
-            <Name>최솔지 @soulgchoi</Name>
-            <Role>Frontend</Role>
-          </Message>
-        </MemberCard>
-        <MemberCard href="https://github.com/EXTC27">
-          <ProfileImg src="https://avatars1.githubusercontent.com/u/40153405?s=120&v=4" />
-          <Message>
-            <Name>김신재 @EXTC27</Name>
-            <Role>Frontend</Role>
-          </Message>
-        </MemberCard>
-        <MemberCard href="https://github.com/kingjky">
-          <ProfileImg src="https://avatars3.githubusercontent.com/u/51773494?s=120&v=4" />
-          <Message>
-            <Name>전경윤 @kingjky</Name>
-            <Role>Backend</Role>
-          </Message>
-        </MemberCard>
-        <MemberCard href="https://github.com/ghleokim">
-          <ProfileImg src="https://avatars3.githubusercontent.com/u/52501513?s=120&v=4" />
-          <Message>
-            <Name>김건호 @ghleokim</Name>
-            <Role>Frontend</Role>
-          </Message>
-        </MemberCard>
-      </Wrapper>
+      <StCont>
+        <BackBtn handleBack={this.goBack}/>
+        
+        <Slide in={this.state.slideIn} direction="left">
+        <Wrapper>
+          {/* <BackButton onClick={this.goBack}>
+            <ArrowBack />
+          </BackButton> */}
+          <Slide in={true} direction="left" timeout={400}>
+            <Header>
+              <Title>개발자에게 메일보내기</Title>
+              <Content href="mailto:hello@saegim.me">hello@saegim.me</Content>
+            </Header>
+          </Slide>
+
+          <Slide in={true} direction="left" timeout={600}>
+            <MemberCard href="https://github.com/Oizys18">
+              <ProfileImg src="https://avatars3.githubusercontent.com/u/37648340?s=120&v=4" />
+              <Message>
+                <Name>양찬우 @Oizys18</Name>
+                <Role>Frontend</Role>
+              </Message>
+            </MemberCard>
+          </Slide>
+
+          <Slide in={true} direction="left" timeout={650}>
+            <MemberCard href="https://github.com/soulgchoi">
+              <ProfileImg src="https://avatars0.githubusercontent.com/u/52682603?s=120&v=4" />
+              <Message>
+                <Name>최솔지 @soulgchoi</Name>
+                <Role>Frontend</Role>
+              </Message>
+            </MemberCard>
+          </Slide>
+
+          <Slide in={true} direction="left" timeout={700}>
+            <MemberCard href="https://github.com/EXTC27">
+              <ProfileImg src="https://avatars1.githubusercontent.com/u/40153405?s=120&v=4" />
+              <Message>
+                <Name>김신재 @EXTC27</Name>
+                <Role>Frontend</Role>
+              </Message>
+            </MemberCard>
+          </Slide>
+          
+          <Slide in={true} direction="left" timeout={750}>
+            <MemberCard href="https://github.com/kingjky">
+              <ProfileImg src="https://avatars3.githubusercontent.com/u/51773494?s=120&v=4" />
+              <Message>
+                <Name>전경윤 @kingjky</Name>
+                <Role>Backend</Role>
+              </Message>
+            </MemberCard>
+          </Slide>
+
+          <Slide in={true} direction="left" timeout={800}>
+            <MemberCard href="https://github.com/ghleokim">
+              <ProfileImg src="https://avatars3.githubusercontent.com/u/52501513?s=120&v=4" />
+              <Message>
+                <Name>김건호 @ghleokim</Name>
+                <Role>Frontend</Role>
+              </Message>
+            </MemberCard>
+          </Slide>
+
+        </Wrapper>
+        </Slide>
+
+      </StCont>
     );
   }
 }
 export default withRouter(Contact);
+
+const StCont = styled.div`
+  overflow: hidden;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -119,15 +154,16 @@ const Role = styled.div`
   font-size:14px;
 `;
 
-const BackButton = styled.div`
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  background: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 16px;
-`;
+// const BackButton = styled.div`
+//   position: absolute;
+//   top: 5%;
+//   left: 5%;
+//   background: white;
+
+//   width: 24px;
+//   height: 24px;
+//   border-radius: 16px;
+// `;
 
 const Header = styled.div`
   background: white;

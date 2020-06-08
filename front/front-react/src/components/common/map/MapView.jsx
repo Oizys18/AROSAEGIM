@@ -6,7 +6,6 @@ import MapItem from "./MapItem";
 import * as MM from "./MapMethod";
 import pointImg from "../../../assets/point/point@2x.png";
 import pointFloatImg from "../../../assets/point/point-float@2x.png";
-import MapListItem from "./MapListItem";
 
 // import MapMarker, {MarkerConfig} from "./MapItemTest";
 
@@ -338,15 +337,6 @@ const StList = styled.div`
   flex-direction: column-reverse;
   align-items: flex-end;
 `
-
-const ButtonWrapper = styled.div`
-  position: absolute;
-  z-index: 10;
-  bottom: 72px;
-
-  display: flex;
-  padding: 0 16px 0 16px;
-`;
 
 const emptyItem = {
   contents: "emptyItem",

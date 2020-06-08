@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 
 import styled from 'styled-components';
 import { Slide, Zoom, IconButton, Divider } from '@material-ui/core';
-import { Close, Refresh, Check, VpnKey, AssignmentInd, Face, ExitToApp, Timelapse, Today, Build } from '@material-ui/icons';
+import { Close, Refresh, Check, VpnKey, AssignmentInd, Face, 
+  ExitToApp, Timelapse, Today, Build, MenuBook, Help } from '@material-ui/icons';
 import { CustomSwitch } from '../../../styles/MuiStyles';
 import { FlexRow, } from '../../../styles/DispFlex';
 // import inlineLogo from "../../../assets/logo/inline-logo-black@2x.png";
-import MenuBookIcon from '@material-ui/icons/MenuBook';
 import UserInfo from './UserInfo';
 import SideMenuBtn from './SideMenuBtn';
 import Filters from './Filters';
-
-import HelpIcon from '@material-ui/icons/Help'; 
 
 class SideMenu extends Component {
   constructor(props){
@@ -135,8 +133,8 @@ class SideMenu extends Component {
             <Divider />
           </>
         }
-        <SideMenuBtn link="guideline" txt={"커뮤니티 가이드라인"} icon={<MenuBookIcon />} />
-        <SideMenuBtn link="tutorial" txt={"튜토리얼 다시보기"} icon={<HelpIcon />} />
+        <SideMenuBtn link="guideline" txt={"커뮤니티 가이드라인"} icon={<MenuBook />} />
+        <SideMenuBtn link="tutorial" txt={"튜토리얼 다시보기"} icon={<Help />} />
         <SideMenuBtn link="contact" txt={"개발자와 연락"} icon={<Build />} />
         </StListCont>
       </Slide>

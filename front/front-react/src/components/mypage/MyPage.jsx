@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Storage } from "../../storage/Storage";
 import styled from "styled-components";
-import { Select, Tabs, Tab, MenuItem }  from "@material-ui/core"
+import { Select, Tabs, Tab, MenuItem, Slide }  from "@material-ui/core"
 import { CreateOutlined, FavoriteBorderOutlined, MessageOutlined } from "@material-ui/icons"
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { getCommentedSaegim, getLikedSaegim, getCreatedSaegim } from "../../apis/UserAPI"
@@ -81,7 +81,7 @@ class MyPage extends Component {
   getLike = async () => {
     const _userId = this.state.userId
     const _data = await getLikedSaegim(_userId)
-    console.log(_data)
+    // console.log(_data)
     const _temp = []
     _data.map( async (d) => {
       const _res = await getSaegimById(d.saegimId)
@@ -136,6 +136,7 @@ class MyPage extends Component {
         <MuiThemeProvider theme={theme}>
         <div>
           <Wrapper>
+            <Slide in={true} direction='down' timeout={450}>
             <UserInfo>
               <User>
                 <span>
@@ -158,11 +159,14 @@ class MyPage extends Component {
                 </Tabs>
               </UserSaegim>
             </UserInfo>
+            </Slide>
+
+            <Slide in={true} direction='up' timeout={400}>
             <SaegimInfo value={this.state.currentTab}>
               <ListInfo>
                 <ListTitle>{MyPageMenu[this.state.currentTab].title}</ListTitle>
                 <StSelect
-                  autowidth
+                  autoWidth
                   value={this.state[MyPageMenu[this.state.currentTab].value]}
                   onChange={this.selectChange}
                   inputProps={{
@@ -196,6 +200,7 @@ class MyPage extends Component {
                 />
               </SaegimShortList>
             </SaegimInfo>
+            </Slide>
           </Wrapper>
         </div>
         </MuiThemeProvider>

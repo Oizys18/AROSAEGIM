@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-import StSwitch from "@material-ui/core/Switch";
+// import styled from "styled-components";
+// import StSwitch from "@material-ui/core/Switch";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { CustomSwitch } from '../../../styles/MuiStyles'
 
 class Switch extends Component {
   constructor(props) {
@@ -33,4 +34,4 @@ class Switch extends Component {
 }
 export default Switch;
 
-const CustomSwitch = styled(StSwitch)``;
+// const CustomSwitch = styled(StSwitch)``;

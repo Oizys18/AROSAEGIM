@@ -18,7 +18,6 @@ class RoadView extends Component {
       rvc: null,
       mmOn: true,
       mm: null,
-      mpj: null,
       cls: null,
 
       userMarker: null,
@@ -148,7 +147,13 @@ class RoadView extends Component {
       newItems: _newItems,
       itemIds: this.state.itemIds.concat(_newItems.map((el) => el.id)),
       olComps: this.state.olComps.concat(
-        _newItems.map((el) => <RoadViewOverlay key={`${el.id}`} id={`${el.id}`} item={el}/>)
+        _newItems.map((el) => 
+          <RoadViewOverlay key={`${el.id}`} 
+            id={`${el.id}`} 
+            item={el} 
+            mapCenter={this.props.mapCenter}
+          />
+        )
       )
     })
   }
@@ -161,8 +166,8 @@ class RoadView extends Component {
             const _co = new kakao.maps.CustomOverlay({
               position: new kakao.maps.LatLng(el.latitude, el.longitude),
               content: document.getElementById(`${el.id}`),
-              xAnchor: Math.random(0, 1), 
-              yAnchor: Math.random(0, 1), 
+              xAnchor: Math.random(), 
+              yAnchor: Math.random(), 
             })
             const _mk = new kakao.maps.Marker(MM.MarkerConfig(el))
             return { id:el.id, co:_co, mk:_mk }
@@ -174,8 +179,9 @@ class RoadView extends Component {
     this.state.olObjs.forEach((el) => {
       const _flag = this.props.items.findIndex(item => item.id === el.id)
       if(_flag !== -1){
+        el.co.setAltitude(MM.randomInt(0, 25))
+        el.co.setRange(50)
         el.co.setMap(this.state.rv)
-        el.co.setRange(100)
         // el.mk.setMap(this.state.mm)
         this.state.cls.addMarker(el.mk)
       }
@@ -217,7 +223,8 @@ class RoadView extends Component {
     await this.setStateAsync({
       mw: _mapWalker,
     })
-    
+
+    _miniMap.addOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
     kakao.maps.event.addListener(_miniMap, "zoom_changed", this.changeLvCt)
     kakao.maps.event.addListener(_miniMap, "dragend", this.changeLvCt)
     kakao.maps.event.addListener(_miniMap, "center_changed", this.changeMWCt)
@@ -234,11 +241,11 @@ class RoadView extends Component {
     this.setState({ userMarker: userMarker })
   }
 
-  //중심 이동, 레벨 변경
+  //레벨 변경
+  //중심 이동
   changeLvCt = () => {
     const _center = this.state.mm.getCenter()
     const _level = this.state.mm.getLevel()
-    // this.changeAddr(_center)
     this.state.rvc.getNearestPanoId(_center, MM.calcPanoRadius(_level), (panoId) => {
       if(panoId)  {
         this.state.rv.setPanoId(panoId, _center) //panoId와 중심좌표를 통해 로드뷰 실행
@@ -246,8 +253,8 @@ class RoadView extends Component {
     })
     this.props.changeMapCenter(_center)
   }
-  //맵워커 위치 변경
-  changeMWCt = () => {
+  //맵워커 위치, 로드 뷰 변경
+  changeMWCt = (e) => {
     const _center = this.state.mm.getCenter()
     this.state.mw.setPosition(_center)
   }

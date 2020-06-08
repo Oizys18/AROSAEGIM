@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 import { Route, withRouter, Switch } from "react-router-dom";
-
 import { Slide } from '@material-ui/core'
-
 import { Storage } from "./storage/Storage";
 import * as GA from './apis/GeolocationAPI';
 import Loading from "./components/common/background/Loading";
 import Background from "./components/common/background/Background";
 import TopBar from "./components/common/navbar/TopBar";
-// import SearchBar from "./components/common/search/SearchBar";
 import SideMenu from "./components/common/menus/SideMenu";
 import BotNav from "./components/common/navbar/BotNav";
 import Modal from "./components/common/modal/Modal"
@@ -22,7 +19,7 @@ import SaegimListPage from "./components/saegim/SaegimListPage";
 import SaegimDetail from "./components/saegim/SaegimDetail";
 import MyPage from "./components/mypage/MyPage";
 import Contact from "./components/contact/Contact";
-import Help from "./components/contact/Help";
+// import Help from "./components/contact/Help";
 import { getUserByEmail } from "./apis/AccountAPI";
 import { delComment } from "./apis/CommentAPI";
 import { delSaegim } from "./apis/SaegimAPI";
@@ -80,28 +77,6 @@ class App extends Component {
     .catch((err) => { this.popModal(GA.getPositionFail(err), 'geolocation error', 'alert') });
 
     this.handleLogin()
-    // const _autoLogin = localStorage.getItem('ARSG autoLogin')
-    // if(_autoLogin === 'true'){
-    //   const _email = localStorage.getItem('ARSG email')
-    //   this.setState({ 
-    //     isLogin: true,
-    //     userInfo: (await getUserByEmail(_email)).data
-    //   })
-    //   this.goFirstPage('/list')
-    // }
-    // else {
-    //   const _email = sessionStorage.getItem('ARSG email')
-    //   if(_email === null){
-    //     this.goFirstPage('/list')
-    //   }
-    //   else{
-    //     this.setState({ 
-    //       isLogin: true,
-    //       userInfo: (await getUserByEmail(_email)).data
-    //     })
-    //     this.goFirstPage('/list')
-    //   }
-    // }
   }
   componentDidUpdate(prevProps, prevState){
     if(this.state.appHeight !== window.innerHeight){
@@ -153,7 +128,7 @@ class App extends Component {
     }
     this.setState({ modal: false })
   }
-  handleLogin = async () => {
+  handleLogin = async (param) => {
     const _autoLogin = localStorage.getItem('ARSG autoLogin')
     if(_autoLogin === 'true'){
       const _email = localStorage.getItem('ARSG email')
@@ -161,11 +136,13 @@ class App extends Component {
         isLogin: true,
         userInfo: (await getUserByEmail(_email)).data
       })
+      if(param === 'login') return
       this.goFirstPage('/list')
     }
     else {
       const _email = sessionStorage.getItem('ARSG email')
       if(_email === null){
+        if(param === 'login') return
         this.goFirstPage('/list')
       }
       else{
@@ -173,6 +150,7 @@ class App extends Component {
           isLogin: true,
           userInfo: (await getUserByEmail(_email)).data
         })
+        if(param === 'login') return
         this.goFirstPage('/list')
       }
     }

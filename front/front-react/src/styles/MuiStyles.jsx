@@ -1,4 +1,3 @@
-import React from 'react';
 import { createMuiTheme } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
@@ -7,7 +6,11 @@ import Switch from '@material-ui/core/Switch';
 export const setPrimaryColor = createMuiTheme({
   palette: {
     primary: { main: '#F3B3A6' },
-    secondary: { main: '#A76E62' }
+  }
+});
+export const setPrimaryColor2 = createMuiTheme({
+  palette: {
+    primary: { main: '#F4C6BA' },
   }
 });
 
