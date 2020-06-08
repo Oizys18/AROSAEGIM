@@ -3,9 +3,11 @@ import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import Card from "../common/cards/Card";
 import "./CardItem.css";
-import { Lock, Photo, AccessTime } from "@material-ui/icons";
+import { Lock, Photo, AccessTime, CreateOutlined  } from "@material-ui/icons";
+import Chip from "../common/chip/Chip";
 import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 import PinIcon from "../../assets/PinIcon";
+import { FlexColumn, FlexRow } from "../../styles/DispFlex";
 
 class CardItem extends Component {
   listElement;
@@ -163,6 +165,9 @@ class CardItem extends Component {
     const saegim = this.props.saegim;
     const idx = this.props.idx;
     const length = this.props.length;
+    const PrintTags = saegim.tags.slice(0, 3).map((tag) => {
+      return <StChip size='small' text={tag.name} key={tag.id} idx={idx} />
+    })
     return (
       <div className="Wrapper" ref={div => (this.wrapper = div)}>
         <StackedCard idx={idx} length={length} >
@@ -178,35 +183,47 @@ class CardItem extends Component {
                 subcolor={this.state.colors[idx+1]}
               >
                 <StCard>
-                  <Location><PinIcon />{saegim.w3w}</Location>
-                  <Registered>
-                    <StTime>
-                      <StAccessTimeIcon />
-                      <div>{this.state.regDate}</div>
-                    </StTime>
-                  </Registered>
-                  { saegim.imagesCount > 0 &&
-                    <Image>
+                  <Top>
+                    <Location>
+                      <PinIcon />{saegim.w3w}
+                    </Location>
+                    <Registered>
+                      <StTime>
+                        <StAccessTimeIcon />
+                        <div>{this.state.regDate}</div>
+                      </StTime>
+                    </Registered>
+                  </Top>
+                  <Top>
+                    <StIcon>
                       <StPhotoIcon/>
-                      <div>{saegim.images}</div>
-                    </Image>
-                  }
-
-                  {saegim.secret
-                    ? <ContentsL>
-                        <Lock />
-                        비밀글
-                      </ContentsL>
-                    : <Contents>{saegim.contents}</Contents>
-                  }
-                  <StLinkDiv>
+                      <div>{saegim.imagesCount}</div>
+                    </StIcon>
+                    <Tags>
+                      {PrintTags}
+                      {saegim.tags.length > 3
+                        && <StChip size='small' text='..' idx={idx}/>
+                      }
+                    </Tags>
+                  </Top>
+                  <ContentsBox>
+                    {saegim.secret
+                      ? <ContentsL>
+                          <Lock />
+                          비밀글
+                        </ContentsL>
+                      : <Contents>{saegim.contents}</Contents>
+                    }
+                  </ContentsBox>
+                  <Bottom>
+                    <User>
+                      <StCreateOutlined />
+                      <UserName>{saegim.userName}</UserName>
+                    </User>
                     <StLink to={`list/${saegim.id}`}>
                       더보기
                     </StLink>
-                </StLinkDiv>
-                <Comments>
-                  <div>{saegim.userName}</div>
-                </Comments>
+                  </Bottom>
                 </StCard>
               </Card>
             </div>
@@ -219,62 +236,63 @@ class CardItem extends Component {
 export default CardItem;
 
 const StLink = styled(Link)`
-    color: inherit;
     text-decoration: none;
     &:focus, &:hover, &:active {
       opacity: 60%;
     }
     align-self: right;
-  `
-
-const StLinkDiv = styled.div`
-  grid-area: link;
-  display: flex;
-  justify-content: center;
-  z-index: 1;
-`
+    font-size: 1rem;
+    font-weight: bold;
+    color: #B98B82;
+`;
 
 const StCard = styled.div`
-  display: grid;
-  grid-template-rows: repeat(5, 8vh);
-  grid-template-columns: repeat(5, 16vw) ;
-  grid-template-areas:
-    "location location location date date"
-    ". contents contents contents image"
-    ". contents contents contents ."
-    ". contents contents contents ."
-    "link link . comments comments";
-  align-items: center;
-  
-  &:after {
-    position: absolute;
-    top: 3%;
-    right: 7%;
-    bottom: 3%;
-    left: 7%;
-    border: 1.5px solid white;
-    border-radius: 8px;
-    content: "";
-  }
+  height: 40vh;
+  width: 80vw;
 `
 
-const Image = styled.div`
-  grid-area: image;
+const Top = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  
+  height: 4vh;
+  font-size: 0.9rem;
+  padding: 0 16px 0 16px;
+`;
+
+const Bottom = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  height: 5vh;
+  font-size: 0.9rem;
+  padding: 0 16px 0 16px;
 `;
 
 const StPhotoIcon = styled(Photo)`
   margin-right: 4px;
 `;
 
+const StIcon = styled(FlexRow)``;
+const Tags = styled(FlexRow)``;
+
+const ContentsBox = styled(FlexColumn)`
+  height: 23vh;
+  width: 80vw;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 20px;
+  margin: 2vh 1vw;
+`;
+
 const Contents = styled.div`
-  grid-area: contents;  
+  width: 60vw;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;  
+  -webkit-box-orient: vertical;
 `
 
 const ContentsL = styled.div`
@@ -285,9 +303,16 @@ const ContentsL = styled.div`
   justify-content: center;
 `;
 
-const Comments = styled.div`
-  grid-area: comments;
-`
+const User = styled(FlexRow)``;
+
+const UserName = styled.div`
+  font-size: 1rem;
+`;
+
+const StCreateOutlined = styled(CreateOutlined)`
+  margin-right: 4px;
+  color: rgba(0, 0, 0, 0.7);
+`;
 
 const Location = styled.div`
   grid-area: location;
@@ -322,4 +347,9 @@ const StTime = styled.div`
 
 const StAccessTimeIcon = styled(AccessTime)`
   margin-right: 4px;
+`;
+
+const StChip = styled(Chip)`
+  margin-left: 4px;
+  background-color: ${props => props.idx===0 ? '#f4c6ba' : '#FBF2EE' };
 `;

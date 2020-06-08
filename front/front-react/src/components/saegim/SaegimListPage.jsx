@@ -67,7 +67,7 @@ class SaegimListPage extends Component {
   getSaegimList = async () => {
     const _data = await SA.getSaegimListByLocation(this.state.location, this.state.distance)
     let _reversedData = []
-    if (_data) {
+    if (_data.length > 1) {
       _reversedData = _data.reverse()
     }
     const _curData = {
