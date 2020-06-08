@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import Fab from "@material-ui/core/Fab";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { withRouter } from "react-router-dom";
 import { Storage } from "../../storage/Storage";
+import styled from "styled-components";
+import { Menu, MenuItem, Fab } from "@material-ui/core";
+import { MoreVert } from "@material-ui/icons";
+import { withRouter } from "react-router-dom";
 
 class SaegimDetailButton extends Component {
   constructor(props) {
@@ -37,7 +35,7 @@ class SaegimDetailButton extends Component {
       <div>
         <div aria-controls="fab-menu" aria-haspopup="true" onClick={this.handleClick}>
           <StFab size="small">
-          <MoreVertIcon />
+            <MoreVert />
           </StFab>
         </div>
         <Menu

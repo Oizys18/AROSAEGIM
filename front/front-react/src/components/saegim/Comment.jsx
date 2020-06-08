@@ -41,7 +41,7 @@ class Comment extends Component{
       id: this.state.userInfo.id,
       name: this.state.userInfo.name
     }
-    const _res = await writeComment(_data, _saegimid, _userInfo)
+    await writeComment(_data, _saegimid, _userInfo)
     this.setState({
       updateFlag: true,
       contents: ""

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import {Link} from "react-router-dom";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import { getTimeDeltaString } from "../common/time/TimeFunctinon"
+import { Link } from "react-router-dom";
+import { AccessTime } from "@material-ui/icons";
 import PinIcon from "../../assets/PinIcon";
+import { getTimeDeltaString } from "../common/time/TimeFunctinon"
 
 class TabPanel extends Component {
   constructor(props) {
@@ -89,6 +89,8 @@ class TabPanel extends Component {
               </StLink>
             </SaegimItem>
           )
+        } else {
+          return <div/>
         }
       });
 
@@ -146,7 +148,7 @@ const StContents = styled.div`
   max-width: 60%;
 `;
 
-const StAccessTimeIcon = styled(AccessTimeIcon)`
+const StAccessTimeIcon = styled(AccessTime)`
   margin-right: 4px;
 `;
 

@@ -1,14 +1,16 @@
 /*global kakao*/
 import React, { Component } from 'react';
 import {Storage} from '../../storage/Storage'
-import CardItem from "./CardItem";
 import styled from "styled-components";
 import * as SA from "../../apis/SaegimAPI";
 import { Zoom, Slide, Select, MenuItem } from "@material-ui/core";
 import { Refresh } from "@material-ui/icons";
 import CtoW from "../../apis/w3w";
+import CardItem from "./CardItem";
 import Loading from "../common/background/Loading";
 import PinIcon from '../../assets/PinIcon';
+import { FlexRow } from "../../styles/DispFlex";
+
 
 class SaegimListPage extends Component {
   constructor(props) {
@@ -229,10 +231,8 @@ const StCont = styled.div`
   overflow: hidden;
 `;
 
-const Wrapper = styled.div `
+const Wrapper = styled.div`
   display: flex;
-  justify-content: center;
-  text-align: center;
   flex-direction: column;
   height: ${props => props.height}px;
 `
@@ -278,15 +278,11 @@ const StMenu = styled.div`
   
 `;
 
-const StButton = styled.div`
+const StButton = styled(FlexRow)`
   width: 30px;
   height: 30px;
   margin-left: 8px;
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  
+
   svg{
     color: white;
     width: 25px;
@@ -294,7 +290,7 @@ const StButton = styled.div`
   }
 `;
 
-const StLocation = styled.div`
+const StLocation = styled(FlexRow)`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -11,7 +11,7 @@ import SaegimDetailButton from "./SaegimDetailButton";
 import Comment from "./Comment";
 import Like from "./Like";
 import {Storage} from "../../storage/Storage";
-import {FlexRow} from "../../styles/DispFlex";
+import { FlexRow, FlexColumn } from "../../styles/DispFlex";
 import Loading from "../common/background/Loading";
 import PinIcon from "../../assets/PinIcon";
 
@@ -333,11 +333,7 @@ const TopBar = styled.div`
   color: white;
 `;
 
-const BackButton= styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+const BackButton= styled(FlexRow)``;
 
 const StCont = styled(FlexRow)`
   .MuiAvatar-root{
@@ -366,7 +362,7 @@ const W3WChip = styled.div`
   }
 `;
 
-const Contents = styled.div `
+const Contents = styled(FlexColumn) `
   display: flex;
   align-items: center;
   justify-content: center;
@@ -458,27 +454,19 @@ const StButton = styled.div`
   right: 16px;
 `;
 
-const Image = styled.div`
+const Image = styled(FlexRow)`
   color: #fafafa;
   margin-right: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const StPhotoIcon = styled(Photo)`
   margin-right: 4px;
 `;
 
-const StCard = styled.div`
+const StCard = styled(FlexColumn)`
   height: 25vh;
   width: 70vw;
   padding: 16px;
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 
   word-break: break-all;
   overflow: scroll;
