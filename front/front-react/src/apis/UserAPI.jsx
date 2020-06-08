@@ -10,8 +10,11 @@ export const getCreatedSaegim = async (id) => {
       userid: id
     }
   })
-  console.log(_res)
-  return _res.data.data;
+  if (_res.data.state === 'success') {
+    return _res.data.data
+  } else {
+    return [];
+  }
 }
 
 export const getCommentedSaegim = async (id) => {
@@ -22,8 +25,11 @@ export const getCommentedSaegim = async (id) => {
       userid: id
     }
   })
-  console.log(_res)
-  return _res.data.data;
+  if (_res.data.state === 'success') {
+    return _res.data.data
+  } else {
+    return [];
+  }
 }
 
 export const getLikedSaegim = async (id) => {
@@ -34,8 +40,11 @@ export const getLikedSaegim = async (id) => {
       userid: id
     }
   })
-  console.log(_res)
-  return _res.data.data;
+  if (_res.data.state === 'success') {
+    return _res.data.data
+  } else {
+    return [];
+  }
 }
 
 export const getUserByID = async (id) => {
@@ -46,7 +55,6 @@ export const getUserByID = async (id) => {
       name: id
     }
   })
-
   if(_res.data.state === 'success'){
     return _res.data.data;
   }

@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
-import Card from "../common/cards/Card";
 import "./CardItem.css";
 import { Lock, Photo, AccessTime, CreateOutlined  } from "@material-ui/icons";
 import Chip from "../common/chip/Chip";
 import { getTimeDeltaString } from "../common/time/TimeFunctinon";
 import PinIcon from "../../assets/PinIcon";
 import { FlexColumn, FlexRow } from "../../styles/DispFlex";
+import Card from "../common/cards/Card";
 
 class CardItem extends Component {
   listElement;
@@ -261,6 +261,7 @@ const Top = styled.div`
   padding: 0 16px 0 16px;
 `;
 
+<<<<<<< front/front-react/src/components/saegim/CardItem.jsx
 const Bottom = styled.div`
   display: flex;
   align-items: center;
@@ -269,6 +270,10 @@ const Bottom = styled.div`
   height: 5vh;
   font-size: 0.9rem;
   padding: 0 16px 0 16px;
+=======
+const Image = styled(FlexRow)`
+  grid-area: image;
+>>>>>>> front/front-react/src/components/saegim/CardItem.jsx
 `;
 
 const StPhotoIcon = styled(Photo)`
@@ -295,12 +300,9 @@ const Contents = styled.div`
   -webkit-box-orient: vertical;
 `
 
-const ContentsL = styled.div`
+const ContentsL = styled(FlexRow)`
   grid-area: contents;
   color: #616161;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 const User = styled(FlexRow)``;
@@ -314,11 +316,8 @@ const StCreateOutlined = styled(CreateOutlined)`
   color: rgba(0, 0, 0, 0.7);
 `;
 
-const Location = styled.div`
+const Location = styled(FlexRow)`
   grid-area: location;
-  display: flex;
-  align-items: center;
-  justify-self: center;
 `
 
 const Registered = styled.div`
@@ -339,11 +338,7 @@ const StackedCard = styled.div `
   display: ${props => props.idx > 4 && 'none'};
 `
 
-const StTime = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+const StTime = styled(FlexRow)``;
 
 const StAccessTimeIcon = styled(AccessTime)`
   margin-right: 4px;

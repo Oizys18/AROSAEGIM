@@ -104,6 +104,7 @@ const Message = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
+  color: rgba(0, 0, 0, 0.87);
 `;
 const Name = styled.div`
   margin-left:10px;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import styled, {keyframes} from "styled-components";
+import styled from "styled-components";
 
 class Card extends Component {
   render() {

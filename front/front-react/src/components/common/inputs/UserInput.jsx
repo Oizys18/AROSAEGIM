@@ -44,11 +44,13 @@ const StInput = styled(TextField)`
         }
         & .Mui-focused{
           &.MuiFormLabel-root, .MuiSvgIcon-root{
-            color: green;
+            ${'' /* color: green; */}
+            color: gray;
           }
         }
         & .MuiOutlinedInput-root.Mui-focused fieldset{
-          border-color: green;  
+          ${'' /* border-color: green;   */}
+          border-color: gray;  
         }
       `
     }
@@ -62,10 +64,12 @@ const StInput = styled(TextField)`
     else if(props.valid === 'valid'){
       return css`
         .MuiFormLabel-root,.MuiSvgIcon-root{
-          color: darkgreen;
+          ${'' /* color: darkgreen; */}
+          color: gray;
         }
         & .MuiOutlinedInput-root fieldset, & .MuiOutlinedInput-root.Mui-focused fieldset{
-          border-color: green;
+          ${'' /* border-color: green; */}
+          border-color: gray;
         }
       `
     }

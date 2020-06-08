@@ -1,31 +1,9 @@
 import React, { Component } from "react";
-import styled from "styled-components";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import Fab from "@material-ui/core/Fab";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { withRouter } from "react-router-dom";
 import { Storage } from "../../storage/Storage";
+import styled from "styled-components";
+import { withRouter } from "react-router-dom";
 
 class SaegimDetailButton extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      vertOpen: null,
-    }
-  }
-
-  handleClick = (e) => {
-    this.setState({
-      vertOpen: e.currentTarget
-    })
-  }
-
-  handleClose = () => {
-    this.setState({
-      vertOpen: null
-    })
-  }
 
   delSaegim = () => {
     this.context.popModal('새김을 삭제하시겠습니까?', 'delSaegim', 'confirm')
@@ -34,26 +12,14 @@ class SaegimDetailButton extends Component {
 
   render() {
     return(
-      <div>
-        <div aria-controls="fab-menu" aria-haspopup="true" onClick={this.handleClick}>
-          <StFab size="small">
-          <MoreVertIcon />
-          </StFab>
+      <StDetail>
+        <div style={{ color: 'gray' }}>
+          수정
         </div>
-        <Menu
-          id="fab-menu"
-          anchorEl={this.state.vertOpen}
-          open={Boolean(this.state.vertOpen)}
-          onClose={this.handleClose}
-        >
-          <MenuItem onClick={this.handleClose} disabled>
-            수정
-          </MenuItem>
-          <MenuItem onClick={this.delSaegim}>
-            삭제
-          </MenuItem>
-        </Menu>
-      </div>
+        <div onClick={this.delSaegim}>
+          삭제
+        </div>
+      </StDetail>
     )
   }
 }
@@ -61,6 +27,12 @@ class SaegimDetailButton extends Component {
 export default withRouter(SaegimDetailButton);
 SaegimDetailButton.contextType = Storage;
 
-const StFab = styled(Fab)`
-  background-color: white;
-`;
+const StDetail = styled.div`
+  width: 20vw;
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  margin: 0 16px 0 16px;
+`

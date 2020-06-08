@@ -11,8 +11,11 @@ export const addLike = async (saegimid, userid) => {
       userid: userid
     }
   })
-  // console.log('addLike: ', _res)
-  return _res.data.data
+  if (_res.data.state === 'success') {
+    return _res.data.data
+  } else {
+    return [];
+  }
 }
 
 export const delLike = async (saegimid, userid) => {
@@ -24,8 +27,11 @@ export const delLike = async (saegimid, userid) => {
       userid: userid
     }
   })
-  // console.log('delLike: ', _res)
-  return _res.data.data
+  if (_res.data.state === 'success') {
+    return _res.data.data
+  } else {
+    return [];
+  }
 }
 
 export const getLike = async (saegimid) => {
@@ -36,6 +42,9 @@ export const getLike = async (saegimid) => {
       saegimid: saegimid
     }
   })
-  // console.log('getLike: ', _res)
-  return _res.data.data
+  if (_res.data.state === 'success') {
+    return _res.data.data
+  } else {
+    return [];
+  }
 }

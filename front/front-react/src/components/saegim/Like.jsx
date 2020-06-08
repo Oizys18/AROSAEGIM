@@ -25,14 +25,14 @@ class Like extends Component{
   }
 
   async like() {
-    const _res = addLike(this.props.id, this.state.userInfo.id)
+    await addLike(this.props.id, this.state.userInfo.id)
     this.setState({
       isLike: true
     })
   }
 
   async dislike() {
-    const _res = delLike(this.props.id, this.state.userInfo.id)
+    await delLike(this.props.id, this.state.userInfo.id)
     this.setState({
       isLike: false
     })

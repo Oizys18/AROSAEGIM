@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import TextField from "@material-ui/core/TextField";
+import { TextField } from "@material-ui/core";
 
 class CommentInput extends Component{
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
         <StInput
@@ -21,7 +18,7 @@ class CommentInput extends Component{
 export default CommentInput;
 
 const StInput = styled(TextField)`
-  max-width: 50vw;
+  width: 65vw;
 
   .MuiInput-underline:after {
     border-bottom: 1.5px solid #616161; 

@@ -11,7 +11,7 @@ import SaegimDetailButton from "./SaegimDetailButton";
 import Comment from "./Comment";
 import Like from "./Like";
 import {Storage} from "../../storage/Storage";
-import {FlexRow} from "../../styles/DispFlex";
+import { FlexRow, FlexColumn } from "../../styles/DispFlex";
 import Loading from "../common/background/Loading";
 import PinIcon from "../../assets/PinIcon";
 
@@ -225,9 +225,14 @@ class SaegimDetail extends Component {
             </Modal>
             }
             <TopBar>
+              <StTopBarR>
               <BackButton onClick={this.goBack}>
                 <ArrowBack/>
               </BackButton>
+              {this.state.userId === this.state.data.userId &&
+                <SaegimDetailButton id={this.props.match.params.id}/>
+              }
+              </StTopBarR>
               <StCont>
                 <StNick>{this.state.user.name}</StNick>
                 <Avatar src={this.state.user.profileImage}/>
@@ -291,11 +296,6 @@ class SaegimDetail extends Component {
                 <Comment id={this.props.match.params.id}/>
               </Comments>
             </Communication>
-            {this.state.userId === this.state.data.userId &&
-            <StButton>
-              <SaegimDetailButton id={this.props.match.params.id}/>
-            </StButton>
-            }
           </Wrapper>
         </Zoom>
       )
@@ -333,11 +333,7 @@ const TopBar = styled.div`
   color: white;
 `;
 
-const BackButton= styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+const BackButton= styled(FlexRow)``;
 
 const StCont = styled(FlexRow)`
   .MuiAvatar-root{
@@ -366,7 +362,7 @@ const W3WChip = styled.div`
   }
 `;
 
-const Contents = styled.div `
+const Contents = styled(FlexColumn) `
   display: flex;
   align-items: center;
   justify-content: center;
@@ -452,36 +448,32 @@ const Comments = styled.div`
   padding: 16px;
 `
 
-const StButton = styled.div`
-  position: fixed;
-  bottom: 5%;
-  right: 16px;
-`;
-
-const Image = styled.div`
+const Image = styled(FlexRow)`
   color: #fafafa;
   margin-right: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const StPhotoIcon = styled(Photo)`
   margin-right: 4px;
 `;
 
-const StCard = styled.div`
+const StCard = styled(FlexColumn)`
   height: 25vh;
   width: 70vw;
   padding: 16px;
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 
   word-break: break-all;
   overflow: scroll;
+  
+  @media (max-height: 850px) {
+    max-height: 25vh;
+  }
+  @media (max-height: 700px) {
+    max-height: 22vh;
+  }
+  @media (max-height: 600px) {
+    max-height: 18vh;
+  }
 `;
 
 const StImg = styled.img`
@@ -512,3 +504,6 @@ const StClose = styled.div`
   justify-content: flex-end;
   border-radius: 15px 15px 0 0;
 `;
+
+const StTopBarR = styled(FlexRow)``;
+

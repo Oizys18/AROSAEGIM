@@ -1,17 +1,15 @@
 import React, { Component } from "react";
+import { Storage } from "../../storage/Storage";
 import styled from "styled-components";
-import { Select, Tabs, Tab, MenuItem } from "@material-ui/core"
-import CreateOutlinedIcon from "@material-ui/icons/CreateOutlined";
-import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
-import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
-import TabPanel from "./TabPanel";
-import MyPageMenu from "./MyPageMenu";
+import { Select, Tabs, Tab, MenuItem }  from "@material-ui/core"
+import { CreateOutlined, FavoriteBorderOutlined, MessageOutlined } from "@material-ui/icons"
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { getCommentedSaegim, getLikedSaegim, getCreatedSaegim } from "../../apis/UserAPI"
 import { getSaegimById } from "../../apis/SaegimAPI";
 import { getUserByEmail } from "../../apis/AccountAPI";
-import { Storage } from "../../storage/Storage";
+import TabPanel from "./TabPanel";
+import MyPageMenu from "./MyPageMenu";
 import Loading from "../common/background/Loading";
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
   palette: {
@@ -140,12 +138,12 @@ class MyPage extends Component {
           <Wrapper>
             <UserInfo>
               <User>
-                <UserName>
+                <span>
                   {this.context.userInfo.name}
-                </UserName>
-                <UserEmail>
+                </span>
+                <span>
                   {this.context.userInfo.email}
-                </UserEmail>
+                </span>
               </User>
               <UserSaegim>
                 <Tabs
@@ -154,9 +152,9 @@ class MyPage extends Component {
                   indicatorColor="secondary"
                   onChange={this.tabChange}
                 >
-                  <Tab icon={<CreateOutlinedIcon/>} value={0}/>
-                  <Tab icon={<FavoriteBorderOutlinedIcon/>} value={1}/>
-                  <Tab icon={<MessageOutlinedIcon/>} value={2}/>
+                  <Tab icon={<CreateOutlined/>} value={0}/>
+                  <Tab icon={<FavoriteBorderOutlined/>} value={1}/>
+                  <Tab icon={<MessageOutlined/>} value={2}/>
                 </Tabs>
               </UserSaegim>
             </UserInfo>
@@ -228,12 +226,6 @@ const UserInfo = styled.div`
   border-radius: 0.4em;
   
   background: linear-gradient(to bottom, #f1f1f1, #FBF2EE);
-`;
-
-const UserEmail = styled.span`
-`;
-
-const UserName = styled.span`
 `;
 
 const UserSaegim = styled.div`

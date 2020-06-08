@@ -4,14 +4,11 @@ const BASE_URL =  process.env.REACT_APP_BASE_URL
 
 export const getSaegimListByLocation = async (latlng, meter) => {
   const [ lat, lng ] = latlng
-  const _meter = meter
-  console.log(latlng, lat, lng)
   const _data = {
     lat: lat,
     lng: lng,
-    meter: _meter
+    meter: meter
   }
-  console.log(_data)
   const _res = await axios({
     method: 'get',
     url: `${BASE_URL}/saegims/latlng`,
@@ -21,7 +18,6 @@ export const getSaegimListByLocation = async (latlng, meter) => {
 }
 
 export const getSaegimDetailById = async (id) => {
-  console.log(id)
   const _res = await axios ({
     method: 'get',
     url: `${BASE_URL}/saegims/${id}/detail`,
@@ -64,7 +60,6 @@ export const getSaegimNearMe = async (data) => {
 };
 
 export const delSaegim = async (id) => {
-  console.log(id)
   const _res = await axios ({
     method: 'delete',
     url: `${BASE_URL}/saegims/${id}`,
@@ -72,7 +67,11 @@ export const delSaegim = async (id) => {
       saegimid: id
     }
   })
-  return _res.data.data;
+  if (_res.data.state === 'success') {
+    return _res.data.data
+  } else {
+    return [];
+  }
 }
 
 
@@ -101,13 +100,16 @@ export const getSaegimByFilter = async (data) => {
 }
 
 export const getSaegimById = async (id) => {
-  console.log(id)
   const _res = await axios ({
     method: 'get',
-    url: `${BASE_URL}/saegims/${id}/detail`,
+    url: `${BASE_URL}/saegims/${id}`,
     params: {
       saegimid: id
     }
   })
-  return _res.data.data;
+  if (_res.data.state === 'success') {
+    return _res.data.data
+  } else {
+    return [];
+  }
 }
