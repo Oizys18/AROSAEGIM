@@ -222,9 +222,10 @@ class RoadView extends Component {
     })
 
     _miniMap.addOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
-    kakao.maps.event.addListener(_miniMap, "zoom_changed", this.changeLvCt)
+    kakao.maps.event.addListener(_miniMap, "zoom_changed", this.changeLv)
     kakao.maps.event.addListener(_miniMap, "dragend", this.changeLvCt)
-    kakao.maps.event.addListener(_miniMap, "center_changed", this.changeMWCt)
+    // kakao.maps.event.addListener(_miniMap, "center_changed", this.changeMWCt)
+    kakao.maps.event.addListener(_miniMap, "click", this.changeMWCt)
   }
 
   showUserCenter = () => {
@@ -238,22 +239,41 @@ class RoadView extends Component {
     this.setState({ userMarker: userMarker })
   }
 
-  //중심 이동, 레벨 변경
+  //레벨 변경
+  changeLv = () => {
+    const _center = this.state.mm.getCenter()
+    // const _level = this.state.mm.getLevel()
+    // // this.changeAddr(_center)
+    // this.state.rvc.getNearestPanoId(_center, MM.calcPanoRadius(_level), (panoId) => {
+    //   if(panoId)  {
+    //     this.state.rv.setPanoId(panoId, _center) //panoId와 중심좌표를 통해 로드뷰 실행
+    //   }
+    // })
+    this.props.changeMapCenter(_center)
+  }
+  //중심 이동
   changeLvCt = () => {
     const _center = this.state.mm.getCenter()
+    // const _level = this.state.mm.getLevel()
+    // // this.changeAddr(_center)
+    // this.state.rvc.getNearestPanoId(_center, MM.calcPanoRadius(_level), (panoId) => {
+    //   if(panoId)  {
+    //     this.state.rv.setPanoId(panoId, _center) //panoId와 중심좌표를 통해 로드뷰 실행
+    //   }
+    // })
+    this.props.changeMapCenter(_center)
+  }
+  //맵워커 위치, 로드 뷰 변경
+  changeMWCt = (e) => {
+    const _center = e.latLng
+    this.state.mw.setPosition(_center)
+
     const _level = this.state.mm.getLevel()
-    // this.changeAddr(_center)
     this.state.rvc.getNearestPanoId(_center, MM.calcPanoRadius(_level), (panoId) => {
       if(panoId)  {
         this.state.rv.setPanoId(panoId, _center) //panoId와 중심좌표를 통해 로드뷰 실행
       }
     })
-    this.props.changeMapCenter(_center)
-  }
-  //맵워커 위치 변경
-  changeMWCt = () => {
-    const _center = this.state.mm.getCenter()
-    this.state.mw.setPosition(_center)
   }
 
   render(){
