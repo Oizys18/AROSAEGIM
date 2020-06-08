@@ -109,12 +109,16 @@ Comment.contextType = Storage;
 const StCommentList = styled.div`
   padding: 0 16px 0px 16px;
   overflow: scroll;
-  min-height: 15vh;
-  @media (min-height: 800px) {
-    min-height: 22vh;
+  
+  max-height: 28vh;
+  @media (max-height: 850px) {
+    max-height: 25vh;
   }
-  @media (max-height: 650px) {
-    min-height: 13vh;
+  @media (max-height: 700px) {
+    max-height: 23vh;
+  }
+  @media (max-height: 600px) {
+    max-height: 15vh;
   }
 `;
 

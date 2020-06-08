@@ -464,6 +464,16 @@ const StCard = styled(FlexColumn)`
 
   word-break: break-all;
   overflow: scroll;
+  
+  @media (max-height: 850px) {
+    max-height: 25vh;
+  }
+  @media (max-height: 700px) {
+    max-height: 22vh;
+  }
+  @media (max-height: 600px) {
+    max-height: 18vh;
+  }
 `;
 
 const StImg = styled.img`
