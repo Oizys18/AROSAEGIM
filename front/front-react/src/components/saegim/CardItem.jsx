@@ -261,7 +261,6 @@ const Top = styled.div`
   padding: 0 16px 0 16px;
 `;
 
-<<<<<<< front/front-react/src/components/saegim/CardItem.jsx
 const Bottom = styled.div`
   display: flex;
   align-items: center;
@@ -270,10 +269,6 @@ const Bottom = styled.div`
   height: 5vh;
   font-size: 0.9rem;
   padding: 0 16px 0 16px;
-=======
-const Image = styled(FlexRow)`
-  grid-area: image;
->>>>>>> front/front-react/src/components/saegim/CardItem.jsx
 `;
 
 const StPhotoIcon = styled(Photo)`
