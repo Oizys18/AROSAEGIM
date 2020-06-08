@@ -154,16 +154,16 @@ const Role = styled.div`
   font-size:14px;
 `;
 
-const BackButton = styled.div`
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  background: white;
+// const BackButton = styled.div`
+//   position: absolute;
+//   top: 5%;
+//   left: 5%;
+//   background: white;
 
-  width: 24px;
-  height: 24px;
-  border-radius: 16px;
-`;
+//   width: 24px;
+//   height: 24px;
+//   border-radius: 16px;
+// `;
 
 const Header = styled.div`
   background: white;

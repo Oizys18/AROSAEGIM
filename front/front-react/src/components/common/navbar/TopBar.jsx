@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Hamburger from '../buttons/Hamburger'
 import styled from 'styled-components';
-import inlineLogo from "../../../assets/logo/inline-logo-white@2x.png";
 import TopBarAnimation from "../animation/TopBarAnimation";
 
 class TopBar extends Component {
@@ -9,7 +8,6 @@ class TopBar extends Component {
     return(
       <StTopCont>
         <Hamburger on={this.props.on} toggle={this.props.toggle}/>
-        {/* <StLogo src={inlineLogo}/> */}
         <TopBarAnimation/>
       </StTopCont>
     )
@@ -24,31 +22,6 @@ const StTopCont = styled.div`
   justify-content: center;
   align-items: center;
 
-  /* background: gray; */
   width: 100%;
   height: 48px;
-  /* padding-top: 2px; */
-`;
-
-// const StLogo = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-
-//   width: 186px;
-//   height: 100%;
-  
-//   /* background: #f2f2f2; */
-//   background-image: url(${inlineLogo});
-//   background-size: 50%;
-//   background-position: center center;
-//   background-repeat: no-repeat;
-
-//   /* border: 3px solid gray;
-//   box-sizing: border-box; */
-// `;
-
-const StLogo = styled.img`
-  width: 25%;
-  height: auto;
 `;

@@ -22,46 +22,13 @@ export default TopBarAnimation;
 const StAnima = styled.div`
   position: relative;
   width: 70%;
-  /* height: 20%; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: 15px;
-  /* transform: translateY(22vh); */
   animation: 6s 4.5s infinite;
-  /* animation-delay: 6s; */
-  /* animation-iteration-count: infinite; */
   
-  /* @keyframes backColor{
-    0% {
-      background-color: white;
-    }
-    5% {
-      background-color: #00e6ac;
-    }
-    20% {
-      background-color: #00e6ac;
-    }
-    30% {
-      background-color: white;
-    }
-    80% {
-      background-color: white;
-    }
-  } */
-
-  /* .logo{
-    display: flex;
-    margin: 0.5rem;
-    // background: linear-gradient(to bottom, #66ffff 0%, #ff99cc 100%);
-    // border: 3px solid white;
-    border-radius: 29px;
-    img{
-      width: 190px;
-    }
-  } */
-
   .words{
     color: white;
     text-shadow: 0 0 10px gray;
@@ -101,63 +68,27 @@ const StAnima = styled.div`
   @keyframes motion {
     0% {
       opacity: 0;
-      /* transform: translateY(10px); */
-      /* transform: translateX(2rem); */
       transform: translateY(0);
     }
     
     5% {
       opacity: 0;
-      /* transform: translateY(0); */
-      /* transform: translateX(0); */
       transform: translateY(0);
     }
     
     20% {
       opacity: 1;
-      /* transform: translateY(0); */
-      /* transform: translateX(0); */
       transform: translateY(0);
     }
 
     30% {
       opacity: 0;
-      /* transform: translateY(-50px); */
-      /* transform: translateX(-4rem); */
       transform: translateY(0);
     }
 
     80% {
       opacity: 0;
-      /* transform: translateY(-50px); */
-      /* transform: translateX(0); */
       transform: translateY(0);
     }
   }
-
-  @keyframes motion2 {
-    0% {
-      opacity: 0;
-      /* transform: translateY(10px); */
-      transform: translateX(2rem);
-    }
-    
-    5% {
-      opacity: 1;
-      /* transform: translateY(0); */
-      transform: translateX(0);
-    }
-    
-    20% {
-      opacity: 1;
-      /* transform: translateY(0); */
-      transform: translateX(0);
-    }
-
-    30% {
-      opacity: 0;
-      /* transform: translateY(-50px); */
-      transform: translateX(-4rem);
-    }
-  }
-`
+`;

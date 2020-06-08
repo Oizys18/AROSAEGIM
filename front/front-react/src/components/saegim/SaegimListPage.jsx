@@ -8,7 +8,7 @@ import { Refresh } from "@material-ui/icons";
 import CtoW from "../../apis/w3w";
 import CardItem from "./CardItem";
 import Loading from "../common/background/Loading";
-import PinIcon from '../../assets/PinIcon';
+// import PinIcon from '../../assets/PinIcon';
 import { FlexRow } from "../../styles/DispFlex";
 
 

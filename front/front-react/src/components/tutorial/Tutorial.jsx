@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import HomeBtn from  '../common/buttons/HomeBtn';
-import { Slide, Zoom, Grow } from '@material-ui/core';
-import { ArrowBack, ArrowForward, Home } from "@material-ui/icons";
+import { Slide, Grow } from '@material-ui/core';
+import { ArrowBack, ArrowForward } from "@material-ui/icons";
 import { withRouter } from "react-router-dom";
 import TutorialItem from "./TutorialItem";
 

@@ -101,10 +101,8 @@ class Login extends Component {
           sessionStorage.setItem('ARSG email', this.state.email)
           sessionStorage.setItem('ARSG userId', _resData.data.id)
         }
-        // this.props.history.replace('/')
-        this.context.handleLogin()
+        this.context.handleLogin('login')
         this.props.history.goBack()
-        // window.location.replace('/')
       }
       else {
         this.context.popModal(`비밀번호를\n확인해주세요!`, 'login', 'alert')

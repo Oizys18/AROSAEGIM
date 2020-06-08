@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Slide, Zoom, Grow } from '@material-ui/core';
+import { Slide, } from '@material-ui/core';
 // import { ArrowBack } from "@material-ui/icons";
 import { withRouter } from "react-router-dom";
 import BackBtn from '../common/buttons/BackBtn';
@@ -136,15 +136,15 @@ const Content = styled.div`
   font-weight: lighter;
 `;
 
-const BackButton = styled.div`
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  background: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 16px;
-`;
+// const BackButton = styled.div`
+//   position: absolute;
+//   top: 5%;
+//   left: 5%;
+//   background: white;
+//   width: 24px;
+//   height: 24px;
+//   border-radius: 16px;
+// `;
 
 const Header = styled.div`
   background: white;

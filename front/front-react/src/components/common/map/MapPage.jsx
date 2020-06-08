@@ -3,20 +3,17 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Slide} from '@material-ui/core';
 import {FlexColumn} from '../../../styles/DispFlex';
-
 // import { getPosition } from '../../../apis/GeolocationAPI';
 import {Storage} from '../../../storage/Storage';
 import SearchBar from "../search/SearchBar";
 import MapSearchList from './MapSearchList';
 import SideMenu from "../menus/SideMenu";
 import MapView from './MapView';
-import MapListItem from "./MapListItem";
 import RoadView from './RoadView';
 import MapBtnSet from './MapBtnSet';
 import CtoW from '../../../apis/w3w';
 import * as SA from '../../../apis/SaegimAPI';
 import * as GA from '../../../apis/GeolocationAPI';
-import * as UA from '../../../apis/UserAPI';
 
 class MapPage extends Component {
   constructor(props){

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import {Slide, Grow, Divider, IconButton, Button, InputBase, } from '@material-ui/core';
+import {Slide, Divider, IconButton, Button, InputBase, } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
-import { FlexColumn } from '../../../styles/DispFlex'
 
 class SearchBar extends Component {
 
@@ -139,17 +138,6 @@ const StSelectCont = styled.div`
 `
 
 const StSelectBtn = styled(Button)`
-`;
-
-const StSelectList = styled(FlexColumn)`
-  position: absolute;
-  background: white;
-  top: 99%;
-  left: 0;
-
-
-  border: 2px solid gray;
-  border-radius: 4px;
 `;
 
 const StInputBase = styled(InputBase)`
