@@ -68,7 +68,10 @@ class SaegimListPage extends Component {
 
   getSaegimList = async () => {
     const _data = await SA.getSaegimListByLocation(this.state.location, this.state.distance)
-    const _reversedData = _data.reverse()
+    let _reversedData = []
+    if (_data.length > 1) {
+      _reversedData = _data.reverse()
+    }
     const _curData = {
       listData: _reversedData,
       distance: this.state.distance,
@@ -203,9 +206,7 @@ class SaegimListPage extends Component {
               {PrintOptions}
             </StSelect>
             <StLocation>
-            {this.state.printLocation === this.state.w3w
-             && <PinIcon />}
-            {this.state.printLocation}
+              {this.state.printLocation}
             </StLocation>
             <StButton onClick={this.refresh}>
               <Refresh/>
@@ -292,7 +293,7 @@ const StButton = styled(FlexRow)`
 
 const StLocation = styled(FlexRow)`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   
   max-width: 40vw;

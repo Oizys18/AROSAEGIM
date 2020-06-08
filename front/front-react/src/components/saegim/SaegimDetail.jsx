@@ -119,9 +119,6 @@ class SaegimDetail extends Component {
   }
 
   async componentDidMount() {
-    this.startTimer = setTimeout(this.setState({
-      curImage: this.state.curImage + 1
-    }), 5000)
     const _userInfo = this.context.userInfo
     if (_userInfo !== {}) {
       this.setState({
@@ -136,6 +133,9 @@ class SaegimDetail extends Component {
     await this.getRegDate()
 
     this.isLoading = false
+    this.startTimer = setTimeout(this.setState({
+      curImage: this.state.curImage + 1
+    }), 5000)
   }
 
   setUpdateLike(flag) {
@@ -154,7 +154,7 @@ class SaegimDetail extends Component {
     if (this.state.curImage !== prevState.curImage) {
       this.timer = setTimeout(this.switchImage, 5000)
     }
-    this.regTimer = setTimeout(this.getRegDate, 60000)
+    this.regTimer = setTimeout(this.getRegDate, 30000)
     if (this.context.updateFlag === 1) {
       this.props.history.push('list')
       this.context.setUpdateFlag(0)
