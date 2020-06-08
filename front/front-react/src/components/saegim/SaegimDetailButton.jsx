@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Menu, MenuItem, Fab } from "@material-ui/core";
 import { MoreVert } from "@material-ui/icons";
 import { withRouter } from "react-router-dom";
+import { FlexRow } from "../../styles/DispFlex";
 
 class SaegimDetailButton extends Component {
   constructor(props) {
@@ -32,26 +33,14 @@ class SaegimDetailButton extends Component {
 
   render() {
     return(
-      <div>
-        <div aria-controls="fab-menu" aria-haspopup="true" onClick={this.handleClick}>
-          <StFab size="small">
-            <MoreVert />
-          </StFab>
-        </div>
-        <Menu
-          id="fab-menu"
-          anchorEl={this.state.vertOpen}
-          open={Boolean(this.state.vertOpen)}
-          onClose={this.handleClose}
-        >
-          <MenuItem onClick={this.handleClose} disabled>
+      <StDetail>
+        <div onClick={this.handleClose} style={{ color: 'gray' }}>
             수정
-          </MenuItem>
-          <MenuItem onClick={this.delSaegim}>
-            삭제
-          </MenuItem>
-        </Menu>
-      </div>
+        </div>
+        <div onClick={this.delSaegim}>
+          삭제
+        </div>
+      </StDetail>
     )
   }
 }
@@ -59,6 +48,12 @@ class SaegimDetailButton extends Component {
 export default withRouter(SaegimDetailButton);
 SaegimDetailButton.contextType = Storage;
 
-const StFab = styled(Fab)`
-  background-color: white;
-`;
+const StDetail = styled.div`
+  width: 20vw;
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  margin: 0 16px 0 16px;
+`

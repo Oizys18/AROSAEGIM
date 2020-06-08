@@ -225,9 +225,14 @@ class SaegimDetail extends Component {
             </Modal>
             }
             <TopBar>
+              <StTopBarR>
               <BackButton onClick={this.goBack}>
                 <ArrowBack/>
               </BackButton>
+              {this.state.userId === this.state.data.userId &&
+                <SaegimDetailButton id={this.props.match.params.id}/>
+              }
+              </StTopBarR>
               <StCont>
                 <StNick>{this.state.user.name}</StNick>
                 <Avatar src={this.state.user.profileImage}/>
@@ -291,11 +296,6 @@ class SaegimDetail extends Component {
                 <Comment id={this.props.match.params.id}/>
               </Comments>
             </Communication>
-            {this.state.userId === this.state.data.userId &&
-            <StButton>
-              <SaegimDetailButton id={this.props.match.params.id}/>
-            </StButton>
-            }
           </Wrapper>
         </Zoom>
       )
@@ -448,12 +448,6 @@ const Comments = styled.div`
   padding: 16px;
 `
 
-const StButton = styled.div`
-  position: fixed;
-  bottom: 5%;
-  right: 16px;
-`;
-
 const Image = styled(FlexRow)`
   color: #fafafa;
   margin-right: 32px;
@@ -500,3 +494,6 @@ const StClose = styled.div`
   justify-content: flex-end;
   border-radius: 15px 15px 0 0;
 `;
+
+const StTopBarR = styled(FlexRow)``;
+
