@@ -143,7 +143,8 @@ class App extends Component {
       }
       else if(this.state.modalSitu === 'user refresh'){
         this.setState({ sideMenu: false })
-        window.location.replace('/')
+        window.location.reload(true)
+        // window.location.replace('/')
       } else if (this.state.modalSitu === 'delSaegim'){
         await delSaegim(this.state.delSaegim)
         window.location.href = '/list'
@@ -259,6 +260,7 @@ class App extends Component {
               on={this.state.sideMenu}
               toggle={this.toggleSideMenu}
               isLogin={this.state.isLogin}
+              popModal={this.popModal}
             />
             
             <BotNav appH={this.state.appHeight} changePage={this.changePage}/>
