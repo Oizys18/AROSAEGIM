@@ -87,7 +87,9 @@ export default function SimplePopover(props) {
             disableUnderline="true"
             margin="dense"
           />
+          <StSmallButton>
           <SmallButton text="작성" onClick={createTag} />
+          </StSmallButton>
           <ErrorTxt />
         </Typography>
       </Popover>
@@ -98,4 +100,10 @@ const StInput = styled(Input)`
   border: 1px solid ghostwhite;
   border-radius: 16px;
   width: 60vw;
+`;
+
+const StSmallButton = styled.span`
+  .MuiButton-contained {
+    background-color: #f4c6ba;
+  }
 `;
