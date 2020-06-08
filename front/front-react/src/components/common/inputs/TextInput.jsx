@@ -37,19 +37,19 @@ const CustomInput = styled(TextField)`
   text-align: center;
   background-color: #ffffff;
   
-  .MuiInputBase-root-78 {
+  & > div {
     font-family: 'Noto Serif KR', serif;
   }
   
-  .MuiInput-underline-69:before {
+  & > div:before {
     border-bottom: none;
   }
   
-  .MuiInput-underline-69:after {
+  & > div:after {
     border-bottom: none;
   }
   
-  .MuiInput-underline-69:hover:not(.Mui-disabled):before {
+  & > div:hover:not(.Mui-disabled):before {
     border-bottom: none;
   }
 `;
