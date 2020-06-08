@@ -27,7 +27,6 @@ public class SaegimDetailDto {
 	private Long id;
 	@NonNull
     private Long userId;
-	@NonNull
     private String userName;
 	@NonNull
     private Date regDate;

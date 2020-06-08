@@ -12,15 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.dto.UserFormDto;
 import com.ssafy.util.UtilFactory;
 
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,7 +32,6 @@ import lombok.Setter;
 public class User {
 	@Id
 	@GeneratedValue
-	@ApiParam(hidden = true)
 	private Long id;
 	@NonNull
 	private String email;
@@ -49,7 +44,6 @@ public class User {
 	private String profileImage;
 
 	@OneToMany(mappedBy="USER", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@ApiModelProperty(hidden = true)
 	private Set<Likes> likes = new HashSet<Likes>();
 	
 	public static User of(UserFormDto userFormDto) {

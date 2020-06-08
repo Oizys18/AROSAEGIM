@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.dto.SaegimFormDto;
 import com.ssafy.util.UtilFactory;
 
-import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,15 +36,11 @@ import lombok.Setter;
 @Transactional
 public class Saegim {
     @Id @GeneratedValue
-    @ApiParam(hidden = true)
     private Long id;
     
     @NonNull
     @Column(name="user_id", nullable=false)
     private Long userId;
-    
-    @NonNull
-    @Column(name="user_name", nullable=false)
     private String userName;
     
     @Temporal(TemporalType.TIMESTAMP)
@@ -66,10 +61,10 @@ public class Saegim {
 	private List<Tagging> taggings = new ArrayList<Tagging>();
     
     @OneToMany(mappedBy="SAEGIM", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Comment> comments = new HashSet<Comment>();
+    private List<Comment> comments = new ArrayList<Comment>();
     
     @OneToMany(mappedBy="SAEGIM", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Image> images = new HashSet<Image>();
+    private List<Image> images = new ArrayList<Image>();
     
     public static Saegim of(SaegimFormDto saegimFormDto) {
     	Saegim saegim = UtilFactory.getModelMapper().map(saegimFormDto, Saegim.class);

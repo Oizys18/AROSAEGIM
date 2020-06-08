@@ -38,8 +38,6 @@ public class Comment {
 	@NonNull
 	@Column(name="user_id", nullable=false)
 	private Long userId;
-	@NonNull
-	@Column(name="user_name", nullable=false)
 	private String userName;
 	@NonNull
 	@Temporal(TemporalType.TIMESTAMP)

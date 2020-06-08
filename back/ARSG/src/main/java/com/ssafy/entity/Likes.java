@@ -6,8 +6,6 @@ import javax.persistence.*;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.*;
 
 @Entity

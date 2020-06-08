@@ -5,7 +5,6 @@ import java.util.List;
 import com.ssafy.dto.LoginFormDto;
 import com.ssafy.dto.UserDto;
 import com.ssafy.dto.UserFormDto;
-import com.ssafy.entity.User;
 
 public interface UserService {
 	public UserDto getUser(Long uId);		// user_id로 사용자 찾기

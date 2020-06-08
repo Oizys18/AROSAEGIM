@@ -4,18 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.dto.LikesDto;
 import com.ssafy.dto.LoginFormDto;
-import com.ssafy.dto.SaegimDetailDto;
 import com.ssafy.dto.UserDto;
 import com.ssafy.dto.UserFormDto;
 import com.ssafy.entity.Likes;
-import com.ssafy.entity.Saegim;
 import com.ssafy.entity.User;
 import com.ssafy.repositories.LikesRepository;
 import com.ssafy.repositories.UserRepository;

@@ -11,7 +11,6 @@ import javax.persistence.Table;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +26,6 @@ import lombok.Setter;
 public class Image {
 	@Id
 	@GeneratedValue
-	@ApiParam(hidden = true)
 	private Long id;
 	@NonNull
 	@Column(name="saegim_id", nullable=false)

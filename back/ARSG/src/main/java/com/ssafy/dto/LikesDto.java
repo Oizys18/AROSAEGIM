@@ -1,8 +1,5 @@
 package com.ssafy.dto;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-
 import com.ssafy.entity.Likes;
 import com.ssafy.util.UtilFactory;
 

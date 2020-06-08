@@ -1,8 +1,5 @@
 package com.ssafy.dto;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-
 import com.ssafy.entity.Tagging;
 import com.ssafy.util.UtilFactory;
 

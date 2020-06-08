@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
-import org.modelmapper.convention.MatchingStrategies;
 
 import com.ssafy.entity.User;
 import com.ssafy.util.UtilFactory;

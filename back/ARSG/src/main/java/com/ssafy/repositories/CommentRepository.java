@@ -10,8 +10,8 @@ import com.ssafy.entity.Comment;
 
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 	Comment findById(Long id);
-	Set<Comment> findByUserId(Long userId);
-	Set<Comment> findBySaegimId(Long saegimId);
+	List<Comment> findByUserId(Long userId);
+	List<Comment> findBySaegimId(Long saegimId);
 	List<Comment> findAll();
 	
 	@Transactional
