@@ -1,22 +1,22 @@
 /*global kakao*/
 import React, { Component } from 'react';
 import {Storage} from '../../storage/Storage'
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import * as SA from "../../apis/SaegimAPI";
 import { Zoom, Slide, Select, MenuItem } from "@material-ui/core";
-import { Refresh } from "@material-ui/icons";
+import { Refresh, HourglassFull } from "@material-ui/icons";
 import CtoW from "../../apis/w3w";
 import CardItem from "./CardItem";
 import Loading from "../common/background/Loading";
-// import PinIcon from '../../assets/PinIcon';
 import { FlexRow } from "../../styles/DispFlex";
-
 
 class SaegimListPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       location: [37.498584699999995, 127.0337029],
+      time: ["", ""],
+      today: "",
       addr: "",
       w3w: "",
       geocoder: new kakao.maps.services.Geocoder(),
@@ -29,7 +29,9 @@ class SaegimListPage extends Component {
       distance: 100,
       data: [],
       printLocation: "",
-      isLoading: true
+      isLoading: true,
+      timeCapsule: false,
+      timeCapsuleData: []
     }
     this.selectChange = this.selectChange.bind(this);
   }
@@ -126,6 +128,46 @@ class SaegimListPage extends Component {
     await this.getSaegimList()
   }
 
+  setTimeCapsule = async () => {
+    if (this.state.timeCapsule === false) {
+      await this.setState({ timeCapsule: true })
+    } else {
+      await this.setState({ timeCapsule: false })
+    }
+  }
+
+  getToday = () => {
+    const date = new Date()
+    const strMonth = date.getMonth() + 1
+    const strDay = date.getDate()
+    return `${strMonth}월 ${strDay}일의 새김`
+  }
+
+  getTime = () => {
+    this.setState({ today: this.getToday() })
+    const _oneYear = new Date().setFullYear(new Date().getFullYear() - 1)
+    const _sTime = new Date(_oneYear).setHours(0, 0, 0, 0)
+    const _eTime = new Date(_oneYear).setHours(24, 0, 0, 0)
+    this.setState({
+      time: [_sTime, _eTime]
+    })
+  }
+
+  getTimeCapsuleData = async () => {
+    const [ _lat, _lng ] = this.state.location
+    const [ _sTime, _eTime ] = this.state.time
+    const _data = {
+      lat: _lat,
+      lng: _lng,
+      meter: this.state.distance,
+      sTime: _sTime,
+      eTime: _eTime,
+      userid: 0
+    }
+    const _res = await SA.getSaegimByFilter(_data)
+    await this.setState({ timeCapsuleData: _res })
+  }
+
   refresh = async () => {
     this.setState({ isLoading: true })
     
@@ -148,6 +190,9 @@ class SaegimListPage extends Component {
     }
     await this.getAddrW3W()
 
+    this.getTime()
+    await this.getTimeCapsuleData()
+
     this.setState({
       isLoading: false
     })
@@ -157,9 +202,15 @@ class SaegimListPage extends Component {
     if (this.state.distance !== prevState.distance) {
       if (this.context.idxUpdateFlag === false) {
         this.getSaegimList()
+      } else if (this.state.timeCapsule === true) {
+        this.getTime()
+        this.getTimeCapsuleData()
       }
     } else if (this.state.printLocation !== prevState.printLocation) {
       this.timer = setTimeout(this.switchLocation, 5000)
+    } else if (this.state.timeCapsule !== prevState.timeCapsule) {
+      this.getTime()
+      this.getTimeCapsuleData()
     }
   }
 
@@ -175,7 +226,15 @@ class SaegimListPage extends Component {
       if (this.context.curPage === '/') {
         _dir = 'left'
       }
-      const PrintCard = this.state.data.map((saegim, idx) => {
+      const EmptyList =
+        <StMessage>
+          주변에 새김이 없습니다.<br/>이 장소의 첫 새김을 남겨주세요.
+        </StMessage>
+      const EmptyTimeCapsule =
+        <StMessage>
+          기록된 새김이 없습니다.<br/>이 장소의 첫 새김을 남기고 다시 찾아주세요.
+        </StMessage>
+      const PrintCurData = this.state.data.map((saegim, idx) => {
         return (
           <Zoom in={true} timeout={300} key={idx}>
             <CardItem
@@ -186,15 +245,24 @@ class SaegimListPage extends Component {
             />
           </Zoom>
         )
+    });
+      const PrintOldData = this.state.timeCapsuleData.map((saegim, idx) => {
+        return (
+          <Zoom in={true} timeout={300} key={idx}>
+            <CardItem
+              saegim={saegim}
+              idx={idx}
+              length={this.state.timeCapsuleData.length}
+              // onChangeData={this.changeData}
+            />
+          </Zoom>
+        )
       });
-
       const PrintOptions = this.state.options.map((option) => {
           return (
             <StMenuItem value={option.idx} key={option.idx}>{option.text}</StMenuItem>
           )
-        }
-      );
-
+        });
       return (
         <StCont>
           <StMenu>
@@ -215,10 +283,16 @@ class SaegimListPage extends Component {
           <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
             <Wrapper height={this.context.appHeight}>
               <StList>
-                {PrintCard}
+                { this.state.timeCapsule
+                  ? (this.state.timeCapsuleData.length > 0 ? PrintOldData : EmptyTimeCapsule )
+                  : (this.state.data.length > 0 ? PrintCurData : EmptyList) }
               </StList>
             </Wrapper>
           </Slide>
+          {this.state.timeCapsule === false
+           ? <StHourglassFull onClick={this.setTimeCapsule}/>
+           : <StTCMessage onClick={this.setTimeCapsule}>{this.state.today}</StTCMessage>
+          }
         </StCont>
       );
     }
@@ -303,4 +377,65 @@ const StLocation = styled(FlexRow)`
 
 const StMenuItem = styled(MenuItem)`
   font-size: 0.9rem;
+`;
+
+const Glow = keyframes`
+  0% {
+    box-shadow: 0px 0px 10px #0fc4c4, 0px 0px 10px white; 
+  }
+  20% {
+    box-shadow: 0px 0px 20px #0fc4c4, 0px 0px 20px white; 
+  } 
+  100% {
+    box-shadow: 0px 0px 10px transparent, 0px 0px 10px transparent;
+    border-width: 2px;
+  }
+`;
+
+const StHourglassFull = styled(HourglassFull)`
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #0fc4c4;
+  
+  border-radius: 50px;
+  padding: 4px;
+  
+  animation: ${Glow} 3s ease infinite;
+`;
+
+const GlowText = keyframes`
+  0% {
+    text-shadow: 0px 0px 10px #0fc4c4, 0px 0px 10px white; 
+  }
+  30% {
+    text-shadow: 0px 0px 20px #0fc4c4, 0px 0px 20px white; 
+  } 
+  100% {
+    text-shadow: 0px 0px 10px transparent, 0px 0px 10px transparent;
+  }
+`;
+
+const StTCMessage = styled.div`
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffffff;
+  animation: ${GlowText} 3s ease infinite;
+`;
+
+const StMessage = styled.div`
+  word-break: keep-all;
+  line-height: 1.5rem;
+  text-align: center;
+  
+  color: #ffffff;
+  text-shadow: 0px 0px 10px #ffffff;
+  
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
 `;
