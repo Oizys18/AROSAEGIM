@@ -285,6 +285,7 @@ const ContentsBox = styled(FlexColumn)`
   background-color: #ffffff;
   border-radius: 20px;
   margin: 2vh 1vw;
+  text-align: center;
 `;
 
 const Contents = styled.div`
