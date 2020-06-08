@@ -4,8 +4,9 @@ import styled from "styled-components";
 import { Storage } from  '../../../storage/Storage';
 import MapItem from "./MapItem";
 import * as MM from "./MapMethod";
+import pointImg from "../../../assets/point/point@2x.png";
+import pointFloatImg from "../../../assets/point/point-float@2x.png";
 import MapListItem from "./MapListItem";
-import DefaultButton from "../buttons/DefaultButton";
 
 // import MapMarker, {MarkerConfig} from "./MapItemTest";
 
@@ -26,6 +27,14 @@ class MapView extends Component {
         status: false,
         item: {id:-1},
       },
+
+      searchMarker: new kakao.maps.Marker({
+        image:new kakao.maps.MarkerImage(
+              pointImg,
+              new kakao.maps.Size(21, 28),
+              { offset: new kakao.maps.Point(11, 28) }
+        )
+      }),
     };
     this.markers = []
   }
@@ -35,8 +44,7 @@ class MapView extends Component {
   async componentDidMount() {
     await this.initMapView();
     await this.fetchItem();
-    // (this.props.userCenter && this.showUserCenter())
-    ( !sessionStorage.getItem('ARSG no GPS') && this.showUserCenter() )
+    (!sessionStorage.getItem('ARSG no GPS') && this.showUserCenter())
     this.overlayMarkers();
   }
   
@@ -45,21 +53,27 @@ class MapView extends Component {
       // console.log('re-rendering markers')
       this.overlayMarkers();
     }
-
     
     if(prevProps.mapCenter !== this.props.mapCenter){
       // 현위치로 가기 눌렀을 때
       if(this.props.mapCenter === this.props.userCenter){
         this.state.mv.panTo(this.props.mapCenter);
-        // console.log('map is in user center')
         (this.state.userMarker && this.state.userMarker.setPosition(this.props.userCenter));
       }
-      // 검색한 장소 클릭시
-      else if(this.props.searchOn){
-        this.state.mv.panTo(this.props.mapCenter);
+    }
+
+    // 검색한 장소 클릭시
+    if(prevProps.searchCenter !== this.props.searchCenter){
+      if(this.props.searchCenter){
+        this.state.searchMarker.setMap(null)
+        this.state.searchMarker.setPosition(this.props.searchCenter)
+        this.state.searchMarker.setMap(this.state.mv)
+        this.state.mv.panTo(this.props.searchCenter);
+      }
+      else{
+        this.state.searchMarker.setMap(null)
       }
     }
-    
 
     // 페이지 전환시 지도 중심, 레벨 유지
     if(prevProps.mapCenter !== this.props.mapCenter && 
@@ -69,23 +83,14 @@ class MapView extends Component {
       this.state.mv.setLevel(this.props.mapLevel);
     }
 
+    // 필터 적용 시 새김 재요청
     if(prevProps.filterVal !== this.props.filterVal){
       this.fetchItem()
     }
-
-    // (!!this.props.userCenter && this.props.usingUserCenter && !this.state.userMarker && this.showUserCenter())
-    // if (prevProps.usingUserCenter !== this.props.usingUserCenter){console.log(prevProps, this.props, this.state)}
-    // if (prevProps.usingUserCenter !== this.props.usingUserCenter && this.props.usingUserCenter && !!this.state.userMarker) {
-    //   
-    //   this.state.mv.panTo(this.props.userCenter)
-    //   // MM.panTo(this.state.mv, this.props.userCenter.getLat(), this.props.userCenter.getLng())
-    // }
-
   }
 
   componentWillUnmount(){
-    // kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLvCt)
-    // kakao.maps.event.removeListener(this.state.mv, "center_changed", this.changeLvCt)
+    // kakao.maps.event.removeListener(this.state.mv, "center_changed", this.handleCenterChange)
     kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLv)
     kakao.maps.event.removeListener(this.state.mv, "dragstart", this.handleDragStart)
     kakao.maps.event.removeListener(this.state.mv, "dragend", this.handleDragEnd)
@@ -99,8 +104,7 @@ class MapView extends Component {
       level: this.props.mapLevel,
     }
     const _mapView = new kakao.maps.Map(_cont, _options)
-    // kakao.maps.event.addListener(_mapView, "zoom_changed", this.changeLvCt)
-    // kakao.maps.event.addListener(_mapView, "center_changed", this.changeLvCt)
+    // kakao.maps.event.addListener(_mapView, "center_changed", this.handleCenterChange)
     kakao.maps.event.addListener(_mapView, "zoom_changed", this.changeLv)
     kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
     kakao.maps.event.addListener(_mapView, "dragend", this.handleDragEnd)
@@ -126,6 +130,17 @@ class MapView extends Component {
   changeLv = () => {
     this.props.changeMapLevel(this.state.mv.getLevel())
   }
+  handleDragStart = () => {
+    // (this.state.selected.status && this.closeItem());
+    (this.props.usingUserCenter && this.props.unsetUsingUserCenter());
+    (this.state.selectedList.status && this.unsetSelectedList());
+    this.closeItem();
+  };
+
+  handleDragEnd = () => {
+    this.props.changeMapCenter(this.state.mv.getCenter())
+    this.fetchItem();
+  };
 
   fetchItem = () => {
     const bounds = this.state.mv.getBounds();
@@ -133,6 +148,27 @@ class MapView extends Component {
     this.props.fetchItem(bounds, center);
   }
 
+  getMarkerImage = (status) => {
+    let imageSrc = null;
+    let imageSize = null;
+    let imageOption = null;
+
+    if (status === 'float') {
+      imageSrc = pointFloatImg;
+      imageSize = new kakao.maps.Size(21, 42); // 마커이미지의 크기입니다
+      imageOption = { offset: new kakao.maps.Point(11, 42) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+    } else {
+      imageSrc = pointImg;
+      imageSize = new kakao.maps.Size(21, 28); // 마커이미지의 크기입니다
+      imageOption = { offset: new kakao.maps.Point(11, 28) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+    }
+    const markerImage = new kakao.maps.MarkerImage(
+      imageSrc,
+      imageSize,
+      imageOption
+    );
+    return markerImage
+  }
   showUserCenter = () => {
     const userCenterPos = {
       latitude: this.props.userCenter.getLat(),
@@ -144,20 +180,6 @@ class MapView extends Component {
     userMarker.setMap(this.state.mv)
     this.setState({userMarker: userMarker})
   }
-
-  handleDragStart = () => {
-    // (this.state.selected.status && this.closeItem());
-    (this.props.usingUserCenter && this.props.unsetUsingUserCenter());
-    (this.state.selectedList.status && this.unsetSelectedList());
-    this.closeItem();
-  };
-
-  handleDragEnd = () => {
-    this.props.changeMapCenter(this.state.mv.getCenter())
-    this.fetchItem();
-    // (this.state.selected.status && this.closeItem());
-    // (this.state.usingUserCenter && this.setState({usingUserCenter: false}));
-  };
 
   handleCluster = (cluster) => {
     const items = cluster.getMarkers()

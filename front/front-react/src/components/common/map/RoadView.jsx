@@ -1,6 +1,5 @@
 /*global kakao*/
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import './MapWalker.css';
 import MapWalker from './MapWalker';
 import styled from 'styled-components';
@@ -108,6 +107,16 @@ class RoadView extends Component {
     .then(() => {
       this.initMM()
     })
+    .then(() => {
+      this.setState({
+        cls: new kakao.maps.MarkerClusterer({
+          map: this.state.mm, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+          averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+          minLevel: 5, // 클러스터 할 최소 지도 레벨 
+          disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
+        })
+      })
+    })
 
     kakao.maps.event.addListener(_roadView, 'position_changed', this.changeRVPos);
     kakao.maps.event.addListener(_roadView, 'viewpoint_changed', this.changeRVVP);
@@ -131,7 +140,7 @@ class RoadView extends Component {
   }
 
   //커스텀 오버레이
-  initOLMK = () => {
+  initOLMK = async () => {
     const _newItems = this.props.items.filter((el) => {
       return !this.state.itemIds.includes(el.id)
     })
@@ -161,19 +170,19 @@ class RoadView extends Component {
         )
       })
     }
-
+    
     this.state.olObjs.forEach((el) => {
       const _flag = this.props.items.findIndex(item => item.id === el.id)
       if(_flag !== -1){
-        // console.log('render', el)
         el.co.setMap(this.state.rv)
         el.co.setRange(100)
-        el.mk.setMap(this.state.mm)
+        // el.mk.setMap(this.state.mm)
+        this.state.cls.addMarker(el.mk)
       }
       else{
-        // console.log('norenderr', el)
         el.co.setMap(null)
-        el.mk.setMap(null)
+        // el.mk.setMap(null)
+        this.state.cls.removeMarker(el.mk)
       }
     })
   }
@@ -191,6 +200,7 @@ class RoadView extends Component {
       level: 4,
     }
     const _miniMap = new kakao.maps.Map(_cont, _option)
+    _miniMap.addOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
 
     await this.setStateAsync({
       mm: _miniMap
@@ -199,33 +209,19 @@ class RoadView extends Component {
       ( !sessionStorage.getItem('ARSG no GPS') && this.showUserCenter() ) //현재 위치 표시
     })
 
-    const _mpj = _miniMap.getProjection()
-    const _cls = new kakao.maps.MarkerClusterer({
-      map: _miniMap, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
-      averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
-      minLevel: 1, // 클러스터 할 최소 지도 레벨 
-      disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
-    });
-    this.setState({
-      mpj: _mpj,
-      cls: _cls,
-    })
-
     const _mapWalker = new MapWalker(this.state.rv.getPosition()) //맵워커 생성
-    _mapWalker.setMap(_miniMap); // 맵워커를 지도에 설정한다.
-
     const _viewpoint = this.state.rv.getViewpoint(); // 맵워커 뷰포트 초기화
+    _mapWalker.setMap(_miniMap); // 맵워커를 지도에 설정한다.
     _mapWalker.setAngle(_viewpoint.pan);
 
     await this.setStateAsync({
-      mw: _mapWalker
+      mw: _mapWalker,
     })
 
     _miniMap.addOverlayMapTypeId(kakao.maps.MapTypeId.ROADVIEW);
-    kakao.maps.event.addListener(_miniMap, "zoom_changed", this.changeLv)
+    kakao.maps.event.addListener(_miniMap, "zoom_changed", this.changeLvCt)
     kakao.maps.event.addListener(_miniMap, "dragend", this.changeLvCt)
-    // kakao.maps.event.addListener(_miniMap, "center_changed", this.changeMWCt)
-    kakao.maps.event.addListener(_miniMap, "click", this.changeMWCt)
+    kakao.maps.event.addListener(_miniMap, "center_changed", this.changeMWCt)
   }
 
   showUserCenter = () => {
@@ -240,40 +236,21 @@ class RoadView extends Component {
   }
 
   //레벨 변경
-  changeLv = () => {
-    const _center = this.state.mm.getCenter()
-    // const _level = this.state.mm.getLevel()
-    // // this.changeAddr(_center)
-    // this.state.rvc.getNearestPanoId(_center, MM.calcPanoRadius(_level), (panoId) => {
-    //   if(panoId)  {
-    //     this.state.rv.setPanoId(panoId, _center) //panoId와 중심좌표를 통해 로드뷰 실행
-    //   }
-    // })
-    this.props.changeMapCenter(_center)
-  }
   //중심 이동
   changeLvCt = () => {
     const _center = this.state.mm.getCenter()
-    // const _level = this.state.mm.getLevel()
-    // // this.changeAddr(_center)
-    // this.state.rvc.getNearestPanoId(_center, MM.calcPanoRadius(_level), (panoId) => {
-    //   if(panoId)  {
-    //     this.state.rv.setPanoId(panoId, _center) //panoId와 중심좌표를 통해 로드뷰 실행
-    //   }
-    // })
-    this.props.changeMapCenter(_center)
-  }
-  //맵워커 위치, 로드 뷰 변경
-  changeMWCt = (e) => {
-    const _center = e.latLng
-    this.state.mw.setPosition(_center)
-
     const _level = this.state.mm.getLevel()
     this.state.rvc.getNearestPanoId(_center, MM.calcPanoRadius(_level), (panoId) => {
       if(panoId)  {
         this.state.rv.setPanoId(panoId, _center) //panoId와 중심좌표를 통해 로드뷰 실행
       }
     })
+    this.props.changeMapCenter(_center)
+  }
+  //맵워커 위치, 로드 뷰 변경
+  changeMWCt = (e) => {
+    const _center = this.state.mm.getCenter()
+    this.state.mw.setPosition(_center)
   }
 
   render(){
@@ -349,18 +326,3 @@ const StMap = styled.div`
   border-top: 1px solid white;
   box-sizing: border-box;
 `
-
-// const emptyItem = {
-//   contents: "emptyItem",
-//   id: 0,
-//   image: null,
-//   latitude: 37.50083104531534,
-//   longitude: 127.03694678811341,
-//   record: null,
-//   regDate: 1590650953712,
-//   secret: 0,
-//   tags: [],
-//   userId: 0,
-//   userName: "empty",
-//   w3w: "empty"
-// }

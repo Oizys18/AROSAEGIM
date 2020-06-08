@@ -1,5 +1,5 @@
-/* global kakao */
 import React, { Component } from 'react';
+import MapSearchResult from './MapSearchResult';
 import styled from 'styled-components';
 import { Slide, IconButton } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
@@ -18,7 +18,7 @@ class MapSearchList extends Component {
         <StResultCont>
         {
           this.props.searchResult.map((el, idx) => {
-            return <SearchResult key={idx} item={el} changeMapCenter={this.props.changeMapCenter}/>
+            return <MapSearchResult key={idx} item={el} searchCenter={this.props.searchCenter}/>
           })
         }
         </StResultCont>
@@ -56,30 +56,3 @@ const StResultCont = styled(FlexColumn)`
   box-sizing: border-box;
 `;
 
-class SearchResult extends Component {
-  changeMapCenter = () => {
-    console.log(Number(this.props.item.x), this.props.item.y)
-    this.props.changeMapCenter( new kakao.maps.LatLng(Number(this.props.item.y), Number(this.props.item.x)))
-  }
-
-  render(){
-    const _item = this.props.item
-    return(
-      <StResult onClick={this.changeMapCenter}>
-        {_item.place_name}<br/>
-        {_item.address_name}<br/>
-        {_item.phone}<br/>
-        {_item.place_url}
-      </StResult>
-    )
-  }
-}
-
-const StResult = styled.div`
-  width: 100%;
-  height: 25vh;
-  background: white;
-  margin-bottom: 8px; 
-  border-radius: 10px;
-  color: gray;
-`;

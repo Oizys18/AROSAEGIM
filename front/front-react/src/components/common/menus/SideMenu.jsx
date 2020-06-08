@@ -40,6 +40,10 @@ class SideMenu extends Component {
     }
   }
 
+  handleRefresh = () => {
+    this.props.popModal(`앱을 새로고침\n하시겠습니까?`, 'user refresh', 'confirm')
+  }
+
   renderFilter = () => {
     const _handleFilter = this.props.handleFilter
     return(
@@ -85,15 +89,11 @@ class SideMenu extends Component {
         />
         <Divider />
         <StBtnCont>
-          {/* <Zoom in={this.props.on} timeout={600} mountOnEnter unmountOnExit>
-            <StBtn2><IconButton onClick={this.props.toggle}><Close/></IconButton></StBtn2>
-          </Zoom> */}
           <Zoom in={this.props.on} timeout={600} mountOnEnter unmountOnExit>
-            <StBtn2><IconButton onClick={this.props.handleFilter.handleInit}><Refresh/></IconButton></StBtn2>
+            <StBtn><IconButton onClick={this.props.handleFilter.handleInit}><Refresh/></IconButton></StBtn>
           </Zoom>
           <Zoom in={this.props.on} timeout={400} mountOnEnter unmountOnExit>
-            <StBtn2><IconButton onClick={this.props.toggle}><Check/></IconButton></StBtn2>
-            {/* <StBtn2><IconButton onClick={this.props.handleFilter.handleApply}><Check/></IconButton></StBtn2> */}
+            <StBtn><IconButton onClick={this.props.toggle}><Check/></IconButton></StBtn>
           </Zoom>
         </StBtnCont>
       </StListCont>
@@ -108,13 +108,15 @@ class SideMenu extends Component {
       <StTopCont>
         {/* <StLogo/> */}
         <StTopMsg>아로새김</StTopMsg>
-        <IconButton onClick={this.props.toggle}><Close/></IconButton>
+        <StTopBtn>
+          {
+            !this.props.isLogin &&
+            <IconButton onClick={this.handleRefresh}><Refresh/></IconButton>
+          }
+          <IconButton onClick={this.props.toggle}><Close/></IconButton>
+        </StTopBtn>
       </StTopCont>
       
-      {/* {
-        this.props.isLogin && 
-        <UserInfo on={this.props.on}/>
-      } */}
       <Slide in={this.props.on} direction='right' timeout={700}>
         <StListCont>
         {
@@ -197,8 +199,6 @@ const StMenuCont = styled.div`
   hr{
     background: linear-gradient(to bottom right, #FBF2EE 0%, #F4BDB0 100%);
   }
-  /* border: 3px solid gray;
-  box-sizing: border-box; */
 `;
 
 const StTopCont = styled.div`
@@ -218,15 +218,6 @@ const StTopCont = styled.div`
 `;
 
 // const StLogo = styled(FlexRow)`
-//   width: 168px;
-//   height: 100%;
-  
-//   /* background: #f2f2f2; */
-//   background-image: url(${inlineLogo});
-//   background-size: 50%;
-//   background-position: center center;
-//   background-repeat: no-repeat;
-//   box-sizing: border-box;
 // `;
 
 const StTopMsg = styled(FlexRow)`
@@ -238,6 +229,8 @@ const StTopMsg = styled(FlexRow)`
   text-shadow: 0 0 3px gray;
 `;
 
+const StTopBtn = styled(FlexRow)`
+`;
 
 const StListCont = styled.div`
   display: flex;
@@ -245,14 +238,6 @@ const StListCont = styled.div`
   height: 100%;
   padding: 8px;
 `;
-
-// const StTopMsg = styled(FlexRow)`
-//   width: 100%;
-//   font-weight: bold;
-//   /* font-size: 110%; */
-//   color: white;
-//   text-shadow: 0 0 5px gray;
-// `;
 
 const StMineCont = styled.div`
   display: flex;
@@ -270,7 +255,7 @@ const StBtnCont = styled(FlexRow)`
   justify-content: space-around;
 `;
 
-const StBtn2 = styled(FlexRow)`
+const StBtn = styled(FlexRow)`
   border: 3px solid #F8DCD4;
   border-radius: 50%;
   background: white;
@@ -285,37 +270,3 @@ const StBtn2 = styled(FlexRow)`
     height: 30px;
   }
 `
-
-
-// const StBtn = styled(FlexRow)`
-//   position: fixed;
-//   z-index: 120;
-//   &.btnCheck{
-//     right: 24px;
-//     bottom: 132px;
-//   }
-//   &.btnRefresh{
-//     right: 24px;
-//     bottom: 78px;
-//   }
-//   &.btnClose{
-//     right: 24px;
-//     bottom: 24px;
-//   }
-
-//   /* margin-top: 8px; */
-
-//   border: 3px solid #F8DCD4;
-//   border-radius: 50%;
-//   background: white;
-
-//   .MuiButtonBase-root{
-//     padding: 6px;
-//   }
-
-//   svg{
-//     color: gray;
-//     width: 30px;
-//     height: 30px;
-//   }
-// `

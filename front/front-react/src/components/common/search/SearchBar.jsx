@@ -24,6 +24,11 @@ class SearchBar extends Component {
     const _intervalId = setInterval(() => {this.setState({ msg: !this.state.msg })}, 3000)
     this.setState({ intervalId: _intervalId })
   }
+  componentDidUpdate(prevProps, ){
+    if(prevProps.searchCenter !== this.props.searchCenter && !this.props.searchCenter){
+      this.setState({ value: '' })
+    }
+  }
   componentWillUnmount(){
     document.removeEventListener('keypress', this.pressEnter)
     clearInterval(this.state.intervalId)
@@ -51,7 +56,7 @@ class SearchBar extends Component {
   handleSearch = () => {
     this.closeSelect()
     this.props.handleSearch(this.state.select, this.state.value)
-    this.setState({ value: '' })
+    // this.setState({ value: '' })
   }
   pressEnter = (e) => {
     if(e.keyCode === 13){

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { ArrowBack } from "@material-ui/icons";
+import HomeBtn from  '../common/buttons/HomeBtn';
+import { Slide, Zoom, Grow } from '@material-ui/core';
+import { ArrowBack, ArrowForward, Home } from "@material-ui/icons";
 import { withRouter } from "react-router-dom";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import TutorialItem from "./TutorialItem";
-import HomeIcon from "@material-ui/icons/Home";
+
 class Tutorial extends Component {
   constructor(props) {
     super(props);
@@ -13,12 +13,16 @@ class Tutorial extends Component {
       page: 0,
       max: 5,
       min: 0,
+
+      slideIn: true,
     };
   }
+  setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
   goHome = () => {
     this.props.history.push(`/list`);
   };
-  goBack = () => {
+  goBack = async () => {
+    await this.setStateAsync({ slideIn: false })
     this.props.history.goBack();
   };
   NextPage = () => {
@@ -36,30 +40,49 @@ class Tutorial extends Component {
 
   render() {
     return (
-      <Wrapper>
-        <BackButton onClick={this.goBack}>
-          <ArrowBack />
-        </BackButton>
-        <HomeButton onClick={this.goBack}>
-          <HomeIcon />
-        </HomeButton>
-        <Header>튜토리얼</Header>
-        <Container>
-          <Navigator>
-            <ButtonIcon onClick={this.PrevPage}>
-              <ArrowBackIcon fontSize="Large" />
-            </ButtonIcon>
-            <ButtonIcon onClick={this.NextPage}>
-              <ArrowForwardIcon fontSize="Large" />
-            </ButtonIcon>
-          </Navigator>
-        </Container>
-        <TutorialItem page={this.state.page} />
-      </Wrapper>
+      <StCont>
+        <HomeBtn handleHome={this.goBack}/>
+
+        <Slide in={this.state.slideIn} direction="left">
+        <Wrapper>
+          {/* <BackButton onClick={this.goBack}>
+            <ArrowBack />
+          </BackButton> */}
+          {/* <HomeButton onClick={this.goBack}>
+            <Home/>
+          </HomeButton> */}
+          <Grow in={true} timeout={1000}>
+            <Header>튜토리얼</Header>
+          </Grow>
+          
+          <Container>
+            <Navigator>
+              <Grow in={true} timeout={1000}>
+                <ButtonIcon onClick={this.PrevPage}>
+                  <ArrowBack fontSize="large" />
+                </ButtonIcon>
+              </Grow>
+              <Grow in={true} timeout={1000}>
+                <ButtonIcon onClick={this.NextPage}>
+                  <ArrowForward fontSize="large" />
+                </ButtonIcon>
+              </Grow>
+            </Navigator>
+          </Container>
+
+          <TutorialItem page={this.state.page} />
+        </Wrapper>
+        </Slide>
+
+      </StCont>
     );
   }
 }
 export default withRouter(Tutorial);
+
+const StCont = styled.div`
+  overflow: hidden;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -81,26 +104,28 @@ const Container = styled.div`
   display: flex;
 `;
 
-const BackButton = styled.div`
-  position: absolute;
-  top: 3%;
-  left: 5%;
-  background: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 16px;
-  z-index: 5;
-`;
-const HomeButton = styled.div`
-  position: absolute;
-  top: 3%;
-  left: 15%;
-  background: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 16px;
-  z-index: 5;
-`;
+// const BackButton = styled.div`
+//   position: absolute;
+//   top: 3%;
+//   left: 5%;
+//   /* background: white; */
+//   color: white;
+//   width: 24px;
+//   height: 24px;
+//   border-radius: 16px;
+//   z-index: 5;
+// `;
+// const HomeButton = styled.div`
+//   position: absolute;
+//   top: 3%;
+//   left: 15%;
+//   /* background: white; */
+//   color: white;
+//   width: 24px;
+//   height: 24px;
+//   border-radius: 16px;
+//   z-index: 5;
+// `;
 
 const Header = styled.div`
   z-index: 5;
@@ -120,7 +145,8 @@ const Navigator = styled.div`
   padding: 0.5em;
 `;
 const ButtonIcon = styled.div`
-  background: white;
+  /* background: white; */
+  color: white;
   width: 36px;
   height: 36px;
   border-radius: 16px;
@@ -129,3 +155,5 @@ const ButtonIcon = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+

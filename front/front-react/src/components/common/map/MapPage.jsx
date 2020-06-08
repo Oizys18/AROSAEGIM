@@ -34,6 +34,7 @@ class MapPage extends Component {
       w3w: '',
       place: new kakao.maps.services.Places(), //카카오 장소 검색 객체
       searchResult: [],
+      searchCenter: null,
       handleSearch: this.handleSearch,
 
       bounds: null,
@@ -118,7 +119,10 @@ class MapPage extends Component {
   };
 
   tglView = () => {
-    this.setState({ roadView: !this.state.roadView })
+    this.setState({ 
+      roadView: !this.state.roadView,
+      searchResult: []
+    })
   };
   goUserCenter = () => {
     GA.getPositionAsync()
@@ -184,6 +188,7 @@ class MapPage extends Component {
   handleApply = async () => {
     this.tglFilter()
   }
+
   handleSearch = (select, value) => {
     if(select === '장소'){
       this.state.place.keywordSearch(value, (data, status, pagination) => {
@@ -206,8 +211,15 @@ class MapPage extends Component {
   }
   initSearch = () => {
     this.setState({
-      searchResult: []
+      searchResult: [],
+      searchCenter: null,
     })
+  }
+  searchCenter = (_center) => {
+    this.setState({
+      searchCenter: _center
+    })
+    this.changeMapCenter(_center)
   }
 
   fetchItem = async (bounds, center) => {
@@ -280,12 +292,13 @@ class MapPage extends Component {
           addr={this.state.addr} 
           w3w={this.state.w3w} 
           handleSearch={this.handleSearch}
+          searchCenter={this.state.searchCenter}
         />
         <MapSearchList 
-          on={this.state.searchResult.length > 0} 
+          on={this.state.searchResult.length > 0 && !this.state.roadView} 
           searchResult={this.state.searchResult} 
           initSearch={this.initSearch}
-          changeMapCenter={this.changeMapCenter}
+          searchCenter={this.searchCenter}
         />
         
 
@@ -334,7 +347,7 @@ class MapPage extends Component {
               fetchItem={this.fetchItem}
               filterVal={this.state.filterVal}
 
-              searchOn={this.state.searchResult.length > 0}
+              searchCenter={this.state.searchCenter}
             />
           }
 
