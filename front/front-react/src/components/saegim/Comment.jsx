@@ -5,6 +5,7 @@ import {getCommentBySaegim, writeComment} from "../../apis/CommentAPI";
 import SmallButton from "../common/buttons/SmallButton";
 import CommentInput from "./CommentInput";
 import CommentItem from "./CommentItem";
+import { FlexRow } from "../../styles/DispFlex";
 
 class Comment extends Component{
   constructor(props) {
@@ -96,7 +97,9 @@ class Comment extends Component{
         </StCommentList>
         <StCommentInput>
           <CommentInput value={this.state.contents} onChange={this.handleInput} />
-          <SmallButton text='등록' onClick={this.handleSubmit} />
+          <StSmallButton>
+            <SmallButton text='등록' onClick={this.handleSubmit} />
+          </StSmallButton>
         </StCommentInput>
       </div>
     );
@@ -122,7 +125,7 @@ const StCommentList = styled.div`
   }
 `;
 
-const StCommentInput = styled.div`
+const StCommentInput = styled(FlexRow)`
   position: fixed;
   bottom: 5%;
 
@@ -135,4 +138,10 @@ const StDescription = styled.div`
   color: #818181;
   margin-left: 16px;
   height: 19px;
+`;
+
+const StSmallButton = styled.div`
+  .MuiButton-contained {
+    background-color: #f4c6ba;
+  }
 `;

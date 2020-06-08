@@ -179,7 +179,7 @@ class SaegimDetail extends Component {
     } else {
       const PrintChip = this.state.data.tags.map((tag) => {
         return (
-          <Chip text={tag.name} key={tag.id}/>
+          <StChip text={tag.name} key={tag.id}/>
         )
       })
       return (
@@ -507,3 +507,8 @@ const StClose = styled.div`
 
 const StTopBarR = styled(FlexRow)``;
 
+const StChip = styled(Chip)`
+  margin-right: 4px;
+  background-color: #FBF2EE;
+  box-shadow: 1px 0 2px gray;
+`;
