@@ -134,7 +134,7 @@ class SideMenu extends Component {
           </>
         }
         <SideMenuBtn link="guideline" txt={"커뮤니티 가이드라인"} icon={<MenuBook />} />
-        <SideMenuBtn link="tutorial" txt={"튜토리얼 다시보기"} icon={<Help />} />
+        <SideMenuBtn link="tutorial" txt={"튜토리얼"} icon={<Help />} />
         <SideMenuBtn link="contact" txt={"개발자와 연락"} icon={<Build />} />
         </StListCont>
       </Slide>
