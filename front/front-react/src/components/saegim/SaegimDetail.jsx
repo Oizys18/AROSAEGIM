@@ -492,9 +492,10 @@ const StMobileStepper = styled(MobileStepper)`
 
 const ImageWrapper = styled.div`
   padding: 24px;
-  position: absolute;
+  position: fixed;
   top: 50%;
-  transform: translateY(-50%);
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
 `;
 
 const StClose = styled.div`
