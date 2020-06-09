@@ -207,6 +207,14 @@ class MapView extends Component {
     this.state.clusterer.addMarkers(markers);
   }
 
+  selectItem = (itemId) => {
+    const item = this.props.items.find(el => itemId === el.id)
+    if (item === undefined) {
+      return;
+    }
+    this.setState({selected: { status: true, item: item }})
+  };
+
   closeItem = () => {
     this.setState({selected: { status: false, item: {id:-1} }})
   }
