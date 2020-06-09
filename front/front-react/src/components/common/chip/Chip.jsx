@@ -6,17 +6,12 @@ class Chip extends Component {
   render() {
     return (
       <StChip
-        size={this.props.size}
+        {...this.props}
         label={this.props.text}
-        onClick={this.props.onClick}
-        color={this.props.color}
-        variant={this.props.variant}
       />
     );
   }
 }
 export default Chip;
 
-const StChip = styled(ChipComponent)`
-  font-size: 8px;
-`;
+const StChip = styled(ChipComponent)``;
