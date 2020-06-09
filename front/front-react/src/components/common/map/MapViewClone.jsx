@@ -149,10 +149,6 @@ class MapView extends Component {
     this.props.fixLocation([center.getLat(), center.getLng()], this.state.w3w)
   }
 
-  cancelMap = () => {
-    console.log(this.state.mv.getCenter())
-  }
-
   render() {
     return (
       <>

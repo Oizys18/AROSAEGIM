@@ -11,8 +11,6 @@ export const login = async (state) => {
       password: pw,
     },
   })
-  console.log(_res)
-  console.log(_res.data)
   return _res.data
   
   // if(_res.data.data === 'success'){

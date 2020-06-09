@@ -111,7 +111,7 @@ class MapItem extends Component {
   }
 
   showDetail = () => {
-    console.log('link to', this.props.item.id)
+    // console.log('link to', this.props.item.id)
   }
 
   slicedContent = (contents, length) => {
