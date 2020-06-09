@@ -2,27 +2,33 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import HomeBtn from  '../common/buttons/HomeBtn';
 import { Slide, Grow } from '@material-ui/core';
-import { ArrowBack, ArrowForward } from "@material-ui/icons";
+import { ArrowBack, ArrowForward, Home } from "@material-ui/icons";
 import { withRouter } from "react-router-dom";
 import TutorialItem from "./TutorialItem";
+import { Storage } from "../../storage/Storage"
+import logo from "../../assets/logo/inline-logo-white.png"
+import {FlexRow} from "../../styles/DispFlex";
 
 class Tutorial extends Component {
   constructor(props) {
     super(props);
     this.state = {
       page: 0,
-      max: 5,
+      max: 3,
       min: 0,
 
       slideIn: true,
     };
   }
   setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
+
   goHome = () => {
     this.props.history.push(`/list`);
+    this.context.toggleSideMenu();
   };
   goBack = async () => {
     await this.setStateAsync({ slideIn: false })
+    this.context.toggleSideMenu();
     this.props.history.goBack();
   };
   NextPage = () => {
@@ -41,16 +47,8 @@ class Tutorial extends Component {
   render() {
     return (
       <StCont>
-        <HomeBtn handleHome={this.goBack}/>
-
         <Slide in={this.state.slideIn} direction="left">
         <Wrapper>
-          {/* <BackButton onClick={this.goBack}>
-            <ArrowBack />
-          </BackButton> */}
-          {/* <HomeButton onClick={this.goBack}>
-            <Home/>
-          </HomeButton> */}
           <Grow in={true} timeout={1000}>
             <Header>튜토리얼</Header>
           </Grow>
@@ -59,29 +57,36 @@ class Tutorial extends Component {
             <Navigator>
               <Grow in={true} timeout={1000}>
                 <ButtonIcon onClick={this.PrevPage}>
-                  <ArrowBack fontSize="large" />
+                  {this.state.page > 0 && <ArrowBack fontSize="large" />}
                 </ButtonIcon>
               </Grow>
               <Grow in={true} timeout={1000}>
                 <ButtonIcon onClick={this.NextPage}>
-                  <ArrowForward fontSize="large" />
+                  {this.state.page < this.state.max && <ArrowForward fontSize="large" />}
                 </ButtonIcon>
               </Grow>
             </Navigator>
           </Container>
 
           <TutorialItem page={this.state.page} />
+          {this.state.page === this.state.max &&
+            <HomeButton onClick={this.goBack}>
+              <Stimg src={logo}/>
+              <StHome>클릭하고 홈으로<Home></Home></StHome>
+            </HomeButton>
+          }
         </Wrapper>
         </Slide>
-
       </StCont>
     );
   }
 }
 export default withRouter(Tutorial);
+Tutorial.contextType = Storage;
 
 const StCont = styled.div`
   overflow: hidden;
+  background-color: black;
 `;
 
 const Wrapper = styled.div`
@@ -104,28 +109,12 @@ const Container = styled.div`
   display: flex;
 `;
 
-// const BackButton = styled.div`
-//   position: absolute;
-//   top: 3%;
-//   left: 5%;
-//   /* background: white; */
-//   color: white;
-//   width: 24px;
-//   height: 24px;
-//   border-radius: 16px;
-//   z-index: 5;
-// `;
-// const HomeButton = styled.div`
-//   position: absolute;
-//   top: 3%;
-//   left: 15%;
-//   /* background: white; */
-//   color: white;
-//   width: 24px;
-//   height: 24px;
-//   border-radius: 16px;
-//   z-index: 5;
-// `;
+const HomeButton = styled.div`
+  /* background: white; */
+  color: white;
+  z-index: 5;
+  // border: 1px solid white;
+`;
 
 const Header = styled.div`
   z-index: 5;
@@ -156,4 +145,16 @@ const ButtonIcon = styled.div`
   align-items: center;
 `;
 
+const Stimg = styled.img`
+  position: fixed;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+`;
 
+const StHome = styled(FlexRow)`
+  position: fixed;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+`;
