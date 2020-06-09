@@ -255,7 +255,7 @@ class RoadViewSaegimDetail extends Component {
                   <StCard>
                     {this.state.isUser !== 1
                       ? this.newLineContent(this.state.data.contents)
-                      : '비밀글입니다.<br/>작성자만 볼 수 있습니다.'}
+                      : <p>{"비밀글입니다."}<br/>{"작성자만 볼 수 있습니다."}</p>}
                   </StCard>
                 </Card>
               </CardWrapper>

@@ -322,7 +322,7 @@ class MapPage extends Component {
               addr={this.state.addr}
               w3w={this.state.w3w}
               changeMapCenter={this.changeMapCenter}
-              items={this.state.items}
+              items={this.state.items.filter(el=> el.secret === 0 || el.userId === this.context.userInfo.id)}
               on={!this.state.roadView}
               tglView={this.tglView}
               fetchItem={this.fetchItem}
@@ -333,7 +333,7 @@ class MapPage extends Component {
               status="list"
               mapCenter={this.state.mapCenter}
               mapLevel={this.state.level}
-              items={this.state.items}
+              items={this.state.items.filter(el=> el.secret === 0 || el.userId === this.context.userInfo.id)}
               hide={this.state.roadView}
               userCenter={this.state.userCenter}
               changeMapCenter={this.changeMapCenter}
