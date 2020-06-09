@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
+import "./CardItem.css";
+import { Lock, Photo, AccessTime, CreateOutlined  } from "@material-ui/icons";
+import Chip from "../common/chip/Chip";
+import { getTimeDeltaString } from "../common/time/TimeFunctinon";
+import PinIcon from "../../assets/PinIcon";
+import { FlexColumn, FlexRow } from "../../styles/DispFlex";
 import Card from "../common/cards/Card";
-import "./CardItem.css"
 
 class CardItem extends Component {
   listElement;
@@ -18,9 +23,10 @@ class CardItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentId: 0
+      currentId: 0,
+      colors: ['#FBF2EE', '#f4c6ba', '#f3b3a6', '#d69f94', '#B98B82', '#A76E62' ],
+      regDate: ""
     }
-
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onTouchMove = this.onTouchMove.bind(this);
     this.onDragStartMouse = this.onDragStartMouse.bind(this);
@@ -30,7 +36,6 @@ class CardItem extends Component {
     this.onDragEnd = this.onDragEnd.bind(this);
     this.updatePosition = this.updatePosition.bind(this);
     this.onClicked = this.onClicked.bind(this);
-
     this.onSwiped = this.onSwiped.bind(this);
   }
 
@@ -44,6 +49,7 @@ class CardItem extends Component {
     window.addEventListener("mouseup", this.onDragEndMouse);
     window.addEventListener("touchend", this.onDragEndTouch);
     this.changeOrder()
+    this.getRegDate()
   }
 
   onDragStartMouse(e) {
@@ -81,15 +87,13 @@ class CardItem extends Component {
   onDragEnd() {
     if (this.dragged) {
       this.dragged = false;
-      if (Math.abs(this.left) > (this.listElement.offsetWidth / 4)*3) {
+      if (Math.abs(this.left) > this.listElement.offsetWidth / 2) {
         this.left = -this.listElement.offsetWidth * 2;
         this.wrapper.style.maxHeight = 0;
         this.listElement.style.transform = `translateX(${this.left}px)`;
         this.onChangeData(this.props.idx)
         this.onSwiped();
       }
-
-      // this.listElement.className = "BouncingListItem";
       this.left = 0;
       if (this.state.currentId !== this.props.saegim.id) {
         this.listElement.style.animation = 'zoom 1s ease-out';
@@ -144,13 +148,29 @@ class CardItem extends Component {
     this.props.onChangeData()
   }
 
+  getRegDate = () => {
+    if (this.props.saegim.regDate !== undefined) {
+      const _regDate = getTimeDeltaString(this.props.saegim.regDate)
+      this.setState({regDate: _regDate})
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.saegim !== this.props.saegim) {
+      this.getRegDate()
+    }
+  }
+
   render() {
     const saegim = this.props.saegim;
     const idx = this.props.idx;
-    const length = this.props.length
+    const length = this.props.length;
+    const PrintTags = saegim.tags.slice(0, 3).map((tag) => {
+      return <StChip size='small' text={tag.name} key={tag.id} idx={idx} />
+    })
     return (
       <div className="Wrapper" ref={div => (this.wrapper = div)}>
-        <StackedCard idx={idx} length={length}>
+        <StackedCard idx={idx} length={length} >
             <div
               onClick={this.onClicked}
               ref={div => (this.listElement = div)}
@@ -158,21 +178,52 @@ class CardItem extends Component {
               onTouchStart={this.onDragStartTouch}
               className="ListItem"
             >
-              <Card>
+              <Card
+                color={this.state.colors[idx]}
+                subcolor={this.state.colors[idx+1]}
+              >
                 <StCard>
-                  <Location>위 치 자 리</Location>
-                  <Registered>작 성 시 간</Registered>
-                  <Contents>
-                    {saegim.contents}, id: {saegim.id}
-                  </Contents>
-                  <StLinkDiv>
-                  <StLink to={{pathname: `/list/${saegim.id}/`}}>
-                    더보기
-                  </StLink>
-                </StLinkDiv>
-                <Comments>
-                  <div>댓 글 자 리 </div>
-                </Comments>
+                  <Top>
+                    <Location>
+                      <PinIcon />{saegim.w3w}
+                    </Location>
+                    <Registered>
+                      <StTime>
+                        <StAccessTimeIcon />
+                        <div>{this.state.regDate}</div>
+                      </StTime>
+                    </Registered>
+                  </Top>
+                  <Top>
+                    <StIcon>
+                      <StPhotoIcon/>
+                      <div>{saegim.imagesCount}</div>
+                    </StIcon>
+                    <Tags>
+                      {PrintTags}
+                      {saegim.tags.length > 3
+                        && <StChip size='small' text='..' idx={idx}/>
+                      }
+                    </Tags>
+                  </Top>
+                  <ContentsBox>
+                    {saegim.secret
+                      ? <ContentsL>
+                          <Lock />
+                          비밀글
+                        </ContentsL>
+                      : <Contents>{saegim.contents}</Contents>
+                    }
+                  </ContentsBox>
+                  <Bottom>
+                    <User>
+                      <StCreateOutlined />
+                      <UserName>{saegim.userName}</UserName>
+                    </User>
+                    <StLink to={`list/${saegim.id}`}>
+                      더보기
+                    </StLink>
+                  </Bottom>
                 </StCard>
               </Card>
             </div>
@@ -185,46 +236,88 @@ class CardItem extends Component {
 export default CardItem;
 
 const StLink = styled(Link)`
-    color: inherit;
     text-decoration: none;
     &:focus, &:hover, &:active {
       opacity: 60%;
     }
     align-self: right;
-  `
-
-const StLinkDiv = styled.div`
-  grid-area: link;
-  display: flex;
-  justify-content: flex-end;
-`
+    font-size: 1rem;
+    font-weight: bold;
+    color: #B98B82;
+`;
 
 const StCard = styled.div`
-  display: grid;
-  grid-template-rows: repeat(5, minmax(8vh, auto));
-  grid-template-columns: repeat(5, minmax(16vw, auto)) ;
-  grid-template-areas:
-    "location location . date date"
-    ". contents contents contents ."
-    ". contents contents contents ."
-    ". contents contents contents ."
-    "link . . comments comments";
+  height: 40vh;
+  width: 80vw;
 `
+
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  height: 4vh;
+  font-size: 0.9rem;
+  padding: 0 16px 0 16px;
+`;
+
+const Bottom = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  height: 5vh;
+  font-size: 0.9rem;
+  padding: 0 16px 0 16px;
+`;
+
+const StPhotoIcon = styled(Photo)`
+  margin-right: 4px;
+`;
+
+const StIcon = styled(FlexRow)``;
+const Tags = styled(FlexRow)``;
+
+const ContentsBox = styled(FlexColumn)`
+  height: 23vh;
+  width: 80vw;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 20px;
+  margin: 2vh 1vw;
+  text-align: center;
+`;
 
 const Contents = styled.div`
+  width: 60vw;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+`
+
+const ContentsL = styled(FlexRow)`
   grid-area: contents;
-`
+  color: #616161;
+`;
 
-const Comments = styled.div`
-  grid-area: comments;
-`
+const User = styled(FlexRow)``;
 
-const Location = styled.div`
+const UserName = styled.div`
+  font-size: 1rem;
+`;
+
+const StCreateOutlined = styled(CreateOutlined)`
+  margin-right: 4px;
+  color: rgba(0, 0, 0, 0.7);
+`;
+
+const Location = styled(FlexRow)`
   grid-area: location;
 `
 
 const Registered = styled.div`
-  grid-area: date
+  grid-area: date;
 `
 
 const zoom = keyframes`
@@ -238,4 +331,16 @@ const StackedCard = styled.div `
   bottom: ${props => 20 + props.idx * 3}%;
   transform: scale(${props => 1.0 - ((props.idx+1) * 0.05)});
   animation: ${zoom} 2s ease;
+  display: ${props => props.idx > 4 && 'none'};
 `
+
+const StTime = styled(FlexRow)``;
+
+const StAccessTimeIcon = styled(AccessTime)`
+  margin-right: 4px;
+`;
+
+const StChip = styled(Chip)`
+  margin-left: 4px;
+  background-color: ${props => props.idx===0 ? '#f4c6ba' : '#FBF2EE' };
+`;

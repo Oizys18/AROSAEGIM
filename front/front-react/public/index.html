@@ -1,31 +1,64 @@
 <!DOCTYPE html>
 <html lang="ko-KO">
-  <style>
-    body{
-      margin: 0;
-      overscroll-behavior-y: contain; /* 오버 스크롤 시 새로고침 방지 */
-    }
-  </style>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;600&display=swap');
+  @font-face { 
+    font-family: 'BMEULJIRO'; 
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/BMEULJIRO.woff') format('woff');
+    font-weight: normal;
+    font-style: normal; 
+  }
+  body{
+    margin: 0;
+    overscroll-behavior-y: contain; /* 오버 스크롤 시 새로고침 방지 */
+    font-family: 'Noto Serif KR', serif;
+  }
+</style>
+<head>
+  <meta charset="utf-8" />
+  <!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2820969c0132ab6234a3db24b7a37921&libraries=services,clusterer,drawing"></script> -->
+  <script type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAO_API%&libraries=services,clusterer"></script>
 
-  <head>
-    <meta charset="utf-8" />
-    <!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2820969c0132ab6234a3db24b7a37921&libraries=services,clusterer,drawing"></script> -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAO_API%&libraries=services,clusterer,drawing"></script>
-    
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" /> -->
+
+  <!-- opengraph 내용 -->
+  <meta property="og:title" content="아로새김" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://saegim.me" />
+  <meta property="og:image" content="https://i.imgur.com/nN4B289.png" />
+  <meta property="og:image:secure_url" content="https://i.imgur.com/nN4B289.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="아로새김" />
+  <meta property="og:description" content="여러분의 이야기를 새김으로 남겨주세요." />
+
+  <!-- 안드로이드 홈 화면 추가 시 상단 주소창 제거 -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <!-- ios 홈 화면 추가 시 상단 주소창 제거 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+
+  <!-- 안드로이드 홈 화면 추가 시 아이콘 -->
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <!-- ios 홈 화면 추가 시 아이콘 -->
+  <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/logo192.png" />
+  <link rel="apple-touch-icon" sizes="256x256" href="%PUBLIC_URL%/logo256.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="%PUBLIC_URL%/logo512.png" />
+
+  <meta name="apple-mobile-web-app-title" content="아로새김" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="아로새김"/>
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="우리는 여기에 있었다." />
+  <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -34,15 +67,13 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+  <title>아로새김</title>
+</head>
 
-    
-
-    <title>ARSG</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -52,5 +83,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  </body>
+</body>
+
 </html>

@@ -2,7 +2,9 @@ package com.ssafy.entity;
 
 import java.io.Serializable;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 //@Embeddable
 @NoArgsConstructor
@@ -10,7 +12,7 @@ import lombok.*;
 public class LikesId implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@NonNull
-	private Long saegim_id;	
+	private Long saegimId;	
 	@NonNull
-	private Long user_id;
+	private Long userId;
 }

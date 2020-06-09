@@ -16,13 +16,13 @@ import lombok.*;
 @Table(name="hashtag")
 public class Hashtag {
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+    @GeneratedValue(strategy = GenerationType.TABLE)
+	private Long id;
 	
 	@NonNull
 	private String name;
 	
-//	@JsonIgnore
-//	@OneToMany(mappedBy="hashtag", fetch = FetchType.EAGER)
-//	private List<Tagging> taggings = new ArrayList<Tagging>();
+	@JsonIgnore
+	@OneToMany(mappedBy="HASHTAG", fetch = FetchType.LAZY)
+	private List<Tagging> taggings = new ArrayList<Tagging>();
 }

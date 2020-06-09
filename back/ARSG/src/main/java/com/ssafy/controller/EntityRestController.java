@@ -21,6 +21,7 @@ public class EntityRestController {
 		return handleFail(e.getMessage(), HttpStatus.OK);
 	}
 	public ResponseEntity<Map<String, Object>> handleSuccess(Object data){
+		if(data==null) return handleFail(data, HttpStatus.BAD_REQUEST);
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("state", "success");
 		resultMap.put("data", data);

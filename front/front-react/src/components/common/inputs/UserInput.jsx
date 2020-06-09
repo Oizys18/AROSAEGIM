@@ -6,6 +6,7 @@ class UserInput extends Component {
   render(){
     
     return(
+      // <ThemeProvider theme={setPrimaryColor}>
       <StInput
         variant="outlined"
         margin="dense"
@@ -19,33 +20,56 @@ class UserInput extends Component {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <div style={{position: 'relative'}}>
+              <div style={{position: 'relative', display: 'flex'}}>
                 {this.props.icon}
               </div>
             </InputAdornment>
           ),
         }}
       />
+      // </ThemeProvider>
     )
   }
 
 } export default UserInput;
 
 const StInput = styled(TextField)`
-  /* ${props => {
-    if(props.valid === 'invalid'){
-    }
-    else{
-      return(css`
-        label{
+  ${props => {
+    if(props.valid === 'init'){
+      return css`
+        .MuiInputBase-root{
           color: gray;
         }
-        label.Mui-focused{
-          color: skyblue;
+        & .Mui-focused{
+          &.MuiFormLabel-root, .MuiSvgIcon-root{
+            ${'' /* color: green; */}
+            color: gray;
+          }
         }
-
-
-      `)
+        & .MuiOutlinedInput-root.Mui-focused fieldset{
+          ${'' /* border-color: green;   */}
+          border-color: gray;  
+        }
+      `
     }
-  }} */
+    else if(props.valid === 'invalid'){
+      return css`
+        .MuiSvgIcon-root{
+          color: darkred;
+        }
+      `
+    }
+    else if(props.valid === 'valid'){
+      return css`
+        .MuiFormLabel-root,.MuiSvgIcon-root{
+          ${'' /* color: darkgreen; */}
+          color: gray;
+        }
+        & .MuiOutlinedInput-root fieldset, & .MuiOutlinedInput-root.Mui-focused fieldset{
+          ${'' /* border-color: green; */}
+          border-color: gray;
+        }
+      `
+    }
+  }}
 `;

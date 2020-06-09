@@ -8,7 +8,7 @@ import com.ssafy.entity.Saegim;
 
 public interface SaegimRepository extends JpaRepository<Saegim, Integer> {
 	Saegim findById(Long id);
-	List<Saegim> findByuId(Long uId);
+	List<Saegim> findByUserId(Long userId);
 	List<Saegim> findAll();
 	long count();
 	

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import lombok.*;
 
 @NoArgsConstructor
@@ -12,11 +14,9 @@ import lombok.*;
 @Getter @Setter
 public class SaegimFormDto {
 	@NonNull
-    private Long uId;
+    private Long userId;
 	@NonNull
-    private String uName;
-	@NonNull
-    private Date regDate;
+    private String userName;
 	@NonNull
     private String contents;
 	@NonNull
@@ -30,5 +30,7 @@ public class SaegimFormDto {
 //    private String image;
 //    private String record;
     
+	@ApiParam(hidden = true)
+	private Date regDate = new Date();
     private List<String> tags = new ArrayList<String>(); 
 }

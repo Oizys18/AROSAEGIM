@@ -1,19 +1,35 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+
 import { Slide, Zoom, } from '@material-ui/core';
-import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, ArrowBack } from '@material-ui/icons';
+import { Email, Lock, EnhancedEncryption, Face, CheckCircle, Warning, } from '@material-ui/icons';
 
 import { Storage } from '../../storage/Storage';
-import LogoAnimation from '../common/logo/LogoAnimation'
+import BackBtn from  '../common/buttons/BackBtn';
+import ImgUp from '../common/image/ImgUp';
+import ImgCrop from '../common/image/ImgCrop';
 import UserInput from '../common/inputs/UserInput';
 import * as AM from './AccountMethod';
 import * as AS from '../../styles/account/AccountStyles';
+import * as AA from '../../apis/AccountAPI';
 
 class Signup extends Component {
   constructor(props){
     super(props);
     this.state = {
       slideIn: true,
+
+      alertModal: false,
+
+      imgFile: '',
+      imgBase64: '',
+      imgW: 0,
+      imgH: 0,
+      
+      cropMode: false,
+      cropedImg: '',
+      cropedImgBase64: '',
+
 
       email: '',
       emailLabel: '이메일',
@@ -33,16 +49,61 @@ class Signup extends Component {
     }
   }
 
-  setStateAsync(state) {
-    return new Promise(resolve => {
-      this.setState(state, resolve);
-    });
+  setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
+  
+  componentDidMount(){
+    document.addEventListener('keypress', this.pressEnter)
+  }
+  componentWillUnmount(){
+    document.removeEventListener('keypress', this.pressEnter)
+  }
+  pressEnter = (e) => {
+    if(e.keyCode === 13){
+      this.handleSubmit()
+    }
+  }
+
+  imgUpload = async (e) => {
+    e.preventDefault();
+    const _reader = new FileReader();
+    const _imgFile = e.target.files[0];
+    
+    _reader.readAsDataURL(_imgFile);
+    _reader.onloadend = () => {
+      this.setState({
+        imgFile: _imgFile,
+        imgBase64: _reader.result,
+      })
+      const _img = new window.Image()
+      _img.src = _reader.result
+      _img.onload = () => {
+        this.setState({
+          imgW: _img.width,
+          imgH: _img.height,
+          cropMode: true,
+        })
+      }
+    }
+  }
+
+  imgCrop = (croped) => {
+    this.setState({
+      cropMode: false,
+      cropedImgBase64: croped,
+    })
+  }
+  cancelCrop = () => {
+    this.setState({ 
+      imgFile: '', 
+      imgBase64: '', 
+      cropMode: false, 
+    })
   }
 
   handleInput = async (e) => {
     if(e.currentTarget.id === 'email'){
       await this.setStateAsync({ email: e.currentTarget.value })
-      this.setState( AM.checkEmail(this.state.email) )
+      this.setState( await AM.checkSignupEmail(this.state.email) )
     }
     else if(e.currentTarget.id === 'pw') {
       await this.setStateAsync({ pw: e.currentTarget.value })
@@ -54,7 +115,7 @@ class Signup extends Component {
     }
     else if(e.currentTarget.id === 'nickName') {
       await this.setStateAsync({ nickName: e.currentTarget.value })
-      this.setState( AM.checkNickName(this.state.nickName) )
+      this.setState( await AM.checkNickName(this.state.nickName) )
     }
   }
 
@@ -101,10 +162,24 @@ class Signup extends Component {
     }
   }
 
-  handleSubmit = () => {
-
+  handleSubmit = async () => { 
+    if(AM.checkAllValid('signup', this.state)){
+      const _resData = await AA.signup(this.state)
+      if(_resData.state === 'success'){
+        this.context.popModal( `성공적으로\n가입 되었습니다!\n\n로그인 해주세요!!`, 'signup', 'alert')
+        this.props.history.replace('/login')
+      }
+      else{
+        this.context.popModal( `가입에 실패하였습니다... ㅠㅠ`, 'signup', 'alert')
+      }
+    }
+    else{
+      // this.setState({ alertModal: true })
+      this.context.popModal( `입력이\n올바르지 않습니다!`, 'signup', 'alert')
+    }
   }
-  handleCancel = async () => {
+
+  handleBack = async () => {
     await this.setStateAsync({ slideIn: false })
     this.props.history.goBack()
   }
@@ -112,61 +187,80 @@ class Signup extends Component {
   render(){
     
     return(
-      <Slide in={this.state.slideIn} direction="left">
-        <AS.StFormCont height={this.context.appHeight}>
-          
-          <AS.StBackBtn onClick={this.handleCancel}>
-            <ArrowBack/>
-          </AS.StBackBtn>
+      <AS.StWraper height={this.context.appHeight}>
+        <BackBtn handleBack={this.handleBack}/>
+        
+        <Slide in={this.state.slideIn} direction="left">
+          <AS.StFormCont>
 
-          <LogoAnimation/>
+            <ImgUp signup 
+              imgBase64={this.state.imgBase64}
+              imgUpload={this.imgUpload}
+              cropedImgBase64={this.state.cropedImgBase64}
+            />
 
-          <UserInput 
-            id='email' 
-            value={this.state.email}
-            label={this.state.emailLabel} 
-            valid={this.state.emailValid}
-            onChange={this.handleInput}
-            icon={this.changeIcon('email')} 
-          />
+            {
+              this.state.cropMode &&
+              <ImgCrop 
+                imgFile={this.state.imgFile} 
+                imgBase64={this.state.imgBase64}
+                imgW={this.state.imgW}
+                imgH={this.state.imgH}
+                mode={"profile"}
+                apply={this.imgCrop}
+                cancel={this.cancelCrop}
+              />
+            }
 
-          <UserInput 
-            id='pw' 
-            value={this.state.pw} 
-            label={this.state.pwLabel} 
-            valid={this.state.pwValid}
-            onChange={this.handleInput}
-            icon={this.changeIcon('pw')} 
-          />
+            <UserInput 
+              id='email' 
+              value={this.state.email}
+              label={this.state.emailLabel} 
+              valid={this.state.emailValid}
+              onChange={this.handleInput}
+              icon={this.changeIcon('email')} 
+            />
 
-          <UserInput 
-            id='pwCheck' 
-            value={this.state.pwCheck} 
-            label={this.state.pwCheckLabel} 
-            valid={this.state.pwCheckValid}
-            onChange={this.handleInput}
-            icon={this.changeIcon('pwCheck')} 
-          />
+            <UserInput 
+              id='pw' 
+              value={this.state.pw} 
+              label={this.state.pwLabel} 
+              valid={this.state.pwValid}
+              onChange={this.handleInput}
+              icon={this.changeIcon('pw')} 
+            />
 
-          <UserInput 
-            id='nickName' 
-            value={this.state.nickName} 
-            label={this.state.nickNameLabel} 
-            valid={this.state.nickNameValid}
-            onChange={this.handleInput}
-            icon={this.changeIcon('nickName')} 
-          />
-          
-          <AS.StBtnCont>
-            <AS.StBtn text="가입" onClick={this.handleSubmit}/>
-          </AS.StBtnCont>
+            <UserInput 
+              id='pwCheck' 
+              value={this.state.pwCheck} 
+              label={this.state.pwCheckLabel} 
+              valid={this.state.pwCheckValid}
+              onChange={this.handleInput}
+              icon={this.changeIcon('pwCheck')} 
+            />
 
-          <AS.StLinkCont>
-            <Link to='/login' replace>로그인</Link>
-          </AS.StLinkCont>
-        </AS.StFormCont>
-      </Slide>
+            <UserInput 
+              id='nickName' 
+              value={this.state.nickName} 
+              label={this.state.nickNameLabel} 
+              valid={this.state.nickNameValid}
+              onChange={this.handleInput}
+              icon={this.changeIcon('nickName')} 
+            />
+            
+            <AS.StBtnCont>
+              <AS.StBtn text="가입" onClick={this.handleSubmit}/>
+            </AS.StBtnCont>
+
+            <AS.StLinkCont>
+              <Link to='/login' replace>로그인</Link>
+            </AS.StLinkCont>
+
+          </AS.StFormCont>
+        </Slide>
+      </AS.StWraper>
     )
   }
 } export default Signup;
 Signup.contextType = Storage;
+
