@@ -55,7 +55,7 @@ class SaegimListPage extends Component {
     await this.setState({
       selectedOption: e.target.value,
     })
-    console.log(this.state.selectedOption)
+    // console.log(this.state.selectedOption)
     await this.setState({
       distance: this.state.options[this.state.selectedOption].value
     })
