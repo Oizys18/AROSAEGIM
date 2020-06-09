@@ -165,7 +165,6 @@ class Signup extends Component {
   handleSubmit = async () => { 
     if(AM.checkAllValid('signup', this.state)){
       const _resData = await AA.signup(this.state)
-      console.log(_resData)
       if(_resData.state === 'success'){
         this.context.popModal( `성공적으로\n가입 되었습니다!\n\n로그인 해주세요!!`, 'signup', 'alert')
         this.props.history.replace('/login')

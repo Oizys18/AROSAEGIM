@@ -27,13 +27,13 @@ class Tutorial extends Component {
   };
   NextPage = () => {
     if (this.state.page < this.state.max) {
-      console.log(this.state.page);
+      // console.log(this.state.page);
       this.setState({ page: this.state.page + 1 });
     }
   };
   PrevPage = () => {
     if (this.state.page > this.state.min) {
-      console.log(this.state.page);
+      // console.log(this.state.page);
       this.setState({ page: this.state.page - 1 });
     }
   };

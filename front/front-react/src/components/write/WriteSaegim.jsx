@@ -151,7 +151,7 @@ class WriteSaegim extends Component {
         .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
         .then((res) => {
           this.handleChange(res.data);
-          console.log(data);
+          // console.log(data);
         })
         .catch((err) => {
           console.log(err);
