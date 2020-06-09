@@ -8,7 +8,7 @@ class LogoAnimation extends Component {
       <Zoom in={true}>
       <StAnima>
         <div className="logo">
-          <img src="/ARSG logo.png" alt="" style={{width : '140px', height: '140px'}}/>
+          <img src="/logo.png" alt="" style={{width : '40vw', height: '40vw'}}/>
         </div> 
         <div className="words">
           <div className="word">우리는</div>
@@ -29,7 +29,7 @@ const StAnima = styled.div`
   position: relative;
   width: 70%;
   /* height: 20%; */
-  margin-bottom: 10%;
+  margin-bottom: 32px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -82,7 +82,7 @@ const StAnima = styled.div`
     height: 25%;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 16px;
 
     .word{
       opacity: 0;

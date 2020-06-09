@@ -13,14 +13,20 @@
       "sizes": "192x192"
     },
     {
+      "src": "logo256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    },
+    {
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
-  ],
+  ]
+  ,
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#000000",
+  "background_color": "#FBF2EE",
   "orientation": "portrait"
 }
