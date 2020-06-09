@@ -1,0 +1,18 @@
+package com.ssafy.entity;
+
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+
+//@Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
+public class LikesId implements Serializable {
+	private static final long serialVersionUID = 1L;
+	@NonNull
+	private Long saegimId;	
+	@NonNull
+	private Long userId;
+}
