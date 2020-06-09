@@ -141,30 +141,4 @@ const StAnima = styled.div`
       transform: translateX(0);
     }
   }
-
-  @keyframes motion2 {
-    0% {
-      opacity: 0;
-      /* transform: translateY(10px); */
-      transform: translateX(2rem);
-    }
-    
-    5% {
-      opacity: 1;
-      /* transform: translateY(0); */
-      transform: translateX(0);
-    }
-    
-    20% {
-      opacity: 1;
-      /* transform: translateY(0); */
-      transform: translateX(0);
-    }
-
-    30% {
-      opacity: 0;
-      /* transform: translateY(-50px); */
-      transform: translateX(-4rem);
-    }
-  }
 `

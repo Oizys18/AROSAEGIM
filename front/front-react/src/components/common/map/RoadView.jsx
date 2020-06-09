@@ -8,6 +8,7 @@ import { ArrowDownward, } from '@material-ui/icons';
 import { FlexRow } from '../../../styles/DispFlex';
 import RoadViewTopBar from "./RoadViewTopBar";
 import RoadViewOverlay from "./RoadViewOverlay";
+import RoadViewSaegimDetail from "./RoadViewSaegimDetail";
 import * as MM from './MapMethod';
 
 class RoadView extends Component {
@@ -25,6 +26,9 @@ class RoadView extends Component {
       newItems: [],
       olComps: [],
       olObjs: [],
+
+      detailId: 0,
+      popDetail: false,
     };
     this.markers = [];
   }
@@ -152,6 +156,7 @@ class RoadView extends Component {
             id={`${el.id}`} 
             item={el} 
             mapCenter={this.props.mapCenter}
+            tgleDetail={this.tgleDetail}
           />
         )
       )
@@ -259,6 +264,20 @@ class RoadView extends Component {
     this.state.mw.setPosition(_center)
   }
 
+  tgleDetail = (id) => {
+    if(id) {
+      this.setState({
+        detailId: id,
+        popDetail: true,
+      })
+    }
+    else{
+      this.setState({
+        popDetail: false,
+      })
+    }
+  }
+
   render(){
     return(
       <>
@@ -283,6 +302,10 @@ class RoadView extends Component {
         </Zoom>
         <Zoom in={!this.state.mmOn} mountOnEnter unmountOnExit>
           <StOpenMMBtn onClick={this.toggleMiniMap}>미니맵</StOpenMMBtn>
+        </Zoom>
+
+        <Zoom in={this.state.popDetail} mountOnEnter unmountOnExit>
+          <RoadViewSaegimDetail on={this.state.popDetail} tgleDetail={this.tgleDetail} id={this.state.detailId}/>
         </Zoom>
 
         <div>
