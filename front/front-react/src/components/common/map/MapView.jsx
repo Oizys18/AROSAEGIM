@@ -49,7 +49,6 @@ class MapView extends Component {
   
   componentDidUpdate(prevProps, prevState) {
     if(prevProps.items !== this.props.items) {
-      // console.log('re-rendering markers')
       this.overlayMarkers();
     }
     
@@ -89,7 +88,6 @@ class MapView extends Component {
   }
 
   componentWillUnmount(){
-    // kakao.maps.event.removeListener(this.state.mv, "center_changed", this.handleCenterChange)
     kakao.maps.event.removeListener(this.state.mv, "zoom_changed", this.changeLv)
     kakao.maps.event.removeListener(this.state.mv, "dragstart", this.handleDragStart)
     kakao.maps.event.removeListener(this.state.mv, "dragend", this.handleDragEnd)
@@ -103,7 +101,6 @@ class MapView extends Component {
       level: this.props.mapLevel,
     }
     const _mapView = new kakao.maps.Map(_cont, _options)
-    // kakao.maps.event.addListener(_mapView, "center_changed", this.handleCenterChange)
     kakao.maps.event.addListener(_mapView, "zoom_changed", this.changeLv)
     kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
     kakao.maps.event.addListener(_mapView, "dragend", this.handleDragEnd)
@@ -130,7 +127,6 @@ class MapView extends Component {
     this.props.changeMapLevel(this.state.mv.getLevel())
   }
   handleDragStart = () => {
-    // (this.state.selected.status && this.closeItem());
     (this.props.usingUserCenter && this.props.unsetUsingUserCenter());
     (this.state.selectedList.status && this.unsetSelectedList());
     this.closeItem();
@@ -173,7 +169,6 @@ class MapView extends Component {
       latitude: this.props.userCenter.getLat(),
       longitude: this.props.userCenter.getLng()
     }
-    // MM.panTo(this.state.mv, userCenterPos.latitude, userCenterPos.longitude)
     const markerConfig = MM.MarkerConfig(userCenterPos, "user")
     const userMarker = new kakao.maps.Marker(markerConfig);
     userMarker.setMap(this.state.mv)
@@ -198,14 +193,11 @@ class MapView extends Component {
   }
 
   overlayMarkers = async () => {
-    // await this.markers.forEach(el=>el.setMap(null));
     const markers = this.props.items.map((el) => {
-      const marker = new kakao.maps.Marker(MM.MarkerConfig(el));// new MapMarker(el);
+      const marker = new kakao.maps.Marker(MM.MarkerConfig(el));
       marker.setMap(this.state.mv)
       marker.itemId = el.id
       kakao.maps.event.addListener(marker, "click", () => {
-        console.log(marker.itemId,'marker clicked');
-        // this.selectItem(marker.itemId)
         this.selectListwithID([marker.itemId])
       })
       return marker
@@ -215,35 +207,11 @@ class MapView extends Component {
     this.state.clusterer.addMarkers(markers);
   }
 
-  selectItem = (itemId) => {
-    // this.props.selectItem(item);
-    const item = this.props.items.find(el => itemId === el.id)
-    if (item === undefined) {
-      return;
-    }
-    this.setState({selected: { status: true, item: item }})
-  };
-
   closeItem = () => {
     this.setState({selected: { status: false, item: {id:-1} }})
   }
 
-  prevItem = () => {
-    const currentIndex = this.state.selectedList.items.indexOf(this.state.selected.item);
-    const prevIndex =
-      currentIndex === 0 ? this.state.selectedList.items.length - 1 : currentIndex - 1;
-    this.selectItem(this.state.selectedList.items[prevIndex].id);
-  };
-
-  nextItem = () => {
-    const currentIndex = this.state.selectedList.items.indexOf(this.state.selected.item);
-    const nextIndex =
-      currentIndex === this.state.selectedList.items.length - 1 ? 0 : currentIndex + 1;
-    this.selectItem(this.state.selectedList.items[nextIndex].id);
-  };
-
   selectListwithID = (itemIdList) => {
-    // this.props.selectItem(item);
     const items = itemIdList.map(itemId => this.props.items.find(el=>el.id === itemId))
     if (items === undefined) {
       return;
@@ -272,16 +240,7 @@ class MapView extends Component {
   render() {
     return (
       <>
-        <StView id="mapView" hidden={this.props.hide}>
-        {/* {this.props.status === 'list' && this.overlayItems()} */}
-          {/* <>{this.props.status === 'list' && this.props.items.map((el, index) => {
-            return <MapItem
-            map={this.props.map}
-            item={el}
-            key={index}
-            selectItem={this.selectItem}
-          />})}</> */}
-        </StView>
+        <StView id="mapView" hidden={this.props.hide}></StView>
         {this.state.selectedList.status && 
           <StListCont>
             <StList>
@@ -289,20 +248,6 @@ class MapView extends Component {
             </StList>
           </StListCont>
         }
-        {/* {this.state.selected.status && 
-          <>
-            {this.state.selectedList.status &&
-              <ButtonWrapper>
-                <DefaultButton text="prev Item" onClick={this.prevItem} />
-                <DefaultButton text="next Item" onClick={this.nextItem} />
-              </ButtonWrapper>
-            } 
-            <MapListItem
-              item={this.state.selected.item}
-              closeItem={this.closeItem}
-            />
-          </>
-        } */}
       </>
     );
   }
