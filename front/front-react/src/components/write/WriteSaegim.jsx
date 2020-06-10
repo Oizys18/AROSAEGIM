@@ -162,7 +162,7 @@ class WriteSaegim extends Component {
               url: `${process.env.REACT_APP_BASE_URL}/files/saegimid/${_saegimId}`,
               data: _formData,
               headers: { 'content-Type': 'multipart/form-data' }
-            }))
+            })
             .then((res) => {
               console.log(res)
             })
