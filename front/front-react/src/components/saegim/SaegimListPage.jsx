@@ -310,15 +310,13 @@ class SaegimListPage extends Component {
               <Refresh/>
             </StButton>
           </StMenu>
-          <Slide in={true} direction={_dir} timeout={300} mountOnEnter unmountOnExit>
-            <Wrapper height={this.context.appHeight}>
-              <StList>
-                { this.state.timeCapsule
-                  ? (this.state.timeCapsuleData.length > 0 ? PrintOldData : EmptyTimeCapsule )
-                  : (this.state.data.length > 0 ? PrintCurData : EmptyList) }
-              </StList>
-            </Wrapper>
-          </Slide>
+          <Wrapper height={this.context.appHeight}>
+            <StList>
+            { this.state.timeCapsule
+              ? (this.state.timeCapsuleData.length > 0 ? PrintOldData : EmptyTimeCapsule )
+              : (this.state.data.length > 0 ? PrintCurData : EmptyList) }
+            </StList>
+          </Wrapper>
           {this.state.timeCapsule === false
            ? <StHourglassFull onClick={this.setTimeCapsule}/>
            : <StTCMessage onClick={this.setTimeCapsule}>{this.state.today}</StTCMessage>
@@ -339,11 +337,12 @@ const StCont = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: ${props => props.height}px;
+  /* height: ${props => props.height}px; */
 `
 
 const StList = styled.div `
   margin-top: 48px;
+  width: 100%;
 `
 
 const StSelect = styled(Select)`
@@ -364,12 +363,20 @@ const StSelect = styled(Select)`
 `;
 
 const StMenu = styled.div`
-  position: absolute;
+  /* position: absolute;
   top: 12%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 50%; */
+
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 12vh;
+  z-index: ${props => props.length + 1};
+
+  /* transform: translateX(-50%); */
   width: 70vw;
   height: 3vh;
+  max-width: 360px;
   
   font-size: 0.9rem;
   

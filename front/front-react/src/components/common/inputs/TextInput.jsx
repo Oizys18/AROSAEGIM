@@ -29,7 +29,7 @@ class TextInput extends Component {
 export default TextInput;
 
 const CustomInput = styled(TextField)`
-  width: 90%;
+  width: auto;
   border-radius: 20px;
   padding: 16px;
   margin: 12px 0;

@@ -172,6 +172,11 @@ class CardItem extends Component {
       <div className="Wrapper" ref={div => (this.wrapper = div)}>
         <StackedCard idx={idx} length={length} >
             <div
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                maxWidth: "480px"
+              }}
               onClick={this.onClicked}
               ref={div => (this.listElement = div)}
               onMouseDown={this.onDragStartMouse}
@@ -248,7 +253,9 @@ const StLink = styled(Link)`
 
 const StCard = styled.div`
   height: 40vh;
-  width: 80vw;
+  width: 100%;
+  /* width: 80vw; */
+  /* max-width: 480px; */
 `
 
 const Top = styled.div`
@@ -280,7 +287,7 @@ const Tags = styled(FlexRow)``;
 
 const ContentsBox = styled(FlexColumn)`
   height: 23vh;
-  width: 80vw;
+  /* width: 80vw; */
   overflow: hidden;
   background-color: #ffffff;
   border-radius: 20px;
@@ -289,7 +296,7 @@ const ContentsBox = styled(FlexColumn)`
 `;
 
 const Contents = styled.div`
-  width: 60vw;
+  /* width: 60vw; */
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -325,7 +332,8 @@ const zoom = keyframes`
   to { transform: scale(${props => 1.0 - props.idx * 0.05}); }
 `
 
-const StackedCard = styled.div `
+const StackedCard = styled.div`
+  width: 100%;
   position: absolute;
   z-index: ${props => props.length - props.idx};
   bottom: ${props => 20 + props.idx * 3}%;
