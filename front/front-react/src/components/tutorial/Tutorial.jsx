@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import HomeBtn from  '../common/buttons/HomeBtn';
 import { Slide, Grow } from '@material-ui/core';
 import { ArrowBack, ArrowForward, Home } from "@material-ui/icons";
 import { withRouter } from "react-router-dom";
@@ -16,8 +15,7 @@ class Tutorial extends Component {
       page: 0,
       max: 3,
       min: 0,
-
-      slideIn: true,
+      slideIn: true
     };
   }
   setStateAsync(state) { return new Promise(resolve => { this.setState(state, resolve) }) }
@@ -25,21 +23,15 @@ class Tutorial extends Component {
   goHome = () => {
     this.props.history.push(`/list`);
     this.context.toggleSideMenu();
-  };
-  goBack = async () => {
-    await this.setStateAsync({ slideIn: false })
-    this.context.toggleSideMenu();
-    this.props.history.goBack();
+    this.setState({ slideIn: false })
   };
   NextPage = () => {
     if (this.state.page < this.state.max) {
-      // console.log(this.state.page);
       this.setState({ page: this.state.page + 1 });
     }
   };
   PrevPage = () => {
     if (this.state.page > this.state.min) {
-      // console.log(this.state.page);
       this.setState({ page: this.state.page - 1 });
     }
   };
@@ -52,7 +44,6 @@ class Tutorial extends Component {
           <Grow in={true} timeout={1000}>
             <Header>튜토리얼</Header>
           </Grow>
-          
           <Container>
             <Navigator>
               <Grow in={true} timeout={1000}>
@@ -67,12 +58,11 @@ class Tutorial extends Component {
               </Grow>
             </Navigator>
           </Container>
-
           <TutorialItem page={this.state.page} />
           {this.state.page === this.state.max &&
-            <HomeButton onClick={this.goBack}>
+            <HomeButton onClick={this.goHome}>
               <Stimg src={logo}/>
-              <StHome>클릭하고 홈으로<Home></Home></StHome>
+              <StHome>클릭하고 홈으로<Home/></StHome>
             </HomeButton>
           }
         </Wrapper>
@@ -113,7 +103,6 @@ const HomeButton = styled.div`
   /* background: white; */
   color: white;
   z-index: 5;
-  // border: 1px solid white;
 `;
 
 const Header = styled.div`

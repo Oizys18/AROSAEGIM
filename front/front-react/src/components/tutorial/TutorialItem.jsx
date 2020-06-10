@@ -4,9 +4,6 @@ import img1 from "../../assets/tutorial/tutorial.png";
 import img2 from "../../assets/tutorial/tutorial2.png";
 import img3 from "../../assets/tutorial/tutorial3.png";
 import img4 from "../../assets/tutorial/tutorial4.png";
-import {FlexColumn, FlexRow} from "../../styles/DispFlex";
-
-
 
 class TutorialItem extends Component {
   constructor(props) {
@@ -93,7 +90,6 @@ class TutorialItem extends Component {
 
     return (
       <Wrapper>
-        {/*<ForeGround />*/}
         <PageChecker />
       </Wrapper>
     );
