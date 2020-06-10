@@ -42,7 +42,7 @@ class WriteSaegim extends Component {
 
   fileUploadAction = () => this.inputReference.current.click();
   fileUploadInputChange = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     if (e.target.files.length + this.state.imgBase64.length > 5) {
       this.setState({ error: 2 });
     } else {
@@ -62,6 +62,7 @@ class WriteSaegim extends Component {
   };
 
   handleChange = (data) => {
+    console.log(data)
     this.props.changeWrite(data);
   };
 
@@ -166,9 +167,8 @@ class WriteSaegim extends Component {
               console.log(res)
             })
           })
-
-
-          this.handleChange(res);
+          console.log(res)
+          this.handleChange(res.data);
         })
         .catch((err) => {
           console.log(err);

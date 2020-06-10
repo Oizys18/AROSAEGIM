@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import DefaultButton from "../common/buttons/DefaultButton";
+import {Zoom} from '@material-ui/core';
 import { Link } from "react-router-dom";
 import {FlexColumn} from "../../styles/DispFlex";
 class WriteComplete extends Component {
   render() {
+    console.log(this.props.id)
     return (
+      <Zoom in={true}>
       <Container>
         <InnerBackground>
           <h2>소중한 기억이<br/>새겨졌습니다.</h2>
@@ -19,6 +22,7 @@ class WriteComplete extends Component {
           </ButtonWrapper>
         </InnerBackground>
       </Container>
+      </Zoom>
     );
   }
 }
