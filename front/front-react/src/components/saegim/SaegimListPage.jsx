@@ -119,14 +119,30 @@ class SaegimListPage extends Component {
     }
   }
 
-  getCurrentLocation = async () => {
-    const _lat = await sessionStorage.getItem('ARSG latitude');
-    const _lng = await sessionStorage.getItem('ARSG longitude');
-    this.setState({
-      location: [_lat, _lng],
-    });
-    await this.getSaegimList()
+  getCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const _lat = position.coords.latitude;
+          const _lng = position.coords.longitude;
+          this.setState({
+            location: [_lat, _lng],
+          });
+          },
+        function(error) {
+          console.error(error);
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 0,
+          timeout: Infinity,
+        }
+      );
+    } else {
+      alert("GPS를 지원하지 않는 디바이스 입니다!");
+    }
   }
+
 
   setTimeCapsule = async () => {
     if (this.state.timeCapsule === false) {
@@ -189,6 +205,7 @@ class SaegimListPage extends Component {
     } else {
       await this.getCurrentLocation()
     }
+    await this.getSaegimList()
     await this.getAddrW3W()
 
     this.getTime()
