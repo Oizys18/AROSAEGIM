@@ -408,13 +408,12 @@ const CardWrapper = styled.div`
 
 const StCard = styled.div`
   max-height: 100%;
-  height:31vh;
   word-break: keep-all;
   overflow: auto;
-  background: url(https://i.imgur.com/EU3ILIP.png) repeat-y;
+  height: 31vh;
+  background: url(https://i.imgur.com/F0zTy6b.png) repeat-y;
   line-height: 25px;
   padding-left: 35px;
-  border: solid 2px #ddd;
   border-radius: 16px;
   font-family: "Noto Serif KR", serif;
   font-size: 15px;
