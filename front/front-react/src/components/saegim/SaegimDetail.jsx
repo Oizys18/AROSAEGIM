@@ -497,7 +497,7 @@ const StCard = styled.div`
 
 const StImg = styled.img`
   width: 100%;
-  // height: 100%;
+  height: 100%;
 `;
 
 const StMobileStepper = styled(MobileStepper)`
