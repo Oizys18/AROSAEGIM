@@ -23,7 +23,8 @@ class SaegimDetail extends Component {
     this.state = {
       data: {
         tags: [],
-        images: []
+        // images: [],
+        files: [],
       },
       regDate: "",
       userId: "",
@@ -77,7 +78,9 @@ class SaegimDetail extends Component {
   }
 
   getSaegimDetail = async () => {
+    console.log(this.props.match.params.id)
     const _data = await SA.getSaegimDetailById(this.props.match.params.id)
+    console.log(_data)
     await this.setStateAsync({ data: _data })
 
     const _user = await getUserByID(this.state.data.userId)

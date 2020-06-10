@@ -4,7 +4,7 @@ import './MapWalker.css';
 import MapWalker from './MapWalker';
 import styled from 'styled-components';
 import { Zoom, Grow, Slide, } from '@material-ui/core';
-import { ArrowDownward, } from '@material-ui/icons';
+import { ArrowDownward, Refresh, HourglassEmpty } from '@material-ui/icons';
 import { FlexRow } from '../../../styles/DispFlex';
 import RoadViewTopBar from "./RoadViewTopBar";
 import RoadViewOverlay from "./RoadViewOverlay";
@@ -27,6 +27,8 @@ class RoadView extends Component {
       olComps: [],
       olObjs: [],
 
+      loading: false,
+
       detailId: 0,
       sgDetail: null,
       popDetail: false,
@@ -36,6 +38,14 @@ class RoadView extends Component {
   
   //미니맵 토글
   toggleMiniMap = async () => { await this.setStateAsync({ mmOn: !this.state.mmOn }) }
+  handleRefresh = async () => {
+    await this.setStateAsync({ loading: true })
+    .then(() => {
+      this.fetchItem()    
+    })
+    // this.initOLMK();
+    // this.renderOLMK();
+  }
 
   setStateAsync(state) {
     return new Promise(resolve => { this.setState(state, resolve) })
@@ -49,7 +59,11 @@ class RoadView extends Component {
   async componentDidUpdate(prevProps, prevState) {
     if(prevState.mmOn !== this.state.mmOn){
       this.state.rv.relayout(); //로드뷰 크기 변경 시 새고로침
-      if(this.state.mmOn){ this.initMM() }
+      // if(this.state.mmOn){ 
+        // this.initMM() 
+        // this.initOLMK()
+        // this.renderOLMK()
+      // }
     }
     if(prevProps.mapCenter !== this.props.mapCenter && this.props.mapCenter === this.props.userCenter){
       this.state.rvc.getNearestPanoId(this.props.mapCenter, 100, (panoId) => {
@@ -64,9 +78,6 @@ class RoadView extends Component {
       }
     }
 
-    if(prevProps.mapCenter !== this.props.mapCenter){
-      this.fetchItem()
-    }
     if(prevProps.filterVal !== this.props.filterVal){
       this.fetchItem()
     }
@@ -74,6 +85,14 @@ class RoadView extends Component {
     if(prevProps.items !== this.props.items) {
       this.initOLMK()
       this.renderOLMK()
+      await this.setStateAsync({ loading: false })
+    }
+
+    if(prevState.loading !== this.state.loading){
+      if(!this.state.loading){
+        this.initOLMK()
+        this.renderOLMK()
+      }
     }
   }
   componentWillUnmount(){
@@ -116,7 +135,7 @@ class RoadView extends Component {
         cls: new kakao.maps.MarkerClusterer({
           map: this.state.mm, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
           averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
-          minLevel: 5, // 클러스터 할 최소 지도 레벨 
+          minLevel: 1, // 클러스터 할 최소 지도 레벨 
           disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
         })
       })
@@ -157,7 +176,8 @@ class RoadView extends Component {
             id={`${el.id}`} 
             item={el} 
             mapCenter={this.props.mapCenter}
-            tgleDetail={this.tgleDetail}
+            openDetail={this.tgleDetail}
+            closeOverlay={this.closeOverlay}
           />
         )
       )
@@ -172,8 +192,10 @@ class RoadView extends Component {
             const _co = new kakao.maps.CustomOverlay({
               position: new kakao.maps.LatLng(el.latitude, el.longitude),
               content: document.getElementById(`${el.id}`),
-              xAnchor: Math.random(), 
-              yAnchor: Math.random(), 
+              // xAnchor: Math.random(), 
+              // yAnchor: Math.random(), 
+              xAnchor: 0.5, 
+              yAnchor: 0.5, 
             })
             const _mk = new kakao.maps.Marker(MM.MarkerConfig(el))
             return { id:el.id, co:_co, mk:_mk }
@@ -181,11 +203,10 @@ class RoadView extends Component {
         )
       })
     }
-    
     this.state.olObjs.forEach((el) => {
       const _flag = this.props.items.findIndex(item => item.id === el.id)
       if(_flag !== -1){
-        el.co.setAltitude(MM.randomInt(0, 25))
+        // el.co.setAltitude(MM.randomInt(0, 15))
         el.co.setRange(50)
         el.co.setMap(this.state.rv)
         // el.mk.setMap(this.state.mm)
@@ -279,6 +300,11 @@ class RoadView extends Component {
       })
     }
   }
+  closeOverlay = (id) => {
+    const _idx = this.state.itemIds.indexOf(id)
+    this.state.olObjs[_idx].co.setMap(null)
+    this.state.cls.removeMarker(this.state.olObjs[_idx].mk)
+  }
 
   render(){
     return(
@@ -299,6 +325,13 @@ class RoadView extends Component {
           <StMap id="miniMap"/>
         </Slide>
         
+        <Zoom in={!this.state.loading} mountOnEnter unmountOnExit>
+          <StRefreshBtn onClick={this.handleRefresh}><Refresh/></StRefreshBtn>
+        </Zoom>
+        <Zoom in={this.state.loading} mountOnEnter unmountOnExit>
+          <StLoading><HourglassEmpty/></StLoading>
+        </Zoom>
+
         <Zoom in={this.state.mmOn} mountOnEnter unmountOnExit>
           <StCloseMMBtn onClick={this.toggleMiniMap}><ArrowDownward/></StCloseMMBtn>
         </Zoom>
@@ -342,16 +375,41 @@ const StBtn = styled(FlexRow)`
   background: #e6e6e6;
 `;
 
+const StRefreshBtn = styled(StBtn)`
+  bottom: 56px;
+  z-index: 10;
+  background: #FBF2EE;
+  svg{
+    color: #404040;
+    width: 24px;
+    height: 24px; 
+  }
+`;
+
+const StLoading = styled(StBtn)`
+  bottom: 56px;
+  z-index: 11;
+  background: #FBF2EE;
+  svg{
+    color: #404040;
+    width: 24px;
+    height: 24px; 
+  }
+`;
 const StOpenMMBtn = styled(StBtn)`
   z-index: 10;
-  height: 20px;
+  height: 24px;
+  background: #FBF2EE;
+  color: #404040;
 `;
 
 const StCloseMMBtn = styled(StBtn)`
   z-index: 11;
+  background: #FBF2EE;
   svg{
-    width: 20px;
-    height: 20px; 
+    color: #404040;
+    width: 24px;
+    height: 24px; 
   }
 `;
 

@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Zoom, Avatar, Modal, MobileStepper, Button } from "@material-ui/core";
 import { ArrowBack, Lock, AccessTime, ArrowBackIos, ArrowForwardIos, Photo, Close  } from "@material-ui/icons";
 import Card from "../cards/Card";
-import * as SA from "../../../apis/SaegimAPI"
 import { getUserByID } from "../../../apis/UserAPI"
 import { getTimeDeltaString } from "../time/TimeFunctinon";
 import Chip from "../chip/Chip"
@@ -23,7 +22,8 @@ class RoadViewSaegimDetail extends Component {
     this.state = {
       data: {
         tags: [],
-        images: []
+        // images: [],
+        files: [],
       },
       regDate: "",
       userId: "",

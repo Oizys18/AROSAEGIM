@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import DefaultButton from "../common/buttons/DefaultButton";
+import {Zoom} from '@material-ui/core';
 import { Link } from "react-router-dom";
 class WriteComplete extends Component {
   render() {
+    console.log(this.props.id)
     return (
+      <Zoom in={true}>
       <Container>
         <h1>작성완료!</h1>
         <ButtonWrapper>
@@ -16,6 +19,7 @@ class WriteComplete extends Component {
           </StLink>
         </ButtonWrapper>
       </Container>
+      </Zoom>
     );
   }
 }
