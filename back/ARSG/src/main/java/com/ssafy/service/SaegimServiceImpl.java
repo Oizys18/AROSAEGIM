@@ -10,9 +10,19 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.dto.*;
-import com.ssafy.entity.*;
-import com.ssafy.repositories.*;
+import com.ssafy.dto.SaegimDetailDto;
+import com.ssafy.dto.SaegimDto;
+import com.ssafy.dto.SaegimFormDto;
+import com.ssafy.entity.Hashtag;
+import com.ssafy.entity.Saegim;
+import com.ssafy.entity.Tagging;
+import com.ssafy.repositories.CommentRepository;
+import com.ssafy.repositories.FileRepository;
+import com.ssafy.repositories.HashtagRepository;
+import com.ssafy.repositories.LikesRepository;
+import com.ssafy.repositories.SaegimRepository;
+import com.ssafy.repositories.TaggingRepository;
+import com.ssafy.repositories.UserRepository;
 
 @Service
 public class SaegimServiceImpl implements SaegimService {
@@ -29,7 +39,7 @@ public class SaegimServiceImpl implements SaegimService {
 	@Autowired
 	private HashtagRepository hashtagRepository;
 	@Autowired
-	private ImageRepository imageRepository;
+	private FileRepository fileRepository;
 	
 	/*
 	 * private static double distance(double lat1, double lon1, double lat2, double
@@ -53,9 +63,8 @@ public class SaegimServiceImpl implements SaegimService {
 	public SaegimDto getSaegimBySaegimId(Long saegimId) {
 		Saegim saegim = saegimRepository.findById(saegimId);
 		saegim.setTaggings(taggingRepository.findBySaegimId(saegimId));
-		saegim.setImages(imageRepository.findBySaegimId(saegimId));
+		saegim.setFiles(fileRepository.findBySaegimId(saegimId));
 		saegim.setUserName(userRepository.findById(saegim.getUserId()).getName());
-		
 		return SaegimDto.of(saegim);
 	}
 	@Override
@@ -65,7 +74,7 @@ public class SaegimServiceImpl implements SaegimService {
 		saegim.setLikes(likesRepository.findBySaegimId(saegimId));
 		saegim.setTaggings(taggingRepository.findBySaegimId(saegimId));
 		saegim.setComments(commentRepository.findBySaegimId(saegimId));
-		saegim.setImages(imageRepository.findBySaegimId(saegimId));
+		saegim.setFiles(fileRepository.findBySaegimId(saegimId));
 		return SaegimDetailDto.of(saegim);
 //				.orElseThrow(() -> 
 //        		new RestException(HttpStatus.NOT_FOUND, "Not found board"));
@@ -92,10 +101,6 @@ public class SaegimServiceImpl implements SaegimService {
 			taggingRepository.save(tagging);
 			taggings.add(tagging);
 		}
-		for (String img : saegimFormDto.getImageSources()) {
-			imageRepository.save(new Image(sId, img));
-		}
-		
 		return getSaegimBySaegimId(sId);
 	}
 	@Override
@@ -103,7 +108,7 @@ public class SaegimServiceImpl implements SaegimService {
 		List<Saegim> saegimList = saegimRepository.findByUserId(userId);
 		saegimList.forEach(saegim->saegim.setUserName(userRepository.findById(saegim.getUserId()).getName()));
 		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
-		saegimList.forEach(saegim->saegim.setImages(imageRepository.findBySaegimId(saegim.getId())));
+		saegimList.forEach(saegim->saegim.setFiles(fileRepository.findBySaegimId(saegim.getId())));
 		return saegimList.stream()
 				.map(saegim->SaegimDto.of(saegim))
 				.collect(Collectors.toList());
@@ -115,9 +120,9 @@ public class SaegimServiceImpl implements SaegimService {
 			String pointwkt = String.format("POINT(%s %s)", saegim.getLatitude(), saegim.getLongitude());
 			saegimRepository.savePointInSaegim(saegim.getId(), pointwkt);
 		}
-		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
-		saegimList.forEach(saegim->saegim.setImages(imageRepository.findBySaegimId(saegim.getId())));
 		saegimList.forEach(saegim->saegim.setUserName(userRepository.findById(saegim.getUserId()).getName()));
+		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
+		saegimList.forEach(saegim->saegim.setFiles(fileRepository.findBySaegimId(saegim.getId())));
 		return saegimList.stream()
 				.map(saegim->SaegimDto.of(saegim))
 				.collect(Collectors.toList());
@@ -139,9 +144,9 @@ public class SaegimServiceImpl implements SaegimService {
 		
 		List<Long> idList = saegimRepository.findSomething(String.format("%.6f", lat1), String.format("%.6f", lng1), String.format("%.6f", lat2), String.format("%.6f", lng2));
 		for (Long id : idList) saegimList.add(saegimRepository.findById(id));
-		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
-		saegimList.forEach(saegim->saegim.setImages(imageRepository.findBySaegimId(saegim.getId())));
 		saegimList.forEach(saegim->saegim.setUserName(userRepository.findById(saegim.getUserId()).getName()));
+		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
+		saegimList.forEach(saegim->saegim.setFiles(fileRepository.findBySaegimId(saegim.getId())));
 		return saegimList.stream()
 				.map(saegim->SaegimDto.of(saegim))
 				.collect(Collectors.toList());
@@ -166,9 +171,9 @@ public class SaegimServiceImpl implements SaegimService {
 			if((start != null && end != null) && (saegim.getRegDate().before(start) || saegim.getRegDate().after(end))) continue;
 			saegimList.add(saegim);
 		}
-		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
-		saegimList.forEach(saegim->saegim.setImages(imageRepository.findBySaegimId(saegim.getId())));
 		saegimList.forEach(saegim->saegim.setUserName(userRepository.findById(saegim.getUserId()).getName()));
+		saegimList.forEach(saegim->saegim.setTaggings(taggingRepository.findBySaegimId(saegim.getId())));
+		saegimList.forEach(saegim->saegim.setFiles(fileRepository.findBySaegimId(saegim.getId())));
 		return saegimList.stream()
 				.map(saegim->SaegimDto.of(saegim))
 				.collect(Collectors.toList());
@@ -189,10 +194,6 @@ public class SaegimServiceImpl implements SaegimService {
 				hashtagRepository.save(ht);
 			}
 			tags.add(ht);
-		}
-		imageRepository.removeBysaegimId(saegimId);
-		for (String img : saegimFormDto.getImageSources()) {
-			imageRepository.save(new Image(saegimId, img));
 		}
 		Saegim saegim = Saegim.of(saegimFormDto);
 		saegim.setId(saegimId);

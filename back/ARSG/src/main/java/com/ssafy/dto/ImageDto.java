@@ -12,6 +12,7 @@ import lombok.Setter;
 @Getter @Setter
 public class ImageDto {
 	private Long id;
+	private Long saegimId;
 	private String source;
 	
 	public static ImageDto of(Image image) {

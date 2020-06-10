@@ -26,9 +26,4 @@ public class EntityRestController {
 		resultMap.put("data", data);
 		return new ResponseEntity<Map<String,Object>>(resultMap, state); 
 	}
-//	@ApiOperation("get 요청에 관한 인삿말을 출력한다")
-//	@GetMapping("/")
-//	public ResponseEntity<Map<String, Object>> postHello() throws Exception{
-//		return handleSuccess("GET Hello World");
-//	}
 }

@@ -1,7 +1,6 @@
 package com.ssafy.controller;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.dto.CommentFormDto;
-import com.ssafy.dto.ImageDto;
 import com.ssafy.dto.SaegimFormDto;
-import com.ssafy.entity.Image;
-import com.ssafy.repositories.ImageRepository;
 import com.ssafy.service.CommentService;
 import com.ssafy.service.LikesService;
 import com.ssafy.service.SaegimService;
@@ -37,8 +33,6 @@ public class SaegimRestController extends EntityRestController{
 	private LikesService likesService;
 	@Autowired
 	private CommentService commentService;
-	@Autowired
-	private ImageRepository imageRepository;
 	
 	@ApiOperation("모든 새김 정보 List")
 	@GetMapping()
@@ -129,29 +123,29 @@ public class SaegimRestController extends EntityRestController{
 		return handleSuccess(saegimService.getSaegimsByUserId(userId));
 	}
 	// ===================== 새김 첨부 이미지 =====================
-	@ApiOperation("saegimId로 이미지 정보 검색")
-	@GetMapping("/{saegimid}/images")
-	public ResponseEntity<Map<String, Object>> getImagesOfSaegimBySid(@PathVariable("saegimid") long saegimId) throws Exception{
-		return handleSuccess(imageRepository.findBySaegimId(saegimId).stream().map(image->ImageDto.of(image)).collect(Collectors.toList()));
-	}
-	@ApiOperation("saegimId로 새로운 이미지 등록")
-	@PostMapping("/{saegimid}/images")
-	public ResponseEntity<Map<String, Object>> postImageOfSaegimBySid(@PathVariable("saegimid") long saegimId, @RequestBody String imageSource) throws Exception{
-		imageRepository.save(new Image(saegimId, imageSource));
-		return handleSuccess(saegimService.getSaegimBySaegimId(saegimId));
-	}
-	@ApiOperation("saegimId와 imageID로 이미지  수정")
-	@PutMapping("/{saegimid}/images/{imageid}")
-	public ResponseEntity<Map<String, Object>> putImageOfSaegimBySidnIId(@PathVariable("saegimid") long saegimId, @PathVariable("imageid") long imageId, String imageSource) throws Exception{
-		Image img = new Image(saegimId, imageSource);
-		img.setId(imageId);
-		imageRepository.save(img);
-		return handleSuccess(saegimService.getSaegimBySaegimId(saegimId));
-	}
-	@ApiOperation("saegimId와 imageID로 이미지  삭제")
-	@DeleteMapping("/{saegimid}/images/{imageid}")
-	public ResponseEntity<Map<String, Object>> deleteImageOfSaegimBySidnCId(@PathVariable("saegimid") long saegimId, @PathVariable("imageid") long imageId) throws Exception{
-		imageRepository.removeById(imageId);
-		return handleSuccess(saegimService.getSaegimBySaegimId(saegimId));
-	}
+//	@ApiOperation("saegimId로 이미지 정보 검색")
+//	@GetMapping("/{saegimid}/images")
+//	public ResponseEntity<Map<String, Object>> getImagesOfSaegimBySid(@PathVariable("saegimid") long saegimId) throws Exception{
+//		return handleSuccess(imageRepository.findBySaegimId(saegimId).stream().map(image->ImageDto.of(image)).collect(Collectors.toList()));
+//	}
+//	@ApiOperation("saegimId로 새로운 이미지 등록")
+//	@PostMapping("/{saegimid}/images")
+//	public ResponseEntity<Map<String, Object>> postImageOfSaegimBySid(@PathVariable("saegimid") long saegimId, @RequestBody String imageSource) throws Exception{
+//		imageRepository.save(new Image(saegimId, imageSource));
+//		return handleSuccess(saegimService.getSaegimBySaegimId(saegimId));
+//	}
+//	@ApiOperation("saegimId와 imageID로 이미지  수정")
+//	@PutMapping("/{saegimid}/images/{imageid}")
+//	public ResponseEntity<Map<String, Object>> putImageOfSaegimBySidnIId(@PathVariable("saegimid") long saegimId, @PathVariable("imageid") long imageId, String imageSource) throws Exception{
+//		Image img = new Image(saegimId, imageSource);
+//		img.setId(imageId);
+//		imageRepository.save(img);
+//		return handleSuccess(saegimService.getSaegimBySaegimId(saegimId));
+//	}
+//	@ApiOperation("saegimId와 imageID로 이미지  삭제")
+//	@DeleteMapping("/{saegimid}/images/{imageid}")
+//	public ResponseEntity<Map<String, Object>> deleteImageOfSaegimBySidnCId(@PathVariable("saegimid") long saegimId, @PathVariable("imageid") long imageId) throws Exception{
+//		imageRepository.removeById(imageId);
+//		return handleSuccess(saegimService.getSaegimBySaegimId(saegimId));
+//	}
 }

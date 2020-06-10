@@ -11,7 +11,6 @@ import javax.persistence.Table;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -19,11 +18,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@NoArgsConstructor @RequiredArgsConstructor @AllArgsConstructor
+@NoArgsConstructor @RequiredArgsConstructor
 @Getter @Setter
-@Table(name = "images")
+@Table(name = "files")
 @Transactional
-public class Image {
+public class Files {
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -31,7 +30,7 @@ public class Image {
 	@Column(name="saegim_id", nullable=false)
 	private Long saegimId;
 	@NonNull
-	private String source;
+	private String extension;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "saegim_id", insertable=false, updatable=false)

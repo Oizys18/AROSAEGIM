@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 
-import com.ssafy.entity.Image;
+import com.ssafy.entity.Files;
 import com.ssafy.entity.Saegim;
 import com.ssafy.util.UtilFactory;
 
@@ -41,11 +41,11 @@ public class SaegimDto {
     private String w3w;
     private String record;
     private Integer secret;
+    private String password;
     
-    private Integer imagesCount;
+    private Integer filesCount;
     
     private List<HashtagDto> tags = new ArrayList<HashtagDto>();
-//    private List<ImageDto> images = new ArrayList<ImageDto>();
     
     public static SaegimDto of(Saegim saegim) {
     	PropertyMap<Saegim, SaegimDto> saegimMap = new PropertyMap<Saegim, SaegimDto>() {
@@ -55,13 +55,11 @@ public class SaegimDto {
     			= saegim.getTaggings().stream()
     			.map(tagging->HashtagDto.of(tagging))
     			.collect(Collectors.toList());
-    			
     			map().setTags(hashtagDtos);
     			
-    			List<Image> imagesList = saegim.getImages();
-    			int count = imagesList.size();
-    			map().setImagesCount(count);
-    				
+    			List<Files> filesList = saegim.getFiles();
+    			int filecount = filesList.size();
+    			map().setFilesCount(filecount);
     		}
     	};
     	ModelMapper modelMapper = UtilFactory.getModelMapper();

@@ -40,11 +40,12 @@ public class SaegimDetailDto {
     private String w3w;
     private String record;
     private Integer secret;
+    private String password;
     
 	private List<LikesDto> likes = new ArrayList<LikesDto>();
     private List<HashtagDto> tags = new ArrayList<HashtagDto>(); 
     private List<CommentDto> comments = new ArrayList<CommentDto>();
-    private List<ImageDto> images = new ArrayList<ImageDto>();
+    private List<FileDto> files = new ArrayList<FileDto>();
     
     public static SaegimDetailDto of(Saegim saegim) {
     	PropertyMap<Saegim, SaegimDetailDto> saegimDetailMap = new PropertyMap<Saegim, SaegimDetailDto>() {
@@ -54,29 +55,25 @@ public class SaegimDetailDto {
     			= saegim.getLikes().stream()
     			.map(likes->LikesDto.of(likes))
     			.collect(Collectors.toList());
-    			
     			map().setLikes(likesDto);
     			
     			List<HashtagDto> hashtagsDto
     			= saegim.getTaggings().stream()
     			.map(tagging->HashtagDto.of(tagging))
     			.collect(Collectors.toList());
-    			
     			map().setTags(hashtagsDto);
     			
     			List<CommentDto> commentDto
     			= saegim.getComments().stream()
     			.map(comment->CommentDto.of(comment))
     			.collect(Collectors.toList());
-    			
     			map().setComments(commentDto);
 
-    			List<ImageDto> ImageDtos
-    			= saegim.getImages().stream()
-    			.map(image->ImageDto.of(image))
+    			List<FileDto> fileDtos
+    			= saegim.getFiles().stream()
+    			.map(file->FileDto.of(file))
     			.collect(Collectors.toList());
-    			
-    			map().setImages(ImageDtos);
+    			map().setFiles(fileDtos);
     		}
     	};
     	ModelMapper modelMapper = UtilFactory.getModelMapper();

@@ -53,6 +53,7 @@ public class Saegim {
     private String w3w;
     private String record;
     private Integer secret;
+    private String password;
     
     @OneToMany(mappedBy="SAEGIM", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Likes> likes = new HashSet<Likes>();
@@ -64,7 +65,7 @@ public class Saegim {
     private List<Comment> comments = new ArrayList<Comment>();
     
     @OneToMany(mappedBy="SAEGIM", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Image> images = new ArrayList<Image>();
+    private List<Files> files = new ArrayList<Files>();
     
     public static Saegim of(SaegimFormDto saegimFormDto) {
     	Saegim saegim = UtilFactory.getModelMapper().map(saegimFormDto, Saegim.class);

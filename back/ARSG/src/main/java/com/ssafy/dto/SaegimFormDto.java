@@ -29,9 +29,10 @@ public class SaegimFormDto {
     private String w3w;
 	@NonNull
 	private Integer secret;
+
+    private String password;
     
 	@ApiParam(hidden = true)
 	private Date regDate = new Date();
     private List<String> tags = new ArrayList<String>(); 
-    private List<String> imageSources = new ArrayList<String>(); 
 }
