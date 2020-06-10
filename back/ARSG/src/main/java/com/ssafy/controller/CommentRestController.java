@@ -4,23 +4,25 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.repositories.LikesRepository;
 import com.ssafy.service.CommentService;
-import com.ssafy.service.LikesService;
 
 import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/comments")
 public class CommentRestController extends EntityRestController{
 	@Autowired
 	private CommentService commentService;
 	
 	@ApiOperation("모든 댓글 정보 검색")
-	@GetMapping("/")
+	@GetMapping()
 	public ResponseEntity<Map<String, Object>> getLikes() throws Exception{
 		return handleSuccess(commentService.getComments());
 	}

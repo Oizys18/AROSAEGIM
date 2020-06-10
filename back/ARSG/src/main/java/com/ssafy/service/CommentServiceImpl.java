@@ -8,38 +8,45 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.dto.CommentDto;
 import com.ssafy.dto.CommentFormDto;
-import com.ssafy.dto.LikesDto;
 import com.ssafy.entity.Comment;
 import com.ssafy.repositories.CommentRepository;
-import com.ssafy.repositories.LikesRepository;
+import com.ssafy.repositories.UserRepository;
 
 @Service
 public class CommentServiceImpl implements CommentService {
 	@Autowired
 	private CommentRepository commentRepository;
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	public List<CommentDto> getCommentsByUserId(Long userId) {
-		return commentRepository.findByUserId(userId).stream()
+		List<Comment> commentList = commentRepository.findByUserId(userId);
+		commentList.forEach(comment->comment.setUserName(userRepository.findById(comment.getUserId()).getName()));
+		return commentList.stream()
 				.map(comment->CommentDto.of(comment))
 				.collect(Collectors.toList());
 	}
 	@Override
 	public List<CommentDto> getCommentsBySaegimId(Long saegimId) {
-		return commentRepository.findBySaegimId(saegimId).stream()
+		List<Comment> commentList = commentRepository.findBySaegimId(saegimId);
+		commentList.forEach(comment->comment.setUserName(userRepository.findById(comment.getUserId()).getName()));
+		return commentList.stream()
 				.map(comment->CommentDto.of(comment))
 				.collect(Collectors.toList());
 	}
 	@Override
 	public List<CommentDto> getComments() {
-		return commentRepository.findAll().stream()
+		List<Comment> commentList = commentRepository.findAll();
+		commentList.forEach(comment->comment.setUserName(userRepository.findById(comment.getUserId()).getName()));
+		return commentList.stream()
 				.map(comment->CommentDto.of(comment))
 				.collect(Collectors.toList());
 	}
 	@Override
 	public List<CommentDto> postCommentOfSaegimBySid(Long saegimId, CommentFormDto commentFormDto) {
-		commentFormDto.setSaegimId(saegimId);
 		Comment comment = Comment.of(commentFormDto);
+		comment.setSaegimId(saegimId);
 		commentRepository.save(comment);
 		return getCommentsBySaegimId(saegimId);
 	}
@@ -53,8 +60,8 @@ public class CommentServiceImpl implements CommentService {
 	}
 	@Override
 	public List<CommentDto> putCommentOfSaegimBySidnCId(Long saegimId, Long commentId, CommentFormDto commentFormDto) {
-		commentFormDto.setSaegimId(saegimId);
 		Comment comment = Comment.of(commentFormDto);
+		comment.setSaegimId(saegimId);
 		comment.setId(commentId);
 		commentRepository.save(comment);
 		return getCommentsBySaegimId(saegimId);

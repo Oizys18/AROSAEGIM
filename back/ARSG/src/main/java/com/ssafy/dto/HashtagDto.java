@@ -1,10 +1,13 @@
 package com.ssafy.dto;
 
-import com.ssafy.configuration.ConfigurationUtilFactory;
-import com.ssafy.entity.Hashtag;
 import com.ssafy.entity.Tagging;
+import com.ssafy.util.UtilFactory;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -16,6 +19,6 @@ public class HashtagDto {
 	private String name;
 	
 	public static HashtagDto of(Tagging tagging) {
-		return ConfigurationUtilFactory.modelmapper().map(tagging.getHASHTAG(), HashtagDto.class);
+		return UtilFactory.getModelMapper().map(tagging.getHASHTAG(), HashtagDto.class);
 	}
 }

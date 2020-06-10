@@ -1,10 +1,5 @@
 package com.ssafy.dto;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -21,4 +16,6 @@ public class UserFormDto {
 	private String name;
 	@NonNull
 	private String password;
+	
+	private String profileImage;
 }

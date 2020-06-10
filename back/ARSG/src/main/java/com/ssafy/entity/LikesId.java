@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-//@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
 public class LikesId implements Serializable {

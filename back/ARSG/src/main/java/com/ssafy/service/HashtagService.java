@@ -2,8 +2,6 @@ package com.ssafy.service;
 
 import java.util.List;
 
-import com.ssafy.dto.CommentDto;
-import com.ssafy.dto.CommentFormDto;
 import com.ssafy.dto.HashtagDto;
 import com.ssafy.dto.TaggingDto;
 

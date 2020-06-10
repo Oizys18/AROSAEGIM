@@ -1,21 +1,15 @@
 package com.ssafy.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.transaction.annotation.Transactional;
-
-import com.ssafy.dto.UserFormDto;
-import com.ssafy.util.UtilFactory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,26 +21,19 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor @RequiredArgsConstructor @AllArgsConstructor
 @Getter @Setter
-@Table(name = "users")
+@Table(name = "images")
 @Transactional
-public class User {
+public class Image {
 	@Id
 	@GeneratedValue
 	private Long id;
 	@NonNull
-	private String email;
+	@Column(name="saegim_id", nullable=false)
+	private Long saegimId;
 	@NonNull
-	private String name;
-	@NonNull
-	private String password;
+	private String source;
 	
-	@Column(name="profile_image")
-	private String profileImage;
-
-	@OneToMany(mappedBy="USER", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Likes> likes = new HashSet<Likes>();
-	
-	public static User of(UserFormDto userFormDto) {
-		return UtilFactory.getModelMapper().map(userFormDto, User.class);
-	}
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "saegim_id", insertable=false, updatable=false)
+	private Saegim SAEGIM;
 }

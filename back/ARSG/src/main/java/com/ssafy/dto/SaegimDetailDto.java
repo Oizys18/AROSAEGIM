@@ -5,11 +5,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 
-import com.ssafy.configuration.ConfigurationUtilFactory;
 import com.ssafy.entity.Saegim;
-import com.ssafy.entity.User;
+import com.ssafy.util.UtilFactory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +27,6 @@ public class SaegimDetailDto {
 	private Long id;
 	@NonNull
     private Long userId;
-	@NonNull
     private String userName;
 	@NonNull
     private Date regDate;
@@ -39,13 +38,14 @@ public class SaegimDetailDto {
     private Double longitude;
 	@NonNull
     private String w3w;
-    private String image;
     private String record;
-    private int secret;
+    private Integer secret;
+    private String password;
     
 	private List<LikesDto> likes = new ArrayList<LikesDto>();
     private List<HashtagDto> tags = new ArrayList<HashtagDto>(); 
     private List<CommentDto> comments = new ArrayList<CommentDto>();
+    private List<FileDto> files = new ArrayList<FileDto>();
     
     public static SaegimDetailDto of(Saegim saegim) {
     	PropertyMap<Saegim, SaegimDetailDto> saegimDetailMap = new PropertyMap<Saegim, SaegimDetailDto>() {
@@ -55,28 +55,31 @@ public class SaegimDetailDto {
     			= saegim.getLikes().stream()
     			.map(likes->LikesDto.of(likes))
     			.collect(Collectors.toList());
-    			
     			map().setLikes(likesDto);
     			
     			List<HashtagDto> hashtagsDto
     			= saegim.getTaggings().stream()
     			.map(tagging->HashtagDto.of(tagging))
     			.collect(Collectors.toList());
-    			
     			map().setTags(hashtagsDto);
     			
-//    			List<CommentDto> commentDto
-//    			= saegim.getComments().stream()
-//    			.map(comment->CommentDto.of(comment))
-//    			.collect(Collectors.toList());
-//    			
-//    			map().setComments(commentDto);
+    			List<CommentDto> commentDto
+    			= saegim.getComments().stream()
+    			.map(comment->CommentDto.of(comment))
+    			.collect(Collectors.toList());
+    			map().setComments(commentDto);
+
+    			List<FileDto> fileDtos
+    			= saegim.getFiles().stream()
+    			.map(file->FileDto.of(file))
+    			.collect(Collectors.toList());
+    			map().setFiles(fileDtos);
     		}
     	};
-    	if(ConfigurationUtilFactory.modelmapper().getTypeMap(Saegim.class, SaegimDetailDto.class) == null)
-    		ConfigurationUtilFactory.modelmapper().addMappings(saegimDetailMap);
+    	ModelMapper modelMapper = UtilFactory.getModelMapper();
+    	modelMapper.addMappings(saegimDetailMap);
     	
-    	SaegimDetailDto dto = ConfigurationUtilFactory.modelmapper().map(saegim, SaegimDetailDto.class);
+    	SaegimDetailDto dto = modelMapper.map(saegim, SaegimDetailDto.class);
     	return dto;
     }
 }

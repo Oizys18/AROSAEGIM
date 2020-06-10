@@ -5,23 +5,29 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-import org.modelmapper.PropertyMap;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.ssafy.configuration.ConfigurationUtilFactory;
-import com.ssafy.dto.LikesDto;
-import com.ssafy.dto.SaegimDetailDto;
-import com.ssafy.dto.SaegimDto;
 import com.ssafy.dto.SaegimFormDto;
+import com.ssafy.util.UtilFactory;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor @RequiredArgsConstructor @AllArgsConstructor
@@ -29,16 +35,12 @@ import lombok.*;
 @Table(name = "saegim")
 @Transactional
 public class Saegim {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue
     private Long id;
     
     @NonNull
     @Column(name="user_id", nullable=false)
     private Long userId;
-    
-    @NonNull
-    @Column(name="user_name", nullable=false)
     private String userName;
     
     @Temporal(TemporalType.TIMESTAMP)
@@ -49,9 +51,9 @@ public class Saegim {
     private Double latitude;
     private Double longitude;
     private String w3w;
-    private String image;
     private String record;
     private Integer secret;
+    private String password;
     
     @OneToMany(mappedBy="SAEGIM", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Likes> likes = new HashSet<Likes>();
@@ -60,10 +62,13 @@ public class Saegim {
 	private List<Tagging> taggings = new ArrayList<Tagging>();
     
     @OneToMany(mappedBy="SAEGIM", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Comment> comments = new HashSet<Comment>();
+    private List<Comment> comments = new ArrayList<Comment>();
+    
+    @OneToMany(mappedBy="SAEGIM", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Files> files = new ArrayList<Files>();
     
     public static Saegim of(SaegimFormDto saegimFormDto) {
-    	Saegim saegim = ConfigurationUtilFactory.modelmapper().map(saegimFormDto, Saegim.class);
+    	Saegim saegim = UtilFactory.getModelMapper().map(saegimFormDto, Saegim.class);
     	return saegim;
     }
 }
