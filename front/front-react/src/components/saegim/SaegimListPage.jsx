@@ -119,9 +119,9 @@ class SaegimListPage extends Component {
     }
   }
 
-  getSessionLocation() {
-    const _lat = sessionStorage.getItem('ARSG latitude');
-    const _lng = sessionStorage.getItem('ARSG longitude');
+  async getSessionLocation() {
+    const _lat = await sessionStorage.getItem('ARSG latitude');
+    const _lng = await sessionStorage.getItem('ARSG longitude');
     this.setState({
       location: [_lat, _lng],
     });
@@ -136,6 +136,7 @@ class SaegimListPage extends Component {
           this.setState({
             location: [_lat, _lng],
           });
+          console.log(this.state.location)
           },
         function(error) {
           console.error(error);
@@ -212,14 +213,13 @@ class SaegimListPage extends Component {
       this.context.idxUpdate(false)
     } else {
       if (sessionStorage.getItem('ARSG latitude')) {
-        this.getSessionLocation()
+        await this.getSessionLocation()
       } else {
         await this.getCurrentLocation()
       }
+      await this.getSaegimList()
+      await this.getAddrW3W()
     }
-    await this.getSaegimList()
-    await this.getAddrW3W()
-
     this.getTime()
     await this.getTimeCapsuleData()
 
