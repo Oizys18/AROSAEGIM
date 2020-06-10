@@ -11,8 +11,7 @@ import {
   Close,
 } from "@material-ui/icons";
 import Card from "../cards/Card";
-import * as SA from "../../../apis/SaegimAPI";
-import { getUserByID } from "../../../apis/UserAPI";
+import { getUserByID } from "../../../apis/UserAPI"
 import { getTimeDeltaString } from "../time/TimeFunctinon";
 import Chip from "../chip/Chip";
 import SaegimDetailButton from "../../saegim/SaegimDetailButton";
@@ -31,7 +30,8 @@ class RoadViewSaegimDetail extends Component {
     this.state = {
       data: {
         tags: [],
-        images: [],
+        // images: [],
+        files: [],
       },
       regDate: "",
       userId: "",

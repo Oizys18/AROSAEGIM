@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import {Storage} from '../../storage/Storage'
 import styled, { keyframes } from "styled-components";
 import * as SA from "../../apis/SaegimAPI";
-import { Zoom, Slide, Select, MenuItem } from "@material-ui/core";
+import { Zoom, Select, MenuItem } from "@material-ui/core";
 import { Refresh, HourglassFull } from "@material-ui/icons";
 import CtoW from "../../apis/w3w";
 import CardItem from "./CardItem";
@@ -252,10 +252,6 @@ class SaegimListPage extends Component {
     if (this.state.isLoading === true) {
       return <Loading/>
     } else {
-      let _dir = 'right'
-      if (this.context.curPage === '/') {
-        _dir = 'left'
-      }
       const EmptyList =
         <StMessage>
           주변에 새김이 없습니다.<br/>이 장소의 첫 새김을 남겨주세요.
