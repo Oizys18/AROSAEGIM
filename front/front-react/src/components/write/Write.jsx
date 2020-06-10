@@ -49,6 +49,7 @@ const StCont = styled.div`
 `;
 
 const Wrapper = styled.div`
+  max-width: 480px;
   height: ${(props) => props.height}px;
   display: flex;
   justify-content: center;

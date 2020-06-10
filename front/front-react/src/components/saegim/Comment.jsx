@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Storage } from "../../storage/Storage"
-import {getCommentBySaegim, writeComment} from "../../apis/CommentAPI";
+import { Storage } from "../../storage/Storage";
+import { getCommentBySaegim, writeComment } from "../../apis/CommentAPI";
 import SmallButton from "../common/buttons/SmallButton";
 import CommentInput from "./CommentInput";
 import CommentItem from "./CommentItem";
 import { FlexRow } from "../../styles/DispFlex";
 
-class Comment extends Component{
+class Comment extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,62 +15,62 @@ class Comment extends Component{
       contents: "",
       updateFlag: false,
       userInfo: {},
-    }
+    };
     this.handleInput = this.handleInput.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
   getComments = async () => {
-    const _comments = await getCommentBySaegim(this.props.id)
+    const _comments = await getCommentBySaegim(this.props.id);
     await this.setState({
-      comments: _comments
-    })
-  }
+      comments: _comments,
+    });
+  };
 
   handleInput = async (e) => {
     await this.setState({
-      contents: e.target.value
-    })
-  }
+      contents: e.target.value,
+    });
+  };
 
   handleSubmit = async () => {
-    const _saegimid = this.props.id
+    const _saegimid = this.props.id;
     const _data = {
       contents: this.state.contents,
-    }
+    };
     const _userInfo = {
       id: this.state.userInfo.id,
-      name: this.state.userInfo.name
-    }
-    await writeComment(_data, _saegimid, _userInfo)
+      name: this.state.userInfo.name,
+    };
+    await writeComment(_data, _saegimid, _userInfo);
     this.setState({
       updateFlag: true,
-      contents: ""
-    })
-  }
+      contents: "",
+    });
+  };
 
   handleClick() {
     this.setState({
-      updateFlag: true
-    })
+      updateFlag: true,
+    });
   }
 
   async componentDidMount() {
-    await this.getComments()
+    await this.getComments();
     await this.setState({
-      userInfo: this.context.userInfo
-    })
+      userInfo: this.context.userInfo,
+    });
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.updateFlag === true) {
-      this.getComments()
+      this.getComments();
       this.setState({
-        updateFlag: false
-      })
+        updateFlag: false,
+      });
     } else if (this.context.updateFlag === 2) {
-      this.getComments()
-      this.context.setUpdateFlag(0)
+      this.getComments();
+      this.context.setUpdateFlag(0);
     }
   }
 
@@ -85,20 +85,23 @@ class Comment extends Component{
           id={comment.id}
           key={i}
         />
-      )
-    })
+      );
+    });
     return (
       <div>
         <StCommentList>
           {PrintComment}
-          { this.state.comments.length < 1
-            && <StDescription>첫 되새김을 남겨주세요.</StDescription>
-          }
+          {this.state.comments.length < 1 && (
+            <StDescription>첫 되새김을 남겨주세요.</StDescription>
+          )}
         </StCommentList>
         <StCommentInput>
-          <CommentInput value={this.state.contents} onChange={this.handleInput} />
+          <CommentInput
+            value={this.state.contents}
+            onChange={this.handleInput}
+          />
           <StSmallButton>
-            <SmallButton text='등록' onClick={this.handleSubmit} />
+            <SmallButton text="등록" onClick={this.handleSubmit} />
           </StSmallButton>
         </StCommentInput>
       </div>
@@ -112,9 +115,8 @@ Comment.contextType = Storage;
 const StCommentList = styled.div`
   padding: 0 16px 0px 16px;
   overflow: scroll;
-  
-  max-height: 28vh;
-  @media (max-height: 850px) {
+  max-height: 25vh;
+  /* @media (max-height: 850px) {
     max-height: 25vh;
   }
   @media (max-height: 700px) {
@@ -122,15 +124,18 @@ const StCommentList = styled.div`
   }
   @media (max-height: 600px) {
     max-height: 15vh;
-  }
+  } */
 `;
 
 const StCommentInput = styled(FlexRow)`
+  z-index: 10;
   position: fixed;
-  bottom: 5%;
-
-  margin-top: 16px;
-  padding: 0 16px 0 16px;
+  bottom: 1%;
+  width: 100%;
+  /* margin-top: 16px; */
+  padding: 4px 8px 0 8px;
+  /* padding: 0 16px 0 16px; */
+  border-top: 1px solid rgba(30, 30, 30, 0.2);
 `;
 
 const StDescription = styled.div`
@@ -141,6 +146,7 @@ const StDescription = styled.div`
 `;
 
 const StSmallButton = styled.div`
+  margin-left: 2vw;
   .MuiButton-contained {
     background-color: #f4c6ba;
   }

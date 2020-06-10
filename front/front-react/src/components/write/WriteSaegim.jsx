@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { IconButton } from "@material-ui/core";
 import TextInput from "../common/inputs/TextInput";
 import Chip from "../common/chip/Chip";
-import { Create, Photo } from "@material-ui/icons"
+import { Create, Photo } from "@material-ui/icons";
 import CtoW from "../../apis/w3w";
 import Switch from "../common/switch/Switch";
 import axios from "axios";
@@ -12,8 +12,8 @@ import SimplePopover from "./Writetag";
 import MapView from "../common/map/MapViewClone";
 import { kakaoLatLng } from "../common/map/MapMethod";
 import PinIcon from "../../assets/PinIcon";
-import { ThemeProvider } from '@material-ui/styles'
-import { setPrimaryColor2 } from '../../styles/MuiStyles';
+import { ThemeProvider } from "@material-ui/styles";
+import { setPrimaryColor2 } from "../../styles/MuiStyles";
 
 class WriteSaegim extends Component {
   constructor(props) {
@@ -35,7 +35,7 @@ class WriteSaegim extends Component {
         status: false,
         center: null,
       },
-      delFlag: false
+      delFlag: false,
     };
     this.inputReference = React.createRef();
   }
@@ -146,27 +146,25 @@ class WriteSaegim extends Component {
       w3w: this.state.w3w,
     };
     // if (this.state.imgBase64) {
-      // data["imageSources"] = this.state.imgBase64;
+    // data["imageSources"] = this.state.imgBase64;
     // }
-    if (this.state.text) {
+    if (this.state.text && this.state.error !== 1 && this.state.error !== 2) {
       axios
         .post("https://k02a2051.p.ssafy.io/api/saegims", data)
         .then((res) => {
-          const _saegimId = res.data.data.id
-          this.state.imgFiles.forEach((el, idx)=> {
-            const _formData = new FormData()
-            _formData.append('file', el)
-            axios(({
-              method: 'post',
+          const _saegimId = res.data.data.id;
+          this.state.imgFiles.forEach((el, idx) => {
+            const _formData = new FormData();
+            _formData.append("file", el);
+            axios({
+              method: "post",
               url: `${process.env.REACT_APP_BASE_URL}/files/saegimid/${_saegimId}`,
               data: _formData,
-              headers: { 'content-Type': 'multipart/form-data' }
-            }))
-            .then((res) => {
-              console.log(res)
-            })
-          })
-
+              headers: { "content-Type": "multipart/form-data" },
+            }).then((res) => {
+              console.log(res);
+            });
+          });
 
           this.handleChange(res);
         })
@@ -178,8 +176,13 @@ class WriteSaegim extends Component {
     }
   };
   handleTextChange = (value) => {
-    this.setState({ text: value });
-    this.setState({ error: 0 });
+    if (value.length < 200) {
+      this.setState({ text: value });
+      this.setState({ error: 0 });
+    } else {
+      this.setState({ text: value });
+      this.setState({ error: 3 });
+    }
   };
   changeSwitch = () => {
     if (this.state.locked) {
@@ -197,26 +200,31 @@ class WriteSaegim extends Component {
     this.setState({ tags: this.state.tags.concat(newTag) });
   };
   deleteTag = (e) => {
-    const _target = e.target.firstChild.nodeValue
-    const _idx = this.state.tags.indexOf(_target)
+    const _target = e.target.firstChild.nodeValue;
+    const _idx = this.state.tags.indexOf(_target);
     if (_idx > -1) {
       this.state.tags.splice(_idx, 1);
     }
-    this.setState({ delFlag: true })
-  }
+    this.setState({ delFlag: true });
+  };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state.delFlag !== prevProps.delFlag && this.state.delFlag === true) {
-      this.setState({ delFlag: false })
+    if (
+      this.state.delFlag !== prevProps.delFlag &&
+      this.state.delFlag === true
+    ) {
+      this.setState({ delFlag: false });
     }
   }
 
   render() {
     const ErrorMsg = () => {
       if (this.state.error === 1) {
-        return <Error>텍스트를 입력해주세요!</Error>;
+        return <Error>텍스트를 입력해주세요.</Error>;
       } else if (this.state.error === 2) {
-        return <Error>이미지는 최대 5장까지 입니다!</Error>;
+        return <Error>이미지는 최대 5장까지 입니다.</Error>;
+      } else if (this.state.error === 3) {
+        return <Error>텍스트는 최대 200자까지 입니다.</Error>;
       } else {
         return <Error>　</Error>;
       }
@@ -250,16 +258,14 @@ class WriteSaegim extends Component {
             <Chip
               size="medium"
               text={
-                this.state.w3w
-                  ? this.state.w3w
-                  : "위치를 가져오는 중입니다 ..."
+                this.state.w3w ? this.state.w3w : "위치를 가져오는 중입니다 ..."
               }
               onClick={this.getLocation}
               icon={<PinIcon />}
             />
           )}
         </Top>
-        <Container> 
+        <Container>
           <ThemeProvider theme={setPrimaryColor2}>
             <TextInput
               placeholder="당신의 추억을 새겨주세요"
@@ -280,7 +286,7 @@ class WriteSaegim extends Component {
             {this.state.tags.map((tag, i) => {
               return (
                 <div onClick={this.deleteTag} style={{ margin: "1px" }} key={i}>
-                  <StChip size="small"text={tag} />
+                  <StChip size="small" text={tag} />
                 </div>
               );
             })}
@@ -337,7 +343,7 @@ const ImageWrapper = styled.div`
   flex-wrap: wrap;
   align-items: center;
   width: 80vw;
-  margin-top: 4vh;
+  margin-top: 2vh;
 `;
 const Error = styled.div`
   color: red;
@@ -358,7 +364,7 @@ const Container = styled.div`
   width: 80vw;
   padding: 16px;
   /* background-color: ghostwhite; */
-  background: #FBF2EE;
+  background: #fbf2ee;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -369,8 +375,8 @@ const Top = styled.div`
   justify-content: space-between;
   align-items: center;
   display: flex;
-  .MuiButtonBase-root{
-    background: linear-gradient(45deg,#ffffff,#F4BDB0);
+  .MuiButtonBase-root {
+    background: linear-gradient(45deg, #ffffff, #f4bdb0);
   }
 `;
 
@@ -452,7 +458,7 @@ const StBtnCont = styled.div`
   border: 1px solid gray;
   border-radius: 50%;
   box-shadow: 0 0 2px #f3b3a6;
-  
+
   background: #ffffff;
   margin-left: 10px;
 `;
