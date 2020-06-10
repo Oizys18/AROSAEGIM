@@ -104,7 +104,7 @@ class MapItem extends Component {
           </StLink>
         </StFlexContainer>
         <StFlexContainer onClick={this.props.closeItem}>
-          <Chip size="small" onDelete={this.props.closeItem} text={"닫기"} clickable deletable />
+          <Chip size="small"  onDelete={this.props.closeItem} text={"닫기"}/>
         </StFlexContainer>
       </StButtonContainer>
     </StDetailCont>
@@ -239,7 +239,7 @@ const StDetailLink = styled.div`
       width: 100%;
       margin-right: 0%;
     } */
-  }
+  /* } */
 `
 
 const StDetailCont = styled.div`
