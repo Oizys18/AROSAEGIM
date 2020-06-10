@@ -207,8 +207,6 @@ class SaegimDetail extends Component {
                     <Close/>
                   </StClose>
                   <StImg
-                    // src={this.state.data.images[this.state.activeStep].source}
-                    // alt={this.state.data.images[this.state.activeStep]}
                     src={this.state.data.files[this.state.activeStep].url}
                     alt={this.state.data.files[this.state.activeStep]}
                   />
@@ -253,9 +251,6 @@ class SaegimDetail extends Component {
               </StCont>
             </TopBar>
             <Contents>
-              {/* {(this.state.data.images.length > 0 && this.state.isUser !== 1)
-              && <BackGround bgImage={this.state.data.images[this.state.curImage].source}/>
-              } */}
               {(this.state.data.files.length > 0 && this.state.isUser !== 1)
               && <BackGround bgImage={this.state.data.files[this.state.curImage].url}/>
               }
@@ -280,12 +275,10 @@ class SaegimDetail extends Component {
                 <LockIcon>
                   {this.state.data.secret ? <Lock/> : <Lock style={{display: 'none'}}/>}
                 </LockIcon>
-                {/* {this.state.data.images.length > 0 */}
                 {this.state.data.files.length > 0
                   ?
                   <Image>
                     <StPhotoIcon onClick={this.handleOpen}/>
-                    {/* <div>{this.state.data.images.length}</div> */}
                     <div>{this.state.data.files.length}</div>
                   </Image>
                   : <Image style={{display: 'none'}}>
@@ -383,10 +376,6 @@ const W3WChip = styled.div`
 `;
 
 const Contents = styled(FlexColumn) `
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
   position: relative;
   z-index: 1;
 
@@ -477,13 +466,23 @@ const StPhotoIcon = styled(Photo)`
   margin-right: 4px;
 `;
 
-const StCard = styled(FlexColumn)`
+const StCard = styled.div`
   height: 25vh;
-  width: 70vw;
+  width: 60vw;
   padding: 16px;
 
-  word-break: break-all;
-  overflow: scroll;
+  word-break: keep-all;
+  overflow: auto;
+  
+  @media (max-height: 850px) {
+    max-height: 25vh;
+  }
+  @media (max-height: 700px) {
+    max-height: 22vh;
+  }
+  @media (max-height: 600px) {
+    max-height: 18vh;
+  }
   
   @media (max-height: 850px) {
     max-height: 25vh;
@@ -511,7 +510,7 @@ const StMobileStepper = styled(MobileStepper)`
 
 const ImageWrapper = styled.div`
   padding: 24px;
-  position: fixed;
+  position: relative;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);

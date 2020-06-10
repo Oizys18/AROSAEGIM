@@ -238,6 +238,7 @@ class RoadViewSaegimDetail extends Component {
                   size="medium"
                   text={this.state.data.w3w}
                   icon={<PinIcon />}
+                  style={{ boxShadow: '0 1px 2px gray' }}
                 />
               </W3WChip>
               <CardWrapper>
@@ -363,10 +364,6 @@ const W3WChip = styled.div`
 `;
 
 const Contents = styled(FlexColumn) `
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
   position: relative;
   z-index: 1;
 
@@ -459,11 +456,11 @@ const StPhotoIcon = styled(Photo)`
 
 const StCard = styled(FlexColumn)`
   height: 25vh;
-  width: 70vw;
+  width: 60vw;
   padding: 16px;
 
-  word-break: break-all;
-  overflow: scroll;
+  word-break: keep-all;
+  overflow: auto;
   
   @media (max-height: 850px) {
     max-height: 25vh;
@@ -491,9 +488,10 @@ const StMobileStepper = styled(MobileStepper)`
 
 const ImageWrapper = styled.div`
   padding: 24px;
-  position: absolute;
+  position: relative;
   top: 50%;
-  transform: translateY(-50%);
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
 `;
 
 const StClose = styled.div`
