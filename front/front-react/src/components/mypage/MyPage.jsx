@@ -247,8 +247,8 @@ const User = styled.div`
 `;
 
 const SaegimInfo = styled.div`
-  height: 60%;
-  width: 80%;
+  height: 55vh;
+  width: 80vw;
   top: 8%;
   
   margin-top: 8px;
