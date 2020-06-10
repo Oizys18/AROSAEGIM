@@ -207,7 +207,7 @@ class RoadView extends Component {
       const _flag = this.props.items.findIndex(item => item.id === el.id)
       if(_flag !== -1){
         // el.co.setAltitude(MM.randomInt(0, 15))
-        el.co.setRange(50)
+        el.co.setRange(70)
         el.co.setMap(this.state.rv)
         // el.mk.setMap(this.state.mm)
         this.state.cls.addMarker(el.mk)
