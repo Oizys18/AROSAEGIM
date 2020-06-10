@@ -81,6 +81,8 @@ const StProfile = styled(FlexRow)`
   *{
     width: 35vw;
     height: 35vw;
+    max-width: 360px;
+    max-height: 360px;
   }
 `;
 

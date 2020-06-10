@@ -59,6 +59,11 @@ const StModalCont = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  max-width: 480px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
 `
 
 const StConfirmCont = styled.div`
