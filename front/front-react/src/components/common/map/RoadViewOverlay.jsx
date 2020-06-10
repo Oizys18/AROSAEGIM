@@ -11,6 +11,7 @@ class RoadViewOverlay extends Component {
     super(props);
     this.state = {
       imgSrc: null,
+      sgDetail: null,
     }
   }
   async componentDidMount(){
@@ -18,16 +19,20 @@ class RoadViewOverlay extends Component {
   }
   
   get1stImg = async () => {
-    if(this.props.item.imagesCount > 0){
-      const data = await SA.getSaegimDetailById(this.props.item.id)
+    const data = await SA.getSaegimDetailById(this.props.item.id)
+    if(this.props.item.filesCount > 0){
       this.setState({
-        imgSrc: data.images[0].source
+        imgSrc: data.files[0].url,
+        // imgSrc: data.images[0].source,
       })
     }
+    this.setState({
+      sgDetail: data
+    })
   }
   
   tgleDetail = () => {
-    this.props.tgleDetail(this.props.item.id)
+    this.props.tgleDetail(this.props.item.id, this.state.sgDetail)
   }
 
   render(){

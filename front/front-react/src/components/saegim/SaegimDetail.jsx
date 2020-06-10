@@ -106,7 +106,7 @@ class SaegimDetail extends Component {
   }
 
    switchImage = () => {
-    if (this.state.curImage < this.state.data.images.length - 1) {
+    if (this.state.curImage < this.state.data.files.length - 1) {
       this.setState({
         curImage: this.state.curImage + 1
       });
@@ -116,6 +116,16 @@ class SaegimDetail extends Component {
       });
     }
     return this.state.curImage;
+    // if (this.state.curImage < this.state.data.images.length - 1) {
+    //   this.setState({
+    //     curImage: this.state.curImage + 1
+    //   });
+    // } else {
+    //   this.setState({
+    //     curImage: 0
+    //   });
+    // }
+    // return this.state.curImage;
   }
 
   async componentDidMount() {
@@ -127,7 +137,8 @@ class SaegimDetail extends Component {
     }
     await this.getSaegimDetail()
     this.setStateAsync({
-      maxSteps: this.state.data.images.length
+      maxSteps: this.state.data.files.length,
+      // maxSteps: this.state.data.images.length
     })
     await this.setIsUser()
     await this.getRegDate()
@@ -185,7 +196,8 @@ class SaegimDetail extends Component {
       return (
         <Zoom in={true}>
           <Wrapper>
-            {this.state.data.images.length > 0 &&
+            {/* {this.state.data.images.length > 0 && */}
+            {this.state.data.files.length > 0 &&
             <Modal
               open={this.state.open}
             >
@@ -195,8 +207,10 @@ class SaegimDetail extends Component {
                     <Close/>
                   </StClose>
                   <StImg
-                    src={this.state.data.images[this.state.activeStep].source}
-                    alt={this.state.data.images[this.state.activeStep]}
+                    // src={this.state.data.images[this.state.activeStep].source}
+                    // alt={this.state.data.images[this.state.activeStep]}
+                    src={this.state.data.files[this.state.activeStep].url}
+                    alt={this.state.data.files[this.state.activeStep]}
                   />
                   <StMobileStepper
                     steps={this.state.maxSteps}
@@ -239,8 +253,11 @@ class SaegimDetail extends Component {
               </StCont>
             </TopBar>
             <Contents>
-              {(this.state.data.images.length > 0 && this.state.isUser !== 1)
+              {/* {(this.state.data.images.length > 0 && this.state.isUser !== 1)
               && <BackGround bgImage={this.state.data.images[this.state.curImage].source}/>
+              } */}
+              {(this.state.data.files.length > 0 && this.state.isUser !== 1)
+              && <BackGround bgImage={this.state.data.files[this.state.curImage].url}/>
               }
               <W3WChip>
                 <Chip
@@ -263,11 +280,13 @@ class SaegimDetail extends Component {
                 <LockIcon>
                   {this.state.data.secret ? <Lock/> : <Lock style={{display: 'none'}}/>}
                 </LockIcon>
-                {this.state.data.images.length > 0
+                {/* {this.state.data.images.length > 0 */}
+                {this.state.data.files.length > 0
                   ?
                   <Image>
                     <StPhotoIcon onClick={this.handleOpen}/>
-                    <div>{this.state.data.images.length}</div>
+                    {/* <div>{this.state.data.images.length}</div> */}
+                    <div>{this.state.data.files.length}</div>
                   </Image>
                   : <Image style={{display: 'none'}}>
                     <StPhotoIcon/>

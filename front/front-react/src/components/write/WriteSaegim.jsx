@@ -29,6 +29,7 @@ class WriteSaegim extends Component {
       error: 0,
       userInfo: {},
       imgBase64: [],
+      imgFiles: [],
 
       mapView: {
         status: false,
@@ -41,7 +42,7 @@ class WriteSaegim extends Component {
 
   fileUploadAction = () => this.inputReference.current.click();
   fileUploadInputChange = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     if (e.target.files.length + this.state.imgBase64.length > 5) {
       this.setState({ error: 2 });
     } else {
@@ -52,6 +53,7 @@ class WriteSaegim extends Component {
         _reader.readAsDataURL(_imgFile);
         _reader.onloadend = () => {
           this.setState({
+            imgFiles: this.state.imgFiles.concat(_imgFile),
             imgBase64: this.state.imgBase64.concat(_reader.result),
           });
         };
@@ -132,7 +134,7 @@ class WriteSaegim extends Component {
     }
   }
 
-  writePost = () => {
+  writePost = async () => {
     let data = {
       contents: this.state.text,
       latitude: this.state.location[0],
@@ -143,15 +145,30 @@ class WriteSaegim extends Component {
       userName: this.state.userInfo.name,
       w3w: this.state.w3w,
     };
-    if (this.state.imgBase64) {
-      data["imageSources"] = this.state.imgBase64;
-    }
+    // if (this.state.imgBase64) {
+      // data["imageSources"] = this.state.imgBase64;
+    // }
     if (this.state.text) {
       axios
-        .post("https://k02a2051.p.ssafy.io/api/saegims/", data)
+        .post("https://k02a2051.p.ssafy.io/api/saegims", data)
         .then((res) => {
-          this.handleChange(res.data);
-          // console.log(data);
+          const _saegimId = res.data.data.id
+          this.state.imgFiles.forEach((el, idx)=> {
+            const _formData = new FormData()
+            _formData.append('file', el)
+            axios(({
+              method: 'post',
+              url: `${process.env.REACT_APP_BASE_URL}/files/saegimid/${_saegimId}`,
+              data: _formData,
+              headers: { 'content-Type': 'multipart/form-data' }
+            }))
+            .then((res) => {
+              console.log(res)
+            })
+          })
+
+
+          this.handleChange(res);
         })
         .catch((err) => {
           console.log(err);

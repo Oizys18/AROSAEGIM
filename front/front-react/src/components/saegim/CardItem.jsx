@@ -197,7 +197,8 @@ class CardItem extends Component {
                   <Top>
                     <StIcon>
                       <StPhotoIcon/>
-                      <div>{saegim.imagesCount}</div>
+                      <div>{saegim.filesCount}</div>
+                      {/* <div>{saegim.imagesCount}</div> */}
                     </StIcon>
                     <Tags>
                       {PrintTags}

@@ -45,8 +45,6 @@ class RoadViewSaegimDetail extends Component {
 
   goBack() {
     this.props.tgleDetail()
-    // this.props.history.goBack();
-    // this.context.idxUpdate(true);
   }
 
   setOpen(status) {
@@ -78,11 +76,11 @@ class RoadViewSaegimDetail extends Component {
   }
 
   getSaegimDetail = async () => {
-    const _data = await SA.getSaegimDetailById(this.props.id)
-    await this.setStateAsync({ data: _data })
-
     const _user = await getUserByID(this.state.data.userId)
-    await this.setStateAsync({ user: _user })
+    await this.setStateAsync({ 
+      data: this.props.sgDetail,      
+      user: _user 
+    })
   }
 
   getRegDate = () => {
@@ -107,7 +105,7 @@ class RoadViewSaegimDetail extends Component {
   }
 
    switchImage = () => {
-    if (this.state.curImage < this.state.data.images.length - 1) {
+    if (this.state.curImage < this.state.data.files.length - 1) {
       this.setState({
         curImage: this.state.curImage + 1
       });
@@ -128,7 +126,7 @@ class RoadViewSaegimDetail extends Component {
     }
     await this.getSaegimDetail()
     this.setStateAsync({
-      maxSteps: this.state.data.images.length
+      maxSteps: this.state.data.files.length
     })
     await this.setIsUser()
     await this.getRegDate()
@@ -137,6 +135,9 @@ class RoadViewSaegimDetail extends Component {
     this.startTimer = setTimeout(this.setState({
       curImage: this.state.curImage + 1
     }), 5000)
+  }
+  componentWillUnmount() {
+    clearTimeout(this.startTimer)
   }
 
   setUpdateLike(flag) {
@@ -149,23 +150,6 @@ class RoadViewSaegimDetail extends Component {
     return new Promise((resolve) => {
       this.setState(state, resolve);
     });
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    // if (this.state.curImage !== prevState.curImage) {
-    //   this.timer = setTimeout(this.switchImage, 5000)
-    // }
-    // this.regTimer = setTimeout(this.getRegDate, 30000)
-    // if (this.context.updateFlag === 1) {
-    //   this.props.history.push('list')
-    //   this.context.setUpdateFlag(0)
-    // }
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.startTimer)
-    clearTimeout(this.timer)
-    clearTimeout(this.regTimer)
   }
 
   newLineContent = (contents) => {
@@ -186,7 +170,8 @@ class RoadViewSaegimDetail extends Component {
       return (
         <Zoom in={this.props.on} mountOnEnter unmountOnExit>
           <Wrapper>
-            {this.state.data.images.length > 0 &&
+            {/* {this.state.data.images.length > 0 && */}
+            {this.state.data.files.length > 0 &&
             <Modal
               open={this.state.open}
             >
@@ -196,8 +181,10 @@ class RoadViewSaegimDetail extends Component {
                     <Close/>
                   </StClose>
                   <StImg
-                    src={this.state.data.images[this.state.activeStep].source}
-                    alt={this.state.data.images[this.state.activeStep]}
+                    // src={this.state.data.images[this.state.activeStep].source}
+                    // alt={this.state.data.images[this.state.activeStep]}
+                    src={this.state.data.files[this.state.activeStep].url}
+                    alt={this.state.data.files[this.state.activeStep]}
                   />
                   <StMobileStepper
                     steps={this.state.maxSteps}
@@ -240,8 +227,11 @@ class RoadViewSaegimDetail extends Component {
               </StCont>
             </TopBar>
             <Contents>
-              {(this.state.data.images.length > 0 && this.state.isUser !== 1)
+              {/* {(this.state.data.images.length > 0 && this.state.isUser !== 1)
               && <BackGround bgImage={this.state.data.images[this.state.curImage].source}/>
+              } */}
+              {(this.state.data.files.length > 0 && this.state.isUser !== 1)
+              && <BackGround bgImage={this.state.data.files[this.state.curImage].url}/>
               }
               <W3WChip>
                 <Chip
@@ -263,11 +253,13 @@ class RoadViewSaegimDetail extends Component {
                 <LockIcon>
                   {this.state.data.secret ? <Lock/> : <Lock style={{display: 'none'}}/>}
                 </LockIcon>
-                {this.state.data.images.length > 0
+                {/* {this.state.data.images.length > 0 */}
+                {this.state.data.files.length > 0
                   ?
                   <Image>
                     <StPhotoIcon onClick={this.handleOpen}/>
-                    <div>{this.state.data.images.length}</div>
+                    {/* <div>{this.state.data.images.length}</div> */}
+                    <div>{this.state.data.files.length}</div>
                   </Image>
                   : <Image style={{display: 'none'}}>
                     <StPhotoIcon/>

@@ -28,6 +28,7 @@ class RoadView extends Component {
       olObjs: [],
 
       detailId: 0,
+      sgDetail: null,
       popDetail: false,
     };
     this.markers = [];
@@ -264,10 +265,11 @@ class RoadView extends Component {
     this.state.mw.setPosition(_center)
   }
 
-  tgleDetail = (id) => {
+  tgleDetail = (id, sgDetail) => {
     if(id) {
       this.setState({
         detailId: id,
+        sgDetail: sgDetail,
         popDetail: true,
       })
     }
@@ -305,7 +307,12 @@ class RoadView extends Component {
         </Zoom>
 
         <Zoom in={this.state.popDetail} mountOnEnter unmountOnExit>
-          <RoadViewSaegimDetail on={this.state.popDetail} tgleDetail={this.tgleDetail} id={this.state.detailId}/>
+          <RoadViewSaegimDetail 
+            on={this.state.popDetail} 
+            tgleDetail={this.tgleDetail} 
+            id={this.state.detailId} 
+            sgDetail={this.state.sgDetail}
+          />
         </Zoom>
 
         <div>
