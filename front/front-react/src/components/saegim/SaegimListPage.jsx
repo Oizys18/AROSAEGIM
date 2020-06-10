@@ -119,6 +119,14 @@ class SaegimListPage extends Component {
     }
   }
 
+  getSessionLocation() {
+    const _lat = sessionStorage.getItem('ARSG latitude');
+    const _lng = sessionStorage.getItem('ARSG longitude');
+    this.setState({
+      location: [_lat, _lng],
+    });
+  }
+
   getCurrentLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -203,7 +211,11 @@ class SaegimListPage extends Component {
       })
       this.context.idxUpdate(false)
     } else {
-      await this.getCurrentLocation()
+      if (sessionStorage.getItem('ARSG latitude')) {
+        this.getSessionLocation()
+      } else {
+        await this.getCurrentLocation()
+      }
     }
     await this.getSaegimList()
     await this.getAddrW3W()
