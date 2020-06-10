@@ -37,8 +37,7 @@ const StListCont = styled(FlexColumn)`
   
   width: 100%;
   height: 40vh;
-  overflow: scroll;
-
+  
   background: #FBF2EE;
   border-top: 2px solid gray;
   border-radius: 10px 10px 0 0;
