@@ -135,7 +135,7 @@ class SaegimListPage extends Component {
           await this.setState({
             location: [_lat, _lng],
           });
-          console.log(this.state.location)
+          // console.log(this.state.location)
           },
         function(error) {
           console.error(error);

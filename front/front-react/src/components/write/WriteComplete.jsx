@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import {FlexColumn} from "../../styles/DispFlex";
 class WriteComplete extends Component {
   render() {
-    console.log(this.props.id)
+    // console.log(this.props.id)
     return (
       <Zoom in={true}>
       <Container>

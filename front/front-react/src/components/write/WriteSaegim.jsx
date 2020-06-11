@@ -62,7 +62,7 @@ class WriteSaegim extends Component {
   };
 
   handleChange = (data) => {
-    console.log(data)
+    // console.log(data)
     this.props.changeWrite(data);
   };
 
@@ -164,10 +164,10 @@ class WriteSaegim extends Component {
               headers: { 'content-Type': 'multipart/form-data' }
             })
             .then((res) => {
-              console.log(res)
+              // console.log(res)
             })
           })
-          console.log(res)
+          // console.log(res)
           this.handleChange(res.data);
         })
         .catch((err) => {
@@ -345,6 +345,7 @@ const ImageWrapper = styled.div`
   flex-wrap: wrap;
   align-items: center;
   width: 80vw;
+  max-width: 800px;
   margin-top: 2vh;
 `;
 const Error = styled.div`
