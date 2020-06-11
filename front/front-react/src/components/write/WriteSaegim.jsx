@@ -363,6 +363,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 const Container = styled.div`
+  max-width: 800px;
   width: 80vw;
   padding: 16px;
   /* background-color: ghostwhite; */
@@ -390,6 +391,7 @@ const Bottom = styled.div`
 
 const CreateWrapper = styled.div`
   justify-content: flex-end;
+  max-width: 800px;
   width: 80vw;
   flex-direction: row;
   align-items: center;

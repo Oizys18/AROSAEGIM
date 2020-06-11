@@ -21,6 +21,7 @@ import { Storage } from "../../storage/Storage";
 import { FlexRow, FlexColumn } from "../../styles/DispFlex";
 import Loading from "../common/background/Loading";
 import PinIcon from "../../assets/PinIcon";
+import saegimRowImg from "../../assets/saegimRow/saegim-row-85.png";
 
 class SaegimDetail extends Component {
   isLoading = true;
@@ -422,6 +423,7 @@ const CardWrapper = styled.div`
   top: 8%;
   width: 85vw;
   height: 32vh;
+  max-width: 800px;
   padding: 18px 8px 8px 8px;
   background-color: #f4c6ba;
   border-radius: 16px;
@@ -431,7 +433,7 @@ const StCard = styled.div`
   word-break: keep-all;
   overflow: auto;
   height: 31vh;
-  background: url(https://i.imgur.com/VB3wlPb.png) repeat-y;
+  background: url(${saegimRowImg}) repeat-y;
   line-height: 25px;
   padding-left: 35px;
   border-radius: 16px;

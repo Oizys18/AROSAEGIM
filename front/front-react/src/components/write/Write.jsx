@@ -46,6 +46,8 @@ Write.contextType = Storage;
 
 const StCont = styled.div`
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 `;
 
 const Wrapper = styled.div`
