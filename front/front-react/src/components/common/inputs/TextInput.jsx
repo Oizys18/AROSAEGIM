@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import TextField from "@material-ui/core/TextField";
+import saegimRowImg from "../../../assets/saegimRow/saegim-row-85.png"
+
 class TextInput extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +31,7 @@ class TextInput extends Component {
 export default TextInput;
 
 const CustomInput = styled.textarea`
-  background: url(https://i.imgur.com/EU3ILIP.png) repeat-y;
+  background: url(${saegimRowImg}) repeat-y;
   width: auto;
   height: auto;
   line-height: 25px;
