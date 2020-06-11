@@ -85,9 +85,7 @@ class SaegimListPage extends Component {
   }
 
   getAddrW3W = async () => {
-    const _lat = await sessionStorage.getItem('ARSG latitude');
-    const _lng = await sessionStorage.getItem('ARSG longitude');
-
+    const [_lat, _lng] = this.state.location
     this.state.geocoder.coord2RegionCode(_lng, _lat, (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
         for(var i = 0; i < result.length; i++) {
