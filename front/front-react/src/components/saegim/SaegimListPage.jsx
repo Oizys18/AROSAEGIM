@@ -133,7 +133,7 @@ class SaegimListPage extends Component {
         async (position) => {
           const _lat = position.coords.latitude;
           const _lng = position.coords.longitude;
-          this.setState({
+          await this.setState({
             location: [_lat, _lng],
           });
           console.log(this.state.location)
@@ -185,7 +185,7 @@ class SaegimListPage extends Component {
     const _data = {
       lat: _lat,
       lng: _lng,
-      meter: this.state.distance,
+      meter: 2000,
       sTime: _sTime,
       eTime: _eTime,
       userid: 0
@@ -231,10 +231,7 @@ class SaegimListPage extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.distance !== prevState.distance) {
       if (this.context.idxUpdateFlag === false) {
-        this.getSaegimList()
-      } else if (this.state.timeCapsule === true) {
-        this.getTime()
-        this.getTimeCapsuleData()
+        if (this.state.timeCapsule === false) { this.getSaegimList() }
       }
     } else if (this.state.printLocation !== prevState.printLocation) {
       this.timer = setTimeout(this.switchLocation, 5000)
@@ -279,7 +276,6 @@ class SaegimListPage extends Component {
               saegim={saegim}
               idx={idx}
               length={this.state.timeCapsuleData.length}
-              // onChangeData={this.changeData}
             />
           </Zoom>
         )
@@ -289,16 +285,19 @@ class SaegimListPage extends Component {
             <StMenuItem value={option.idx} key={option.idx}>{option.text}</StMenuItem>
           )
         });
+      const PrintNoOption = <div style={{ marginLeft: '8px', color: 'rgba(0, 0, 0, 0.87)'}}>2km</div>
+
       return (
         <StCont>
           <StMenu>
-            <StSelect
-              autoWidth
-              value={this.state.selectedOption}
-              onChange={this.selectChange}
-            >
-              {PrintOptions}
-            </StSelect>
+            {this.state.timeCapsule ? PrintNoOption
+              : <StSelect
+                autoWidth
+                value={this.state.selectedOption}
+                onChange={this.selectChange}>
+                {PrintOptions}
+                </StSelect>
+            }
             <StLocation>
               {this.state.printLocation}
             </StLocation>
