@@ -185,7 +185,7 @@ class SaegimListPage extends Component {
     const _data = {
       lat: _lat,
       lng: _lng,
-      meter: this.state.distance,
+      meter: 4000, // this.state.distance,
       sTime: _sTime,
       eTime: _eTime,
       userid: 0
