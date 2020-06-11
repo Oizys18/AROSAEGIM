@@ -21,12 +21,12 @@ class SaegimListPage extends Component {
       w3w: "",
       geocoder: new kakao.maps.services.Geocoder(),
       options: [
-        { value: 100, text: '100m', idx: 0},
-        { value: 500, text: '500m', idx: 1},
-        { value: 1000, text: '1km', idx: 2}
+        { value: 200, text: '100m', idx: 0},
+        { value: 1000, text: '500m', idx: 1},
+        { value: 2000, text: '1km', idx: 2}
       ],
       selectedOption: 0,
-      distance: 100,
+      distance: 200,
       data: [],
       printLocation: "",
       isLoading: true,
@@ -55,7 +55,6 @@ class SaegimListPage extends Component {
     await this.setState({
       selectedOption: e.target.value,
     })
-    // console.log(this.state.selectedOption)
     await this.setState({
       distance: this.state.options[this.state.selectedOption].value
     })
@@ -133,7 +132,7 @@ class SaegimListPage extends Component {
         async (position) => {
           const _lat = position.coords.latitude;
           const _lng = position.coords.longitude;
-          this.setState({
+          await this.setState({
             location: [_lat, _lng],
           });
           console.log(this.state.location)
@@ -220,8 +219,8 @@ class SaegimListPage extends Component {
       await this.getSaegimList()
       await this.getAddrW3W()
     }
-    this.getTime()
-    await this.getTimeCapsuleData()
+    // this.getTime()
+    // await this.getTimeCapsuleData()
 
     this.setState({
       isLoading: false
@@ -231,14 +230,11 @@ class SaegimListPage extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.distance !== prevState.distance) {
       if (this.context.idxUpdateFlag === false) {
-        this.getSaegimList()
-      } else if (this.state.timeCapsule === true) {
-        this.getTime()
-        this.getTimeCapsuleData()
+        if (this.state.timeCapsule === false) { this.getSaegimList() }
       }
     } else if (this.state.printLocation !== prevState.printLocation) {
       this.timer = setTimeout(this.switchLocation, 5000)
-    } else if (this.state.timeCapsule !== prevState.timeCapsule) {
+    } else if (this.state.timeCapsule !== prevState.timeCapsule && this.state.timeCapsule === true) {
       this.getTime()
       this.getTimeCapsuleData()
     }
@@ -279,7 +275,6 @@ class SaegimListPage extends Component {
               saegim={saegim}
               idx={idx}
               length={this.state.timeCapsuleData.length}
-              // onChangeData={this.changeData}
             />
           </Zoom>
         )
@@ -289,16 +284,19 @@ class SaegimListPage extends Component {
             <StMenuItem value={option.idx} key={option.idx}>{option.text}</StMenuItem>
           )
         });
+      const PrintNoOption = <div style={{ margin: '0 24px 0 16px', color: 'rgba(0, 0, 0, 0.87)'}}>2km</div>
+
       return (
         <StCont>
           <StMenu>
-            <StSelect
-              autoWidth
-              value={this.state.selectedOption}
-              onChange={this.selectChange}
-            >
-              {PrintOptions}
-            </StSelect>
+            {this.state.timeCapsule ? PrintNoOption
+              : <StSelect
+                autoWidth
+                value={this.state.selectedOption}
+                onChange={this.selectChange}>
+                {PrintOptions}
+                </StSelect>
+            }
             <StLocation>
               {this.state.printLocation}
             </StLocation>
