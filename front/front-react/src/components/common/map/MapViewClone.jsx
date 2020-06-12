@@ -11,8 +11,7 @@ import pointImg from "../../../assets/point/point@2x.png";
 import pointFloatImg from "../../../assets/point/point-float@2x.png";
 import CtoW from "../../../apis/w3w";
 import PinIcon from "../../../assets/PinIcon";
-
-// import MapMarker, {MarkerConfig} from "./MapItemTest";
+import { ArrowBack, ArrowForward } from '@material-ui/icons';
 
 class MapView extends Component {
   constructor(props) {
@@ -28,7 +27,9 @@ class MapView extends Component {
       centerMarker: null,
       w3w: this.props.w3w,
       w3wHistory: {
+        prevStatus: false,
         prev:[],
+        savedStatus: false,
         saved:[],
       },
     };
@@ -181,8 +182,9 @@ class MapView extends Component {
   }
 
   setW3WHistoryInSession = async (item) => {
-    const _prev = this.state.w3wHistory.prev.concat([item]);
-    const _newPrev = _prev.filter((el, index) => _prev.indexOf(el) === index );
+    const exists = this.state.w3wHistory.prev.findIndex(el=>el.w3w === item.w3w);
+    const _prev = this.state.w3wHistory.prev
+    const _newPrev = exists === -1 ? _prev.concat([item]) : _prev
     
     await this.setStateAsync({
       w3wHistory: {
@@ -194,52 +196,24 @@ class MapView extends Component {
     sessionStorage.setItem('ARSG W3W History', JSON.stringify(this.state.w3wHistory.prev))
   }
 
-  setW3WHistory = async (item) => {
-    const _saved = this.state.history.saved.concat([item]);
-    // 중복제거
-    const _newSaved = _saved.filter((el, index) => _saved.indexOf(el) === index );
-
-    await this.setStateAsync({
+  prevOn = () => {
+    this.setState({
       w3wHistory: {
         ...this.state.w3wHistory,
-        saved: _newSaved
+        prevStatus: !this.state.w3wHistory.prevStatus
       }
     })
-    console.log(this.state.w3wHistory)
-    sessionStorage.setItem('ARSG W3W History', JSON.stringify(this.state.w3wHistory.saved))
-  }
-
-  setW3WHistoryRaw = async () => {
-    const _center = this.state.mv.getCenter()
-    const _item = {
-      w3w: this.state.w3w,
-      lat: _center.getLat(),
-      lng: _center.getLng(),
-    }
-    const _saved = this.state.w3wHistory.saved.concat([_item]);
-    const _newSaved = _saved.filter((el, index) => _saved.indexOf(el) === index );
-
-    await this.setStateAsync({
-      w3wHistory: {
-        ...this.state.w3wHistory,
-        saved: _newSaved
-      }
-    })
-    localStorage.setItem('ARSG W3W History', JSON.stringify(_newSaved))
-  }
-
-  deleteSavedHistory = (e) => {
-    console.log(e)
   }
 
   prevHistoryChips = () => {
-    return this.state.w3wHistory.prev.map((el,index) => <Chip key={index} text={el.w3w}/>)
+    return this.state.w3wHistory.prev.map((el,index) => {
+      const moveToHistory = () => {
+        MM.panTo(this.state.mv, el.lat, el.lng)
+      }
+      return <Chip key={index} text={el.w3w} onClick={moveToHistory}/>
+    })
   }
 
-  savedHistoryChips = () => {
-    return this.state.w3wHistory.saved.map((el,index) => <MapChip key={index} text={el.w3w} onDelete={this.deleteSavedHistory(el)}/>)
-  }
-  
   render() {
     return (
       <>
@@ -248,17 +222,17 @@ class MapView extends Component {
         {this.props.status === "write" && !!this.state.w3w &&
           <StTextWrapper>
             <Chip color="primary" size="medium" text={this.state.w3w} icon={<PinIcon />}/>
-            <Chip color="secondary" size="medium" text={"저장하기"} onClick={this.setW3WHistoryRaw} />
           </StTextWrapper>
         }
         {this.props.status === "write" && 
           <>
-            <StHistoryWrapper>
-              <Chip icon={<DeleteForeverIcon />}/>
-              {this.savedHistoryChips()}
-            </StHistoryWrapper>
             <StPrevHistoryWrapper>
-              {this.prevHistoryChips()}
+              {this.state.w3wHistory.prevStatus ? 
+              <Chip text={"히스토리 닫기"} icon={<ArrowBack/>} onClick={this.prevOn}/>
+              : <Chip text={"히스토리 보기"} icon={<ArrowForward/>} onClick={this.prevOn}/>
+              }
+              {this.state.w3wHistory.prevStatus
+              ? this.prevHistoryChips() : <></>} 
             </StPrevHistoryWrapper>
           </>
         }
@@ -305,32 +279,17 @@ const StTextWrapper = styled.div`
   align-items: center;
 `
 
-const StHistoryWrapper = styled.div`
-  position: absolute;
-  bottom: 80px;
-  z-index: 15;
-  
-  display: flex;
-  flex-direction: row-reverse;
-  width: 100%;
-  
-  overflow-x: scroll;
-
-  justify-content:flex-end;
-  align-items: center;
-`
 const StPrevHistoryWrapper = styled.div`
   position: absolute;
-  bottom: 40px;
+  bottom: 50px;
   z-index: 15;
   
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   width: 100%;
   
-  overflow-x: scroll;
+  overflow-x: auto;
 
-  justify-content:flex-end;
   align-items: center;
 `
 
