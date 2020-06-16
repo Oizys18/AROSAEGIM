@@ -21,8 +21,9 @@ class WriteSaegim extends Component {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
-      location: null,
-      w3w: null,
+      locationStat: null,
+      location: [37.498584699999995, 127.0337029],
+      w3w: "진학.등록금.호흡",
       text: null,
       locked: 0,
       tags: [],
@@ -75,9 +76,9 @@ class WriteSaegim extends Component {
 
   getLocation = () => {
     //지도 컴포넌트 열어서 위치 정확하게 수정하기
-    if (this.state.location === null) {
-      return;
-    }
+    // if (this.state.locationStat === null) {
+    //   return;
+    // }
     this.setState({
       mapView: {
         status: true,
