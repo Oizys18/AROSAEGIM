@@ -4,9 +4,7 @@ import styled from "styled-components";
 import { Storage } from  '../../../storage/Storage';
 import * as MM from "./MapMethod";
 import DoneIcon from '@material-ui/icons/Done';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Chip from "../chip/Chip";
-import MapChip from "../chip/MapChip";
 import pointImg from "../../../assets/point/point@2x.png";
 import pointFloatImg from "../../../assets/point/point-float@2x.png";
 import CtoW from "../../../apis/w3w";
@@ -56,7 +54,10 @@ class MapView extends Component {
   }
 
   componentWillUnmount(){
+    kakao.maps.event.removeListener(this.state.mv, "idle", this.handleIdle)
+    // kakao.maps.event.removeListener(this.state.mv, "zoom_start", this.handleZoomStart)
     kakao.maps.event.removeListener(this.state.mv, "center_changed", this.handleCenterChange)
+    kakao.maps.event.removeListener(this.state.mv, "bounds_changed", this.handleBoundsChange)
     kakao.maps.event.removeListener(this.state.mv, "dragstart", this.handleDragStart)
     kakao.maps.event.removeListener(this.state.mv, "dragend", this.handleDragEnd)
   }
@@ -69,6 +70,8 @@ class MapView extends Component {
       level: this.props.mapLevel,
     }
     const _mapView = new kakao.maps.Map(_cont, _options)
+    kakao.maps.event.addListener(_mapView, "idle", this.handleIdle)
+    // kakao.maps.event.addListener(_mapView, "zoom_start", this.handleZoomStart)
     kakao.maps.event.addListener(_mapView, "center_changed", this.handleCenterChange)
     kakao.maps.event.addListener(_mapView, "bounds_changed", this.handleBoundsChange)
     kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
@@ -95,15 +98,25 @@ class MapView extends Component {
     this.setState({userMarker: userMarker})
   }
 
+  handleIdle = () => {
+    this.setState({write: {moving: false}})
+    this.props.changeMapCenter(this.state.mv.getCenter())
+  }
+
+  handleZoomStart = () => {
+    this.setState({write: {moving: true}})
+  }
+  
   handleCenterChange = () => {
     const center = this.state.mv.getCenter();
     this.state.centerMarker.setPosition(center);
   }
-
+  
   handleBoundsChange = () => {
-    if (!this.state.write.moving) {
-      this.updateW3W();
-    }
+    this.setState({write: {moving: true}})
+    // if (!this.state.write.moving) {
+    //   this.updateW3W();
+    // }
   }
 
   handleDragStart = () => {
@@ -112,7 +125,6 @@ class MapView extends Component {
 
   handleDragEnd = () => {
     this.setState({write: {moving: false}})
-    this.props.changeMapCenter(this.state.mv.getCenter())
   };
 
   updateW3W = async () => {
