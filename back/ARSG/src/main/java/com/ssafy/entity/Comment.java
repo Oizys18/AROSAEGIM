@@ -1,6 +1,5 @@
 package com.ssafy.entity;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -15,10 +14,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.ssafy.configuration.ConfigurationUtilFactory;
 import com.ssafy.dto.CommentFormDto;
+import com.ssafy.util.UtilFactory;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
@@ -35,8 +38,6 @@ public class Comment {
 	@NonNull
 	@Column(name="user_id", nullable=false)
 	private Long userId;
-	@NonNull
-	@Column(name="user_name", nullable=false)
 	private String userName;
 	@NonNull
 	@Temporal(TemporalType.TIMESTAMP)
@@ -49,6 +50,6 @@ public class Comment {
 	private Saegim SAEGIM;
 
 	public static Comment of(CommentFormDto commentFormDto) {
-		return ConfigurationUtilFactory.modelmapper().map(commentFormDto, Comment.class);
+		return UtilFactory.getModelMapper().map(commentFormDto, Comment.class);
 	}
 }

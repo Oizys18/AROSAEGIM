@@ -9,8 +9,7 @@ import pointImg from "../../../assets/point/point@2x.png";
 import pointFloatImg from "../../../assets/point/point-float@2x.png";
 import CtoW from "../../../apis/w3w";
 import PinIcon from "../../../assets/PinIcon";
-
-// import MapMarker, {MarkerConfig} from "./MapItemTest";
+import { ArrowBack, ArrowForward } from '@material-ui/icons';
 
 class MapView extends Component {
   constructor(props) {
@@ -25,6 +24,12 @@ class MapView extends Component {
       },
       centerMarker: null,
       w3w: this.props.w3w,
+      w3wHistory: {
+        prevStatus: false,
+        prev:[],
+        savedStatus: false,
+        saved:[],
+      },
     };
     this.markers = []
   }
@@ -34,6 +39,7 @@ class MapView extends Component {
   async componentDidMount() {
     await this.initMapView();
     await this.overlayCurPosition();
+    await this.getW3WHistory();
   }
   
   async componentDidUpdate(prevProps, prevState) {
@@ -48,7 +54,10 @@ class MapView extends Component {
   }
 
   componentWillUnmount(){
+    kakao.maps.event.removeListener(this.state.mv, "idle", this.handleIdle)
+    // kakao.maps.event.removeListener(this.state.mv, "zoom_start", this.handleZoomStart)
     kakao.maps.event.removeListener(this.state.mv, "center_changed", this.handleCenterChange)
+    kakao.maps.event.removeListener(this.state.mv, "bounds_changed", this.handleBoundsChange)
     kakao.maps.event.removeListener(this.state.mv, "dragstart", this.handleDragStart)
     kakao.maps.event.removeListener(this.state.mv, "dragend", this.handleDragEnd)
   }
@@ -61,6 +70,8 @@ class MapView extends Component {
       level: this.props.mapLevel,
     }
     const _mapView = new kakao.maps.Map(_cont, _options)
+    kakao.maps.event.addListener(_mapView, "idle", this.handleIdle)
+    // kakao.maps.event.addListener(_mapView, "zoom_start", this.handleZoomStart)
     kakao.maps.event.addListener(_mapView, "center_changed", this.handleCenterChange)
     kakao.maps.event.addListener(_mapView, "bounds_changed", this.handleBoundsChange)
     kakao.maps.event.addListener(_mapView, "dragstart", this.handleDragStart)
@@ -87,15 +98,25 @@ class MapView extends Component {
     this.setState({userMarker: userMarker})
   }
 
+  handleIdle = () => {
+    this.setState({write: {moving: false}})
+    this.props.changeMapCenter(this.state.mv.getCenter())
+  }
+
+  handleZoomStart = () => {
+    this.setState({write: {moving: true}})
+  }
+  
   handleCenterChange = () => {
     const center = this.state.mv.getCenter();
     this.state.centerMarker.setPosition(center);
   }
-
+  
   handleBoundsChange = () => {
-    if (!this.state.write.moving) {
-      this.updateW3W();
-    }
+    this.setState({write: {moving: true}})
+    // if (!this.state.write.moving) {
+    //   this.updateW3W();
+    // }
   }
 
   handleDragStart = () => {
@@ -104,13 +125,16 @@ class MapView extends Component {
 
   handleDragEnd = () => {
     this.setState({write: {moving: false}})
-    this.props.changeMapCenter(this.state.mv.getCenter())
   };
 
   updateW3W = async () => {
-    const center = this.state.mv.getCenter()
-    const w3w = await CtoW(center.getLat(), center.getLng())
+    const center = this.state.mv.getCenter();
+    const _lat = center.getLat();
+    const _lng = center.getLng();
+    const w3w = await CtoW(_lat, _lng);
+
     this.setState({w3w: w3w.data.words})
+    if (!!w3w.data.words && !!center) {this.setW3WHistoryInSession({w3w: w3w.data.words, lat: _lat, lng: _lng})}
   }
 
   overlayCurPosition = () => {
@@ -148,6 +172,59 @@ class MapView extends Component {
     const center = this.state.mv.getCenter()
     this.props.fixLocation([center.getLat(), center.getLng()], this.state.w3w)
   }
+  
+  getW3WHistory = () => {
+    const _saved = localStorage.getItem('ARSG W3W History');
+    const _prev = sessionStorage.getItem('ARSG W3W History');
+
+    const _parsedHistory = {
+      prev: _prev ? JSON.parse(_prev) : [],
+      saved: _saved ? JSON.parse(_saved) : []
+    }
+
+    this.setState({ w3wHistory: _parsedHistory })
+    
+    if (!_prev) {
+      sessionStorage.setItem('ARSG W3W History', JSON.stringify([]))
+    }
+    if (!_saved) {
+      localStorage.setItem('ARSG W3W History', JSON.stringify([]))
+    }
+    console.log(this.state.w3wHistory)
+  }
+
+  setW3WHistoryInSession = async (item) => {
+    const exists = this.state.w3wHistory.prev.findIndex(el=>el.w3w === item.w3w);
+    const _prev = this.state.w3wHistory.prev
+    const _newPrev = exists === -1 ? _prev.concat([item]) : _prev
+    
+    await this.setStateAsync({
+      w3wHistory: {
+        ...this.state.w3wHistory,
+        prev: _newPrev
+      }
+    })
+
+    sessionStorage.setItem('ARSG W3W History', JSON.stringify(this.state.w3wHistory.prev))
+  }
+
+  prevOn = () => {
+    this.setState({
+      w3wHistory: {
+        ...this.state.w3wHistory,
+        prevStatus: !this.state.w3wHistory.prevStatus
+      }
+    })
+  }
+
+  prevHistoryChips = () => {
+    return this.state.w3wHistory.prev.map((el,index) => {
+      const moveToHistory = () => {
+        MM.panTo(this.state.mv, el.lat, el.lng)
+      }
+      return <Chip key={index} text={el.w3w} onClick={moveToHistory}/>
+    })
+  }
 
   render() {
     return (
@@ -158,6 +235,18 @@ class MapView extends Component {
           <StTextWrapper>
             <Chip color="primary" size="medium" text={this.state.w3w} icon={<PinIcon />}/>
           </StTextWrapper>
+        }
+        {this.props.status === "write" && 
+          <>
+            <StPrevHistoryWrapper>
+              {this.state.w3wHistory.prevStatus ? 
+              <Chip text={"히스토리 닫기"} icon={<ArrowBack/>} onClick={this.prevOn}/>
+              : <Chip text={"히스토리 보기"} icon={<ArrowForward/>} onClick={this.prevOn}/>
+              }
+              {this.state.w3wHistory.prevStatus
+              ? this.prevHistoryChips() : <></>} 
+            </StPrevHistoryWrapper>
+          </>
         }
         {this.props.status === "write" && 
           <StButtonWrapper>
@@ -199,6 +288,20 @@ const StTextWrapper = styled.div`
   flex-direction: row;
   width: 100%;
   justify-content:center;
+  align-items: center;
+`
+
+const StPrevHistoryWrapper = styled.div`
+  position: absolute;
+  bottom: 50px;
+  z-index: 15;
+  
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  
+  overflow-x: auto;
+
   align-items: center;
 `
 

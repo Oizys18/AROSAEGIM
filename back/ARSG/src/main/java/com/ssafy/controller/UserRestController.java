@@ -3,15 +3,21 @@ package com.ssafy.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.dto.CommentFormDto;
 import com.ssafy.dto.LoginFormDto;
 import com.ssafy.dto.UserDto;
 import com.ssafy.dto.UserFormDto;
-import com.ssafy.entity.User;
 import com.ssafy.service.CommentService;
 import com.ssafy.service.LikesService;
 import com.ssafy.service.UserService;
@@ -30,13 +36,18 @@ public class UserRestController extends EntityRestController{
 	private LikesService likesService;
 
 	@ApiOperation("모든 회원 정보 List")
-	@GetMapping("/")
+	@GetMapping()
 	public ResponseEntity<Map<String, Object>> getUsers() throws Exception{
 		return handleSuccess(userService.getUsers());
 	}
 	@ApiOperation("user 정보로 회원 등록")
-	@PostMapping("/")
-	public ResponseEntity<Map<String, Object>> postUser(UserFormDto userFormDto) throws Exception{
+	@PostMapping()
+	public ResponseEntity<Map<String, Object>> postUser(@RequestBody UserFormDto userFormDto) throws Exception{
+		System.out.println("======================== UserFormDto ========================");
+		System.out.println(userFormDto.getEmail());
+		System.out.println(userFormDto.getName());
+		System.out.println(userFormDto.getPassword());
+		System.out.println(userFormDto.getProfileImage().length());
 		return handleSuccess(userService.postUser(userFormDto));
 	}
 	@ApiOperation("userId으로 회원 정보 검색")
@@ -46,7 +57,7 @@ public class UserRestController extends EntityRestController{
 	}
 	@ApiOperation("userId으로 회원 정보 수정")
 	@PutMapping("/{userid}")
-	public ResponseEntity<Map<String, Object>> putUser(@PathVariable("userid") long userid, UserFormDto userFormDto) throws Exception{
+	public ResponseEntity<Map<String, Object>> putUser(@PathVariable("userid") long userid, @RequestBody UserFormDto userFormDto) throws Exception{
 		return handleSuccess(userService.putUser(userid, userFormDto));
 	}
 	@ApiOperation("userId으로 회원 정보 삭제")
@@ -85,11 +96,11 @@ public class UserRestController extends EntityRestController{
 	// 추가
 	@ApiOperation("id, pw로 로그인")
 	@PostMapping("/login")
-	public ResponseEntity<Map<String, Object>> loginUser(LoginFormDto loginFormDto) throws Exception{
+	public ResponseEntity<Map<String, Object>> loginUser(@RequestBody LoginFormDto loginFormDto) throws Exception{
 		UserDto tmp = userService.loginUser(loginFormDto);
 		if(tmp != null)
 			return handleSuccess(tmp);
 		else
-			return handleFail("login fail", HttpStatus.I_AM_A_TEAPOT);
+			return handleSuccess("login fail");
 	}
 }

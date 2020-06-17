@@ -1,12 +1,7 @@
 package com.ssafy.dto;
 
-import org.modelmapper.PropertyMap;
-
-import com.ssafy.configuration.ConfigurationUtilFactory;
-import com.ssafy.entity.Likes;
-import com.ssafy.entity.Saegim;
 import com.ssafy.entity.Tagging;
-import com.ssafy.entity.User;
+import com.ssafy.util.UtilFactory;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,11 +12,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter @Setter
 public class TaggingDto {
-	private Long saegimId;
 	private Long tagId;
+	private Long saegimId;
 	
 	public static TaggingDto of(Tagging tagging) {
-    	TaggingDto dto = ConfigurationUtilFactory.modelmapper().map(tagging, TaggingDto.class);
+    	TaggingDto dto = UtilFactory.getModelMapper().map(tagging, TaggingDto.class);
     	return dto;
     }
 }

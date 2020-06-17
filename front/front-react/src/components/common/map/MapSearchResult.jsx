@@ -16,26 +16,28 @@ class MapSearchResult extends Component {
   render(){
     const _item = this.props.item
     return(
-      <StResult>
-        <StMapSvg>
-          <IconButton onClick={this.searchCenter}>
-            <Room/>
-          </IconButton>
-        </StMapSvg>
-        <StTxtCont onClick={this.searchCenter}>
-          <div className='pn'>{_item.place_name}</div>
-          <div className='an'>{_item.address_name}</div>
-          <div className='ph'>{_item.phone}</div>
-          <StUrlCont>
-            <div className='km'>
-              카카오 맵
-            </div>
-            <IconButton onClick={this.clickLink}>
-              <ExitToApp/>
+      <div>
+        <StResult>
+          <StMapSvg>
+            <IconButton onClick={this.searchCenter}>
+              <Room/>
             </IconButton>
-          </StUrlCont>
-        </StTxtCont>
-      </StResult>
+          </StMapSvg>
+          <StTxtCont onClick={this.searchCenter}>
+            <div className='pn'>{_item.place_name}</div>
+            <div className='an'>{_item.address_name}</div>
+            <div className='ph'>{_item.phone}</div>
+            <StUrlCont>
+              <div className='km'>
+                카카오 맵
+              </div>
+              <IconButton onClick={this.clickLink}>
+                <ExitToApp/>
+              </IconButton>
+            </StUrlCont>
+          </StTxtCont>
+        </StResult>
+      </div>
     )
   }
 } export default MapSearchResult;

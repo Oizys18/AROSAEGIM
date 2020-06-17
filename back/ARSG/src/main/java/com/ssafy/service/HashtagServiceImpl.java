@@ -6,15 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.dto.CommentDto;
-import com.ssafy.dto.CommentFormDto;
 import com.ssafy.dto.HashtagDto;
-import com.ssafy.dto.LikesDto;
 import com.ssafy.dto.TaggingDto;
-import com.ssafy.entity.Comment;
-import com.ssafy.repositories.CommentRepository;
-import com.ssafy.repositories.HashtagRepository;
-import com.ssafy.repositories.LikesRepository;
 import com.ssafy.repositories.TaggingRepository;
 
 @Service

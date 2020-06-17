@@ -14,12 +14,7 @@ import lombok.Setter;
 @Getter @Setter
 public class CommentFormDto {
 	@NonNull
-	@ApiParam(hidden = true)
-	private Long saegimId;
-	@NonNull
     private Long userId;
-	@NonNull
-	private String userName;
 	@NonNull
 	private String contents;
 	@ApiParam(hidden = true)
