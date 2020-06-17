@@ -185,9 +185,10 @@ const StMenuCont = styled.div`
   position: fixed;
   top: 0;
   z-index: 120;
-
+  
   width: 70%;
   height: 100%;
+  max-width: 400px;
 
   display: flex;
   flex-direction: column;

@@ -8,7 +8,6 @@ class LogoAnimation extends Component {
       <Zoom in={true}>
       <StAnima>
         <div className="logo">
-          <img src="/logo.png" alt="" style={{width : '40vw', height: '40vw'}}/>
         </div> 
         <div className="words">
           <div className="word">우리는</div>
@@ -65,12 +64,15 @@ const StAnima = styled.div`
   .logo{
     display: flex;
     margin: 0.5rem;
-    // background: linear-gradient(to bottom, #66ffff 0%, #ff99cc 100%);
-    // border: 3px solid white;
+    height: 40vw;
+    width: 40vw;
+    max-width: 360px;
+    max-height: 360px;
+
+    background-size: contain;
+    background-image: url('/logo.png');
+
     border-radius: 29px;
-    img{
-      width: 190px;
-    }
   }
 
   .words{

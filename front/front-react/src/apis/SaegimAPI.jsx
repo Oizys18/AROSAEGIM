@@ -7,7 +7,7 @@ export const getSaegimListByLocation = async (latlng, meter) => {
   const _data = {
     lat: lat,
     lng: lng,
-    meter: meter
+    meter: Math.floor(meter / 2)
   }
   const _res = await axios({
     method: 'get',
@@ -44,20 +44,6 @@ export const boundsToMeter = ({lat1, lon1, lat2, lon2}) => {
   return d * 1000; // meters
 };
 
-export const getSaegimNearMe = async (data) => {
-  const { lat, lng, meter } = data;
-
-  const _res = await axios({
-    method: "get",
-    url: `${process.env.REACT_APP_BASE_URL}/saegims/latlng?lat=${lat}&lng=${lng}&meter=${Math.floor(meter / 2)}`,
-  });
-
-  if (_res.data.state === "success") {
-    return _res.data.data;
-  } else {
-    return [];
-  }
-};
 
 export const delSaegim = async (id) => {
   const _res = await axios ({
@@ -89,8 +75,6 @@ export const getSaegimByFilter = async (data) => {
       endtime: eTime,
     }
   })
-
-  // console.log(_res.data)
 
   if (_res.data.state === "success") {
     return _res.data.data;

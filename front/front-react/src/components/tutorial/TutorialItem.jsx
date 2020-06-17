@@ -4,9 +4,6 @@ import img1 from "../../assets/tutorial/tutorial.png";
 import img2 from "../../assets/tutorial/tutorial2.png";
 import img3 from "../../assets/tutorial/tutorial3.png";
 import img4 from "../../assets/tutorial/tutorial4.png";
-import {FlexColumn, FlexRow} from "../../styles/DispFlex";
-
-
 
 class TutorialItem extends Component {
   constructor(props) {
@@ -93,7 +90,6 @@ class TutorialItem extends Component {
 
     return (
       <Wrapper>
-        {/*<ForeGround />*/}
         <PageChecker />
       </Wrapper>
     );
@@ -124,6 +120,7 @@ const StAccent = styled.div`
   z-index: 3;
   border: 2px dashed white;
   border-radius: 15px;
+  max-width: 400px;
 `;
 
 const StAccent1 = styled(StAccent)`
@@ -144,7 +141,7 @@ const StAccent2 = styled(StAccent)`
 const StAccent3 = styled(StAccent)`
   left: 50%; transform: translateX(-50%); width: 75%; height: 150px;
   
-  top: 55%;
+  top: 50%;
   @media (max-height: 850px) {
     top: 55%;
   }

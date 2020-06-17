@@ -46,9 +46,12 @@ Write.contextType = Storage;
 
 const StCont = styled.div`
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 `;
 
 const Wrapper = styled.div`
+  max-width: 480px;
   height: ${(props) => props.height}px;
   display: flex;
   justify-content: center;

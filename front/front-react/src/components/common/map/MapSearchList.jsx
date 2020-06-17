@@ -10,18 +10,20 @@ class MapSearchList extends Component {
     return(
       <Slide in={this.props.on} direction='up' mountOnEnter unmountOnExit>
         <StListCont> 
-        <StTopCont>
           <div>
-            <IconButton onClick={this.props.initSearch}><Close/></IconButton>
+            <StTopCont>
+              <div>
+                <IconButton onClick={this.props.initSearch}><Close/></IconButton>
+              </div>
+            </StTopCont>
+            <StResultCont>
+            {
+              this.props.searchResult.map((el, idx) => {
+                return <MapSearchResult key={idx} item={el} searchCenter={this.props.searchCenter}/>
+              })
+            }
+            </StResultCont>
           </div>
-        </StTopCont>
-        <StResultCont>
-        {
-          this.props.searchResult.map((el, idx) => {
-            return <MapSearchResult key={idx} item={el} searchCenter={this.props.searchCenter}/>
-          })
-        }
-        </StResultCont>
         </StListCont>
       </Slide>
     )
@@ -37,8 +39,7 @@ const StListCont = styled(FlexColumn)`
   
   width: 100%;
   height: 40vh;
-  overflow: scroll;
-
+  
   background: #FBF2EE;
   border-top: 2px solid gray;
   border-radius: 10px 10px 0 0;
@@ -49,6 +50,7 @@ const StTopCont = styled(FlexRow)`
   width: 100%;
 `;
 const StResultCont = styled(FlexColumn)`
+  display: flex;
   justify-content: flex-start;
   overflow: scroll;
   width: 100%;

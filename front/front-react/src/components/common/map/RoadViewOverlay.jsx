@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import { AccessTime } from '@material-ui/icons';
+import { AccessTime, Close, Add } from '@material-ui/icons';
 import { FlexColumn, FlexRow } from '../../../styles/DispFlex';
 import { getTimeDeltaString } from "../../common/time/TimeFunctinon";
 import * as SA from '../../../apis/SaegimAPI';
@@ -11,6 +11,7 @@ class RoadViewOverlay extends Component {
     super(props);
     this.state = {
       imgSrc: null,
+      sgDetail: null,
     }
   }
   async componentDidMount(){
@@ -18,16 +19,23 @@ class RoadViewOverlay extends Component {
   }
   
   get1stImg = async () => {
-    if(this.props.item.imagesCount > 0){
-      const data = await SA.getSaegimDetailById(this.props.item.id)
+    const data = await SA.getSaegimDetailById(this.props.item.id)
+    if(this.props.item.filesCount > 0){
       this.setState({
-        imgSrc: data.images[0].source
+        imgSrc: data.files[0].url,
+        // imgSrc: data.images[0].source,
       })
     }
+    this.setState({
+      sgDetail: data
+    })
   }
   
-  tgleDetail = () => {
-    this.props.tgleDetail(this.props.item.id)
+  openDetail = () => {
+    this.props.openDetail(this.props.item.id, this.state.sgDetail)
+  }
+  closeOverlay = () => {    
+    this.props.closeOverlay(this.props.item.id)
   }
 
   render(){
@@ -39,17 +47,20 @@ class RoadViewOverlay extends Component {
 
             <StTop>
               <StUserName>{this.props.item.userName}</StUserName>
-              <StTimeCont>
-                <AccessTime/>
-                <StTime>{getTimeDeltaString(this.props.item.regDate)}</StTime>
-              </StTimeCont>
+              <StCloseBtn onClick={this.closeOverlay}><Close/></StCloseBtn>
             </StTop>
 
             <StContent>{this.props.item.contents}</StContent>
 
+            <StTimeCont>
+              <AccessTime/>
+              <StTime>{getTimeDeltaString(this.props.item.regDate)}</StTime>
+            </StTimeCont>
+
             <StBot>
               <StWWW>{this.props.item.w3w}</StWWW>
-              <StDetail onClick={this.tgleDetail}>더보기</StDetail>
+              <StDetail onClick={this.openDetail}><Add/></StDetail>
+              {/* <StDetail onClick={this.openDetail}>더보기</StDetail> */}
             </StBot>
 
           </StItem>
@@ -83,7 +94,7 @@ const StItem = styled(FlexColumn)`
   padding: 8px;
 
   /* background: ${props => props.isImg ? `rgba(251,242,238, 0.4)` : `rgba(251,242,238, 0.9)`}; */
-  background: ${props => props.isImg ? `rgba(0,0,0, 0.55)` : `rgba(0,0,0, 0.7)`};
+  background: ${props => props.isImg ? `rgba(0,0,0, 0.5)` : `rgba(0,0,0, 0.9)`};
   width: 55vw;
   min-height: 40vw;
   max-height: 55vh;
@@ -105,7 +116,11 @@ const StUserName = styled(FlexRow)`
   color: white;
   font-size: 80%;
 `;
+const StCloseBtn = styled(FlexRow)`
+  color: white;
+`;
 const StTimeCont = styled(FlexRow)`
+  align-self: flex-start;
   color: white;
   font-size: 80%;
   svg{
@@ -129,7 +144,6 @@ const StContent = styled.div`
 const StBot = styled(FlexRow)`
   width: 100%;
   justify-content: space-between;
-  
   *{
     color: white;
   }
@@ -138,5 +152,5 @@ const StWWW = styled(FlexRow)`
   font-size: 70%;
 `;
 const StDetail = styled(FlexRow)`
-  font-size: 80%;
+  /* font-size: 80%; */
 `;

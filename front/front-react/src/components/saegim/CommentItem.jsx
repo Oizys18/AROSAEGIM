@@ -1,20 +1,20 @@
 import React, { Component } from "react";
-import { Storage } from "../../storage/Storage"
+import { Storage } from "../../storage/Storage";
 import styled from "styled-components";
-import { Close } from "@material-ui/icons"
+import { Close } from "@material-ui/icons";
 
 class CommentItem extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      userid: this.context.userInfo.id
-    }
+      userid: this.context.userInfo.id,
+    };
   }
 
   handleClick = () => {
-    this.context.popModal('댓글을 삭제하시겠습니까?', 'delComment', 'confirm')
-    this.context.setDelComment([this.props.saegimid, this.props.id])
-  }
+    this.context.popModal("댓글을 삭제하시겠습니까?", "delComment", "confirm");
+    this.context.setDelComment([this.props.saegimid, this.props.id]);
+  };
 
   render() {
     return (
@@ -23,13 +23,13 @@ class CommentItem extends Component {
           <StUser>{this.props.user}</StUser>
           <div>{this.props.contents}</div>
         </StComment>
-        {this.state.userid === this.props.userid &&
+        {this.state.userid === this.props.userid && (
           <div onClick={this.handleClick}>
-            <Close/>
+            <Close />
           </div>
-        }
+        )}
       </Wrapper>
-    )
+    );
   }
 }
 
@@ -43,11 +43,14 @@ const Wrapper = styled.div`
 `;
 
 const StComment = styled.div`
+  font-size: 14px;
   margin-bottom: 4px;
   display: flex;
+  align-items:center;
 `;
 
 const StUser = styled.div`
+  font-size: 14px;
   margin-right: 8px;
   font-weight: bold;
 `;
