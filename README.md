@@ -22,7 +22,7 @@ _위 이미지를 클릭하면 영상을 볼 수 있습니다._
 
 ### 1.1 새김
 
-![write](https://user-images.githubusercontent.com/52501513/84864335-782aeb00-b0b1-11ea-9ad6-8e6d95e40818.png)
+<img src="https://user-images.githubusercontent.com/52501513/84864335-782aeb00-b0b1-11ea-9ad6-8e6d95e40818.png" width="300" alt="새김">
 
 아로새김은 사용자의 글 한 조각을 **새김** 이라고 부릅니다. 각 새김에는 고유한 W3W 주소가 함께 저장되고, 이는 지도 및 로드뷰 화면을 통해 볼 수 있습니다.
 
