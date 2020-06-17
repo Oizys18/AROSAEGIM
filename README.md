@@ -116,37 +116,65 @@ $ npm run build
 
 _위 이미지를 클릭하면 영상을 볼 수 있습니다._
 
-메인 페이지
+<table width="100%">
+  <tr>
+    <th>메인페이지</th>
+    <th>리스트</th>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://i.imgur.com/UDQ29OA.gif" width="300" alt="메인페이지">
+    </td>
+    <td>
+      <img src="https://i.imgur.com/NrEVZTM.gif" width="300" alt="리스트">
+    </td>
+  </tr>
+</table>
 
-<img src="https://i.imgur.com/UDQ29OA.gif" width="300" alt="메인페이지">
+<table width="100%">
+  <tr>
+    <th>지도 뷰</th>
+    <th>로드뷰</th>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://i.imgur.com/3D6gYYL.gif" width="300" alt="맵">
+    </td>
+    <td>
+      <img src="https://i.imgur.com/I2NumLN.gif" width="300" alt="로드뷰">
+    </td>
+  </tr>
+</table>
 
-리스트
+<table width="100%">
+  <tr>
+    <th>필터 기능</th>
+    <th>새김 작성</th>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://i.imgur.com/ciGSQcO.gif" width="300" alt="필터">
+    </td>
+    <td>
+      <img src="https://i.imgur.com/JT2cugf.gif" width="300" alt="새김 작성">
+    </td>
+  </tr>
+</table>
 
-<img src="https://i.imgur.com/NrEVZTM.gif" width="300" alt="리스트">
-
-지도 뷰
-
-<img src="https://i.imgur.com/3D6gYYL.gif" width="300" alt="맵">
-
-로드뷰
-
-<img src="https://i.imgur.com/I2NumLN.gif" width="300" alt="로드뷰">
-
-필터 기능
-
-<img src="https://i.imgur.com/ciGSQcO.gif" width="300" alt="필터">
-
-새김 작성
-
-<img src="https://i.imgur.com/JT2cugf.gif" width="300" alt="새김 작성">
-
-마이페이지
-
-<img src="https://i.imgur.com/fNMKvbT.gif" width="300" alt="마이페이지">
-
-W3W 히스토리
-
-<img src="https://i.imgur.com/1WiU2sc.gif" width="300" alt="히스토리">
+<table width="100%">
+  <tr>
+    <th>마이페이지</th>
+    <th>W3W 히스토리</th>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://i.imgur.com/fNMKvbT.gif" width="300" alt="마이페이지">
+    </td>
+    <td>
+      <img src="https://i.imgur.com/1WiU2sc.gif" width="300" alt="히스토리">
+    </td>
+  </tr>
+</table>
 
 ## 팀원
 - 양찬우
