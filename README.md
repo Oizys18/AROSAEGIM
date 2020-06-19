@@ -108,9 +108,30 @@ $ npm run build
 
 **시작하기 전에**
 
-아로새김의 백엔드는 java 1.8, mariaDB 10.4를 사용합니다.
+아로새김은 java 1.8, mariaDB 10.4를 사용합니다.
 
 **환경 설정**
+
+본 프로젝트를 실행하기 위해서는 `JDK 8` 및 IDE 등이 필요합니다. 설치에 관한 내용은 다음 링크를 참고해주세요.
+
+**Java**
+
+- [JDK 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
+
+**MariaDB**
+
+- [MariaDB Server 10.4](https://go.mariadb.com/download-mariadb-server-community.html?utm_source=google&utm_medium=ppc&utm_campaign=MKG-Search-Google-Branded-APAC-Korea-bd-Server-DL&gclid=Cj0KCQjwoaz3BRDnARIsAF1RfLfBvSxaNHItD_sSpM1_vHFYDdh2vrfkA8AYDT0tLb8giXPheFw2430aArEDEALw_wcB)
+
+**Spring Tools Suite**
+
+- [STS 3.9.7](http://dist.springsource.com/release/STS/index.html)
+
+**설치 & 실행**
+
+**STS**
+
+1. [Maven] - [Update Project]
+2. [Run As] - [Spring Boot App]
 
 ---
 
