@@ -1,8 +1,6 @@
 # 아로새김 Arosaegim
 ![](https://img.shields.io/badge/version-1.0.0-green.svg) ![](https://img.shields.io/badge/created__at-20.05.06-yellow.svg) ![](https://img.shields.io/badge/updated__at-20.05.06-blue.svg) 
 
-## 프로젝트는 [saegim.me](https://saegim.me) 에서 확인하실 수 있습니다.
-
 ## 0. 아로새김
 
 > **아로새기다** [아로새기다] ( 활용형: 아로새김 )
